@@ -1,12 +1,12 @@
-package com.fpt.ats.capstone;
+package com.fpt.capstone.ats;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CapstoneApplication {
+public class AtsApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CapstoneApplication.class, args);
+		SpringApplication.run(AtsApplication.class, args);
 	}
 }
