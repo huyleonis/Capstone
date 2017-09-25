@@ -5,7 +5,11 @@
  */
 package ats.swing.gui;
 
+import ats.daos.VehiclePaymentDAO;
+import ats.dtos.VehiclePayment;
 import com.sun.java.swing.plaf.windows.resources.windows;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -45,7 +49,6 @@ public class ManualPaymentDialog extends javax.swing.JDialog {
         setMinimumSize(new java.awt.Dimension(500, 250));
         setModal(true);
         setName("paymentDialog"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(500, 250));
         setResizable(false);
         setSize(new java.awt.Dimension(500, 250));
         getContentPane().setLayout(new java.awt.CardLayout());
@@ -136,8 +139,18 @@ public class ManualPaymentDialog extends javax.swing.JDialog {
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         String licencePlate = txtLicencePlatePayment.getText();
+        VehiclePaymentDAO dao = new VehiclePaymentDAO();
+        VehiclePayment vp = new VehiclePayment();
+        try {
+            vp = dao.searchPaymentByLicensePlate(licencePlate);
+        } catch (Exception ex) {
+            Logger.getLogger(ManualPaymentDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
         if(licencePlate != null){
-            JOptionPane.showMessageDialog (null, licencePlate, "Title", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog (null,
+                    licencePlate+": "+vp.getTypeName()+" - "+vp.getFee()+" VND",
+                    "Information of Vehicle",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnConfirmActionPerformed
 

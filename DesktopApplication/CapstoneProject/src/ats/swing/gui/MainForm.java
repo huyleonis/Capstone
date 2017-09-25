@@ -5,17 +5,54 @@
  */
 package ats.swing.gui;
 
+import ats.daos.TransactionDAO;
+import ats.dtos.Transaction;
+import java.util.List;
+import java.util.Vector;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Chi Hieu
  */
 public class MainForm extends javax.swing.JFrame {
 
+    private DefaultTableModel model;
+
     /**
      * Creates new form MainForm
      */
     public MainForm() {
         initComponents();
+        setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+        
+    }
+
+    private void loadDataIntoJTable() throws Exception{
+        model = new DefaultTableModel();
+        //Set Column Title
+        Vector column = new Vector();
+        column.add("Transaction ID");
+        column.add("License Plate");
+        column.add("Username");
+        column.add("Fee");
+        column.add("Date");
+        model.setColumnIdentifiers(column);
+        TransactionDAO dao = new TransactionDAO();
+        List<Transaction> list = dao.listOfTransaction();
+        for (int i = 0; i < list.size(); i++) {
+            Transaction tr = (Transaction)list.get(i);
+            Vector row = new Vector();
+            row.add(tr.getIdTransaction());
+            row.add(tr.getLicensePlate());
+            row.add(tr.getUsername());
+            row.add(tr.getFee());
+            row.add(tr.getDateOfTransaction());
+            model.addRow(row);
+        }
+
+        tblHistory.setModel(model);
     }
 
     /**
