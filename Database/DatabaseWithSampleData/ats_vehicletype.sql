@@ -16,31 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `account`
+-- Table structure for table `vehicletype`
 --
 
-DROP TABLE IF EXISTS `account`;
+DROP TABLE IF EXISTS `vehicletype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `account` (
-  `Username` varchar(255) NOT NULL,
-  `Password` varchar(255) NOT NULL,
-  `Role` int(11) NOT NULL,
-  `NumberId` varchar(45) NOT NULL,
-  `LicensePlate` varchar(45) NOT NULL,
-  PRIMARY KEY (`Username`),
-  KEY `_idx` (`LicensePlate`),
-  CONSTRAINT `Account_REF_Vehicle` FOREIGN KEY (`LicensePlate`) REFERENCES `vehicle` (`LicensePlate`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `vehicletype` (
+  `IdType` int(50) NOT NULL AUTO_INCREMENT,
+  `NameType` varchar(50) NOT NULL,
+  PRIMARY KEY (`IdType`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `account`
+-- Dumping data for table `vehicletype`
 --
 
-LOCK TABLES `account` WRITE;
-/*!40000 ALTER TABLE `account` DISABLE KEYS */;
-/*!40000 ALTER TABLE `account` ENABLE KEYS */;
+LOCK TABLES `vehicletype` WRITE;
+/*!40000 ALTER TABLE `vehicletype` DISABLE KEYS */;
+INSERT INTO `vehicletype` VALUES (1,'Car'),(2,'Truck'),(3,'Small Truck'),(4,'Bus');
+/*!40000 ALTER TABLE `vehicletype` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-25 14:37:30
+-- Dump completed on 2017-09-25 15:35:09

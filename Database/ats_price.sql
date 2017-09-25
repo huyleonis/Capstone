@@ -23,11 +23,15 @@ DROP TABLE IF EXISTS `price`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `price` (
-  `IdPrice` int(11) NOT NULL AUTO_INCREMENT,
+  `IdPrice` int(11) NOT NULL,
   `IdStation` int(11) NOT NULL,
   `Price` double NOT NULL,
+  `IdType` int(50) NOT NULL,
   PRIMARY KEY (`IdPrice`),
-  KEY `_idx` (`IdStation`)
+  KEY `Price_REF_Station_idx` (`IdStation`),
+  KEY `Price_REF_VehicleType_idx` (`IdType`),
+  CONSTRAINT `Price_REF_Station` FOREIGN KEY (`IdStation`) REFERENCES `station` (`IdStation`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `Price_REF_VehicleType` FOREIGN KEY (`IdType`) REFERENCES `vehicletype` (`IdType`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -49,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-24 22:21:36
+-- Dump completed on 2017-09-25 14:37:31

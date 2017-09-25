@@ -23,10 +23,10 @@ DROP TABLE IF EXISTS `station`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `station` (
-  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `IdStation` int(11) NOT NULL,
   `Name` varchar(255) NOT NULL,
   `Location` varchar(255) NOT NULL,
-  PRIMARY KEY (`Id`)
+  PRIMARY KEY (`IdStation`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -48,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-24 22:21:36
+-- Dump completed on 2017-09-25 14:37:31
