@@ -9,10 +9,11 @@ import ats.daos.TransactionDAO;
 import ats.daos.VehiclePaymentDAO;
 import ats.dtos.Transaction;
 import ats.dtos.VehiclePayment;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -30,10 +31,10 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm() {
         initComponents();
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-        
+
     }
 
-    private void loadDataIntoJTable() throws Exception{
+    private void loadDataIntoJTable() throws Exception {
         model = new DefaultTableModel();
         //Set Column Title
         Vector column = new Vector();
@@ -46,7 +47,7 @@ public class MainForm extends javax.swing.JFrame {
         TransactionDAO dao = new TransactionDAO();
         List<Transaction> list = dao.listOfTransaction();
         for (int i = 0; i < list.size(); i++) {
-            Transaction tr = (Transaction)list.get(i);
+            Transaction tr = (Transaction) list.get(i);
             Vector row = new Vector();
             row.add(tr.getIdTransaction());
             row.add(tr.getLicensePlate());
@@ -137,8 +138,12 @@ public class MainForm extends javax.swing.JFrame {
 
         txtLicensePlate.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         txtLicensePlate.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtLicensePlate.setText("11A-11111");
         txtLicensePlate.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtLicensePlate.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                txtLicensePlateCaretUpdate(evt);
+            }
+        });
         txtLicensePlate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtLicensePlateActionPerformed(evt);
@@ -402,35 +407,39 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void btnManualPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManualPaymentActionPerformed
-        ManualPaymentDialog manualdialog = new ManualPaymentDialog(this, true);
-        manualdialog.setVisible(true);
+        JOptionPane.showMessageDialog(null,"Đã thu phí", "Thông báo",
+                JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnManualPaymentActionPerformed
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSearchActionPerformed
 
-    
-    
+
     private void txtLicensePlateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLicensePlateActionPerformed
+        
+    }//GEN-LAST:event_txtLicensePlateActionPerformed
+
+    private void txtLicensePlateCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtLicensePlateCaretUpdate
         String licensePlate = txtLicensePlate.getText();
         VehiclePaymentDAO dao = new VehiclePaymentDAO();
         VehiclePayment vp = new VehiclePayment();
         try {
             vp = dao.searchPaymentByLicensePlate(licensePlate);
         } catch (Exception ex) {
-            Logger.getLogger(ManualPaymentDialog.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
+        Locale lc = new Locale("nv","VN");
+        NumberFormat nf = NumberFormat.getCurrencyInstance(lc);
         String price = String.valueOf(vp.getFee());
-        if(licensePlate.length() >0 && vp.getFee() > 0 && vp.getTypeName().length() >0){
-            lbPirce.setText(price + " VNĐ");
+        if (licensePlate.length() > 0 && vp.getFee() > 0 && vp.getTypeName().length() > 0) {
+            lbPirce.setText(nf.format(vp.getFee()));
             lbTypeName.setText(vp.getTypeName());
-        }
-        else{
+        } else {
             lbPirce.setText("Not available");
             lbTypeName.setText("Not available");
         }
-    }//GEN-LAST:event_txtLicensePlateActionPerformed
+    }//GEN-LAST:event_txtLicensePlateCaretUpdate
 
     /**
      * @param args the command line arguments
