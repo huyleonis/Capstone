@@ -9,12 +9,16 @@ import ats.daos.TransactionDAO;
 import ats.daos.VehiclePaymentDAO;
 import ats.dtos.Transaction;
 import ats.dtos.VehiclePayment;
+import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.event.CaretEvent;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -117,10 +121,17 @@ public class MainForm extends javax.swing.JFrame {
 
         btnManualPayment.setFont(new java.awt.Font("Arial", 0, 22)); // NOI18N
         btnManualPayment.setText("Thu Phí");
+        btnManualPayment.setToolTipText("Ấn để tiến hành thu phí");
+        btnManualPayment.setName(""); // NOI18N
         btnManualPayment.setPreferredSize(new java.awt.Dimension(200, 100));
         btnManualPayment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnManualPaymentActionPerformed(evt);
+            }
+        });
+        btnManualPayment.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnManualPaymentKeyPressed(evt);
             }
         });
 
@@ -138,6 +149,7 @@ public class MainForm extends javax.swing.JFrame {
 
         txtLicensePlate.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         txtLicensePlate.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtLicensePlate.setToolTipText("Nhập biển số xe");
         txtLicensePlate.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txtLicensePlate.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
@@ -147,6 +159,11 @@ public class MainForm extends javax.swing.JFrame {
         txtLicensePlate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtLicensePlateActionPerformed(evt);
+            }
+        });
+        txtLicensePlate.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtLicensePlateKeyPressed(evt);
             }
         });
 
@@ -407,7 +424,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void btnManualPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManualPaymentActionPerformed
-        JOptionPane.showMessageDialog(null,"Đã thu phí", "Thông báo",
+        JOptionPane.showMessageDialog(null, "Đã thu phí", "Thông báo",
                 JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnManualPaymentActionPerformed
 
@@ -417,7 +434,7 @@ public class MainForm extends javax.swing.JFrame {
 
 
     private void txtLicensePlateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLicensePlateActionPerformed
-        
+
     }//GEN-LAST:event_txtLicensePlateActionPerformed
 
     private void txtLicensePlateCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtLicensePlateCaretUpdate
@@ -427,11 +444,10 @@ public class MainForm extends javax.swing.JFrame {
         try {
             vp = dao.searchPaymentByLicensePlate(licensePlate);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Locale lc = new Locale("nv","VN");
+        Locale lc = new Locale("nv", "VN");
         NumberFormat nf = NumberFormat.getCurrencyInstance(lc);
-        String price = String.valueOf(vp.getFee());
         if (licensePlate.length() > 0 && vp.getFee() > 0 && vp.getTypeName().length() > 0) {
             lbPirce.setText(nf.format(vp.getFee()));
             lbTypeName.setText(vp.getTypeName());
@@ -439,7 +455,20 @@ public class MainForm extends javax.swing.JFrame {
             lbPirce.setText("Not available");
             lbTypeName.setText("Not available");
         }
+               
     }//GEN-LAST:event_txtLicensePlateCaretUpdate
+
+    private void btnManualPaymentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnManualPaymentKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            btnManualPayment.doClick();
+        }
+    }//GEN-LAST:event_btnManualPaymentKeyPressed
+
+    private void txtLicensePlateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLicensePlateKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            btnManualPayment.doClick();
+        }
+    }//GEN-LAST:event_txtLicensePlateKeyPressed
 
     /**
      * @param args the command line arguments
