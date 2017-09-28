@@ -5,6 +5,8 @@
  */
 package capstoneproject;
 
+import ats.swing.gui.MainForm;
+
 /**
  *
  * @author Chi Hieu
@@ -15,7 +17,8 @@ public class CapstoneProject {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        MainForm mainform = new MainForm();
+        mainform.setVisible(true);
     }
-    
+
 }
