@@ -23,11 +23,15 @@ DROP TABLE IF EXISTS `station`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `station` (
-  `IdStation` int(11) NOT NULL,
-  `Name` varchar(255) NOT NULL,
-  `Location` varchar(255) NOT NULL,
-  PRIMARY KEY (`IdStation`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `location` varchar(255) NOT NULL,
+  `zone` varchar(45) NOT NULL,
+  `account_id` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_station_account_idx` (`account_id`),
+  CONSTRAINT `fk_station_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`username`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,7 +40,7 @@ CREATE TABLE `station` (
 
 LOCK TABLES `station` WRITE;
 /*!40000 ALTER TABLE `station` DISABLE KEYS */;
-INSERT INTO `station` VALUES (1,'Fire','Tp.HCM'),(2,'Water','Đồng Nai');
+INSERT INTO `station` VALUES (1,'Cai Lậy','[1, 1]','QL1A','hieu'),(2,'Hồ Chí Minh','[10, 100]','Tp.HCM','huy');
 /*!40000 ALTER TABLE `station` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -49,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-25 15:35:10
+-- Dump completed on 2017-09-29 21:43:45

@@ -23,14 +23,15 @@ DROP TABLE IF EXISTS `account`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `account` (
-  `Username` varchar(255) NOT NULL,
-  `Password` varchar(255) NOT NULL,
-  `Role` int(11) NOT NULL,
-  `NumberId` varchar(45) NOT NULL,
-  `LicensePlate` varchar(45) NOT NULL,
-  PRIMARY KEY (`Username`),
-  KEY `_idx` (`LicensePlate`),
-  CONSTRAINT `Account_REF_Vehicle` FOREIGN KEY (`LicensePlate`) REFERENCES `vehicle` (`LicensePlate`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` int(11) NOT NULL,
+  `id_number` varchar(45) NOT NULL,
+  `license_plate` varchar(45) NOT NULL,
+  `e_wallet_id` varchar(45) NOT NULL,
+  PRIMARY KEY (`username`),
+  KEY `fk_account_vehicle_idx` (`license_plate`),
+  CONSTRAINT `fk_account_vehicle` FOREIGN KEY (`license_plate`) REFERENCES `vehicle` (`license_plate`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -40,7 +41,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES ('admin','admin',1,'12345689','33C-33333'),('hieu','hieu',2,'12345678','11A-11111'),('huy','huy',3,'123654789','44D-44444'),('son','son',3,'14785236','55F-55555'),('tin','tin',2,'12345679','22B-22222');
+INSERT INTO `account` VALUES ('admin','admin',1,'12345678','55F-5555','2525'),('hieu','hieu',2,'025307060','11A-1111','1234'),('huy','huy',2,'111111111','22B-2222','4321'),('son','son',3,'44444444','44D-4444','9876'),('tin','tin',3,'22222222','33C-3333','6789'),('user','user',2,'8654321','66G-6666','2222');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-25 15:35:09
+-- Dump completed on 2017-09-29 21:43:45

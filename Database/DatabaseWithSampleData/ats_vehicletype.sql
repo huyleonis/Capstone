@@ -23,10 +23,10 @@ DROP TABLE IF EXISTS `vehicletype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vehicletype` (
-  `IdType` int(50) NOT NULL AUTO_INCREMENT,
-  `NameType` varchar(50) NOT NULL,
-  PRIMARY KEY (`IdType`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+  `id` int(50) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,7 +35,7 @@ CREATE TABLE `vehicletype` (
 
 LOCK TABLES `vehicletype` WRITE;
 /*!40000 ALTER TABLE `vehicletype` DISABLE KEYS */;
-INSERT INTO `vehicletype` VALUES (1,'Car'),(2,'Truck'),(3,'Small Truck'),(4,'Bus');
+INSERT INTO `vehicletype` VALUES (1,'ô tô con'),(2,'xe tải nhẹ'),(3,'xe tải nặng'),(4,'xe du lịch'),(5,'xe container'),(6,'xe buýt');
 /*!40000 ALTER TABLE `vehicletype` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -48,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-25 15:35:09
+-- Dump completed on 2017-09-29 21:43:45

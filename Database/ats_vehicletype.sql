@@ -23,9 +23,9 @@ DROP TABLE IF EXISTS `vehicletype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vehicletype` (
-  `IdType` int(50) NOT NULL AUTO_INCREMENT,
-  `NameType` varchar(50) NOT NULL,
-  PRIMARY KEY (`IdType`)
+  `id` int(50) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -47,4 +47,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-25 14:37:30
+-- Dump completed on 2017-09-29 21:27:12

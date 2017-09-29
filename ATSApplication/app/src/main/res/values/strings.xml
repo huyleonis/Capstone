@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ATS Application</string>
+    <string name="title_activity_home">ATS Home Screen</string>
+</resources>
