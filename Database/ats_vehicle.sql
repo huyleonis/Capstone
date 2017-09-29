@@ -23,11 +23,11 @@ DROP TABLE IF EXISTS `vehicle`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vehicle` (
-  `LicensePlate` varchar(45) NOT NULL,
-  `IdType` int(50) NOT NULL,
-  PRIMARY KEY (`LicensePlate`),
-  KEY `IdType_idx` (`IdType`),
-  CONSTRAINT `Vehicle_REF_VehicleType` FOREIGN KEY (`IdType`) REFERENCES `vehicletype` (`IdType`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  `license_plate` varchar(45) NOT NULL,
+  `type_id` int(50) NOT NULL,
+  PRIMARY KEY (`license_plate`),
+  KEY `IdType_idx` (`type_id`),
+  CONSTRAINT `Vehicle_REF_VehicleType` FOREIGN KEY (`type_id`) REFERENCES `vehicletype` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -49,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-25 14:37:31
+-- Dump completed on 2017-09-29 21:27:13

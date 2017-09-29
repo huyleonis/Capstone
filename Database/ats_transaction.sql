@@ -23,16 +23,22 @@ DROP TABLE IF EXISTS `transaction`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `transaction` (
-  `IdTransaction` int(11) NOT NULL,
-  `Username` varchar(45) NOT NULL,
-  `IdPrice` int(11) NOT NULL,
-  `DateTime` datetime NOT NULL,
-  `Fee` double NOT NULL,
-  PRIMARY KEY (`IdTransaction`),
-  KEY `Username_idx` (`Username`),
-  KEY `Trans_REF_Price_idx` (`IdPrice`),
-  CONSTRAINT `Trans_REF_Account` FOREIGN KEY (`Username`) REFERENCES `account` (`Username`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `Trans_REF_Price` FOREIGN KEY (`IdPrice`) REFERENCES `price` (`IdPrice`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(225) NOT NULL,
+  `station_id` int(11) NOT NULL,
+  `date_time` datetime NOT NULL,
+  `vehicle_id` varchar(45) NOT NULL,
+  `status` varchar(45) NOT NULL,
+  `price_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_transaction_account_idx` (`username`),
+  KEY `fk_transaction_station_idx` (`station_id`),
+  KEY `fk_transaction_vehicle_idx` (`vehicle_id`),
+  KEY `fk_transaction_price_idx` (`price_id`),
+  CONSTRAINT `fk_transaction_account` FOREIGN KEY (`username`) REFERENCES `account` (`username`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_transaction_price` FOREIGN KEY (`price_id`) REFERENCES `price` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_transaction_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_transaction_vehicle` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicle` (`license_plate`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -54,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-25 14:37:31
+-- Dump completed on 2017-09-29 21:27:14

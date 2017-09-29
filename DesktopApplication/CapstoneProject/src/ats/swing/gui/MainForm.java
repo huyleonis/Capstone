@@ -83,6 +83,8 @@ public class MainForm extends javax.swing.JFrame {
         lbPirce = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         lbTypeName = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        lbStatus = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         tabHistory = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -110,7 +112,6 @@ public class MainForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(0, 0));
         setMinimumSize(new java.awt.Dimension(1280, 720));
-        setPreferredSize(new java.awt.Dimension(1280, 720));
         setSize(new java.awt.Dimension(1280, 720));
         getContentPane().setLayout(new java.awt.CardLayout());
 
@@ -176,7 +177,14 @@ public class MainForm extends javax.swing.JFrame {
 
         lbTypeName.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         lbTypeName.setForeground(new java.awt.Color(255, 0, 51));
-        lbTypeName.setText("Loại Xe");
+        lbTypeName.setText("Loại xe");
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel6.setText("Trạng thái:");
+
+        lbStatus.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
+        lbStatus.setForeground(new java.awt.Color(255, 0, 51));
+        lbStatus.setText("Đã thu phí");
 
         javax.swing.GroupLayout InfoPaneLayout = new javax.swing.GroupLayout(InfoPane);
         InfoPane.setLayout(InfoPaneLayout);
@@ -184,24 +192,29 @@ public class MainForm extends javax.swing.JFrame {
             InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(InfoPaneLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(InfoPaneLayout.createSequentialGroup()
+                            .addGroup(InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(70, 70, 70))
+                        .addGroup(InfoPaneLayout.createSequentialGroup()
+                            .addGroup(InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(lbPirce, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtLicensePlate, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addGap(19, 19, 19)))
+                    .addComponent(lbStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
                     .addGroup(InfoPaneLayout.createSequentialGroup()
                         .addGroup(InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(73, 73, 73))
-                    .addGroup(InfoPaneLayout.createSequentialGroup()
-                        .addGroup(InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lbTypeName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lbPirce, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtLicensePlate, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(19, 19, 19))))
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbTypeName, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         InfoPaneLayout.setVerticalGroup(
             InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(InfoPaneLayout.createSequentialGroup()
-                .addGap(43, 43, 43)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtLicensePlate, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -213,7 +226,11 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbTypeName)
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(lbStatus)
+                .addContainerGap())
         );
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -238,7 +255,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(InfoPane, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
                     .addComponent(btnManualPayment, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(46, 46, 46)
+                .addGap(43, 43, 43)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(46, 46, 46))
         );
@@ -452,8 +469,8 @@ public class MainForm extends javax.swing.JFrame {
             lbPirce.setText(nf.format(vp.getFee()));
             lbTypeName.setText(vp.getTypeName());
         } else {
-            lbPirce.setText("Not available");
-            lbTypeName.setText("Not available");
+            lbPirce.setText("Không hợp lệ");
+            lbTypeName.setText("Không hợp lệ");
         }
                
     }//GEN-LAST:event_txtLicensePlateCaretUpdate
@@ -522,10 +539,12 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lbPirce;
+    private javax.swing.JLabel lbStatus;
     private javax.swing.JLabel lbTypeName;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;

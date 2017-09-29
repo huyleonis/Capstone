@@ -23,10 +23,14 @@ DROP TABLE IF EXISTS `station`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `station` (
-  `IdStation` int(11) NOT NULL,
-  `Name` varchar(255) NOT NULL,
-  `Location` varchar(255) NOT NULL,
-  PRIMARY KEY (`IdStation`)
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `location` varchar(255) NOT NULL,
+  `zone` varchar(45) NOT NULL,
+  `account_id` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_station_account_idx` (`account_id`),
+  CONSTRAINT `fk_station_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`username`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -48,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-25 14:37:31
+-- Dump completed on 2017-09-29 21:27:13
