@@ -5,6 +5,7 @@
  */
 package capstoneproject;
 
+import ats.connection.RequestServer;
 import ats.swing.gui.MainForm;
 
 /**
@@ -15,10 +16,13 @@ public class CapstoneProject {
 
     /**
      * @param args the command line arguments
+     * @throws java.lang.Exception
      */
-    public static void main(String[] args) {
-        MainForm mainform = new MainForm();
-        mainform.setVisible(true);
+    public static void main(String[] args) throws Exception{
+//        MainForm mainform = new MainForm();
+//        mainform.setVisible(true);
+        RequestServer rs = new RequestServer();
+        rs.sendGet();
     }
 
 }

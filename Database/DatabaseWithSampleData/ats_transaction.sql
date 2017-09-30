@@ -24,22 +24,20 @@ DROP TABLE IF EXISTS `transaction`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `transaction` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(225) NOT NULL,
+  `username_id` int(11) NOT NULL,
   `station_id` int(11) NOT NULL,
   `date_time` datetime NOT NULL,
-  `vehicle_id` varchar(45) NOT NULL,
+  `license_plate` varchar(45) NOT NULL,
   `status` varchar(45) NOT NULL,
   `price_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_transaction_account_idx` (`username`),
   KEY `fk_transaction_station_idx` (`station_id`),
-  KEY `fk_transaction_vehicle_idx` (`vehicle_id`),
   KEY `fk_transaction_price_idx` (`price_id`),
-  CONSTRAINT `fk_transaction_account` FOREIGN KEY (`username`) REFERENCES `account` (`username`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  KEY `fk_transaction_account_idx` (`username_id`),
+  CONSTRAINT `fk_transaction_account` FOREIGN KEY (`username_id`) REFERENCES `account` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_transaction_price` FOREIGN KEY (`price_id`) REFERENCES `price` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_transaction_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_transaction_vehicle` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicle` (`license_plate`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+  CONSTRAINT `fk_transaction_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -48,7 +46,7 @@ CREATE TABLE `transaction` (
 
 LOCK TABLES `transaction` WRITE;
 /*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
-INSERT INTO `transaction` VALUES (1,'user',1,'2000-02-02 00:00:00','66G-6666','New',6),(2,'tin',1,'2000-02-02 00:00:00','33C-3333','New',3),(3,'hieu',1,'2000-02-02 00:00:00','11A-1111','Finish',1),(4,'huy',2,'2000-02-02 00:00:00','22B-2222','New',2);
+INSERT INTO `transaction` VALUES (1,1,1,'2017-01-01 00:00:00','11A-1111','Mới',1),(2,2,1,'2017-01-01 00:00:00','22B-2222','Hoàn Thành',2);
 /*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -61,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-29 21:43:46
+-- Dump completed on 2017-09-30 12:55:56
