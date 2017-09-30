@@ -16,37 +16,35 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `account`
+-- Table structure for table `beacon`
 --
 
-DROP TABLE IF EXISTS `account`;
+DROP TABLE IF EXISTS `beacon`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `account` (
+CREATE TABLE `beacon` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` int(11) NOT NULL,
-  `fullname` varchar(45) NOT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  `phone` varchar(45) DEFAULT NULL,
-  `number_id` varchar(45) DEFAULT NULL,
-  `e_wallet` varchar(45) DEFAULT NULL,
-  `vehicle_id` int(11) NOT NULL,
+  `uuid` varchar(50) NOT NULL,
+  `major` int(11) NOT NULL,
+  `minor` int(11) NOT NULL,
+  `station_id` int(11) NOT NULL,
+  `account_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_account_vehicle_idx` (`vehicle_id`),
-  CONSTRAINT `fk_account_vehicle` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicle` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+  KEY `fk_beacon_account_idx` (`account_id`),
+  KEY `fk_beacon_station_idx` (`station_id`),
+  CONSTRAINT `fk_beacon_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_beacon_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `account`
+-- Dumping data for table `beacon`
 --
 
-LOCK TABLES `account` WRITE;
-/*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'admin','admin',1,'admin','admim','123456789','123456789','12345',1),(2,'hieu','hieu',2,'hieu','hieu','0935526427','12345678','54321',2),(3,'son','son',3,'son','son','1234568711','251515151','12121',3);
-/*!40000 ALTER TABLE `account` ENABLE KEYS */;
+LOCK TABLES `beacon` WRITE;
+/*!40000 ALTER TABLE `beacon` DISABLE KEYS */;
+INSERT INTO `beacon` VALUES (1,'111',1234,4321,1,1),(2,'222',1478,3214,1,2);
+/*!40000 ALTER TABLE `beacon` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -58,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-30 12:55:55
+-- Dump completed on 2017-09-30 12:55:57

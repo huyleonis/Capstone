@@ -38,9 +38,9 @@ public class VehiclePaymentDAO {
     public VehiclePayment searchPaymentByLicensePlate(String licensePlate) throws Exception{
         VehiclePayment vp = new VehiclePayment();
         try {
-            String sql = "Select t.NameType, p.Price "
+            String sql = "Select t.name, p.price "
                     + "FROM vehicletype t, vehicle v, price p "
-                    + "WHERE t.IdType = v.IdType AND t.IdType = p.IdType AND v.LicensePlate = ?";
+                    + "WHERE t.id = v.type_id AND t.id = p.type_id AND v.license_plate = ?";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
             preStm.setString(1, licensePlate);
@@ -48,8 +48,8 @@ public class VehiclePaymentDAO {
             String nameType = "";
             double price = 0;
             if(rs.next()){
-                nameType = rs.getString("NameType");
-                price = rs.getDouble("Price");
+                nameType = rs.getString("name");
+                price = rs.getDouble("price");
                 vp.setTypeName(nameType);
                 vp.setFee(price);
             }
