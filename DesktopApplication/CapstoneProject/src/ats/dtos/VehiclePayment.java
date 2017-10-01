@@ -10,9 +10,26 @@ package ats.dtos;
  * @author Chi Hieu
  */
 public class VehiclePayment {
-    private String licensePlate, typeName;
+    private String licensePlate, typeName, status;
     private double fee;
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public VehiclePayment(String licensePlate, String typeName, String status, double fee) {
+        this.licensePlate = licensePlate;
+        this.typeName = typeName;
+        this.status = status;
+        this.fee = fee;
+    }
+
+    
+    
     public VehiclePayment() {
     }
 

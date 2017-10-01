@@ -17,6 +17,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.CaretEvent;
 import javax.swing.table.DefaultTableModel;
 
@@ -27,7 +29,6 @@ import javax.swing.table.DefaultTableModel;
 public class MainForm extends javax.swing.JFrame {
 
     private DefaultTableModel model;
-
     /**
      * Creates new form MainForm
      */
@@ -37,32 +38,31 @@ public class MainForm extends javax.swing.JFrame {
 
     }
 
-    private void loadDataIntoJTable() throws Exception {
-        model = new DefaultTableModel();
-        //Set Column Title
-        Vector column = new Vector();
-        column.add("Transaction ID");
-        column.add("License Plate");
-        column.add("Username");
-        column.add("Fee");
-        column.add("Date");
-        model.setColumnIdentifiers(column);
-        TransactionDAO dao = new TransactionDAO();
-        List<Transaction> list = dao.listOfTransaction();
-        for (int i = 0; i < list.size(); i++) {
-            Transaction tr = (Transaction) list.get(i);
-            Vector row = new Vector();
-            row.add(tr.getIdTransaction());
-            row.add(tr.getLicensePlate());
-            row.add(tr.getUsername());
-            row.add(tr.getFee());
-            row.add(tr.getDateOfTransaction());
-            model.addRow(row);
-        }
-
-        tblHistory.setModel(model);
-    }
-
+//    private void loadDataIntoJTable() throws Exception {
+//        model = new DefaultTableModel();
+//        //Set Column Title
+//        Vector column = new Vector();
+//        column.add("Transaction ID");
+//        column.add("License Plate");
+//        column.add("Username");
+//        column.add("Fee");
+//        column.add("Date");
+//        model.setColumnIdentifiers(column);
+//        TransactionDAO dao = new TransactionDAO();
+//        List<Transaction> list = dao.listOfTransaction();
+//        for (int i = 0; i < list.size(); i++) {
+//            Transaction tr = (Transaction) list.get(i);
+//            Vector row = new Vector();
+//            row.add(tr.getIdTransaction());
+//            row.add(tr.getLicensePlate());
+//            row.add(tr.getUsername());
+//            row.add(tr.getFee());
+//            row.add(tr.getDateOfTransaction());
+//            model.addRow(row);
+//        }
+//
+//        tblHistory.setModel(model);
+//    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -119,11 +119,9 @@ public class MainForm extends javax.swing.JFrame {
         jTabbedPane1.setMinimumSize(new java.awt.Dimension(1280, 720));
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(1280, 720));
 
-        tabHome.setBackground(new java.awt.Color(153, 204, 255));
         tabHome.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         tabHome.setPreferredSize(new java.awt.Dimension(1280, 720));
 
-        InfoPane.setBackground(new java.awt.Color(204, 255, 255));
         InfoPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Xe hiện tại", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Arial", 0, 24), new java.awt.Color(102, 102, 255))); // NOI18N
         InfoPane.setMaximumSize(new java.awt.Dimension(270, 350));
         InfoPane.setMinimumSize(new java.awt.Dimension(270, 350));
@@ -196,19 +194,19 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, InfoPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(InfoPaneLayout.createSequentialGroup()
-                        .addComponent(txtLicensePlate, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnManualPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lbStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(InfoPaneLayout.createSequentialGroup()
                         .addGroup(InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lbTypeName, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbPirce, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lbPirce, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(InfoPaneLayout.createSequentialGroup()
+                                .addComponent(txtLicensePlate, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnManualPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -252,11 +250,13 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 925, Short.MAX_VALUE)
+            .addGap(0, 830, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -294,8 +294,6 @@ public class MainForm extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Thu Phí", tabHome);
         tabHome.getAccessibleContext().setAccessibleName("");
-
-        tabHistory.setBackground(new java.awt.Color(153, 204, 255));
 
         tblHistory.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tblHistory.setModel(new javax.swing.table.DefaultTableModel(
@@ -492,23 +490,23 @@ public class MainForm extends javax.swing.JFrame {
             lbTypeName.setText("");
             lbStatus.setText("");
         }
-               
+
     }//GEN-LAST:event_txtLicensePlateCaretUpdate
 
     private void btnManualPaymentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnManualPaymentKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnManualPayment.doClick();
         }
     }//GEN-LAST:event_btnManualPaymentKeyPressed
 
     private void txtLicensePlateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLicensePlateKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnManualPayment.doClick();
         }
     }//GEN-LAST:event_txtLicensePlateKeyPressed
 
     private void btnOpenCarrierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenCarrierActionPerformed
-        // TODO add your handling code here:
+        txtLicensePlate.setText("");
     }//GEN-LAST:event_btnOpenCarrierActionPerformed
 
     private void btnOpenCarrierKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnOpenCarrierKeyPressed
@@ -519,28 +517,6 @@ public class MainForm extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
