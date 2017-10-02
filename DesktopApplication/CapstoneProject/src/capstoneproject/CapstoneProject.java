@@ -5,8 +5,8 @@
  */
 package capstoneproject;
 
-import ats.connection.RequestServer;
 import ats.swing.gui.MainForm;
+import javax.swing.UIManager;
 
 /**
  *
@@ -18,11 +18,12 @@ public class CapstoneProject {
      * @param args the command line arguments
      * @throws java.lang.Exception
      */
-    public static void main(String[] args) throws Exception{
-//        MainForm mainform = new MainForm();
-//        mainform.setVisible(true);
-        RequestServer rs = new RequestServer();
-        rs.sendGet();
+    public static void main(String[] args) throws Exception {
+        String theme = "com.jtattoo.plaf.texture.TextureLookAndFeel";
+        UIManager.setLookAndFeel(theme);
+        MainForm mainform = new MainForm();
+        mainform.setVisible(true);
+
     }
 
 }

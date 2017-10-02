@@ -5,6 +5,7 @@
  */
 package ats.connection;
 
+import ats.dtos.VehiclePayment;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -39,13 +40,21 @@ public class RequestServer {
                 // Loop through each item
 //                for (Object o : a) {
 //                    JSONObject tutorials = (JSONObject) o;
+                    VehiclePayment vehiclePayment = new VehiclePayment();
 
-                    Long id = (Long) a.get("id");
-                    System.out.println("Post ID : " + id);
-
-                    String title = (String) a.get("name");
-                    System.out.println("Post Title : " + title);
-
+                    String licensePlate = (String) a.get("license_plate");
+                    vehiclePayment.setLicensePlate(licensePlate);
+                    
+                    String typeName = (String) a.get("name");
+                    vehiclePayment.setTypeName(typeName);
+                    //System.out.println("Post ID : " + typeName);
+                    
+                    Double price = (Double) a.get("price");
+                    vehiclePayment.setFee(price);
+//                    System.out.println("Post Title : " + price);
+                    
+                    String status = (String) a.get("status");
+                    vehiclePayment.setStatus(status);
                     System.out.println("\n");
 //                }
             }
