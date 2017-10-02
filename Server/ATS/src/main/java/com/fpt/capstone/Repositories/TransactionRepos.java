@@ -24,5 +24,7 @@ public interface TransactionRepos extends JpaRepository<Transaction,Integer>{
                                             " where a.role = 3 and a.vehicle_id = v.id and v.license_plate = ?1)", nativeQuery = true)
     Transaction findByLicensePlate(String a, int id);
 
-
+    @Query(value = "insert into transaction ( username_id, station_id, date_time, status, price_id)" +
+            " values ((select a.id from vehicle v, account a where v.id = a.vehicle_id and v.license_plate = ?1), ?2, '2017-01-01 00:00:03', 'Chưa thanh toán', (select price.id from vehicle ve, vehicletype vt, price price where ve.license_plate = ?1 and ve.type_id = vt.id and vt.id = price.type_id and price.station_id = ?2))", nativeQuery = true)
+    Transaction insertTransaction(String license_plate, int station_id);
 }
