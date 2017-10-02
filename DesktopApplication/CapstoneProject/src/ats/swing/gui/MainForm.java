@@ -5,13 +5,19 @@
  */
 package ats.swing.gui;
 
+import ats.connection.RequestServer;
+import ats.connection.Todo;
 import ats.daos.TransactionDAO;
 import ats.daos.VehiclePaymentDAO;
 import ats.dtos.Transaction;
 import ats.dtos.VehiclePayment;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Timer;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +34,9 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MainForm extends javax.swing.JFrame {
 
+    Timer timer;
     private DefaultTableModel model;
+
     /**
      * Creates new form MainForm
      */
@@ -473,23 +481,24 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtLicensePlateActionPerformed
 
     private void txtLicensePlateCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtLicensePlateCaretUpdate
-        String licensePlate = txtLicensePlate.getText();
-        VehiclePaymentDAO dao = new VehiclePaymentDAO();
-        VehiclePayment vp = new VehiclePayment();
-        try {
-            vp = dao.searchPaymentByLicensePlate(licensePlate);
-        } catch (Exception ex) {
-            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        DecimalFormat formatter = new DecimalFormat("###,###,###.##");
-        if (licensePlate.length() > 0 && vp.getFee() > 0 && vp.getTypeName().length() > 0) {
-            lbPirce.setText(formatter.format(vp.getFee()) + " đồng");
-            lbTypeName.setText(vp.getTypeName());
-        } else {
-            lbPirce.setText("");
-            lbTypeName.setText("");
-            lbStatus.setText("");
-        }
+
+//String licensePlate = txtLicensePlate.getText();
+//        VehiclePaymentDAO dao = new VehiclePaymentDAO();
+//        VehiclePayment vp = new VehiclePayment();
+//        try {
+//            vp = dao.searchPaymentByLicensePlate(licensePlate);
+//        } catch (Exception ex) {
+//            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        DecimalFormat formatter = new DecimalFormat("###,###,###.##");
+//        if (licensePlate.length() > 0 && vp.getFee() > 0 && vp.getTypeName().length() > 0) {
+//            lbPirce.setText(formatter.format(vp.getFee()) + " đồng");
+//            lbTypeName.setText(vp.getTypeName());
+//        } else {
+//            lbPirce.setText("");
+//            lbTypeName.setText("");
+//            lbStatus.setText("");
+//        }
 
     }//GEN-LAST:event_txtLicensePlateCaretUpdate
 
@@ -504,9 +513,26 @@ public class MainForm extends javax.swing.JFrame {
             btnManualPayment.doClick();
         }
     }//GEN-LAST:event_txtLicensePlateKeyPressed
+    Todo todo = new Todo();
+    Queue<VehiclePayment> qe = todo.list();   // list transaction
+
 
     private void btnOpenCarrierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenCarrierActionPerformed
-        txtLicensePlate.setText("");
+        if (!qe.isEmpty()) {
+            VehiclePayment vp = qe.poll();
+            DecimalFormat formatter = new DecimalFormat("###,###,###.##");
+            if (vp.getLicensePlate().length() > 0 && vp.getFee() > 0 && vp.getTypeName().length() > 0) {
+                txtLicensePlate.setText(vp.getLicensePlate());
+                lbPirce.setText(formatter.format(vp.getFee()) + " đồng");
+                lbTypeName.setText(vp.getTypeName());
+                lbStatus.setText(vp.getStatus());
+            }
+        } else {
+            txtLicensePlate.setText("Chưa có xe mới...");
+            lbPirce.setText("Chưa có xe mới...");
+            lbTypeName.setText("Chưa có xe mới...");
+            lbStatus.setText("Chưa có xe mới...");
+        }
     }//GEN-LAST:event_btnOpenCarrierActionPerformed
 
     private void btnOpenCarrierKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnOpenCarrierKeyPressed

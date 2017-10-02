@@ -9,7 +9,7 @@ package ats.dtos;
  *
  * @author Chi Hieu
  */
-public class VehiclePayment {
+public class VehiclePayment implements Comparable<VehiclePayment>{
     private String licensePlate, typeName, status;
     private double fee;
 
@@ -66,6 +66,11 @@ public class VehiclePayment {
 
     public void setFee(double fee) {
         this.fee = fee;
+    }
+
+    @Override
+    public int compareTo(VehiclePayment o) {
+        return Integer.compare(this.licensePlate.length(), o.licensePlate.length());
     }
     
     

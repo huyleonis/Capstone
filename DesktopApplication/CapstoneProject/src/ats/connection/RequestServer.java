@@ -10,92 +10,76 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import org.json.simple.JSONArray;
+import java.util.Queue;
+import java.util.Timer;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Chi Hieu
  */
-public class RequestServer {
+public class RequestServer extends TimerTask {
+
+    public static final String urlName = "http://192.168.88.191:8080/price/findPrice/B9407F30-F5F8-466E-AFF9-25556B57FE6D:36857:31381/tuan";
 
     //private final String USER_AGENT = "Mozilla/5.0";
-
     // HTTP GET request
-    public void sendGet() throws Exception {
+    
+    public VehiclePayment sendGet() throws Exception {
         JSONParser parser = new JSONParser();
+        VehiclePayment vehiclePayment = new VehiclePayment();
         try {
-            URL oracle = new URL("http://192.168.1.10:8080/ats/station/111"); // URL to Parse
+            URL oracle = new URL(urlName); // URL to Parse
             URLConnection yc = oracle.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
 
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
-                JSONObject a = (JSONObject) parser.parse(inputLine);
-
+                JSONObject payment = (JSONObject)parser.parse(inputLine);
                 // Loop through each item
 //                for (Object o : a) {
 //                    JSONObject tutorials = (JSONObject) o;
-                    VehiclePayment vehiclePayment = new VehiclePayment();
+                String licensePlate = (String) payment.get("nameStation");
+                vehiclePayment.setLicensePlate(licensePlate);
 
-                    String licensePlate = (String) a.get("license_plate");
-                    vehiclePayment.setLicensePlate(licensePlate);
-                    
-                    String typeName = (String) a.get("name");
-                    vehiclePayment.setTypeName(typeName);
-                    //System.out.println("Post ID : " + typeName);
-                    
-                    Double price = (Double) a.get("price");
-                    vehiclePayment.setFee(price);
-//                    System.out.println("Post Title : " + price);
-                    
-                    String status = (String) a.get("status");
-                    vehiclePayment.setStatus(status);
-                    System.out.println("\n");
-//                }
+                String typeName = (String) payment.get("nameStation");
+                vehiclePayment.setTypeName(typeName);
+//                System.out.println("Post ID : " + typeName);
+
+                Double price = (Double) payment.get("price");
+                vehiclePayment.setFee(price);
+//                System.out.println("Post Title : " + price);
+
+                String status = (String) payment.get("nameStation");
+                vehiclePayment.setStatus(status);
+//                System.out.println("\n");
+//                
+
             }
-            in.close();
+            //in.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return vehiclePayment;
     }
+
+    @Override
+    public void run() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+
 }
-//        
-//        String url = "192.168.1.10:8080/ats/station/111?uuid=123456";
-//
-//        URL obj = new URL(url);
-//        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-//
-//        // optional default is GET
-//        con.setRequestMethod("GET");
-//
-//        //add request header
-//        con.setRequestProperty("User-Agent", USER_AGENT);
-//        int responseCode = con.getResponseCode();
-//        System.out.println("\nSending 'GET' request to URL : " + url);
-//        System.out.println("Response Code : " + responseCode);
-//
-//        BufferedReader in = new BufferedReader(
-//                new InputStreamReader(con.getInputStream()));
-//        String inputLine;
-//        StringBuffer response = new StringBuffer();
-//
-//        while ((inputLine = in.readLine()) != null) {
-//            response.append(inputLine);
-//        }
-//        in.close();
-//
-//        //print result
-//        System.out.println(response.toString());
-//
-//    }
 //    
+    
 // HTTP POST request
 //	private void sendPost() throws Exception {
 //
