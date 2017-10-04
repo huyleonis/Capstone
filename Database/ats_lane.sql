@@ -16,41 +16,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `transaction`
+-- Table structure for table `lane`
 --
 
-DROP TABLE IF EXISTS `transaction`;
+DROP TABLE IF EXISTS `lane`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `transaction` (
-  `id` varchar(50) NOT NULL,
-  `username_id` int(11) NOT NULL,
+CREATE TABLE `lane` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
   `station_id` int(11) NOT NULL,
-  `date_time` datetime NOT NULL,
-  `status` varchar(45) NOT NULL,
-  `price_id` int(11) NOT NULL,
-  `lane_id` int(11) DEFAULT NULL,
-  `type` tinyint(1) NOT NULL,
-  `photo` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_transaction_station_idx` (`station_id`),
-  KEY `fk_transaction_price_idx` (`price_id`),
-  KEY `fk_transaction_account_idx` (`username_id`),
-  KEY `fk_transaction_lane_idx` (`lane_id`),
-  CONSTRAINT `fk_transaction_account` FOREIGN KEY (`username_id`) REFERENCES `account` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_transaction_lane` FOREIGN KEY (`lane_id`) REFERENCES `lane` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_transaction_price` FOREIGN KEY (`price_id`) REFERENCES `price` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_transaction_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_lane_station_idx` (`station_id`),
+  CONSTRAINT `fk_lane_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `transaction`
+-- Dumping data for table `lane`
 --
 
-LOCK TABLES `transaction` WRITE;
-/*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
-/*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
+LOCK TABLES `lane` WRITE;
+/*!40000 ALTER TABLE `lane` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lane` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -62,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-04 14:00:04
+-- Dump completed on 2017-10-04 14:00:03

@@ -23,9 +23,11 @@ DROP TABLE IF EXISTS `vehicle`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vehicle` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `license_plate` varchar(45) NOT NULL,
   `type_id` int(50) NOT NULL,
-  PRIMARY KEY (`license_plate`),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `license_plate_UNIQUE` (`license_plate`),
   KEY `IdType_idx` (`type_id`),
   CONSTRAINT `Vehicle_REF_VehicleType` FOREIGN KEY (`type_id`) REFERENCES `vehicletype` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -49,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-29 21:27:13
+-- Dump completed on 2017-10-04 14:00:05

@@ -16,41 +16,35 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `transaction`
+-- Table structure for table `beacon`
 --
 
-DROP TABLE IF EXISTS `transaction`;
+DROP TABLE IF EXISTS `beacon`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `transaction` (
-  `id` varchar(50) NOT NULL,
-  `username_id` int(11) NOT NULL,
+CREATE TABLE `beacon` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(50) NOT NULL,
+  `major` int(11) NOT NULL,
+  `minor` int(11) NOT NULL,
   `station_id` int(11) NOT NULL,
-  `date_time` datetime NOT NULL,
-  `status` varchar(45) NOT NULL,
-  `price_id` int(11) NOT NULL,
-  `lane_id` int(11) DEFAULT NULL,
+  `lane_id` int(11) NOT NULL,
   `type` tinyint(1) NOT NULL,
-  `photo` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_transaction_station_idx` (`station_id`),
-  KEY `fk_transaction_price_idx` (`price_id`),
-  KEY `fk_transaction_account_idx` (`username_id`),
-  KEY `fk_transaction_lane_idx` (`lane_id`),
-  CONSTRAINT `fk_transaction_account` FOREIGN KEY (`username_id`) REFERENCES `account` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_transaction_lane` FOREIGN KEY (`lane_id`) REFERENCES `lane` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_transaction_price` FOREIGN KEY (`price_id`) REFERENCES `price` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_transaction_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_beacon_station_idx` (`station_id`),
+  KEY `fk_beacon_lane_idx` (`lane_id`),
+  CONSTRAINT `fk_beacon_lane` FOREIGN KEY (`lane_id`) REFERENCES `lane` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_beacon_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `transaction`
+-- Dumping data for table `beacon`
 --
 
-LOCK TABLES `transaction` WRITE;
-/*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
-/*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
+LOCK TABLES `beacon` WRITE;
+/*!40000 ALTER TABLE `beacon` DISABLE KEYS */;
+/*!40000 ALTER TABLE `beacon` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
