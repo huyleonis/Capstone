@@ -25,10 +25,11 @@ public interface DishCategoryDetailRepo extends JpaRepository<DishCategoryDetail
    void insertDishCategoryDetail(Long dishId, Long categoryId);
 
 
-
    @Query(value = "select * from dish_category_detail where dish_id in \n" +
-                  "  (select id from dishes where user_id in" +
-                  "    (select followed_user_id from follows where user_id = ?1) and deleted = false)" +
-                  "and dish_category_id = ?2", nativeQuery = true)
-   List<DishCategoryDetail> findDishCategoryDetailRelatedToUser(Long userId, Long dishCategoryId);
+           "  (select id from dishes where user_id in" +
+           "    (select followed_user_id from follows where user_id = ?1) and deleted = false)" +
+           "and dish_category_id = ?2", nativeQuery = true)
+   default List<DishCategoryDetail> findDishCategoryDetailRelatedToUser(Long userId, Long dishCategoryId) {
+      return null;
+   }
 }
