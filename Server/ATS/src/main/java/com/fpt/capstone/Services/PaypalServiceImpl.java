@@ -11,12 +11,12 @@ import com.fpt.capstone.Paypal.Utils.PaypalPaymentMethod;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
 public class PaypalServiceImpl implements PaypalService {
 
     APIContext apiContext = new APIContext(clientID, clientSecret, mode);

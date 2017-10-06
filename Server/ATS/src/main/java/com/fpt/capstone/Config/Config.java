@@ -13,10 +13,6 @@ import org.springframework.http.converter.json.GsonHttpMessageConverter;
 
 //@EnableAutoConfiguration(exclude = JacksonAutoConfiguration.class)
 @EnableAutoConfiguration
-@Configuration
-@ComponentScan(basePackages = "com.fpt.capstone.Services")
-@EnableJpaRepositories(basePackages = "com.fpt.capstone.Repositories")
-@EntityScan(basePackages = "com.fpt.capstone.Entities")
 public class Config {
 
 //    @Bean

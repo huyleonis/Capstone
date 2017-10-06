@@ -20,8 +20,14 @@ import com.paypal.base.rest.PayPalRESTException;
 @Service
 public class PaypalService {
 
-	@Autowired
-	private APIContext apiContext;
+//	@Autowired
+//	private APIContext apiContext;
+
+	public static final String mode = "sandbox";
+	public static final String clientId = "AQUIw_QD53VPpT-5C6rhrCbqRCAni_JczJcyWuiGmevazOsN1oQz-QPWY2wDxp645HcYm9HlRLzRjjfs";
+	public static final String clientSecret = "EFBNXDXITaycOeOhc-oEigNzUyr53pmP2q2zit1nWdvVowV4BZMQTxRLOxobcsv3U1FdBKVTR4-agzUM";
+
+	APIContext apiContext = new APIContext(clientId, clientSecret, mode);
 	
 	public Payment createPayment(
 			Double total, 
