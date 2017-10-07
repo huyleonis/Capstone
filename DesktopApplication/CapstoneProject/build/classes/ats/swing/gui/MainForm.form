@@ -232,14 +232,13 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
+                      <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="lbStatus" alignment="0" max="32767" attributes="0"/>
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jLabel5" alignment="0" min="-2" pref="176" max="-2" attributes="0"/>
-                                      <Component id="jLabel2" alignment="0" min="-2" pref="176" max="-2" attributes="0"/>
                                       <Component id="jLabel6" alignment="0" min="-2" pref="176" max="-2" attributes="0"/>
                                       <Component id="lbTypeName" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
                                       <Component id="jLabel4" alignment="0" min="-2" pref="176" max="-2" attributes="0"/>
@@ -249,6 +248,8 @@
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Component id="btnManualPayment" min="-2" pref="151" max="-2" attributes="0"/>
                                       </Group>
+                                      <Component id="jLabel2" alignment="0" min="-2" pref="176" max="-2" attributes="0"/>
+                                      <Component id="lbId" alignment="0" min="-2" pref="197" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
@@ -279,7 +280,9 @@
                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="lbStatus" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="35" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="lbId" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace pref="15" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -383,6 +386,11 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnManualPaymentActionPerformed"/>
                     <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btnManualPaymentKeyPressed"/>
                   </Events>
+                </Component>
+                <Component class="javax.swing.JLabel" name="lbId">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="id"/>
+                  </Properties>
                 </Component>
               </SubComponents>
             </Container>

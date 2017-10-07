@@ -5,28 +5,20 @@
  */
 package ats.swing.gui;
 
-import ats.connection.RequestServer;
-import ats.connection.Todo;
-import ats.daos.TransactionDAO;
-import ats.daos.VehiclePaymentDAO;
-import ats.dtos.Transaction;
+import ats.connection.AutoPaymentRequest;
+import ats.connection.ManualPaymentRequest;
+import ats.connection.LoopRequest;
 import ats.dtos.VehiclePayment;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Timer;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.event.CaretEvent;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.Timer;
 
 /**
  *
@@ -35,42 +27,72 @@ import javax.swing.table.DefaultTableModel;
 public class MainForm extends javax.swing.JFrame {
 
     Timer timer;
-    private DefaultTableModel model;
+    AutoPaymentRequest apr = new AutoPaymentRequest();
+    Queue<VehiclePayment> qe = apr.getAutoTrans(1);
 
     /**
      * Creates new form MainForm
      */
     public MainForm() {
+        //Timer timer;
         initComponents();
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-
+        lbId.setVisible(false);
+        //updateForm();
+//        String licensePlate = txtLicensePlate.getText().trim();
+//        if ("".equals(licensePlate)) {
+//            timer = new Timer(1000, new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    if (!qe.isEmpty()) {
+//                        VehiclePayment vp = qe.poll();
+//                        DecimalFormat formatter = new DecimalFormat("###,###,###.##");
+//                        if (vp.getLicensePlate().length() > 0 && vp.getFee() > 0 && vp.getTypeName().length() > 0) {
+//                            txtLicensePlate.setText(vp.getLicensePlate());
+//                            lbPirce.setText(formatter.format(vp.getFee()) + " đồng");
+//                            lbTypeName.setText(vp.getTypeName());
+//                            lbStatus.setText(vp.getStatus());
+//                        }
+//                    } else {
+//                        txtLicensePlate.setText("");
+//                        lbPirce.setText("Chưa có xe mới...");
+//                        lbTypeName.setText("Chưa có xe mới...");
+//                        lbStatus.setText("Chưa có xe mới...");
+//                    }
+//                }
+//            });
+//        }
+//        timer.start();
     }
 
-//    private void loadDataIntoJTable() throws Exception {
-//        model = new DefaultTableModel();
-//        //Set Column Title
-//        Vector column = new Vector();
-//        column.add("Transaction ID");
-//        column.add("License Plate");
-//        column.add("Username");
-//        column.add("Fee");
-//        column.add("Date");
-//        model.setColumnIdentifiers(column);
-//        TransactionDAO dao = new TransactionDAO();
-//        List<Transaction> list = dao.listOfTransaction();
-//        for (int i = 0; i < list.size(); i++) {
-//            Transaction tr = (Transaction) list.get(i);
-//            Vector row = new Vector();
-//            row.add(tr.getIdTransaction());
-//            row.add(tr.getLicensePlate());
-//            row.add(tr.getUsername());
-//            row.add(tr.getFee());
-//            row.add(tr.getDateOfTransaction());
-//            model.addRow(row);
-//        }
-//
-//        tblHistory.setModel(model);
-//    }
+    public void updateForm() {
+        String licensePlate = txtLicensePlate.getText().trim();
+        if ("".equals(licensePlate) || licensePlate.isEmpty()) {
+            timer = new Timer(1000, btnOpenCarrier.getAction());
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    if (!qe.isEmpty()) {
+//                        VehiclePayment vp = qe.poll();
+//                        DecimalFormat formatter = new DecimalFormat("###,###,###.##");
+//                        if (vp.getLicensePlate().length() > 0 && vp.getFee() > 0 && vp.getTypeName().length() > 0) {
+//                            txtLicensePlate.setText(vp.getLicensePlate());
+//                            lbPirce.setText(formatter.format(vp.getFee()) + " đồng");
+//                            lbTypeName.setText(vp.getTypeName());
+//                            lbStatus.setText(vp.getStatus());
+//                        }
+//                    } else {
+//                        txtLicensePlate.setText("");
+//                        lbPirce.setText("Chưa có xe mới...");
+//                        lbTypeName.setText("Chưa có xe mới...");
+//                        lbStatus.setText("Chưa có xe mới...");
+//                    }
+//                }
+//            });
+//        } else {
+//            //timer.stop();
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -92,6 +114,7 @@ public class MainForm extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         lbStatus = new javax.swing.JLabel();
         btnManualPayment = new javax.swing.JButton();
+        lbId = new javax.swing.JLabel();
         btnOpenCarrier = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         tabHistory = new javax.swing.JPanel();
@@ -195,18 +218,19 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        lbId.setText("id");
+
         javax.swing.GroupLayout InfoPaneLayout = new javax.swing.GroupLayout(InfoPane);
         InfoPane.setLayout(InfoPaneLayout);
         InfoPaneLayout.setHorizontalGroup(
             InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, InfoPaneLayout.createSequentialGroup()
+            .addGroup(InfoPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lbStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(InfoPaneLayout.createSequentialGroup()
                         .addGroup(InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lbTypeName, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -214,7 +238,9 @@ public class MainForm extends javax.swing.JFrame {
                             .addGroup(InfoPaneLayout.createSequentialGroup()
                                 .addComponent(txtLicensePlate, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnManualPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnManualPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbId, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -239,7 +265,9 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lbStatus)
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbId)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         btnOpenCarrier.setFont(new java.awt.Font("Arial", 0, 22)); // NOI18N
@@ -467,8 +495,26 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void btnManualPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManualPaymentActionPerformed
-        JOptionPane.showMessageDialog(null, "Đã thu phí", "Thông báo",
-                JOptionPane.INFORMATION_MESSAGE);
+        ManualPaymentRequest rs = new ManualPaymentRequest();
+        VehiclePayment vp;
+        String id = lbId.getText();
+        String status = "";
+        if (id.length() > 0) {
+
+            try {
+                vp = rs.updateManualPayment(id);
+                status = vp.getStatus();
+                lbStatus.setText(status);
+            } catch (Exception ex) {
+                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (status.length() > 0) {
+            JOptionPane.showMessageDialog(null, status, "Thông báo",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+
+
     }//GEN-LAST:event_btnManualPaymentActionPerformed
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
@@ -482,57 +528,86 @@ public class MainForm extends javax.swing.JFrame {
 
     private void txtLicensePlateCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtLicensePlateCaretUpdate
 
-//String licensePlate = txtLicensePlate.getText();
-//        VehiclePaymentDAO dao = new VehiclePaymentDAO();
-//        VehiclePayment vp = new VehiclePayment();
-//        try {
-//            vp = dao.searchPaymentByLicensePlate(licensePlate);
-//        } catch (Exception ex) {
-//            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        DecimalFormat formatter = new DecimalFormat("###,###,###.##");
-//        if (licensePlate.length() > 0 && vp.getFee() > 0 && vp.getTypeName().length() > 0) {
-//            lbPirce.setText(formatter.format(vp.getFee()) + " đồng");
-//            lbTypeName.setText(vp.getTypeName());
-//        } else {
-//            lbPirce.setText("");
-//            lbTypeName.setText("");
-//            lbStatus.setText("");
-//        }
 
     }//GEN-LAST:event_txtLicensePlateCaretUpdate
 
     private void btnManualPaymentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnManualPaymentKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            btnManualPayment.doClick();
-        }
+//        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+//            timer.stop();
+//            btnManualPayment.doClick();
+//        }
+
     }//GEN-LAST:event_btnManualPaymentKeyPressed
 
     private void txtLicensePlateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLicensePlateKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            btnManualPayment.doClick();
+        if (evt.getKeyCode() == KeyEvent.VK_SPACE) {
+            //timer.stop();
+            String licensePlate = txtLicensePlate.getText();
+            ManualPaymentRequest rs = new ManualPaymentRequest();
+            VehiclePayment vp = new VehiclePayment();
+            try {
+                vp = rs.insertManualPayment(licensePlate, 1);
+            } catch (Exception ex) {
+                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            DecimalFormat formatter = new DecimalFormat("###,###,###.##");
+            if (licensePlate.length() > 0 && vp.getFee() > 0 && vp.getTypeName().length() > 0) {
+                lbPirce.setText(formatter.format(vp.getFee()) + " đồng");
+                lbTypeName.setText(vp.getTypeName());
+                lbStatus.setText(vp.getStatus());
+                lbId.setText(vp.getId());
+            } else {
+                lbPirce.setText("");
+                lbTypeName.setText("");
+                lbStatus.setText("");
+                lbId.setText("");
+            }
         }
     }//GEN-LAST:event_txtLicensePlateKeyPressed
-    Todo todo = new Todo();
-    Queue<VehiclePayment> qe = todo.list();   // list transaction
+    // list transaction
 
 
     private void btnOpenCarrierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenCarrierActionPerformed
+        //timer.stop();
+        String id = lbId.getText();
+        if(id != "id"){
+            ManualPaymentRequest mpr = new ManualPaymentRequest();
+            try {
+                mpr.finishManualPayment(id);
+            } catch (Exception ex) {
+                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         if (!qe.isEmpty()) {
             VehiclePayment vp = qe.poll();
             DecimalFormat formatter = new DecimalFormat("###,###,###.##");
-            if (vp.getLicensePlate().length() > 0 && vp.getFee() > 0 && vp.getTypeName().length() > 0) {
+            if (vp != null) {
                 txtLicensePlate.setText(vp.getLicensePlate());
                 lbPirce.setText(formatter.format(vp.getFee()) + " đồng");
                 lbTypeName.setText(vp.getTypeName());
                 lbStatus.setText(vp.getStatus());
+                lbId.setText(vp.getId());
             }
         } else {
-            txtLicensePlate.setText("Chưa có xe mới...");
+            txtLicensePlate.setText("");
             lbPirce.setText("Chưa có xe mới...");
             lbTypeName.setText("Chưa có xe mới...");
             lbStatus.setText("Chưa có xe mới...");
+            lbId.setText("id");
+            //timer.start();
         }
+
+//        ManualPaymentRequest mpr = new ManualPaymentRequest();
+//        try {
+//            VehiclePayment vp = mpr.finishManualPayment(lbId.getText());
+//            lbPirce.setText("");
+//            lbTypeName.setText("");
+//            lbStatus.setText("");
+//            lbId.setText("");
+//        } catch (Exception ex) {
+//            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+
     }//GEN-LAST:event_btnOpenCarrierActionPerformed
 
     private void btnOpenCarrierKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnOpenCarrierKeyPressed
@@ -548,6 +623,7 @@ public class MainForm extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainForm().setVisible(true);
+
             }
         });
     }
@@ -574,6 +650,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel lbId;
     private javax.swing.JLabel lbPirce;
     private javax.swing.JLabel lbStatus;
     private javax.swing.JLabel lbTypeName;

@@ -10,8 +10,16 @@ package ats.dtos;
  * @author Chi Hieu
  */
 public class VehiclePayment implements Comparable<VehiclePayment>{
-    private String licensePlate, typeName, status;
+    private String id, licensePlate, typeName, status;
     private double fee;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getStatus() {
         return status;
@@ -21,28 +29,26 @@ public class VehiclePayment implements Comparable<VehiclePayment>{
         this.status = status;
     }
 
-    public VehiclePayment(String licensePlate, String typeName, String status, double fee) {
+    
+    
+    public VehiclePayment() {
+    }
+
+    public VehiclePayment(String id, String typeName, String status, double fee) {
+        this.id = id;
+        this.typeName = typeName;
+        this.status = status;
+        this.fee = fee;
+    }
+
+    public VehiclePayment(String id, String licensePlate, String typeName, String status, double fee) {
+        this.id = id;
         this.licensePlate = licensePlate;
         this.typeName = typeName;
         this.status = status;
         this.fee = fee;
     }
 
-    
-    
-    public VehiclePayment() {
-    }
-
-    public VehiclePayment(String typeName, double fee) {
-        this.typeName = typeName;
-        this.fee = fee;
-    }
-
-    public VehiclePayment(String licensePlate, String typeName, double fee) {
-        this.licensePlate = licensePlate;
-        this.typeName = typeName;
-        this.fee = fee;
-    }
 
     public String getLicensePlate() {
         return licensePlate;
@@ -70,7 +76,7 @@ public class VehiclePayment implements Comparable<VehiclePayment>{
 
     @Override
     public int compareTo(VehiclePayment o) {
-        return Integer.compare(this.licensePlate.length(), o.licensePlate.length());
+        return Double.compare(this.fee, o.fee);
     }
     
     

@@ -3,12 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Chi%20Hieu/Desktop/Capstone/DesktopApplication/CapstoneProject/src/ats/dtos/VehiclePayment.java</file>
-            <file>file:/C:/Users/Chi%20Hieu/Desktop/Capstone/DesktopApplication/CapstoneProject/src/ats/connection/RequestServer.java</file>
-            <file>file:/C:/Users/Chi%20Hieu/Desktop/Capstone/DesktopApplication/CapstoneProject/src/ats/utils/CameraUtil.java</file>
-            <file>file:/C:/Users/Chi%20Hieu/Desktop/Capstone/DesktopApplication/CapstoneProject/src/ats/connection/Todo.java</file>
+            <file>file:/C:/Users/Chi%20Hieu/Desktop/Capstone/DesktopApplication/CapstoneProject/src/ats/connection/ManualPaymentRequest.java</file>
+            <file>file:/C:/Users/Chi%20Hieu/Desktop/Capstone/DesktopApplication/CapstoneProject/src/ats/connection/AutoPaymentRequest.java</file>
             <file>file:/C:/Users/Chi%20Hieu/Desktop/Capstone/DesktopApplication/CapstoneProject/src/ats/swing/gui/MainForm.java</file>
-            <file>file:/C:/Users/Chi%20Hieu/Desktop/Capstone/DesktopApplication/CapstoneProject/src/capstoneproject/CapstoneProject.java</file>
         </group>
     </open-files>
 </project-private>
