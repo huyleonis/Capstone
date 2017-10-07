@@ -1,88 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Paypal</title>
+    <meta charset="UTF-8" />
+    <title>Insert title here</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://www.paypalobjects.com/api/checkout.js"></script>
 </head>
 <body>
-    <div id="paypal-button-container"></div>
+<!--<form method="post" th:action="@{/pay}">-->
+<!--<button type="submit"> Process Payment </button>-->
+<!--</form>-->
+<div id="paypal-button-container"></div>
 
-    <script>
-        paypal.Button.render({
+<script>
+    paypal.Button.render({
 
-            env: 'sandbox', // sandbox | production
+        env: 'sandbox', // sandbox | production
 
-            // Show the buyer a 'Pay Now' button in thae checkout flow
-            commit: true,
+        // Show the buyer a 'Pay Now' button in the checkout flow
+        commit: true,
 
-            // payment() is called when the button is clicked
-            payment: function() {
+        // payment() is called when the button is clicked
+        payment: function() {
 
-                // Set up a url on your server to create the payment
-                var CREATE_URL = 'http://localhost:8080/ATS/paypal/create';
+            // Set up a url on your server to create the payment
+            var CREATE_URL = 'http://localhost:8080/ATS/paypal/pay';
 
-                // Make a call to your server to set up the payment
-                return paypal.request.post(CREATE_URL)
-                    .then(function(res) {
-                        return res.id;
-                    });
-            },
+            // Make a call to your server to set up the payment
+            return paypal.request.post(CREATE_URL)
+                .then(function(res) {
+                    return res.paymentID;
+                });
+        },
 
-            // onAuthorize() is called when the buyer approves the payment
-            onAuthorize: function(data, actions) {
+        // onAuthorize() is called when the buyer approves the payment
+        onAuthorize: function(data, actions) {
 
-                // Set up a url on your server to execute the payment
-                var EXECUTE_URL = 'http://localhost:8080/ATS/paypal/execute';
+            // Set up a url on your server to execute the payment
+            var EXECUTE_URL = 'http://localhost:8080/ATS/paypal/pay/success';
 
-                // Set up the data you need to pass to your server
-                var data = {
-                    paymentID: data.paymentID,
-                    payerID: data.payerID
-                };
+            // Set up the data you need to pass to your server
+            var data = {
+                paymentID: data.paymentID,
+                payerID: data.payerID
+            };
 
-                // Make a call to your server to execute the payment
-                return paypal.request.post(EXECUTE_URL, data)
-                    .then(function (res) {
-                        window.alert('Payment Complete!');
-                    });
-            }
+            // Make a call to your server to execute the payment
+            return paypal.request.post(EXECUTE_URL, data)
+                .then(function (res) {
+                    window.alert('Payment Complete!');
+                });
+        }
 
-        }, '#paypal-button-container');
-    </script>
+    }, '#paypal-button-container');
+</script>
+
 </body>
 </html>
-
-<!--<div id="paypal-button"></div>-->
-
-<!--<script src="https://www.paypalobjects.com/api/checkout.js"></script>-->
-
-<!--<script>-->
-    <!--var CREATE_PAYMENT_URL  = 'http://localhost:8080/paypal/create';-->
-    <!--var EXECUTE_PAYMENT_URL = 'http://localhost:8080/paypal/execute';-->
-
-    <!--paypal.Button.render({-->
-
-        <!--env: 'sandbox', // Or 'sandbox'-->
-
-        <!--commit: true, // Show a 'Pay Now' button-->
-
-        <!--payment: function() {-->
-            <!--return paypal.request.post(CREATE_PAYMENT_URL).then(function(data) {-->
-                <!--return data.id;-->
-            <!--});-->
-        <!--},-->
-
-        <!--onAuthorize: function(data) {-->
-            <!--return paypal.request.post(EXECUTE_PAYMENT_URL, {-->
-                <!--paymentID: data.paymentID,-->
-                <!--payerID:   data.payerID-->
-            <!--}).then(function() {-->
-                <!--window.alert("Payment Completed");-->
-            <!--});-->
-        <!--}-->
-
-    <!--}, '#paypal-button');-->
-<!--</script>-->

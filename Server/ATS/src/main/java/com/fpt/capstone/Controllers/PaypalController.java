@@ -13,8 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/ATS/paypal")
@@ -25,19 +28,22 @@ public class PaypalController {
 
     private Logger log = Logger.getLogger(this.getClass());
 
-    public static final String PAYPAL_SUCCESS_URL = "pay/success";
-    public static final String PAYPAL_CANCEL_URL = "pay/cancel";
+    public static final String PAYPAL_SUCCESS_URL = "/pay/success";
+    public static final String PAYPAL_CANCEL_URL = "/pay/cancel";
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, value = "/ATS/paypal")
     public String index() {
-        return "index";
+        return "homePage";
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String createPayment(HttpServletRequest req) {
+    @RequestMapping(value = "/pay", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, String> createPayment(HttpServletRequest req) {
 
         String cancelUrl = UrlUtils.getBaseUrl(req) + "/" + PAYPAL_CANCEL_URL;
         String successUrl = UrlUtils.getBaseUrl(req) + "/" + PAYPAL_SUCCESS_URL;
+
+        Map<String, String> map = new HashMap<>();
 
         try {
             Payment payment = paypalService.createPayment(4.00, "USD",
@@ -46,21 +52,22 @@ public class PaypalController {
 
             for (Links links : payment.getLinks()){
                 if (links.getRel().equalsIgnoreCase("approval_url")) {
-                    return "redirect:" + links.getHref();
+                    map.put("paymentID", payment.getId());
+                    return map;
                 }
             }
         } catch (PayPalRESTException e){
             log.error(e.getMessage());
         }
 
-        return "redirect:/";
+        return map;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = PAYPAL_CANCEL_URL)
+    @RequestMapping(method = RequestMethod.POST, value = PAYPAL_CANCEL_URL)
     public String cancelPay() { return "cancel";}
 
-    @RequestMapping(value = PAYPAL_SUCCESS_URL, method = RequestMethod.GET)
-    public String executePayment(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
+    @RequestMapping(value = PAYPAL_SUCCESS_URL, method = RequestMethod.POST)
+    public String executePayment(@RequestParam("paymentID") String paymentId, @RequestParam("payerID") String payerId) {
 
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
