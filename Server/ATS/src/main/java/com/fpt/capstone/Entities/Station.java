@@ -22,6 +22,10 @@ public class Station implements Serializable
     @OneToMany(mappedBy="station")
     private List<Beacon> beacons;
 
+    //bi-directional many-to-one association to Lane
+    @OneToMany(mappedBy="station")
+    private List<Lane> lanes;
+
     //bi-directional many-to-one association to Price
     @OneToMany(mappedBy="station")
     private List<Price> prices;
@@ -85,6 +89,28 @@ public class Station implements Serializable
         beacon.setStation(null);
 
         return beacon;
+    }
+
+    public List<Lane> getLanes() {
+        return this.lanes;
+    }
+
+    public void setLanes(List<Lane> lanes) {
+        this.lanes = lanes;
+    }
+
+    public Lane addLane(Lane lane) {
+        getLanes().add(lane);
+        lane.setStation(this);
+
+        return lane;
+    }
+
+    public Lane removeLane(Lane lane) {
+        getLanes().remove(lane);
+        lane.setStation(null);
+
+        return lane;
     }
 
     public List<Price> getPrices() {

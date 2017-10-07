@@ -28,7 +28,7 @@ CREATE TABLE `beacon` (
   `major` int(11) NOT NULL,
   `minor` int(11) NOT NULL,
   `station_id` int(11) NOT NULL,
-  `account_id` int(11) NOT NULL,
+  `account_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_beacon_account_idx` (`account_id`),
   KEY `fk_beacon_station_idx` (`station_id`),
@@ -43,7 +43,7 @@ CREATE TABLE `beacon` (
 
 LOCK TABLES `beacon` WRITE;
 /*!40000 ALTER TABLE `beacon` DISABLE KEYS */;
-INSERT INTO `beacon` VALUES (1,'111',1234,4321,1,1),(2,'222',1478,3214,1,2);
+INSERT INTO `beacon` VALUES (1,'111',1234,4321,1,),(2,'222',1478,3214,1,2);
 /*!40000 ALTER TABLE `beacon` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

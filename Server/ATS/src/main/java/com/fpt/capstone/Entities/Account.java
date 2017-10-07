@@ -32,10 +32,6 @@ public class Account {
     @ManyToOne
     private Vehicle vehicle;
 
-    //bi-directional many-to-one association to Beacon
-    @OneToMany(mappedBy="account")
-    private List<Beacon> beacons;
-
     //bi-directional many-to-one association to Transaction
     @OneToMany(mappedBy="account")
     private List<Transaction> transactions;
@@ -121,28 +117,6 @@ public class Account {
 
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
-    }
-
-    public List<Beacon> getBeacons() {
-        return this.beacons;
-    }
-
-    public void setBeacons(List<Beacon> beacons) {
-        this.beacons = beacons;
-    }
-
-    public Beacon addBeacon(Beacon beacon) {
-        getBeacons().add(beacon);
-        beacon.setAccount(this);
-
-        return beacon;
-    }
-
-    public Beacon removeBeacon(Beacon beacon) {
-        getBeacons().remove(beacon);
-        beacon.setAccount(null);
-
-        return beacon;
     }
 
     public List<Transaction> getTransactions() {

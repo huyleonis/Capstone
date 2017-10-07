@@ -16,11 +16,13 @@ public class Beacon {
 
     private int minor;
 
+    private int type;
+
     private String uuid;
 
-    //bi-directional many-to-one association to Account
+    //bi-directional many-to-one association to Lane
     @ManyToOne
-    private Account account;
+    private Lane lane;
 
     //bi-directional many-to-one association to Station
     @ManyToOne
@@ -53,6 +55,14 @@ public class Beacon {
         this.minor = minor;
     }
 
+    public int getType() {
+        return this.type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public String getUuid() {
         return this.uuid;
     }
@@ -61,12 +71,12 @@ public class Beacon {
         this.uuid = uuid;
     }
 
-    public Account getAccount() {
-        return this.account;
+    public Lane getLane() {
+        return this.lane;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setLane(Lane lane) {
+        this.lane = lane;
     }
 
     public Station getStation() {

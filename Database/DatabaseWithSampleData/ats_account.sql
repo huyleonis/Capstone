@@ -32,7 +32,7 @@ CREATE TABLE `account` (
   `phone` varchar(45) DEFAULT NULL,
   `number_id` varchar(45) DEFAULT NULL,
   `e_wallet` varchar(45) DEFAULT NULL,
-  `vehicle_id` int(11) NOT NULL,
+  `vehicle_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_account_vehicle_idx` (`vehicle_id`),
   CONSTRAINT `fk_account_vehicle` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicle` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -45,7 +45,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'admin','admin',1,'admin','admim','123456789','123456789','12345',1),(2,'hieu','hieu',2,'hieu','hieu','0935526427','12345678','54321',2),(3,'son','son',3,'son','son','1234568711','251515151','12121',3);
+INSERT INTO `account` VALUES (1,'admin','admin',1,'admin','admim','123456789','','',),(2,'hieu','hieu',2,'hieu','hieu','0935526427','','',),(3,'son','son',2,'son','son','1234568711','','',);
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

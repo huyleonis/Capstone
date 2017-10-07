@@ -10,18 +10,23 @@ import java.util.UUID;
  */
 
 public class Beacon {
+    public static final int BEACON_PAYMENT = 1;
+    public static final int BEACON_CHECK_RESULT = 2;
+
     private UUID proximityUUID;
     private int major;
     private int minor;
+    private int type;
 
-    public Beacon(UUID proximityUUID, int major, int minor) {
+    public Beacon(UUID proximityUUID, int major, int minor, int type) {
         this.proximityUUID = proximityUUID;
         this.major = major;
         this.minor = minor;
+        this.type = type;
     }
 
-    public Beacon(String proximityUUID, int major, int minor) {
-        this(UUID.fromString(proximityUUID), major, minor);
+    public Beacon(String proximityUUID, int major, int minor, int type) {
+        this(UUID.fromString(proximityUUID), major, minor, type);
     }
 
     public UUID getProximityUUID() {
@@ -34,6 +39,10 @@ public class Beacon {
 
     public int getMinor() {
         return minor;
+    }
+
+    public int getType() {
+        return this.type;
     }
 
     public BeaconRegion toBeaconRegion() {

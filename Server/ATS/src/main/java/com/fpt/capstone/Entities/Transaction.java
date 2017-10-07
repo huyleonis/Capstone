@@ -8,21 +8,26 @@ import java.util.Date;
 public class Transaction {
 
     @Id
-    private int id;
+    private String id;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="date_time")
     private Date dateTime;
 
-//    @Column(name="license_plate")
-//    private String licensePlate;
+    private String photo;
 
     private String status;
+
+    private byte type;
 
     //bi-directional many-to-one association to Account
     @ManyToOne
     @JoinColumn(name="username_id")
     private Account account;
+
+    //bi-directional many-to-one association to Lane
+    @ManyToOne
+    private Lane lane;
 
     //bi-directional many-to-one association to Price
     @ManyToOne
@@ -35,11 +40,11 @@ public class Transaction {
     public Transaction() {
     }
 
-    public int getId() {
+    public String getId() {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -51,13 +56,13 @@ public class Transaction {
         this.dateTime = dateTime;
     }
 
-//    public String getLicensePlate() {
-//        return this.licensePlate;
-//    }
-//
-//    public void setLicensePlate(String licensePlate) {
-//        this.licensePlate = licensePlate;
-//    }
+    public String getPhoto() {
+        return this.photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
     public String getStatus() {
         return this.status;
@@ -67,12 +72,28 @@ public class Transaction {
         this.status = status;
     }
 
+    public byte getType() {
+        return this.type;
+    }
+
+    public void setType(byte type) {
+        this.type = type;
+    }
+
     public Account getAccount() {
         return this.account;
     }
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public Lane getLane() {
+        return this.lane;
+    }
+
+    public void setLane(Lane lane) {
+        this.lane = lane;
     }
 
     public Price getPrice() {

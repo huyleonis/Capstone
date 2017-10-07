@@ -15,10 +15,17 @@ public class PriceController {
     private PriceServiceImpl priceServiceImpl;
 
 
-    @RequestMapping(value = "findPrice/{uuid}/{username}", method = RequestMethod.GET)
+    @RequestMapping(value = "findPriceDriver/{uuid}/{username}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public PriceDTO findPriceByUuidAndUsername(@PathVariable String uuid, @PathVariable String username){
         return priceServiceImpl.findPriceByUuidAndUsername(uuid, username);
+    }
+
+    @RequestMapping(value = "findPriceStaff/{stationId}/{licensePlate}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public PriceDTO findPriceByStationIdAndLicensePlate(@PathVariable int stationId, @PathVariable String licensePlate){
+        return priceServiceImpl.findPriceByStationIdAndLicensePlate(stationId, licensePlate);
     }
 }
