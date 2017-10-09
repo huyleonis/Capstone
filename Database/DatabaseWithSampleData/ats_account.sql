@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
 --
 -- Host: localhost    Database: ats
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.12-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -24,19 +24,20 @@ DROP TABLE IF EXISTS `account`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `account` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `username` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
   `role` int(11) NOT NULL,
-  `fullname` varchar(45) NOT NULL,
+  `fullname` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
   `phone` varchar(45) DEFAULT NULL,
   `number_id` varchar(45) DEFAULT NULL,
   `e_wallet` varchar(45) DEFAULT NULL,
   `vehicle_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `username_UNIQUE` (`username`),
   KEY `fk_account_vehicle_idx` (`vehicle_id`),
   CONSTRAINT `fk_account_vehicle` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicle` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +46,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'admin','admin',1,'admin','admim','123456789','','',),(2,'hieu','hieu',2,'hieu','hieu','0935526427','','',),(3,'son','son',2,'son','son','1234568711','','',);
+INSERT INTO `account` VALUES (1,'admin','admin',1,'admin','admin@gmail.com','0123456789',NULL,NULL,NULL),(2,'huy','123',2,'huy','huy@gmail.com','0121456789',NULL,NULL,NULL),(3,'son','123',2,'son','son@gmail.com','0122456789',NULL,NULL,NULL),(4,'tin','123',2,'tin','tin@gmail.com','0133456789',NULL,NULL,NULL),(5,'hieu','123',3,'hieu','hieu@gmail.com','0122334455','123456789','12345',1),(6,'tuan','123',3,'tuan','tuan@gmail.com','0122334456','123456788','12344',2),(7,'quan','123',3,'quan','quan@gmail.com','011223344','123456798','12354',3),(8,'canh','123',3,'canh','canh@gmail.com','011223345','123456777','12333',4),(9,'chi','123',3,'chi','chi@gmail.com','012223333','011111111','11111',5),(10,'hiep','123',3,'hiep','hiep@gmail.com','012222222','012222222','22222',6);
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -58,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-30 12:55:55
+-- Dump completed on 2017-10-04 23:36:56

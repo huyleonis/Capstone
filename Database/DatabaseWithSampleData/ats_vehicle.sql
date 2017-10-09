@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
 --
 -- Host: localhost    Database: ats
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.12-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -27,9 +27,10 @@ CREATE TABLE `vehicle` (
   `license_plate` varchar(45) NOT NULL,
   `type_id` int(50) NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `license_plate_UNIQUE` (`license_plate`),
   KEY `IdType_idx` (`type_id`),
   CONSTRAINT `Vehicle_REF_VehicleType` FOREIGN KEY (`type_id`) REFERENCES `vehicletype` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +39,7 @@ CREATE TABLE `vehicle` (
 
 LOCK TABLES `vehicle` WRITE;
 /*!40000 ALTER TABLE `vehicle` DISABLE KEYS */;
-INSERT INTO `vehicle` VALUES (1,'11A-1111',1),(2,'22B-2222',2),(3,'33C-3333',3);
+INSERT INTO `vehicle` VALUES (1,'92K-9195',1),(2,'92K-1111',2),(3,'92K-2222',3),(4,'92K-3333',2),(5,'92K-4444',1),(6,'92K-5555',3);
 /*!40000 ALTER TABLE `vehicle` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-30 12:55:56
+-- Dump completed on 2017-10-04 23:36:56

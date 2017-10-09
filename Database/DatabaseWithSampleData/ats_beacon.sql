@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
 --
 -- Host: localhost    Database: ats
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.12-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -28,13 +28,14 @@ CREATE TABLE `beacon` (
   `major` int(11) NOT NULL,
   `minor` int(11) NOT NULL,
   `station_id` int(11) NOT NULL,
-  `account_id` int(11) DEFAULT NULL,
+  `lane_id` int(11) DEFAULT NULL,
+  `type` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_beacon_account_idx` (`account_id`),
   KEY `fk_beacon_station_idx` (`station_id`),
-  CONSTRAINT `fk_beacon_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  KEY `fk_beacon_lane_idx` (`lane_id`),
+  CONSTRAINT `fk_beacon_lane` FOREIGN KEY (`lane_id`) REFERENCES `lane` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_beacon_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +44,7 @@ CREATE TABLE `beacon` (
 
 LOCK TABLES `beacon` WRITE;
 /*!40000 ALTER TABLE `beacon` DISABLE KEYS */;
-INSERT INTO `beacon` VALUES (1,'111',1234,4321,1,),(2,'222',1478,3214,1,2);
+INSERT INTO `beacon` VALUES (1,'75483743',1111,1111,1,NULL,0),(2,'1111111',2222,2222,1,1,1),(3,'2222222',3333,3333,1,2,1),(4,'3333333',4444,4444,1,3,1),(5,'4444444',5555,5555,2,NULL,0),(6,'5555555',6666,6666,2,1,1),(7,'6666666',7777,7777,2,2,1);
 /*!40000 ALTER TABLE `beacon` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-09-30 12:55:57
+-- Dump completed on 2017-10-04 23:36:56
