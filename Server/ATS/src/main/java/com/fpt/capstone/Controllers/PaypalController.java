@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/ATS/paypal")
+@RequestMapping("/")
 public class PaypalController {
 
     @Autowired
@@ -31,9 +31,9 @@ public class PaypalController {
     public static final String PAYPAL_SUCCESS_URL = "/pay/success";
     public static final String PAYPAL_CANCEL_URL = "/pay/cancel";
 
-    @RequestMapping(method = RequestMethod.GET, value = "/ATS/paypal")
+    @RequestMapping(method = RequestMethod.GET)
     public String index() {
-        return "homePage";
+        return "index.html";
     }
 
     @RequestMapping(value = "/pay", method = RequestMethod.POST)
@@ -63,21 +63,21 @@ public class PaypalController {
         return map;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = PAYPAL_CANCEL_URL)
-    public String cancelPay() { return "cancel";}
+    @RequestMapping(method = RequestMethod.GET, value = PAYPAL_CANCEL_URL)
+    public String cancelPay() { return "cancel.html";}
 
-    @RequestMapping(value = PAYPAL_SUCCESS_URL, method = RequestMethod.POST)
+    @RequestMapping(value = "/pay/execute", method = RequestMethod.POST)
     public String executePayment(@RequestParam("paymentID") String paymentId, @RequestParam("payerID") String payerId) {
 
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if (payment.getState().equalsIgnoreCase("approved")){
-                return "success";
+                return "Payment Success";
             }
         } catch (PayPalRESTException e){
             log.error(e.getMessage());
         }
 
-        return "redirect:/";
+        return "cancel.html";
     }
 }

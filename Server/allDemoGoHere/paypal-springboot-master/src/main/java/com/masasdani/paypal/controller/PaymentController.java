@@ -44,6 +44,7 @@ public class PaymentController {
     public Map<String, String> pay(HttpServletRequest req) {
         String cancelUrl = URLUtils.getBaseURl(req) + "/" + PAYPAL_CANCEL_URL;
         String successUrl = URLUtils.getBaseURl(req) + "/" + PAYPAL_SUCCESS_URL;
+        Map<String, String> map = new HashMap<>();
         try {
             Payment payment = paypalService.createPayment(
                     1.99,
@@ -55,7 +56,7 @@ public class PaymentController {
                     successUrl);
             for (Links links : payment.getLinks()) {
                 if (links.getRel().equals("approval_url")) {
-                    Map<String, String> map = new HashMap<>();
+
                     map.put("paymentID", payment.getId());
 
                     return map;
@@ -64,7 +65,7 @@ public class PaymentController {
         } catch (PayPalRESTException e) {
             log.error(e.getMessage());
         }
-        return null;
+        return map;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = PAYPAL_CANCEL_URL)

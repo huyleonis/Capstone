@@ -8,9 +8,6 @@
     <script src="https://www.paypalobjects.com/api/checkout.js"></script>
 </head>
 <body>
-<!--<form method="post" th:action="@{/pay}">-->
-<!--<button type="submit"> Process Payment </button>-->
-<!--</form>-->
 <div id="paypal-button-container"></div>
 
 <script>
@@ -25,7 +22,7 @@
         payment: function() {
 
             // Set up a url on your server to create the payment
-            var CREATE_URL = 'http://localhost:8080/ATS/paypal/pay';
+            var CREATE_URL = '/pay';
 
             // Make a call to your server to set up the payment
             return paypal.request.post(CREATE_URL)
@@ -38,7 +35,7 @@
         onAuthorize: function(data, actions) {
 
             // Set up a url on your server to execute the payment
-            var EXECUTE_URL = 'http://localhost:8080/ATS/paypal/pay/success';
+            var EXECUTE_URL = '/pay/execute';
 
             // Set up the data you need to pass to your server
             var data = {
