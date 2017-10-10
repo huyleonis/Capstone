@@ -15,28 +15,16 @@ import java.util.List;
 @RequestMapping("/ats")
 public class InformationController {
 
-//    @RequestMapping("/")
-//    @ResponseBody
-//    public String viewInformaiton(){
-//        return "demo";
-//    }
 
-    @Autowired
-    private VehicleServiceImpl vehicleRepos;
-
-
-//    @RequestMapping(value = "/{licensePlate}", method = RequestMethod.GET)
-//    @ResponseStatus(HttpStatus.OK)
-//    public Vehicle getVehicle(@PathVariable("licensePlate") String licensePlate){
-//        return vehicleRepos.find(licensePlate);
-//    }
-
-    @RequestMapping(value = "/getall", method = RequestMethod.GET)
+    
+    @RequestMapping(value = "/checkConnection", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public List<VehicleDTO> getall()
-    {
-        return vehicleRepos.getall();
+    @ResponseBody
+    public String checkConnection() {
+        System.out.println("Check Connection successfully.");
+        return "true";
     }
+    
 
 
 }

@@ -2,9 +2,11 @@ package com.example.hp.atsapplication;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +19,8 @@ import com.example.hp.atsapplication.utils.RequestServer;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +39,9 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
     FragmentManager fm = getFragmentManager();
     Fragment fragmentConfirm;
     Fragment fragmentResult;
+
+    private boolean isDisplayedConfirmFragment = false;
+    private boolean isDisplayedResultFragment = false;
 
     private RequestServer rs;
 
@@ -59,8 +66,12 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
         fragmentConfirm = fm.findFragmentById(R.id.fragmentConfirm);
         fragmentResult = fm.findFragmentById(R.id.fragmentResult);
 
-        hideConfirmFragment();
-        hideResultFragment();
+        if (!isDisplayedConfirmFragment) {
+            hideConfirmFragment();
+        }
+        if (!isDisplayedResultFragment) {
+            hideResultFragment();
+        }
 
         app = (AtsApplication) getApplication();
 
@@ -70,10 +81,7 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
             app.enableBeaconNotifications(textMessage, this);
         }
 
-//
-//        Intent  service = new Intent(getBaseContext(), BeaconMonitorService.class);
-//        startService(service);
-    }
+}
 
     public void clickToGetStationInformation(View view) {
         if (!SystemRequirementsChecker.checkWithDefaultDialogs(this)) {
@@ -92,25 +100,43 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
             JSONObject infos = new JSONObject(result);
 
             String city = infos.getString("nameStation");
-            String idStation = infos.getString("id");
+            String idStation = infos.getString("idStation");
             String zone = infos.getString("zoneStation");
-            String price = infos.getString("price");
+            double price = Double.parseDouble(infos.getString("price"));
+
+            DecimalFormat formatter = new DecimalFormat("###,###,###.##");
 
             textCity.setText(city);
             textIdStation.setText(idStation);
             textZone.setText(zone);
-            textPrice.setText(price + "  đồng");
+            textPrice.setText(formatter.format(price) + " đồng");
 
             SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
             showConfirmFragment();
+            isDisplayedConfirmFragment = true;
             setting.edit().putString("IdStation", idStation).commit();
 
         } catch (Exception e) {
             Log.e("Home Activity", e.getMessage());
-            Toast.makeText(this, "Cannot parse json with result: " + result, Toast.LENGTH_LONG).show();
+            new AlertDialog.Builder(HomeActivity.this)
+                    .setTitle("Exception")
+                    .setMessage("Cannot parse json with result: " + result)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .create().show();
+            //Toast.makeText(this, "Cannot parse json with result: " + result, Toast.LENGTH_LONG).show();
         }
 
     }
+
 
     public void clickToLogOut(View view) {
         SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
@@ -130,9 +156,6 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
         textIdStation.setText("-");
         textZone.setText("-");
         textPrice.setText("0  đồng");
-
-        hideConfirmFragment();
-        hideResultFragment();
     }
 
     public void showConfirmFragment() {
@@ -173,6 +196,7 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
                     JSONObject infos = new JSONObject(result);
 
                     String status = infos.getString("status");
+                    isDisplayedResultFragment = true;
                     if (status.equals("Thành công")) {
                         showResultFragment("Thanh toán thành công");
                     } else {
@@ -186,6 +210,20 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
                     setting.edit().putString("IdTransaction",idTrans).commit();
                 } catch (Exception e) {
                     Log.e("Make Payment", e.getMessage());
+                    new AlertDialog.Builder(HomeActivity.this)
+                            .setTitle("Exception")
+                            .setMessage("Cannot parse json with result: " + result)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .create().show();
                 }
             }
         };
@@ -199,15 +237,18 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
 //        params.put("IdStation", setting.getString("IdStation", ""));
 
         rs.execute(params, "transaction", "makePayment", "GET");
+        isDisplayedConfirmFragment = false;
         hideConfirmFragment();
         textMessage.setText("Trạng thái: đang thanh toán phí...");
     }
 
     public void clickToCancelPayment(View view) {
+        isDisplayedConfirmFragment = false;
         hideConfirmFragment();
 }
 
     public void clickToCloseResult(View view) {
+        isDisplayedResultFragment = false;
         hideResultFragment();
     }
 

@@ -37,6 +37,7 @@ public class BeaconInfoManager {
 
     private Context context;
 
+
     private int notificationId = 0;
 
     public BeaconInfoManager(Context context, final TextView message, final HomeActivity activity, final String username) {
@@ -51,7 +52,6 @@ public class BeaconInfoManager {
 
                 if (type == com.example.hp.atsapplication.estimote.Beacon.BEACON_PAYMENT) {
                     message.setText("Trạng thái: Đi vào khu vực thu phí");
-
 
                     List<String> params = new ArrayList<>();
 
@@ -84,7 +84,7 @@ public class BeaconInfoManager {
                 Log.d(TAG, "Exit Beacon Region: " + beaconRegion.getIdentifier());
                 int type = beaconType.get(beaconRegion.getIdentifier());
 
-                if (type == com.example.hp.atsapplication.estimote.Beacon.BEACON_PAYMENT) {
+                if (type == com.example.hp.atsapplication.estimote.Beacon.BEACON_CHECK_RESULT) {
                     message.setText("Trạng thái: Chuẩn bị ra khỏi khu vực thu phí");
 
                     activity.setUpDefaultInfo(null);

@@ -18,7 +18,7 @@ public interface PriceRepos extends JpaRepository<Price, String>{
      * @return
      */
     @Query(value = "select * from price price" +
-            " where price.station_id = (select s.id from beacon b, station s where b.uuid = ?1 and b.station_id = s.id)" +
+            " where price.station_id = (select b.station_id from beacon b where b.uuid = ?1)" +
             " and price.type_id = (select vehicletype.id from account account, vehicle vehicle, vehicletype vehicletype where account.role = 3 and account.username= ?2 and account.vehicle_id = vehicle.id and vehicle.type_id = vehicletype.id)", nativeQuery = true)
     Price findPriceByUuidAndUsername(String username, String uuid);
 

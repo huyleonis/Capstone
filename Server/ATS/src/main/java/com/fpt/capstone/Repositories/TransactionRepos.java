@@ -74,7 +74,7 @@ public interface TransactionRepos extends JpaRepository<Transaction,Integer>{
     @Modifying
     @Transactional
     @Query(value = "insert into transaction (id, username_id, station_id, date_time, status, price_id, type)" +
-            " values(" +
+                    " values(" +
             "?3, " +
             "(select id from account where username = ?1), " +
             "?2, " +
@@ -91,7 +91,7 @@ public interface TransactionRepos extends JpaRepository<Transaction,Integer>{
      * @param status
      * @return
      */
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Transactional
     @Query(value = "update transaction set status = ?2 where id = ?1", nativeQuery = true)
     int updateTransaction(String idTransaction, String status);
@@ -112,7 +112,7 @@ public interface TransactionRepos extends JpaRepository<Transaction,Integer>{
      * @param lane_id
      * @return
      */
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Transactional
     @Query(value = "update transaction set lane_id = ?2 where id = ?1", nativeQuery = true)
     int updateTransaction(String idTransaction, int lane_id);

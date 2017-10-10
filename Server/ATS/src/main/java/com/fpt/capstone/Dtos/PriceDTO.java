@@ -13,6 +13,7 @@ public class PriceDTO {
     private double price;
     private String nameVehicleType;
     private Date from_date;
+    private int idStation;
 
     public int getId() {
         return id;
@@ -70,6 +71,15 @@ public class PriceDTO {
         this.from_date = from_date;
     }
 
+    public int getIdStation() {
+        return idStation;
+    }
+
+    public void setIdStation(int idStation) {
+        this.idStation = idStation;
+    }
+        
+
     public static PriceDTO convertFromEntity(Price price){
         PriceDTO dto = new PriceDTO();
 
@@ -80,6 +90,7 @@ public class PriceDTO {
         double price1 = price.getPrice();
         String nameVehicleType = price.getVehicletype().getName();
         Date from_date = price.getFromDate();
+        int idStation = price.getStation().getId();
 
         dto.setId(id);
         dto.setNameStation(nameStation);
@@ -88,7 +99,8 @@ public class PriceDTO {
         dto.setPrice(price1);
         dto.setNameVehicleType(nameVehicleType);
         dto.setFrom_date(from_date);
-
+        dto.setIdStation(idStation);
+        
         return dto;
     }
 }
