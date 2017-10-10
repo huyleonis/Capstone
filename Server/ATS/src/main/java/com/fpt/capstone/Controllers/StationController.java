@@ -7,13 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/station")
 public class StationController {
 
     @Autowired
     private StationServiceImpl stationServiceImpl;
 
-    @RequestMapping(value = "/station/{uuid}", method = RequestMethod.GET)
+    @RequestMapping(value = "/get/{uuid}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public StationDTO findByUuid(@PathVariable String uuid) {

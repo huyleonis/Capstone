@@ -88,12 +88,13 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionDTO updateTransactionStatus(String id, String status) {
-        int transaction = transactionRepos.updateTransaction(id, status);
+        int transaction = transactionRepos.updateTransaction(id, status);   
+        
         if(transaction >0){
             Transaction transaction1 = transactionRepos.findById(id);
             if (transaction1 != null){
                 TransactionDTO dto = TransactionDTO.convertFromEntity(transaction1);
-                dto.setStatus(status);
+                //dto.setStatus(status);
                 return dto;
             }
         }
@@ -112,7 +113,7 @@ public class TransactionServiceImpl implements TransactionService {
             Transaction transaction1 = transactionRepos.findById(id);
             if (transaction1 != null){
                 TransactionDTO dto = TransactionDTO.convertFromEntity(transaction1);
-                dto.setLaneId(laneId);
+                //dto.setLaneId(laneId);
                 return dto;
             }
         }

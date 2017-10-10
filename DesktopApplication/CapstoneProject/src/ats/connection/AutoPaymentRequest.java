@@ -63,8 +63,6 @@ public class AutoPaymentRequest extends TimerTask {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (org.json.simple.parser.ParseException ex) {
-            Logger.getLogger(AutoPaymentRequest.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
 

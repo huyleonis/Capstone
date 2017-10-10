@@ -22,7 +22,7 @@ import android.util.Log;
 import retrofit2.http.HTTP;
 
 public class RequestServer extends AsyncTask<Object, Void, String> {
-    private static final String DEFAULT_URL = "http://127.20.10.3:8080/";
+    public static String DEFAULT_URL = "";
 	public RequestResult delegate = null;
 
     @Override

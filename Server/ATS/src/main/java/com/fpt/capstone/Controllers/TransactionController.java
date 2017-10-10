@@ -80,14 +80,19 @@ public class TransactionController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public TransactionDTO insertTransactionPayment(@PathVariable String username, @PathVariable int stationId ){
+        System.out.println("Request Make payment from Driver in station " +  stationId);
+        
         // Khởi tạo transaction, status: Chưa thanh toán
         TransactionDTO transDTO =  transactionServiceImpl.insertAutoTransaction(username, stationId);
+        
+        System.out.println("   + create transaction ["+transDTO.getId()+"] success with status [" + transDTO.getStatus() + "]");
 
         // Gọi module paypal
         //....
         transDTO = transactionServiceImpl.updateTransactionStatus(transDTO.getId(), "Thành công");
         // status:
 
+        System.out.println("   + update transaction success with status [" + transDTO.getStatus() + "]");
         return transDTO;
     }
 
@@ -102,6 +107,8 @@ public class TransactionController {
     @ResponseBody
     public TransactionDTO checkResult(@PathVariable String uuid, @PathVariable String idTransaction) {
 
+        System.out.println("Request Check result from Driver");
+        
         TransactionDTO transDTO =  transactionServiceImpl.getById(idTransaction);
         if (transDTO.getStatus().endsWith("Chờ xử lý")) {
             return transDTO;
@@ -112,11 +119,13 @@ public class TransactionController {
         //Cập nhật làn xe vô
         LaneDTO laneDTO = laneServiceImpl.getLaneByBeacon(uuid);
         transDTO = transactionServiceImpl.updateTransactionLane(idTransaction, laneDTO.getId());
+        
+        System.out.println("   + Update trans (1) lane ["+ transDTO.getLaneId() +"] and status ["+transDTO.getStatus()+"]");
 
         //Cập nhật trạng thái thành chờ xử lý
         transDTO = transactionServiceImpl.updateTransactionStatus(idTransaction, status);
 
-
+        System.out.println("   + Update trans (2) lane ["+ transDTO.getLaneId() +"] and status ["+transDTO.getStatus()+"]");
         return transDTO;
     }
 

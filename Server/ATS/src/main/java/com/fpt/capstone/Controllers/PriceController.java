@@ -19,6 +19,10 @@ public class PriceController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public PriceDTO findPriceByUuidAndUsername(@PathVariable String uuid, @PathVariable String username){
+        System.out.println("Get Price from Driver");
+        System.out.println("    + UUID: " + uuid);
+        System.out.println("    + username: " + username);
+        
         return priceServiceImpl.findPriceByUuidAndUsername(uuid, username);
     }
 
