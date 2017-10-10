@@ -6,6 +6,7 @@ import com.fpt.capstone.Paypal.Utils.UrlUtils;
 import com.fpt.capstone.Services.PaypalService;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
+import com.paypal.api.payments.RedirectUrls;
 import com.paypal.base.rest.PayPalRESTException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping(value = "/")
 public class PaypalController {
 
     @Autowired
@@ -52,6 +53,11 @@ public class PaypalController {
 
             for (Links links : payment.getLinks()){
                 if (links.getRel().equalsIgnoreCase("approval_url")) {
+
+                    RedirectUrls redirectUrls = new RedirectUrls();
+                    redirectUrls.setReturnUrl(links.getHref());
+                    payment.setRedirectUrls(redirectUrls);
+
                     map.put("paymentID", payment.getId());
                     return map;
                 }
@@ -60,19 +66,19 @@ public class PaypalController {
             log.error(e.getMessage());
         }
 
-        return map;
+        return null;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = PAYPAL_CANCEL_URL)
     public String cancelPay() { return "cancel.html";}
 
-    @RequestMapping(value = "/pay/execute", method = RequestMethod.POST)
+    @RequestMapping(value = PAYPAL_SUCCESS_URL, method = RequestMethod.POST)
     public String executePayment(@RequestParam("paymentID") String paymentId, @RequestParam("payerID") String payerId) {
 
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if (payment.getState().equalsIgnoreCase("approved")){
-                return "Payment Success";
+                return "success";
             }
         } catch (PayPalRESTException e){
             log.error(e.getMessage());
