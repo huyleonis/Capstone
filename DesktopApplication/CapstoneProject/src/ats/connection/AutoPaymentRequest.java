@@ -29,13 +29,16 @@ import org.json.simple.parser.JSONParser;
  */
 public class AutoPaymentRequest extends TimerTask {
 
+    public static final String localhost = "http://172.20.10.4:8080";
+
     //Get all Automatic Payment to Queue
-    public Queue<VehiclePayment> getAutoTrans(int idLane){
+    public Queue<VehiclePayment> getAutoTrans(int idLane) {
 
         JSONParser parser = new JSONParser();
         Queue<VehiclePayment> list = new PriorityQueue<>();
         try {
-            URL oracle = new URL("http://127.20.10.3:8080/transaction/getResult/" + idLane); // URL to Parse
+            URL oracle = new URL(localhost
+                    + "/transaction/getResult/" + 1); // URL to Parse
             URLConnection yc = oracle.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
 
@@ -78,7 +81,6 @@ public class AutoPaymentRequest extends TimerTask {
 //            Logger.getLogger(AutoPaymentRequest.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //    }
-
     @Override
     public void run() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

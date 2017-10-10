@@ -28,7 +28,11 @@ public class MainForm extends javax.swing.JFrame {
 
     Timer timer;
     AutoPaymentRequest apr = new AutoPaymentRequest();
-    Queue<VehiclePayment> qe = apr.getAutoTrans(1);
+    //LoopRequest lp = new LoopRequest();
+    
+    
+   Queue<VehiclePayment> qe = apr.getAutoTrans(1);
+    //Queue<VehiclePayment> qe = lp.getListTransaction(1);
 
     /**
      * Creates new form MainForm
