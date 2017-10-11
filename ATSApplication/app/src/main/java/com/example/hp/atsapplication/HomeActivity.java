@@ -86,7 +86,7 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
             app.enableBeaconNotifications(textMessage, this);
         }
 
-}
+    }
 
     public void clickToGetStationInformation(View view) {
         if (!SystemRequirementsChecker.checkWithDefaultDialogs(this)) {
@@ -205,14 +205,14 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
                     if (status.equals("Thành công")) {
                         showResultFragment("Thanh toán thành công");
                     } else {
-                        String reason =  infos.getString("reason");
+                        String reason = infos.getString("reason");
                         showResultFragment("Thanh toán thất bại. \nLý do: " + reason);
                     }
 
                     textMessage.setText("Trạng thái: đã xử lý thanh toán.");
 
                     String idTrans = infos.getString("id");
-                    setting.edit().putString("IdTransaction",idTrans).commit();
+                    setting.edit().putString("IdTransaction", idTrans).commit();
                 } catch (Exception e) {
                     Log.e("Make Payment", e.getMessage());
                     new AlertDialog.Builder(HomeActivity.this)
@@ -250,7 +250,7 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
     public void clickToCancelPayment(View view) {
         isDisplayedConfirmFragment = false;
         hideConfirmFragment();
-}
+    }
 
     public void clickToCloseResult(View view) {
         isDisplayedResultFragment = false;
@@ -262,9 +262,14 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
         return setting.getString("IdTransaction", "");
     }
 
+
     public void clickToViewHistory(View view){
         Intent intent = new Intent(this, HistoryActivity.class);
         startActivity(intent);
-        HomeActivity.this.finish();
+    }
+
+    public void clickToGetDetail(View view){
+        Intent intent = new Intent(this, DetailTransactionActivity.class);
+        startActivity(intent);        
     }
 }
