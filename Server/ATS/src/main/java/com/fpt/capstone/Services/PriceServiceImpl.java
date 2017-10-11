@@ -34,4 +34,11 @@ public class PriceServiceImpl implements PriceService{
             return null;
         }
     }
+
+    @Override
+    public PriceDTO findPriceById(int priceId) {
+        PriceDTO dto = PriceDTO.convertFromEntity(priceRepos.findById(priceId));
+
+        return dto;
+    }
 }

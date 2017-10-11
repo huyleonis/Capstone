@@ -5,65 +5,62 @@ import com.fpt.capstone.Entities.Transaction;
 import java.util.Date;
 
 public class TransactionDTO {
-    private String id;
-    private String username;
-    private int username_id;
-    private int station_id;
-    private Date date_time;
-    private String vehicle_id;
+
+    private String TransactionId;
+    private int usernameId;
+    private int stationId;
+    private Date dateTime;
     private String status;
-    private int priceid;
-    private double price_id;
-    private String license_plate;
-
-    public int getLaneId() {
-        return laneId;
-    }
-
-    public void setLaneId(int laneId) {
-        this.laneId = laneId;
-    }
-
+    private int priceId;
     private int laneId;
+    private int type;
+    private String photo;
 
-    public String getId() {
-        return id;
+    public TransactionDTO() {
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public TransactionDTO(String transactionId, int usernameId, int stationId, Date dateTime, String status, int priceId, int laneId, int type, String photo) {
+        TransactionId = transactionId;
+        this.usernameId = usernameId;
+        this.stationId = stationId;
+        this.dateTime = dateTime;
+        this.status = status;
+        this.priceId = priceId;
+        this.laneId = laneId;
+        this.type = type;
+        this.photo = photo;
     }
 
-    public String getUsername() {
-        return username;
+    public String getTransactionId() {
+        return TransactionId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setTransactionId(String transactionId) {
+        TransactionId = transactionId;
     }
 
-    public int getStation_id() {
-        return station_id;
+    public int getUsernameId() {
+        return usernameId;
     }
 
-    public void setStation_id(int station_id) {
-        this.station_id = station_id;
+    public void setUsernameId(int usernameId) {
+        this.usernameId = usernameId;
     }
 
-    public Date getDate_time() {
-        return date_time;
+    public int getStationId() {
+        return stationId;
     }
 
-    public void setDate_time(Date date_time) {
-        this.date_time = date_time;
+    public void setStationId(int stationId) {
+        this.stationId = stationId;
     }
 
-    public String getVehicle_id() {
-        return vehicle_id;
+    public Date getDateTime() {
+        return dateTime;
     }
 
-    public void setVehicle_id(String vehicle_id) {
-        this.vehicle_id = vehicle_id;
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
     }
 
     public String getStatus() {
@@ -74,85 +71,74 @@ public class TransactionDTO {
         this.status = status;
     }
 
-    public double getPrice_id() {
-        return price_id;
+    public int getPriceId() {
+        return priceId;
     }
 
-    public void setPrice_id(double price_id) {
-        this.price_id = price_id;
+    public void setPriceId(int priceId) {
+        this.priceId = priceId;
     }
 
-    public String getLicense_plate() {
-        return license_plate;
+    public int getLaneId() {
+        return laneId;
     }
 
-    public void setLicense_plate(String license_plate) {
-        this.license_plate = license_plate;
+    public void setLaneId(int laneId) {
+        this.laneId = laneId;
     }
 
-    public int getUsername_id() {
-        return username_id;
+    public int getType() {
+        return type;
     }
 
-    public void setUsername_id(int username_id) {
-        this.username_id = username_id;
+    public void setType(int type) {
+        this.type = type;
     }
 
-    public int getPriceid() {
-        return priceid;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setPriceid(int priceid) {
-        this.priceid = priceid;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
-    public static TransactionDTO convertFromEntity(Transaction transaction){
+    public static TransactionDTO convertFromEntity(Transaction transaction) {
+
         TransactionDTO dto = new TransactionDTO();
 
-        String id = transaction.getId();
-        String username = transaction.getAccount().getUsername();
-        int username_id = transaction.getAccount().getId();
-        int station_id = transaction.getStation().getId();
-        Date date_time = transaction.getDateTime();
-
-        String vehicle_id = transaction.getPrice().getVehicletype().getName();
-        String status = transaction.getStatus();
-        int price_id = transaction.getPrice().getId();
-        double price = transaction.getPrice().getPrice();
-        if (transaction.getLane() != null) {
-            int laneId = transaction.getLane().getId();
-            dto.setLaneId(laneId);
+        dto.setTransactionId(transaction.getId());
+        dto.setUsernameId(transaction.getAccount().getId());
+        dto.setStationId(transaction.getStation().getId());
+        dto.setDateTime(transaction.getDateTime());
+        dto.setStatus(transaction.getStatus());
+        dto.setPriceId(transaction.getPrice().getId());
+//        dto.setLaneId(transaction.getLane().getId());
+        dto.setLaneId(-1);
+        dto.setType(transaction.getType());
+        if (transaction.getPhoto() != null) {
+            dto.setPhoto(transaction.getPhoto());
+        } else {
+            dto.setPhoto(null);
         }
-
-
-        dto.setId(id);
-        dto.setUsername(username);
-        dto.setUsername_id(username_id);
-        dto.setStation_id(station_id);
-        dto.setDate_time(date_time);
-        dto.setVehicle_id(vehicle_id);
-        dto.setStatus(status);
-        dto.setPrice_id(price);
-        dto.setPriceid(price_id);
-
 
         return dto;
     }
 
-    public static Transaction convertToEntity(TransactionDTO transactionDTO){
-        String id = transactionDTO.getId();
-        int username_id = transactionDTO.getUsername_id();
-        int station_id = transactionDTO.getStation_id();
-        Date date_time = transactionDTO.getDate_time();
-        String status = transactionDTO.getStatus();
-        int price_id = transactionDTO.getPriceid();
-
-        Transaction tr = new Transaction();
-        tr.setId(id);
-        tr.setDateTime(date_time);
-        tr.setStatus(status);
-
-        return tr;
-
-    }
+//    public static Transaction convertToEntity(TransactionDTO transactionDTO) {
+//        String id = transactionDTO.getId();
+//        int username_id = transactionDTO.getUsername_id();
+//        int station_id = transactionDTO.getStation_id();
+//        Date date_time = transactionDTO.getDate_time();
+//        String status = transactionDTO.getStatus();
+//        int price_id = transactionDTO.getPriceid();
+//
+//        Transaction tr = new Transaction();
+//        tr.setId(id);
+//        tr.setDateTime(date_time);
+//        tr.setStatus(status);
+//
+//        return tr;
+//
+//    }
 }

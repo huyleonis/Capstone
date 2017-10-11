@@ -9,32 +9,26 @@ import java.util.List;
 public class Price {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="from_date")
     private Date fromDate;
 
+    @Column(name = "price")
     private double price;
 
-    //bi-directional many-to-one association to Station
     @ManyToOne
+    @JoinColumn(name = "station_id")
     private Station station;
 
-    //bi-directional many-to-one association to Vehicletype
     @ManyToOne
     @JoinColumn(name="type_id")
     private Vehicletype vehicletype;
 
-    //bi-directional many-to-one association to Transaction
-    @OneToMany(mappedBy="price")
-    private List<Transaction> transactions;
-
-    public Price() {
-    }
-
     public int getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(int id) {
@@ -42,7 +36,7 @@ public class Price {
     }
 
     public Date getFromDate() {
-        return this.fromDate;
+        return fromDate;
     }
 
     public void setFromDate(Date fromDate) {
@@ -50,7 +44,7 @@ public class Price {
     }
 
     public double getPrice() {
-        return this.price;
+        return price;
     }
 
     public void setPrice(double price) {
@@ -58,7 +52,7 @@ public class Price {
     }
 
     public Station getStation() {
-        return this.station;
+        return station;
     }
 
     public void setStation(Station station) {
@@ -66,32 +60,10 @@ public class Price {
     }
 
     public Vehicletype getVehicletype() {
-        return this.vehicletype;
+        return vehicletype;
     }
 
     public void setVehicletype(Vehicletype vehicletype) {
         this.vehicletype = vehicletype;
-    }
-
-    public List<Transaction> getTransactions() {
-        return this.transactions;
-    }
-
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
-    }
-
-    public Transaction addTransaction(Transaction transaction) {
-        getTransactions().add(transaction);
-        transaction.setPrice(this);
-
-        return transaction;
-    }
-
-    public Transaction removeTransaction(Transaction transaction) {
-        getTransactions().remove(transaction);
-        transaction.setPrice(null);
-
-        return transaction;
     }
 }
