@@ -506,17 +506,17 @@ public class MainForm extends javax.swing.JFrame {
         if (id.length() > 0) {
 
             try {
-                vp = rs.updateManualPayment(id);
+                vp = rs.finishManualPayment(id);
                 status = vp.getStatus();
                 lbStatus.setText(status);
             } catch (Exception ex) {
                 Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        if (status.length() > 0) {
-            JOptionPane.showMessageDialog(null, status, "Thông báo",
-                    JOptionPane.INFORMATION_MESSAGE);
-        }
+//        if (status.length() > 0) {
+//            JOptionPane.showMessageDialog(null, status, "Thông báo",
+//                    JOptionPane.INFORMATION_MESSAGE);
+//        }
 
 
     }//GEN-LAST:event_btnManualPaymentActionPerformed
