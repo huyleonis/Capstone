@@ -13,9 +13,9 @@
         android:layout_height="52dp"
         android:layout_marginRight="66dp"
         android:layout_marginTop="22dp"
+        android:onClick="clickToCancelPayment"
         android:text="Hủy"
         android:textSize="18sp"
-        android:onClick="clickToCancelPayment"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8"
         tools:layout_constraintLeft_creator="1"
@@ -44,12 +44,12 @@
         android:layout_height="52dp"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="22dp"
+        android:onClick="clickToMakePayment"
         android:text="Đồng ý"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8"
         tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintTop_creator="1"
-        android:onClick="clickToMakePayment"/>
+        tools:layout_constraintTop_creator="1" />
 
 </android.support.constraint.ConstraintLayout>
