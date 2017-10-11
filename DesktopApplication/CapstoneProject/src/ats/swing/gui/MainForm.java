@@ -28,7 +28,11 @@ public class MainForm extends javax.swing.JFrame {
 
     Timer timer;
     AutoPaymentRequest apr = new AutoPaymentRequest();
-    Queue<VehiclePayment> qe = apr.getAutoTrans(1);
+    //LoopRequest lp = new LoopRequest();
+    
+    
+   Queue<VehiclePayment> qe = apr.getAutoTrans(1);
+    //Queue<VehiclePayment> qe = lp.getListTransaction(1);
 
     /**
      * Creates new form MainForm
@@ -570,6 +574,7 @@ public class MainForm extends javax.swing.JFrame {
     private void btnOpenCarrierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenCarrierActionPerformed
         //timer.stop();
         String id = lbId.getText();
+        qe.addAll(apr.getAutoTrans(1));
         if(id != "id"){
             ManualPaymentRequest mpr = new ManualPaymentRequest();
             try {
