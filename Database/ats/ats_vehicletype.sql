@@ -16,29 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `lane`
+-- Table structure for table `vehicletype`
 --
 
-DROP TABLE IF EXISTS `lane`;
+DROP TABLE IF EXISTS `vehicletype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `lane` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `station_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_lane_station_idx` (`station_id`),
-  CONSTRAINT `fk_lane_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `vehicletype` (
+  `id` int(50) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `lane`
+-- Dumping data for table `vehicletype`
 --
 
-LOCK TABLES `lane` WRITE;
-/*!40000 ALTER TABLE `lane` DISABLE KEYS */;
-/*!40000 ALTER TABLE `lane` ENABLE KEYS */;
+LOCK TABLES `vehicletype` WRITE;
+/*!40000 ALTER TABLE `vehicletype` DISABLE KEYS */;
+INSERT INTO `vehicletype` VALUES (1,'O to con'),(2,'du lich'),(3,'tai');
+/*!40000 ALTER TABLE `vehicletype` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -50,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-04 14:00:03
+-- Dump completed on 2017-10-11  9:21:48

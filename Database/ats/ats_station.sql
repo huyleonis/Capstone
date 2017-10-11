@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
 -- Host: localhost    Database: ats
 -- ------------------------------------------------------
--- Server version	5.7.12-log
+-- Server version	5.7.17-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,27 +16,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `vehicletype`
+-- Table structure for table `station`
 --
 
-DROP TABLE IF EXISTS `vehicletype`;
+DROP TABLE IF EXISTS `station`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `vehicletype` (
-  `id` int(50) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
+CREATE TABLE `station` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `location` varchar(255) NOT NULL,
+  `zone` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `vehicletype`
+-- Dumping data for table `station`
 --
 
-LOCK TABLES `vehicletype` WRITE;
-/*!40000 ALTER TABLE `vehicletype` DISABLE KEYS */;
-INSERT INTO `vehicletype` VALUES (1,'O to con'),(2,'du lich'),(3,'tai');
-/*!40000 ALTER TABLE `vehicletype` ENABLE KEYS */;
+LOCK TABLES `station` WRITE;
+/*!40000 ALTER TABLE `station` DISABLE KEYS */;
+INSERT INTO `station` VALUES (1,'Cai Lậy','[342,1034324]','Tiền Giang'),(2,'Trảm Bom','[131,2323]','Đồng Nai');
+/*!40000 ALTER TABLE `station` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-04 23:36:56
+-- Dump completed on 2017-10-11  9:21:47

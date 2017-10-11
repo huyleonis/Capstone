@@ -16,30 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `vehicle`
+-- Table structure for table `lane`
 --
 
-DROP TABLE IF EXISTS `vehicle`;
+DROP TABLE IF EXISTS `lane`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `vehicle` (
+CREATE TABLE `lane` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `license_plate` varchar(45) NOT NULL,
-  `type_id` int(50) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `station_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `license_plate_UNIQUE` (`license_plate`),
-  KEY `IdType_idx` (`type_id`),
-  CONSTRAINT `Vehicle_REF_VehicleType` FOREIGN KEY (`type_id`) REFERENCES `vehicletype` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY `fk_lane_station_idx` (`station_id`),
+  CONSTRAINT `fk_lane_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `vehicle`
+-- Dumping data for table `lane`
 --
 
-LOCK TABLES `vehicle` WRITE;
-/*!40000 ALTER TABLE `vehicle` DISABLE KEYS */;
-/*!40000 ALTER TABLE `vehicle` ENABLE KEYS */;
+LOCK TABLES `lane` WRITE;
+/*!40000 ALTER TABLE `lane` DISABLE KEYS */;
+INSERT INTO `lane` VALUES (1,'lane 1',1),(2,'lane 2',1),(3,'lane 3',1),(4,'lane 1',2),(5,'lane 2',2);
+/*!40000 ALTER TABLE `lane` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-04 14:00:05
+-- Dump completed on 2017-10-11  9:21:46

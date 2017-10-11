@@ -16,41 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `transaction`
+-- Table structure for table `vehicle`
 --
 
-DROP TABLE IF EXISTS `transaction`;
+DROP TABLE IF EXISTS `vehicle`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `transaction` (
-  `id` varchar(50) NOT NULL,
-  `username_id` int(11) NOT NULL,
-  `station_id` int(11) NOT NULL,
-  `date_time` datetime NOT NULL,
-  `status` varchar(45) NOT NULL,
-  `price_id` int(11) NOT NULL,
-  `lane_id` int(11) DEFAULT NULL,
-  `type` tinyint(1) NOT NULL,
-  `photo` varchar(45) DEFAULT NULL,
+CREATE TABLE `vehicle` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `license_plate` varchar(45) NOT NULL,
+  `type_id` int(50) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_transaction_station_idx` (`station_id`),
-  KEY `fk_transaction_price_idx` (`price_id`),
-  KEY `fk_transaction_account_idx` (`username_id`),
-  KEY `fk_transaction_lane_idx` (`lane_id`),
-  CONSTRAINT `fk_transaction_account` FOREIGN KEY (`username_id`) REFERENCES `account` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_transaction_lane` FOREIGN KEY (`lane_id`) REFERENCES `lane` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_transaction_price` FOREIGN KEY (`price_id`) REFERENCES `price` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_transaction_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  UNIQUE KEY `license_plate_UNIQUE` (`license_plate`),
+  KEY `IdType_idx` (`type_id`),
+  CONSTRAINT `Vehicle_REF_VehicleType` FOREIGN KEY (`type_id`) REFERENCES `vehicletype` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `transaction`
+-- Dumping data for table `vehicle`
 --
 
-LOCK TABLES `transaction` WRITE;
-/*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
-/*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
+LOCK TABLES `vehicle` WRITE;
+/*!40000 ALTER TABLE `vehicle` DISABLE KEYS */;
+INSERT INTO `vehicle` VALUES (1,'92K-9195',1),(2,'92K-1111',2),(3,'92K-2222',3),(4,'92K-3333',2),(5,'92K-4444',1),(6,'92K-5555',3);
+/*!40000 ALTER TABLE `vehicle` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -62,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-04 14:00:04
+-- Dump completed on 2017-10-11  9:21:47

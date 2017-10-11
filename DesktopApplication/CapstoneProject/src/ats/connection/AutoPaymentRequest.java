@@ -32,7 +32,7 @@ public class AutoPaymentRequest extends TimerTask {
     public static final String localhost = "http://172.20.10.4:8080";
 
     //Get all Automatic Payment to Queue
-    public Queue<VehiclePayment> getAutoTrans(int idLane) {
+    public Queue<VehiclePayment> getAutoTrans(int idLane)  {
 
         JSONParser parser = new JSONParser();
         Queue<VehiclePayment> list = new PriorityQueue<>();
@@ -66,6 +66,8 @@ public class AutoPaymentRequest extends TimerTask {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (org.json.simple.parser.ParseException ex) {
+            Logger.getLogger(AutoPaymentRequest.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
 
