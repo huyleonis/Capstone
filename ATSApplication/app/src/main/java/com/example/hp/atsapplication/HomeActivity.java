@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,8 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
     Fragment fragmentConfirm;
     Fragment fragmentResult;
 
+    private Button btnViewHistory;
+
     private boolean isDisplayedConfirmFragment = false;
     private boolean isDisplayedResultFragment = false;
 
@@ -56,6 +59,8 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
         textZone = (TextView) findViewById(R.id.textZone);
         textPrice = (TextView) findViewById(R.id.textPrice);
         textPaymentResult = (TextView) findViewById(R.id.textPaymentResult);
+
+        btnViewHistory = (Button) findViewById(R.id.btnViewHistory);
 
     }
 
@@ -255,5 +260,11 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
     public String getIdTransaction() {
         final SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
         return setting.getString("IdTransaction", "");
+    }
+
+    public void clickToViewHistory(View view){
+        Intent intent = new Intent(this, HistoryActivity.class);
+        startActivity(intent);
+        HomeActivity.this.finish();
     }
 }
