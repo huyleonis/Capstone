@@ -7,4 +7,6 @@ public interface PriceService {
     PriceDTO findPriceByUuidAndUsername(String uuid, String username);
 
     PriceDTO findPriceByStationIdAndLicensePlate(int stationId, String licensePlate);
+
+    PriceDTO findPriceById(int priceId);
 }

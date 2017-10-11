@@ -33,4 +33,7 @@ public interface PriceRepos extends JpaRepository<Price, String>{
             "(select vehicle_type.id from vehicletype vehicle_type where vehicle_type.id = " +
             "(select vehicle.type_id from vehicle vehicle where vehicle.license_plate = ?2))", nativeQuery = true)
     Price findPriceByStationIdAndLicensePlate(int stationId, String licensePlate);
+
+    @Query(value = "SELECT * FROM price WHERE id = ?1", nativeQuery = true)
+    Price findById(Integer id);
 }

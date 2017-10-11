@@ -8,136 +8,125 @@ import java.util.List;
 public class Account {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(name="e_wallet")
-    private String eWallet;
-
-    private String email;
-
-    private String fullname;
-
-    @Column(name="number_id")
-    private String numberId;
-
-    private String password;
-
-    private String phone;
-
-    private int role;
-
+    @Column(name = "username")
     private String username;
 
-    //bi-directional many-to-one association to Vehicle
-    @ManyToOne
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "role")
+    private int role;
+
+    @Column(name = "fullname")
+    private String fullname;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "number_id")
+    private String numberId;
+
+    @Column(name = "e_wallet")
+    private String eWallet;
+
+    @OneToOne
+    @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 
-    //bi-directional many-to-one association to Transaction
-    @OneToMany(mappedBy="account")
-    private List<Transaction> transactions;
-
-    public Account() {
-    }
+    @Column(name = "balance")
+    private double balance;
 
     public int getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public String getEWallet() {
-        return this.eWallet;
-    }
-
-    public void setEWallet(String eWallet) {
-        this.eWallet = eWallet;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFullname() {
-        return this.fullname;
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
-    public String getNumberId() {
-        return this.numberId;
-    }
-
-    public void setNumberId(String numberId) {
-        this.numberId = numberId;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPhone() {
-        return this.phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public int getRole() {
-        return this.role;
-    }
-
-    public void setRole(int role) {
-        this.role = role;
-    }
-
     public String getUsername() {
-        return this.username;
+        return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getNumberId() {
+        return numberId;
+    }
+
+    public void setNumberId(String numberId) {
+        this.numberId = numberId;
+    }
+
+    public String geteWallet() {
+        return eWallet;
+    }
+
+    public void seteWallet(String eWallet) {
+        this.eWallet = eWallet;
+    }
+
     public Vehicle getVehicle() {
-        return this.vehicle;
+        return vehicle;
     }
 
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
     }
 
-    public List<Transaction> getTransactions() {
-        return this.transactions;
+    public double getBalance() {
+        return balance;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
-    }
-
-    public Transaction addTransaction(Transaction transaction) {
-        getTransactions().add(transaction);
-        transaction.setAccount(this);
-
-        return transaction;
-    }
-
-    public Transaction removeTransaction(Transaction transaction) {
-        getTransactions().remove(transaction);
-        transaction.setAccount(null);
-
-        return transaction;
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 }

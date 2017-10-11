@@ -61,7 +61,7 @@ public interface TransactionRepos extends JpaRepository<Transaction,Integer>{
      * @param id
      * @return
      */
-    @Query(value = "select * from transaction where id = ?1" , nativeQuery = true)
+    @Query(value = "select * from transaction t where t.id = ?1" , nativeQuery = true)
     Transaction findById(String id);
 
     /**

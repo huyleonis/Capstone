@@ -14,10 +14,13 @@ public class Transaction {
     @Column(name="date_time")
     private Date dateTime;
 
+    @Column(name = "photo")
     private String photo;
 
+    @Column(name = "status")
     private String status;
 
+    @Column(name = "type")
     private byte type;
 
     //bi-directional many-to-one association to Account
@@ -27,21 +30,21 @@ public class Transaction {
 
     //bi-directional many-to-one association to Lane
     @ManyToOne
+    @JoinColumn(name = "lane_id")
     private Lane lane;
 
     //bi-directional many-to-one association to Price
     @ManyToOne
+    @JoinColumn(name = "price_id")
     private Price price;
 
     //bi-directional many-to-one association to Station
     @ManyToOne
+    @JoinColumn(name = "station_id")
     private Station station;
 
-    public Transaction() {
-    }
-
     public String getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(String id) {
@@ -49,7 +52,7 @@ public class Transaction {
     }
 
     public Date getDateTime() {
-        return this.dateTime;
+        return dateTime;
     }
 
     public void setDateTime(Date dateTime) {
@@ -57,7 +60,7 @@ public class Transaction {
     }
 
     public String getPhoto() {
-        return this.photo;
+        return photo;
     }
 
     public void setPhoto(String photo) {
@@ -65,7 +68,7 @@ public class Transaction {
     }
 
     public String getStatus() {
-        return this.status;
+        return status;
     }
 
     public void setStatus(String status) {
@@ -73,7 +76,7 @@ public class Transaction {
     }
 
     public byte getType() {
-        return this.type;
+        return type;
     }
 
     public void setType(byte type) {
@@ -81,7 +84,7 @@ public class Transaction {
     }
 
     public Account getAccount() {
-        return this.account;
+        return account;
     }
 
     public void setAccount(Account account) {
@@ -89,7 +92,7 @@ public class Transaction {
     }
 
     public Lane getLane() {
-        return this.lane;
+        return lane;
     }
 
     public void setLane(Lane lane) {
@@ -97,7 +100,7 @@ public class Transaction {
     }
 
     public Price getPrice() {
-        return this.price;
+        return price;
     }
 
     public void setPrice(Price price) {
@@ -105,7 +108,7 @@ public class Transaction {
     }
 
     public Station getStation() {
-        return this.station;
+        return station;
     }
 
     public void setStation(Station station) {

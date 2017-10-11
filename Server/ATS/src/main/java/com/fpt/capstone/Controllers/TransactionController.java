@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/transaction")
@@ -85,11 +87,11 @@ public class TransactionController {
         // Khởi tạo transaction, status: Chưa thanh toán
         TransactionDTO transDTO =  transactionServiceImpl.insertAutoTransaction(username, stationId);
         
-        System.out.println("   + create transaction ["+transDTO.getId()+"] success with status [" + transDTO.getStatus() + "]");
+        System.out.println("   + create transaction ["+transDTO.getTransactionId()+"] success with status [" + transDTO.getStatus() + "]");
 
         // Gọi module paypal
         //....
-        transDTO = transactionServiceImpl.updateTransactionStatus(transDTO.getId(), "Thành công");
+        transDTO = transactionServiceImpl.updateTransactionStatus(transDTO.getTransactionId(), "Thành công");
         // status:
 
         System.out.println("   + update transaction success with status [" + transDTO.getStatus() + "]");
@@ -144,11 +146,23 @@ public class TransactionController {
         for (TransactionDTO tran: result) {
             if (!tran.getStatus().endsWith("Đang xử lý")) {
                 String status = tran.getStatus().replace("Chờ xử lý", "Đang xử lý");
-                transactionServiceImpl.updateTransactionStatus(tran.getId(), status);
+                transactionServiceImpl.updateTransactionStatus(tran.getTransactionId(), status);
             }
         }
         return result;
     }
 
 
+    @RequestMapping(value = "/updateProcessingTransaction")
+    @ResponseBody
+    public Map<String, String> updateProcessingTransaction(String transactionId){
+        Map<String, String> map = new HashMap<>();
+        String status= "";
+
+
+
+        map.put("status", status);
+
+        return map;
+    }
 }

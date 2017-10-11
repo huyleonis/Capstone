@@ -16,5 +16,8 @@ public interface StationRepos extends JpaRepository<Station, Integer>{
     Station findByUuid(String uuid);
 
     @Query(value = "select station_id from lane where id = ?1", nativeQuery = true)
-    int getStationIdOfLane(int laneId);
+    int getStationIdOfLane(Integer laneId);
+
+    @Query(value = "select * from station where id like ?1", nativeQuery = true)
+    Station findById(Integer id);
 }

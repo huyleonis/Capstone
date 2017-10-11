@@ -7,13 +7,21 @@ import java.util.Date;
 public class PriceDTO {
 
     private int id;
-    private String nameStation;
-    private String locationStation;
-    private String zoneStation;
+    private int stationId;
     private double price;
-    private String nameVehicleType;
-    private Date from_date;
-    private int idStation;
+    private int typeId;
+    private Date fromDate;
+
+    public PriceDTO() {
+    }
+
+    public PriceDTO(int id, int stationId, double price, int typeId, Date fromDate) {
+        this.id = id;
+        this.stationId = stationId;
+        this.price = price;
+        this.typeId = typeId;
+        this.fromDate = fromDate;
+    }
 
     public int getId() {
         return id;
@@ -23,28 +31,12 @@ public class PriceDTO {
         this.id = id;
     }
 
-    public String getNameStation() {
-        return nameStation;
+    public int getStationId() {
+        return stationId;
     }
 
-    public void setNameStation(String nameStation) {
-        this.nameStation = nameStation;
-    }
-
-    public String getLocationStation() {
-        return locationStation;
-    }
-
-    public void setLocationStation(String locationStation) {
-        this.locationStation = locationStation;
-    }
-
-    public String getZoneStation() {
-        return zoneStation;
-    }
-
-    public void setZoneStation(String zoneStation) {
-        this.zoneStation = zoneStation;
+    public void setStationId(int stationId) {
+        this.stationId = stationId;
     }
 
     public double getPrice() {
@@ -55,52 +47,31 @@ public class PriceDTO {
         this.price = price;
     }
 
-    public String getNameVehicleType() {
-        return nameVehicleType;
+    public int getTypeId() {
+        return typeId;
     }
 
-    public void setNameVehicleType(String nameVehicleType) {
-        this.nameVehicleType = nameVehicleType;
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
     }
 
-    public Date getFrom_date() {
-        return from_date;
+    public Date getFromDate() {
+        return fromDate;
     }
 
-    public void setFrom_date(Date from_date) {
-        this.from_date = from_date;
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
     }
-
-    public int getIdStation() {
-        return idStation;
-    }
-
-    public void setIdStation(int idStation) {
-        this.idStation = idStation;
-    }
-        
 
     public static PriceDTO convertFromEntity(Price price){
         PriceDTO dto = new PriceDTO();
 
-        int id = price.getId();
-        String nameStation = price.getStation().getName();
-        String locationStation = price.getStation().getLocation();
-        String zoneStation = price.getStation().getZone();
-        double price1 = price.getPrice();
-        String nameVehicleType = price.getVehicletype().getName();
-        Date from_date = price.getFromDate();
-        int idStation = price.getStation().getId();
+        dto.setId(price.getId());
+        dto.setFromDate(price.getFromDate());
+        dto.setPrice(price.getPrice());
+        dto.setStationId(price.getStation().getId());
+        dto.setTypeId(price.getVehicletype().getId());
 
-        dto.setId(id);
-        dto.setNameStation(nameStation);
-        dto.setLocationStation(locationStation);
-        dto.setZoneStation(zoneStation);
-        dto.setPrice(price1);
-        dto.setNameVehicleType(nameVehicleType);
-        dto.setFrom_date(from_date);
-        dto.setIdStation(idStation);
-        
         return dto;
     }
 }
