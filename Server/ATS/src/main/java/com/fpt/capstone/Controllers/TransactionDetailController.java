@@ -18,7 +18,7 @@ public class TransactionDetailController {
 
     @RequestMapping(value = "/getTransactionDetail/{transactionId}", method = RequestMethod.GET)
     @ResponseBody
-    public TransactionDetailDTO getTransactionDetail(@PathVariable String transactionId){
+    public TransactionDetailDTO getTransactionDetail(@PathVariable String transactionId) {
 
         TransactionDetailDTO dto = transactionDetailService.findTransactionById(transactionId);
 

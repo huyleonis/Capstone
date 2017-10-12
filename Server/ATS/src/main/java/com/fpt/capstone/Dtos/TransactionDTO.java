@@ -12,14 +12,14 @@ public class TransactionDTO {
     private Date dateTime;
     private String status;
     private int priceId;
-    private int laneId;
+    private Integer laneId;
     private int type;
     private String photo;
 
     public TransactionDTO() {
     }
 
-    public TransactionDTO(String transactionId, int usernameId, int stationId, Date dateTime, String status, int priceId, int laneId, int type, String photo) {
+    public TransactionDTO(String transactionId, int usernameId, int stationId, Date dateTime, String status, int priceId, Integer laneId, int type, String photo) {
         TransactionId = transactionId;
         this.usernameId = usernameId;
         this.stationId = stationId;
@@ -79,11 +79,11 @@ public class TransactionDTO {
         this.priceId = priceId;
     }
 
-    public int getLaneId() {
+    public Integer getLaneId() {
         return laneId;
     }
 
-    public void setLaneId(int laneId) {
+    public void setLaneId(Integer laneId) {
         this.laneId = laneId;
     }
 
@@ -107,19 +107,20 @@ public class TransactionDTO {
 
         TransactionDTO dto = new TransactionDTO();
 
-        dto.setTransactionId(transaction.getId());
-        dto.setUsernameId(transaction.getAccount().getId());
-        dto.setStationId(transaction.getStation().getId());
-        dto.setDateTime(transaction.getDateTime());
-        dto.setStatus(transaction.getStatus());
-        dto.setPriceId(transaction.getPrice().getId());
-//        dto.setLaneId(transaction.getLane().getId());
-        dto.setLaneId(-1);
-        dto.setType(transaction.getType());
-        if (transaction.getPhoto() != null) {
-            dto.setPhoto(transaction.getPhoto());
-        } else {
-            dto.setPhoto(null);
+        if (transaction != null) {
+            dto.setTransactionId(transaction.getId());
+            dto.setUsernameId(transaction.getAccount().getId());
+            dto.setStationId(transaction.getStation().getId());
+            dto.setDateTime(transaction.getDateTime());
+            dto.setStatus(transaction.getStatus());
+            dto.setPriceId(transaction.getPrice().getId());
+            if (transaction.getLane() != null) {
+                dto.setLaneId(transaction.getLane().getId());
+            }
+            dto.setType(transaction.getType());
+            if (transaction.getPhoto() != null) {
+                dto.setPhoto(transaction.getPhoto());
+            }
         }
 
         return dto;

@@ -119,20 +119,22 @@ public class Account {
         this.balance = balance;
     }
 
-    public static Account convertFromEntity(com.fpt.capstone.Entities.Account account){
+    public static Account convertFromEntity(com.fpt.capstone.Entities.Account account) {
         Account dto = new Account();
 
-        dto.setId(account.getId());
-        dto.setNumberId(account.getNumberId());
-        dto.setRole(account.getRole());
-        dto.setPassword(account.getPassword());
-        dto.setUsername(account.getUsername());
-        dto.setEmail(account.getEmail());
-        dto.setFullname(account.getFullname());
-        dto.setPhone(account.getPhone());
-        dto.setBalance(account.getBalance());
-        dto.seteWallet(account.geteWallet());
-        dto.setVehicleId(account.getVehicle().getId());
+        if (account != null) {
+            dto.setId(account.getId());
+            dto.setNumberId(account.getNumberId());
+            dto.setRole(account.getRole());
+            dto.setPassword(account.getPassword());
+            dto.setUsername(account.getUsername());
+            dto.setEmail(account.getEmail());
+            dto.setFullname(account.getFullname());
+            dto.setPhone(account.getPhone());
+            dto.setBalance(account.getBalance());
+            dto.seteWallet(account.geteWallet());
+            dto.setVehicleId(account.getVehicle().getId());
+        }
 
         return dto;
     }

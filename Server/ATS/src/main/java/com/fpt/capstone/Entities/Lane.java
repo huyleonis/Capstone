@@ -9,7 +9,7 @@ public class Lane {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;
@@ -19,11 +19,11 @@ public class Lane {
     @JoinColumn(name = "station_id")
     private Station station;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
