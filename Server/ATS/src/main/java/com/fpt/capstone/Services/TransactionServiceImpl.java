@@ -1,6 +1,5 @@
 package com.fpt.capstone.Services;
 
-import com.fpt.capstone.Dtos.PriceDTO;
 import com.fpt.capstone.Dtos.TransactionDTO;
 import com.fpt.capstone.Entities.Price;
 import com.fpt.capstone.Entities.Transaction;
@@ -8,12 +7,12 @@ import com.fpt.capstone.Repositories.AccountRepos;
 import com.fpt.capstone.Repositories.PriceRepos;
 import com.fpt.capstone.Repositories.StationRepos;
 import com.fpt.capstone.Repositories.TransactionRepos;
-import oracle.jrockit.jfr.StringConstantPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -121,6 +120,19 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    public List<TransactionDTO> getHistoryTransaction(String username, Date fromDate, Date toDate) {
+//        fromDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//        toDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        List<Transaction> list = transactionRepos.getHistoryTransaction(username, fromDate, toDate);
+        List<TransactionDTO> result = new ArrayList<>();
+        for(Transaction tran : list){
+            TransactionDTO dto = TransactionDTO.convertFromEntity(tran);
+            result.add(dto);
+        }
+        return result;
+    }
+
+    @Override
     public List<TransactionDTO> getTransactionsForStaff(int laneId, String status) {
         List<Transaction> list = transactionRepos.getTransactionForStaff(laneId, status);
         List<TransactionDTO> result = new ArrayList<>();
@@ -145,4 +157,6 @@ public class TransactionServiceImpl implements TransactionService {
 //        }
 //        return null;
 //    }
+
+
 }

@@ -1,18 +1,22 @@
 package com.fpt.capstone.Dtos;
 
 import com.fpt.capstone.Entities.Transaction;
-
 import java.util.Date;
+
+
 
 public class TransactionDTO {
     private String id;
+
     private String username;        
     private Date dateTime;
     private String status;   
     private double price;
     private String failReason;
     private int laneId;
-    private int stationId;
+    private int stationId;    
+    private String vehicleType;
+
 
     public TransactionDTO() {
     }
@@ -44,6 +48,7 @@ public class TransactionDTO {
         this.username = username;
     }
 
+
     public Date getDateTime() {
         return dateTime;
     }
@@ -68,6 +73,7 @@ public class TransactionDTO {
         this.price = price;
     }
 
+
     public String getFailReason() {
         return failReason;
     }
@@ -91,6 +97,14 @@ public class TransactionDTO {
     public void setStationId(int stationId) {
         this.stationId = stationId;
     }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
     
     public static TransactionDTO convertFromEntity(Transaction tran) {
         TransactionDTO dto = new TransactionDTO();
@@ -106,16 +120,16 @@ public class TransactionDTO {
         if (tran.getPrice() != null) {
             dto.setPrice(tran.getPrice().getPrice());
         }
-        
+        if (tran.getAccount() != null) {
+            if (tran.getAccount().getVehicle() != null) {
+                dto.setVehicleType(tran.getAccount().getVehicle().getVehicletype().getName());
+            }            
+        }
         
         dto.setStatus(tran.getStatus());
         dto.setUsername(tran.getAccount().getUsername());        
         
         return dto;
     }
-
     
-    
-    
-
 }

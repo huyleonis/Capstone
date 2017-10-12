@@ -22,13 +22,15 @@ import java.util.TimerTask;
  * @author Chi Hieu
  */
 public class ManualPaymentRequest{
-
+    public static final String localhost = "http://172.20.10.4:8080";
     //private final String USER_AGENT = "Mozilla/5.0";
     // HTTP GET request
 
     //Make a manual payment
     public VehiclePayment insertManualPayment(String licensePlate, int idLane) throws Exception {
+
         String urlName = "http://localhost:8080/transaction/makeManualPayment/" + licensePlate + "/" + idLane;
+
         JSONParser parser = new JSONParser();
         VehiclePayment vehiclePayment = new VehiclePayment();
         try {
@@ -63,6 +65,7 @@ public class ManualPaymentRequest{
 
     //Update Manual Payment: status from Chưa Thanh Toán to Đã thanh toán.
     public VehiclePayment updateManualPayment(String id) throws Exception {
+
         String urlName = "http://localhost:8080/transaction/receivedMoney/" + id;
         JSONParser parser = new JSONParser();
         VehiclePayment vehiclePayment = new VehiclePayment();
@@ -95,6 +98,7 @@ public class ManualPaymentRequest{
 
     //Finish Manual Payment: update status from "Đã hoàn thành" to "Đã hoàn thành"
     public VehiclePayment finishManualPayment(String id) throws Exception {
+
         String urlName = "http://localhost:8080/transaction/finish/" + id;
         JSONParser parser = new JSONParser();
         VehiclePayment vehiclePayment = new VehiclePayment();

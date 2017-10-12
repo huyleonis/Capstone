@@ -1,0 +1,34 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#80FFFFFF">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <TextView
+        android:id="@+id/txtDate"
+        android:layout_width="154dp"
+        android:layout_height="27dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="115dp"
+        tools:layout_editor_absoluteY="31dp" />
+
+    <TextView
+        android:id="@+id/txtInfo"
+        android:layout_width="202dp"
+        android:layout_height="34dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteY="69dp"
+        tools:layout_editor_absoluteX="2dp" />
+
+    <TextView
+        android:id="@+id/txtStatus"
+        android:layout_width="161dp"
+        android:layout_height="33dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteY="69dp"
+        tools:layout_editor_absoluteX="219dp" />
+</android.support.constraint.ConstraintLayout>

@@ -373,7 +373,7 @@ public class MenuServiceImpl extends AbstractServiceImpl implements MenuService 
             MenuTag newTag = new MenuTag();
             newTag.setName(tag);
             newTag = menuTagRepo.save(newTag);
-            menuTagDetailRepo.insertMenuTagDetail(menuId, newTag.getId());
+            menuTagDeta ilRepo.insertMenuTagDetail(menuId, newTag.getId());
          }
       }
    }

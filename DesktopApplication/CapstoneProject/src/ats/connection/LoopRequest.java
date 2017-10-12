@@ -21,7 +21,7 @@ public class LoopRequest {
     Timer timer;
     //update List each 1 second
 
-    //public Queue<VehiclePayment> getListTransaction(int seconds) {
+//    public Queue<VehiclePayment> getListTransaction(int seconds) {
 //        timer = new Timer();
 //        Queue<VehiclePayment> qe = new PriorityQueue<>();
 //        timer.scheduleAtFixedRate(new AutoPaymentRequest() {

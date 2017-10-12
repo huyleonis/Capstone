@@ -1,5 +1,7 @@
 package com.fpt.capstone.Entities;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -12,6 +14,7 @@ public class Transaction {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="date_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date dateTime;
 
     private String photo;
