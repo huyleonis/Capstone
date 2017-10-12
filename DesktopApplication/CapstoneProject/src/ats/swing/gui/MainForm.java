@@ -37,7 +37,7 @@ public class MainForm extends javax.swing.JFrame {
         //Timer timer;
         initComponents();
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-        lbId.setVisible(false);
+        lbId.setVisible(true);
         //updateForm();
 //        String licensePlate = txtLicensePlate.getText().trim();
 //        if ("".equals(licensePlate)) {
@@ -570,6 +570,7 @@ public class MainForm extends javax.swing.JFrame {
     private void btnOpenCarrierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenCarrierActionPerformed
         //timer.stop();
         String id = lbId.getText();
+        qe.addAll(apr.getAutoTrans(1));
         if(id != "id"){
             ManualPaymentRequest mpr = new ManualPaymentRequest();
             try {

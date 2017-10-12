@@ -14,8 +14,8 @@ public class PriceServiceImpl implements PriceService{
 
 
     @Override
-    public PriceDTO findPriceByUuidAndUsername(String uuid, String username) {
-        Price price = priceRepos.findPriceByUuidAndUsername(uuid, username);
+    public PriceDTO findPriceByStationAndUsername(int stationId, String username) {
+        Price price = priceRepos.findPriceByStationAndUsername(username, stationId);
         if (price != null){
             PriceDTO priceDTO = PriceDTO.convertFromEntity(price);
             return priceDTO;

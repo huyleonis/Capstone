@@ -25,6 +25,8 @@ public class Account {
     private String phone;
 
     private int role;
+    
+    private double balance;
 
     private String username;
 
@@ -140,4 +142,22 @@ public class Account {
 
         return transaction;
     }
+
+    public String geteWallet() {
+        return eWallet;
+    }
+
+    public void seteWallet(String eWallet) {
+        this.eWallet = eWallet;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+    
+    
 }

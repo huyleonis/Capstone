@@ -232,10 +232,6 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
         params.add(setting.getString("Username", ""));
         params.add(setting.getString("IdStation", ""));
 
-//        Map<String, String> params = new HashMap<>();
-//        params.put("Username", setting.getString("Username", ""));
-//        params.put("IdStation", setting.getString("IdStation", ""));
-
         rs.execute(params, "transaction", "makePayment", "GET");
         isDisplayedConfirmFragment = false;
         hideConfirmFragment();

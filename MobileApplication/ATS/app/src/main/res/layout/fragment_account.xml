@@ -1,13 +1,276 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="fpt.capstone.ats.fragments.AccountFragment">
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Fragment Account" />
+        android:id="@+id/layout">
 
-</FrameLayout>
+
+        <RelativeLayout
+            android:id="@+id/profile_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/nav_menu_header_bg"
+            android:elevation="3dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+
+                android:id="@+id/profile"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="0dp"
+                android:clickable="true"
+                android:elevation="5dp"
+                android:padding="20dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/man"
+                app:civ_border_color="#FFFFFFFF"
+                app:civ_border_width="3dp" />
+
+            <ImageView
+                android:id="@+id/edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="100dp"
+                android:clickable="true"
+
+                android:src="@android:drawable/ic_menu_edit" />
+
+            <TextView
+                android:id="@+id/textFullName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/profile"
+                android:layout_marginLeft="150dp"
+                android:layout_marginTop="30dp"
+                android:text="Laxman Marothiya"
+                android:textColor="#fff"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textVehicleType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textLicensePlate"
+                android:layout_centerHorizontal="false"
+                android:layout_marginLeft="150dp"
+                android:layout_marginTop="10dp"
+                android:text="Surat"
+                android:textColor="#fff"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textLicensePlate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textFullName"
+                android:layout_centerHorizontal="false"
+                android:layout_marginLeft="150dp"
+                android:layout_marginTop="10dp"
+                android:text="(Adhyaksh)"
+                android:textColor="#fff"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/profile_layout"
+            android:layout_margin="5dp"
+            android:layout_marginTop="0dp"
+            android:background="#ccffffff"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginTop="4dp"
+
+                android:clickable="true"
+                android:text="Số CMND: "
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@+id/textView22"
+                app:layout_constraintLeft_toLeftOf="@+id/textView22"
+                android:layout_marginLeft="0dp" />
+
+            <TextView
+                android:id="@+id/textNumberId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="5dp"
+                android:clickable="true"
+                android:text="933939933"
+                app:layout_constraintLeft_toRightOf="@+id/textView11"
+                app:layout_constraintTop_toBottomOf="@+id/textPhone"
+                android:layout_marginStart="8dp" />
+
+            <TextView
+                android:id="@+id/textPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="9876543210"
+                android:layout_margin="5dp"
+                android:layout_marginLeft="5dp"
+                app:layout_constraintLeft_toRightOf="@+id/textView22"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+            <TextView
+                android:id="@+id/textLicenseId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="ABCD XYZ"
+                app:layout_constraintLeft_toRightOf="@+id/textView26"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@+id/textEmail"
+                android:layout_marginStart="8dp" />
+
+            <TextView
+                android:id="@+id/textEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="marothiatechs@gmail.com"
+                app:layout_constraintLeft_toRightOf="@+id/textView27"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@+id/textNumberId"
+                android:layout_marginStart="5dp" />
+
+            <TextView
+                android:id="@+id/textView26"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:clickable="true"
+
+                android:text="Số bằng lái:"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="@+id/textView27"
+                app:layout_constraintTop_toBottomOf="@+id/textView27" />
+
+            <TextView
+                android:id="@+id/textView27"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="Email: "
+                android:textStyle="bold"
+                android:layout_marginTop="4dp"
+                app:layout_constraintTop_toBottomOf="@+id/textView11"
+                app:layout_constraintLeft_toLeftOf="@+id/textView11" />
+
+            <TextView
+                android:id="@+id/textView22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:clickable="true"
+                android:text="Số điện thoại"
+                android:textStyle="bold"
+                android:layout_marginLeft="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-condensed"
+                android:text="Thông tin tài khoản"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="serif"
+                android:text="Số tiền trong tài khoản"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textLicenseId" />
+
+            <TextView
+                android:id="@+id/textBalance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="100,000 đồng"
+                android:textColor="#46cc2b"
+                android:textSize="30sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+            <TextView
+                android:id="@+id/textWarning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Số tiền trong tài khoản của quý khách còn rất thấp.\nVui lòng nạp tiền để tiếp tục sử dụng!"
+                android:textAlignment="center"
+                android:textColor="#ff0015"
+                android:textSize="10sp"
+                android:textStyle="italic"
+                android:visibility="invisible"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textBalance" />
+
+            <Button
+                android:id="@+id/button7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Nạp tiền"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textWarning" />
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="10dp"
+                android:text="Đăng xuất tài khoản"
+                android:textColor="@android:color/holo_orange_dark"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button7" />
+
+        </android.support.constraint.ConstraintLayout>
+    </RelativeLayout>
+</ScrollView>

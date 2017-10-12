@@ -12,7 +12,7 @@ public class PriceDTO {
     private String zoneStation;
     private double price;
     private String nameVehicleType;
-    private Date from_date;
+    private Date fromDate;
     private int idStation;
 
     public int getId() {
@@ -63,12 +63,12 @@ public class PriceDTO {
         this.nameVehicleType = nameVehicleType;
     }
 
-    public Date getFrom_date() {
-        return from_date;
+    public Date getFromDate() {
+        return fromDate;
     }
 
-    public void setFrom_date(Date from_date) {
-        this.from_date = from_date;
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
     }
 
     public int getIdStation() {
@@ -83,23 +83,18 @@ public class PriceDTO {
     public static PriceDTO convertFromEntity(Price price){
         PriceDTO dto = new PriceDTO();
 
-        int id = price.getId();
-        String nameStation = price.getStation().getName();
-        String locationStation = price.getStation().getLocation();
-        String zoneStation = price.getStation().getZone();
-        double price1 = price.getPrice();
-        String nameVehicleType = price.getVehicletype().getName();
-        Date from_date = price.getFromDate();
-        int idStation = price.getStation().getId();
-
-        dto.setId(id);
-        dto.setNameStation(nameStation);
-        dto.setLocationStation(locationStation);
-        dto.setZoneStation(zoneStation);
-        dto.setPrice(price1);
-        dto.setNameVehicleType(nameVehicleType);
-        dto.setFrom_date(from_date);
-        dto.setIdStation(idStation);
+        dto.setId(price.getId());
+        if (price.getStation() != null) {
+            dto.setNameStation(price.getStation().getName());
+            dto.setLocationStation(price.getStation().getLocation());
+            dto.setZoneStation(price.getStation().getZone());
+            dto.setIdStation(price.getStation().getId());
+        }
+        
+        dto.setPrice(price.getPrice());
+        dto.setNameVehicleType(price.getVehicletype().getName());
+        dto.setFromDate(price.getFromDate());
+        
         
         return dto;
     }

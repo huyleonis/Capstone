@@ -35,7 +35,7 @@ public class AutoPaymentRequest extends TimerTask {
         JSONParser parser = new JSONParser();
         Queue<VehiclePayment> list = new PriorityQueue<>();
         try {
-            URL oracle = new URL("http://127.20.10.3:8080/transaction/getResult/" + idLane); // URL to Parse
+            URL oracle = new URL("http://localhost:8080/transaction/getResult/" + idLane); // URL to Parse
             URLConnection yc = oracle.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
 
@@ -63,6 +63,8 @@ public class AutoPaymentRequest extends TimerTask {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (org.json.simple.parser.ParseException ex) {
+            Logger.getLogger(AutoPaymentRequest.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
 

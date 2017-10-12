@@ -8,11 +8,15 @@ import com.estimote.coresdk.observation.region.beacon.BeaconRegion;
 import com.estimote.coresdk.recognition.packets.Beacon;
 import com.estimote.coresdk.service.BeaconManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import fpt.capstone.ats.activities.MainActivity;
+import fpt.capstone.ats.fragments.HomeFragment;
 import fpt.capstone.ats.utils.RequestServer;
 
 /**
@@ -33,7 +37,7 @@ public class BeaconInfoManager {
 
     private int notificationId = 0;
 
-    public BeaconInfoManager(Context context, final TextView message, final MainActivity activity, final String username) {
+    public BeaconInfoManager(Context context, final TextView message, final HomeFragment homeFragment, final String username) {
         this.context = context;
         beaconManager = new BeaconManager(context);
 
@@ -53,7 +57,6 @@ public class BeaconInfoManager {
                     params.add(username);
 
                     RequestServer rs = new RequestServer();
-                    rs.delegate = activity;
                     rs.execute(params, "price", "findPriceDriver", "GET");
                 } else if (type == fpt.capstone.ats.estimote.Beacon.BEACON_CHECK_RESULT) {
                     RequestServer rs = new RequestServer();
@@ -61,7 +64,7 @@ public class BeaconInfoManager {
                     List<String> params = new ArrayList<>();
                     params.add(beaconRegion.getProximityUUID() + ":" + beaconRegion.getMajor() +
                             ":" + beaconRegion.getMinor());
-                    params.add(activity.getIdTransaction());
+                    params.add(homeFragment.getIdTransaction());
                     rs.delegate = new RequestServer.RequestResult() {
                         @Override
                         public void processFinish(String result) {
@@ -80,19 +83,29 @@ public class BeaconInfoManager {
                 if (type == fpt.capstone.ats.estimote.Beacon.BEACON_CHECK_RESULT) {
                     message.setText("Trạng thái: Chuẩn bị ra khỏi khu vực thu phí");
 
-                    activity.setUpDefaultInfo(null);
+                    homeFragment.setUpDefaultInfo(null);
                 }
             }
         });
+
+        beaconManager.setRangingListener(new BeaconManager.BeaconRangingListener() {
+            @Override
+            public void onBeaconsDiscovered(BeaconRegion beaconRegion, List<Beacon> beacons) {
+
+
+
+            }
+        });
+
     }
 
     public void startMonitoring() {
         beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
             @Override
             public void onServiceReady() {
-                for (BeaconRegion region: regionToMonitor) {
-                    beaconManager.startMonitoring(region);
-                }
+//                for (BeaconRegion region: regionToMonitor) {
+//                    beaconManager.startMonitoring(region);
+//                }
             }
         });
     }
@@ -103,4 +116,32 @@ public class BeaconInfoManager {
         regionToMonitor.add(region);
     }
 
+
+    private void processPaymentBeacon(TextView message, int idStation, String username, HomeFragment homeFragment) {
+        message.setText("Trạng thái: Đi vào khu vực thu phí");
+
+        List<String> params = new ArrayList<>();
+
+        params.add(idStation + "");
+        params.add(username);
+
+        RequestServer rs = new RequestServer();
+        //rs.delegate = homeFragment;
+        rs.execute(params, "price", "findPriceDriver", "GET");
+    }
+
+    private void processResultBeacon(int idLane, HomeFragment homeFragment) {
+        RequestServer rs = new RequestServer();
+
+        List<String> params = new ArrayList<>();
+        params.add(idLane + "");
+        params.add(homeFragment.getIdTransaction());
+        rs.delegate = new RequestServer.RequestResult() {
+            @Override
+            public void processFinish(String result) {
+                Log.d("Exit Beacon","Send Transaction success");
+            }
+        };
+        rs.execute(params, "transaction", "checkResult", "GET");
+    }
 }

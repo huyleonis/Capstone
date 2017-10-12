@@ -4,6 +4,7 @@ import com.fpt.capstone.Dtos.LaneDTO;
 import com.fpt.capstone.Dtos.ResponseDTO;
 import com.fpt.capstone.Dtos.TransactionDTO;
 import com.fpt.capstone.Entities.Transaction;
+import com.fpt.capstone.Services.AccountServiceImpl;
 import com.fpt.capstone.Services.LaneService;
 import com.fpt.capstone.Services.LaneServiceImpl;
 import com.fpt.capstone.Services.TransactionServiceImpl;
@@ -22,6 +23,9 @@ public class TransactionController {
 
     @Autowired
     private LaneServiceImpl laneServiceImpl;
+    
+    @Autowired
+    private AccountServiceImpl accountServiceImpl;
 
 //    @RequestMapping(value = "findByLicensePlate/{license_plate}/{id}")
 //    @ResponseStatus(HttpStatus.OK)
@@ -88,8 +92,14 @@ public class TransactionController {
         System.out.println("   + create transaction ["+transDTO.getId()+"] success with status [" + transDTO.getStatus() + "]");
 
         // Gọi module paypal
-        //....
-        transDTO = transactionServiceImpl.updateTransactionStatus(transDTO.getId(), "Thành công");
+        String result = accountServiceImpl.makePayment(username, stationId);
+        if (result.equals("")) {
+            transDTO = transactionServiceImpl.updateTransactionStatus(transDTO.getId(), "Thành công");
+        } else {
+            transDTO = transactionServiceImpl.updateTransactionStatus(transDTO.getId(), "Thất bại");
+            transDTO.setFailReason(result);
+        }
+        
         // status:
 
         System.out.println("   + update transaction success with status [" + transDTO.getStatus() + "]");
@@ -98,16 +108,18 @@ public class TransactionController {
 
     /**
      * Khi xe nhận tín hiệu beacon 2, gửi yêu cầu check result. Server cập nhật trạng
-     * @param uuid
+     * @param laneId
      * @param idTransaction
      * @return
      */
-    @RequestMapping(value = "checkResult/{uuid}/{idTransaction}")
+    @RequestMapping(value = "checkResult/{laneId}/{idTransaction}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public TransactionDTO checkResult(@PathVariable String uuid, @PathVariable String idTransaction) {
+    public TransactionDTO checkResult(@PathVariable String laneId, @PathVariable String idTransaction) {
 
-        System.out.println("Request Check result from Driver");
+        System.out.println("Request Check result from Driver in lane with ID " + laneId);
+        
+        int iLaneId = Integer.parseInt(laneId);
         
         TransactionDTO transDTO =  transactionServiceImpl.getById(idTransaction);
         if (transDTO.getStatus().endsWith("Chờ xử lý")) {
@@ -117,8 +129,7 @@ public class TransactionController {
         String status =  transDTO.getStatus() + " - Chờ xử lý";
 
         //Cập nhật làn xe vô
-        LaneDTO laneDTO = laneServiceImpl.getLaneByBeacon(uuid);
-        transDTO = transactionServiceImpl.updateTransactionLane(idTransaction, laneDTO.getId());
+        transDTO = transactionServiceImpl.updateTransactionLane(idTransaction, iLaneId);
         
         System.out.println("   + Update trans (1) lane ["+ transDTO.getLaneId() +"] and status ["+transDTO.getStatus()+"]");
 

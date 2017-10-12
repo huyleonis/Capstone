@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#80FFFFFF"
+    android:background="#CCFFFFFF"
     tools:context="fpt.capstone.ats.fragments.PaymentResultFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -15,7 +15,7 @@
         android:layout_marginTop="20dp"
         android:fontFamily="sans-serif-condensed"
         android:text="-"
-        android:textColor="#008744"
+        android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintLeft_toRightOf="@+id/textView9"
         app:layout_constraintTop_toTopOf="parent"
