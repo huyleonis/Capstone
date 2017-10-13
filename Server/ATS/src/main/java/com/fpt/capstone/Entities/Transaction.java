@@ -10,8 +10,7 @@ public class Transaction {
     @Id
     private String id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="date_time")
+    @Column(name = "date_time")
     private Date dateTime;
 
     @Column(name = "photo")
@@ -25,7 +24,7 @@ public class Transaction {
 
     //bi-directional many-to-one association to Account
     @ManyToOne
-    @JoinColumn(name="username_id")
+    @JoinColumn(name = "username_id")
     private Account account;
 
     //bi-directional many-to-one association to Lane

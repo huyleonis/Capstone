@@ -259,7 +259,53 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
 
     public void clickToGetDetail(View view){
         Intent intent = new Intent(this, DetailTransactionActivity.class);
+        getTransactionDetail();
         startActivity(intent);
+
         HomeActivity.this.finish();
+    }
+
+    public void getTransactionDetail() {
+        final SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
+        Log.d("Request TransDetail", "Send Request TransDetail");
+        rs = new RequestServer();
+        rs.delegate = new RequestServer.RequestResult() {
+            @Override
+            public void processFinish(String result) {
+                try {
+                    Log.d("Receive TransDetail", "Transaction Detail Json: " + result);
+                    JSONObject infos = new JSONObject(result);
+                } catch (Exception e) {
+                    Log.e("Transaction Detail", e.getMessage());
+                    new AlertDialog.Builder(HomeActivity.this)
+                            .setTitle("Exception")
+                            .setMessage("Cannot parse json with result: " + result)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .create().show();
+                }
+            }
+        };
+
+        List<String> params = new ArrayList<>();
+        params.add("1507602350726");
+//        params.add(setting.getString("IdStation", ""));
+
+//        Map<String, String> params = new HashMap<>();
+//        params.put("Username", setting.getString("Username", ""));
+//        params.put("IdStation", setting.getString("IdStation", ""));
+
+        rs.execute(params, "transactiondetail", "getTransactionDetail", "GET");
+//        isDisplayedConfirmFragment = false;
+//        hideConfirmFragment();
+//        textMessage.setText("Trạng thái: đang thanh toán phí...");
     }
 }

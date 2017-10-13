@@ -76,7 +76,7 @@ public class InitialActivity extends AppCompatActivity {
 
         if(hasLoggedIn && !username.isEmpty()) {
             //Go directly to main activity.
-            Intent intent = new Intent(this, HomeActivity.class);
+            Intent intent = new Intent(this, DetailTransactionActivity.class);
             startActivity(intent);
         } else {
             //Go directly to main activity.
