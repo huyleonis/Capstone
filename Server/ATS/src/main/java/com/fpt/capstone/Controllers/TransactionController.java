@@ -30,12 +30,7 @@ public class TransactionController {
     @Autowired
     private AccountService accountService;
 
-//    @RequestMapping(value = "findByLicensePlate/{license_plate}/{id}")
-//    @ResponseStatus(HttpStatus.OK)
-//    @ResponseBody
-//    public TransactionDTO findByLicensePlate(@PathVariable String license_plate, @PathVariable int id){
-//        return transactionServiceImpl.findByLicensePlate(license_plate, id);
-//    }
+    
 
     /**
      * Tạo transaction thu phí thủ công khi staff enter biển số xe

@@ -7,17 +7,13 @@ package ats.swing.gui;
 
 import ats.connection.AutoPaymentRequest;
 import ats.connection.ManualPaymentRequest;
-import ats.connection.LoopRequest;
+import ats.dtos.VehicleDTO;
 import ats.dtos.VehiclePayment;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 /**
@@ -28,11 +24,7 @@ public class MainForm extends javax.swing.JFrame {
 
     Timer timer;
     AutoPaymentRequest apr = new AutoPaymentRequest();
-    //LoopRequest lp = new LoopRequest();
-    
-    
-   Queue<VehiclePayment> qe = apr.getAutoTrans(1);
-    //Queue<VehiclePayment> qe = lp.getListTransaction(1);
+    Queue<VehiclePayment> qe = apr.getAutoTrans(1);
 
     /**
      * Creates new form MainForm
@@ -42,59 +34,6 @@ public class MainForm extends javax.swing.JFrame {
         initComponents();
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
         lbId.setVisible(false);
-        //updateForm();
-//        String licensePlate = txtLicensePlate.getText().trim();
-//        if ("".equals(licensePlate)) {
-//            timer = new Timer(1000, new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    if (!qe.isEmpty()) {
-//                        VehiclePayment vp = qe.poll();
-//                        DecimalFormat formatter = new DecimalFormat("###,###,###.##");
-//                        if (vp.getLicensePlate().length() > 0 && vp.getFee() > 0 && vp.getTypeName().length() > 0) {
-//                            txtLicensePlate.setText(vp.getLicensePlate());
-//                            lbPirce.setText(formatter.format(vp.getFee()) + " đồng");
-//                            lbTypeName.setText(vp.getTypeName());
-//                            lbStatus.setText(vp.getStatus());
-//                        }
-//                    } else {
-//                        txtLicensePlate.setText("");
-//                        lbPirce.setText("Chưa có xe mới...");
-//                        lbTypeName.setText("Chưa có xe mới...");
-//                        lbStatus.setText("Chưa có xe mới...");
-//                    }
-//                }
-//            });
-//        }
-//        timer.start();
-    }
-
-    public void updateForm() {
-        String licensePlate = txtLicensePlate.getText().trim();
-        if ("".equals(licensePlate) || licensePlate.isEmpty()) {
-            timer = new Timer(1000, btnOpenCarrier.getAction());
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    if (!qe.isEmpty()) {
-//                        VehiclePayment vp = qe.poll();
-//                        DecimalFormat formatter = new DecimalFormat("###,###,###.##");
-//                        if (vp.getLicensePlate().length() > 0 && vp.getFee() > 0 && vp.getTypeName().length() > 0) {
-//                            txtLicensePlate.setText(vp.getLicensePlate());
-//                            lbPirce.setText(formatter.format(vp.getFee()) + " đồng");
-//                            lbTypeName.setText(vp.getTypeName());
-//                            lbStatus.setText(vp.getStatus());
-//                        }
-//                    } else {
-//                        txtLicensePlate.setText("");
-//                        lbPirce.setText("Chưa có xe mới...");
-//                        lbTypeName.setText("Chưa có xe mới...");
-//                        lbStatus.setText("Chưa có xe mới...");
-//                    }
-//                }
-//            });
-//        } else {
-//            //timer.stop();
-        }
     }
 
     /**
@@ -190,21 +129,21 @@ public class MainForm extends javax.swing.JFrame {
 
         lbPirce.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         lbPirce.setForeground(new java.awt.Color(255, 0, 51));
-        lbPirce.setText("VNĐ");
+        lbPirce.setText("-");
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel5.setText("Giá tiền:");
 
         lbTypeName.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         lbTypeName.setForeground(new java.awt.Color(255, 0, 51));
-        lbTypeName.setText("Loại xe");
+        lbTypeName.setText("-");
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel6.setText("Tình trạng:");
 
         lbStatus.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         lbStatus.setForeground(new java.awt.Color(255, 0, 51));
-        lbStatus.setText("Đã thu phí");
+        lbStatus.setText("-");
 
         btnManualPayment.setFont(new java.awt.Font("Arial", 0, 22)); // NOI18N
         btnManualPayment.setText("Đã Thu");
@@ -498,27 +437,30 @@ public class MainForm extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
+    /**
+     * Event của button "Đã thu"
+     * Staff nhập biển số xe và gửi request lên server yêu cầu thanh toán thủ công
+     *
+     * input licensePlate, idLane
+     * @return typeVehicle, price
+     */  
     private void btnManualPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManualPaymentActionPerformed
         ManualPaymentRequest rs = new ManualPaymentRequest();
         VehiclePayment vp;
-        String id = lbId.getText();
+        String licensePlate = txtLicensePlate.getText().trim();
         String status = "";
-        if (id.length() > 0) {
-
+        if (!lbTypeName.getText().equals("-")) {
             try {
-                vp = rs.finishManualPayment(id);
-                status = vp.getStatus();
+                vp = rs.insertManualPayment(licensePlate, 1);
+                lbId.setText(vp.getId());
+                String id = lbId.getText();
+
+                status = rs.finishManualPayment(id).getStatus();
                 lbStatus.setText(status);
             } catch (Exception ex) {
                 Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-//        if (status.length() > 0) {
-//            JOptionPane.showMessageDialog(null, status, "Thông báo",
-//                    JOptionPane.INFORMATION_MESSAGE);
-//        }
-
-
     }//GEN-LAST:event_btnManualPaymentActionPerformed
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
@@ -530,52 +472,64 @@ public class MainForm extends javax.swing.JFrame {
 
     }//GEN-LAST:event_txtLicensePlateActionPerformed
 
+    /**
+     * Event lấy dữ liệu xe gồm loại xe, giá xe từ biển số xe do Staff nhập vào
+     *
+     * input licensePlate, idLane
+     * @return typeVehicle, price
+     */
     private void txtLicensePlateCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtLicensePlateCaretUpdate
+        String licensePlate = txtLicensePlate.getText();
+        ManualPaymentRequest mpr = new ManualPaymentRequest();
+        VehicleDTO dto = new VehicleDTO();
+        DecimalFormat formatter = new DecimalFormat("###,###,###.##");
+        try {
+            dto = mpr.getInfoVehicle(licensePlate, 1);
+            if (dto != null) {
+                if (dto.getPrice() != null) {
+                    lbPirce.setText(formatter.format(dto.getPrice()) + " đồng");
+                } else {
+                    lbPirce.setText("-");
+                }
+                if (dto.getTypeVehicle() != null) {
+                    lbTypeName.setText(dto.getTypeVehicle());
+                } else {
+                    lbTypeName.setText("-");
+                }
+                lbStatus.setText("-");
+            } else {
+                lbPirce.setText("-");
+                lbTypeName.setText("-");
+                lbStatus.setText("-");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-
+        //dto = null;
     }//GEN-LAST:event_txtLicensePlateCaretUpdate
 
+    /**
+     * Event ấn nút Enter của button "Đã thu"
+     *
+     * @return
+     */
     private void btnManualPaymentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnManualPaymentKeyPressed
-//        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-//            timer.stop();
-//            btnManualPayment.doClick();
-//        }
-
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            btnManualPayment.doClick();
+        }
     }//GEN-LAST:event_btnManualPaymentKeyPressed
 
     private void txtLicensePlateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLicensePlateKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_SPACE) {
-            //timer.stop();
-            String licensePlate = txtLicensePlate.getText();
-            ManualPaymentRequest rs = new ManualPaymentRequest();
-            VehiclePayment vp = new VehiclePayment();
-            try {
-                vp = rs.insertManualPayment(licensePlate, 1);
-            } catch (Exception ex) {
-                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            DecimalFormat formatter = new DecimalFormat("###,###,###.##");
-            if (licensePlate.length() > 0 && vp.getFee() > 0 && vp.getTypeName().length() > 0) {
-                lbPirce.setText(formatter.format(vp.getFee()) + " đồng");
-                lbTypeName.setText(vp.getTypeName());
-                lbStatus.setText(vp.getStatus());
-                lbId.setText(vp.getId());
-            } else {
-                lbPirce.setText("");
-                lbTypeName.setText("");
-                lbStatus.setText("");
-                lbId.setText("");
-            }
-        }
+
     }//GEN-LAST:event_txtLicensePlateKeyPressed
-    // list transaction
 
 
     private void btnOpenCarrierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenCarrierActionPerformed
-        //timer.stop();
+
         String id = lbId.getText();
         qe.addAll(apr.getAutoTrans(1));
-        if(id != "id"){
+        if (id != "id") {
             ManualPaymentRequest mpr = new ManualPaymentRequest();
             try {
                 mpr.finishManualPayment(id);
@@ -599,20 +553,7 @@ public class MainForm extends javax.swing.JFrame {
             lbTypeName.setText("Chưa có xe mới...");
             lbStatus.setText("Chưa có xe mới...");
             lbId.setText("id");
-            //timer.start();
         }
-
-//        ManualPaymentRequest mpr = new ManualPaymentRequest();
-//        try {
-//            VehiclePayment vp = mpr.finishManualPayment(lbId.getText());
-//            lbPirce.setText("");
-//            lbTypeName.setText("");
-//            lbStatus.setText("");
-//            lbId.setText("");
-//        } catch (Exception ex) {
-//            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-
     }//GEN-LAST:event_btnOpenCarrierActionPerformed
 
     private void btnOpenCarrierKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnOpenCarrierKeyPressed

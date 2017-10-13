@@ -15,12 +15,16 @@ public class TransactionDTO {
     private int laneId;
     private int type;
     private String photo;
+    private String vehicleType;
+    private Double price;
+    private String licensePlate;
+    private int accountId;
 
     public TransactionDTO() {
     }
 
-    public TransactionDTO(String transactionId, int usernameId, int stationId, Date dateTime, String status, int priceId, int laneId, int type, String photo) {
-        TransactionId = transactionId;
+    public TransactionDTO(String TransactionId, int usernameId, int stationId, Date dateTime, String status, int priceId, int laneId, int type, String photo, String vehicleType, Double price, String licensePlate, int accountId) {
+        this.TransactionId = TransactionId;
         this.usernameId = usernameId;
         this.stationId = stationId;
         this.dateTime = dateTime;
@@ -29,6 +33,42 @@ public class TransactionDTO {
         this.laneId = laneId;
         this.type = type;
         this.photo = photo;
+        this.vehicleType = vehicleType;
+        this.price = price;
+        this.licensePlate = licensePlate;
+        this.accountId = accountId;
+    }
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
     }
 
     public String getTransactionId() {
@@ -121,7 +161,10 @@ public class TransactionDTO {
         } else {
             dto.setPhoto(null);
         }
-
+        dto.setLicensePlate(transaction.getAccount().getVehicle().getLicensePlate());
+        dto.setVehicleType(transaction.getAccount().getVehicle().getVehicletype().getName());
+        dto.setPrice(transaction.getPrice().getPrice());
+        dto.setAccountId(transaction.getAccount().getId());
         return dto;
     }
 

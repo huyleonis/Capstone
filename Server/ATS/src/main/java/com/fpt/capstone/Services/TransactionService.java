@@ -5,7 +5,7 @@ import com.fpt.capstone.Dtos.TransactionDTO;
 import java.util.List;
 
 public interface TransactionService {
-//    TransactionDTO findByLicensePlate(String licensePlate, int id);
+
 
     TransactionDTO insertManualTransaction(String licensePlate, int laneId);
 
