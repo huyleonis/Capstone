@@ -1,18 +1,24 @@
 package com.example.hp.atsapplication;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.DatePickerDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -23,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,9 +47,18 @@ public class HistoryActivity extends AppCompatActivity {
 
     private TextView fromDate;
     private TextView toDate;
+    private Button search;
     private int year, month, day, hours, minus, second;
 
     String date_time = "";
+    ArrayList<Transaction> lstData = new ArrayList<Transaction>();
+    private CustomerAdapter adapter;
+
+//    FragmentManager fm = getFragmentManager();
+//    Fragment fragmentHistoryResult;
+//    private boolean isDisplayHistoryResultFragment = false;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +67,25 @@ public class HistoryActivity extends AppCompatActivity {
 
         fromDate = (TextView) findViewById(R.id.txtFromDate);
         toDate = (TextView) findViewById(R.id.txtToDate);
+        search = (Button) findViewById(R.id.btSearch);
+
+
+
+
+        ListView listView = (ListView) findViewById(R.id.listView);
+
+        adapter = new CustomerAdapter(this, R.layout.item_row, lstData);
+
+
+
+
+
+        listView.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
 
 
     }
+
 
     public void clickToFromDate(View view){
         final Calendar c = Calendar.getInstance();
@@ -129,57 +161,83 @@ public class HistoryActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
-    public void clickToShowHistory(View view) {
 
+
+    public void clickToShowHistory(View view) throws ParseException {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         fromDate = (TextView) findViewById(R.id.txtFromDate);
         String fromDateString = fromDate.getText().toString();
+        Date date1 = format.parse(fromDateString);
+
         Log.d("fromDate", fromDateString);
 
         toDate = (TextView) findViewById(R.id.txtToDate);
         String toDateString = toDate.getText().toString();
+        Date date2 = format.parse(toDateString);
+
+//        if(fromDateString.equals("##-##-####") || toDateString.equals("##-##-####") || fromDateString.equals("##-##-####") && toDateString.equals("##-##-####")){
+//
+//        }
+
+        // check validate ngày bắt đầu lớn hơn ngày kết thúc
+        if (date1.compareTo(date2) > 0 ){
+            new AlertDialog.Builder(HistoryActivity.this)
+                    .setTitle("Exception")
+                    .setMessage("Ngày bắt đầu không được nhỏ hơn ngày kết thúc")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .create().show();
+        }
 
         final SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
         RequestServer rs = new RequestServer();
         rs.delegate  = new RequestServer.RequestResult() {
-
             @Override
             public void processFinish(String result) {
 
                 try {
-                    JSONArray list =  new JSONArray(result);
-                    Log.d("abc", result);
-                    Log.d("Result", String.valueOf(list.get(0)));
-                    for(int i=0; i<list.length(); i++){
-                        JSONObject trans =  list.getJSONObject(i);
-                        if(trans != null){
-                            String id = (String) trans.get("id");
-                            int stationId = (int) trans.get("stationId");
-                            String stationName = (String) trans.get("stationName");
-//                            Date dateTime = (Date) trans.get("dateTime");
-                            Long dateTime = trans.getLong("dateTime");
-                            Date date = new Date(trans.getLong("dateTime"));
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                            String dateText = simpleDateFormat.format(date);
-                            dateText = trans.getString("dateTime");
-                            Log.d("dateText" , dateText);
-                            Double price = (Double) trans.get("price_id");
-                            String username = (String) trans.get("username");
+                    lstData.clear();
+                    JSONArray list = new JSONArray(result);
+                        for (int i = 0; i < list.length(); i++) {
+                            JSONObject trans = list.getJSONObject(i);
+                            Transaction transaction = new Transaction();
+                            transaction.setDateTime((Long) trans.get("dateTime"));
+                            transaction.setStationId((Integer) trans.get("stationId"));
+                            transaction.setPrice((Double) trans.get("price"));
+                            transaction.setStatus((String) trans.get("status"));
 
+                            lstData.add(transaction);
+
+
+                            adapter.notifyDataSetChanged();
 
                         }
-                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+
         };
+
 
         ArrayList<String> params = new ArrayList<>();
         params.add(setting.getString("Username", ""));
         params.add(fromDateString);
         params.add(toDateString);
 
-
         rs.execute(params, "history", "getByDate", "GET");
+
+
     }
+
 }
