@@ -12,7 +12,6 @@ public class PriceDTO {
     private int typeId;
     private Date fromDate;
     private String typeVehicle;
-    private int accountId;
 
     public PriceDTO() {
     }
@@ -25,14 +24,13 @@ public class PriceDTO {
         this.fromDate = fromDate;
     }
 
-    public PriceDTO(int id, int stationId, double price, int typeId, Date fromDate, String typeVehicle, int accountId) {
+    public PriceDTO(int id, int stationId, double price, int typeId, Date fromDate, String typeVehicle) {
         this.id = id;
         this.stationId = stationId;
         this.price = price;
         this.typeId = typeId;
         this.fromDate = fromDate;
         this.typeVehicle = typeVehicle;
-        this.accountId = accountId;
     }
 
     public String getTypeVehicle() {
@@ -41,14 +39,6 @@ public class PriceDTO {
 
     public void setTypeVehicle(String typeVehicle) {
         this.typeVehicle = typeVehicle;
-    }
-
-    public int getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
     }
 
     public int getId() {

@@ -9,8 +9,11 @@ import ats.connection.AutoPaymentRequest;
 import ats.connection.ManualPaymentRequest;
 import ats.dtos.VehicleDTO;
 import ats.dtos.VehiclePayment;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,9 +25,7 @@ import javax.swing.Timer;
  */
 public class MainForm extends javax.swing.JFrame {
 
-    Timer timer;
-    AutoPaymentRequest apr = new AutoPaymentRequest();
-    Queue<VehiclePayment> qe = apr.getAutoTrans(1);
+    Timer timer = new Timer(1000, new MyTimerActionListener());
 
     /**
      * Creates new form MainForm
@@ -33,7 +34,51 @@ public class MainForm extends javax.swing.JFrame {
         //Timer timer;
         initComponents();
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-        lbId.setVisible(false);
+        lbId.setVisible(true);
+        timer.start();
+//        try {
+//            Thread.sleep(10000);
+//        } catch (InterruptedException e) {
+//        }
+        //timer.stop();
+    }
+    AutoPaymentRequest apr = new AutoPaymentRequest();
+    Queue<VehiclePayment> qe = apr.getAutoTrans(1);
+    
+
+    class MyTimerActionListener implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+            
+//            if(txtLicensePlate.getText().isEmpty()){
+//                timer.stop();
+//            }else{
+//                timer.start();
+//            }        
+            //Queue<VehiclePayment> qe = apr.getAutoTrans(1);
+            String id = lbId.getText();
+            qe.addAll(apr.getAutoTrans(1));
+            if (!qe.isEmpty()) {
+                timer.stop();
+                VehiclePayment vp = qe.poll();
+                DecimalFormat formatter = new DecimalFormat("###,###,###.##");
+                if (vp != null) {
+                    txtLicensePlate.setText(vp.getLicensePlate());
+                    lbPirce.setText(formatter.format(vp.getFee()) + " đồng");
+                    lbTypeName.setText(vp.getTypeName());
+                    lbStatus.setText(vp.getStatus());
+                    lbId.setText(vp.getId());
+                }
+            } else {
+                timer.restart();
+                txtLicensePlate.setText("");
+                lbPirce.setText("Chưa có xe mới...");
+                lbTypeName.setText("Chưa có xe mới...");
+                lbStatus.setText("Chưa có xe mới...");
+                lbId.setText("id");
+            }
+
+        }
     }
 
     /**
@@ -438,12 +483,13 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     /**
-     * Event của button "Đã thu"
-     * Staff nhập biển số xe và gửi request lên server yêu cầu thanh toán thủ công
+     * Event của button "Đã thu" Staff nhập biển số xe và gửi request lên server
+     * yêu cầu thanh toán thủ công
      *
      * input licensePlate, idLane
+     *
      * @return typeVehicle, price
-     */  
+     */
     private void btnManualPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManualPaymentActionPerformed
         ManualPaymentRequest rs = new ManualPaymentRequest();
         VehiclePayment vp;
@@ -476,9 +522,14 @@ public class MainForm extends javax.swing.JFrame {
      * Event lấy dữ liệu xe gồm loại xe, giá xe từ biển số xe do Staff nhập vào
      *
      * input licensePlate, idLane
+     *
      * @return typeVehicle, price
      */
     private void txtLicensePlateCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtLicensePlateCaretUpdate
+        timer.stop();
+        if(txtLicensePlate.getText().isEmpty()){
+            timer.start();
+        }
         String licensePlate = txtLicensePlate.getText();
         ManualPaymentRequest mpr = new ManualPaymentRequest();
         VehicleDTO dto = new VehicleDTO();
@@ -526,9 +577,12 @@ public class MainForm extends javax.swing.JFrame {
 
 
     private void btnOpenCarrierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenCarrierActionPerformed
-
+        // AutoPaymentRequest apr = new AutoPaymentRequest();
+        //Queue<VehiclePayment> qe = apr.getAutoTrans(1);
+        //Queue<VehiclePayment> qe = new PriorityQueue<>();
+        //timer.stop();
         String id = lbId.getText();
-        qe.addAll(apr.getAutoTrans(1));
+       // qe.addAll(apr.getAutoTrans(1));
         if (id != "id") {
             ManualPaymentRequest mpr = new ManualPaymentRequest();
             try {
@@ -567,11 +621,13 @@ public class MainForm extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+
             public void run() {
                 new MainForm().setVisible(true);
 
             }
         });
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

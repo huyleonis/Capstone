@@ -60,7 +60,7 @@ public class ManualPaymentRequest {
     }
 
     /**
-     * Tạo transaction khi staff nhập biển số xe đúng
+     * Tạo transaction khi staff gửi request
      *
      * @param licensePlate biển số xe
      * @param idLane làn xe ứng với mỗi list
@@ -91,37 +91,48 @@ public class ManualPaymentRequest {
         return vehiclePayment;
     }
 
-    //Update Manual Payment: status from Chưa Thanh Toán to Đã thanh toán.
-    public VehiclePayment updateManualPayment(String id) throws Exception {
-        String urlName = LOCALHOST + "/transaction/receivedMoney/" + id;
-        JSONParser parser = new JSONParser();
-        VehiclePayment vehiclePayment = new VehiclePayment();
-        try {
-            URL oracle = new URL(urlName); // URL to Parse
-            URLConnection yc = oracle.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                JSONObject payment = (JSONObject) parser.parse(inputLine);
-
-                String typeName = (String) payment.get("vehicle_id");
-                vehiclePayment.setTypeName(typeName);
-
-                Double price = (Double) payment.get("price_id");
-                vehiclePayment.setFee(price);
-
-                String status = (String) payment.get("status");
-                vehiclePayment.setStatus(status);
-            }
-            in.close();
-        } catch (FileNotFoundException e) {
-        } catch (IOException e) {
-        }
-        return vehiclePayment;
-    }
-
-    //Finish Manual Payment: update status from "Đã hoàn thành" to "Đã hoàn thành"
+    /**
+     * Cập nhật trạng thái của transaction thành "Đã thu"
+     *
+     * @param id id của transaction
+     * @return trả về Object có chứa thông tin transaction với status là "Đã
+     * thu"
+     */
+//    public VehiclePayment updateManualPayment(String id) throws Exception {
+//        String urlName = LOCALHOST + "/transaction/receivedMoney/" + id;
+//        JSONParser parser = new JSONParser();
+//        VehiclePayment vehiclePayment = new VehiclePayment();
+//        try {
+//            URL oracle = new URL(urlName); // URL to Parse
+//            URLConnection yc = oracle.openConnection();
+//            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+//
+//            String inputLine;
+//            while ((inputLine = in.readLine()) != null) {
+//                JSONObject payment = (JSONObject) parser.parse(inputLine);
+//
+//                String typeName = (String) payment.get("vehicle_id");
+//                vehiclePayment.setTypeName(typeName);
+//
+//                Double price = (Double) payment.get("price_id");
+//                vehiclePayment.setFee(price);
+//
+//                String status = (String) payment.get("status");
+//                vehiclePayment.setStatus(status);
+//            }
+//            in.close();
+//        } catch (FileNotFoundException e) {
+//        } catch (IOException e) {
+//        }
+//        return vehiclePayment;
+//    }
+    /**
+     * Cập nhật trạng thái của transaction thành Kết thúc
+     *
+     * @param id id của transaction
+     * @return trả về Object có chứa thông tin transaction với status là "Kết
+     * thúc"
+     */
     public VehiclePayment finishManualPayment(String id) throws Exception {
         String urlName = LOCALHOST + "/transaction/finish/" + id;
         JSONParser parser = new JSONParser();
