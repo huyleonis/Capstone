@@ -12,9 +12,13 @@ public class Transaction {
     @Id
     private String id;
 
+<<<<<<< HEAD
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="date_time")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+=======
+    @Column(name = "date_time")
+>>>>>>> origin/CapstoneProjectOfSon
     private Date dateTime;
 
     private String photo;
@@ -25,7 +29,7 @@ public class Transaction {
 
     //bi-directional many-to-one association to Account
     @ManyToOne
-    @JoinColumn(name="username_id")
+    @JoinColumn(name = "username_id")
     private Account account;
 
     //bi-directional many-to-one association to Lane

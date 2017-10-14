@@ -13,7 +13,7 @@ public class TransactionDTO {
     private String status;   
     private double price;
     private String failReason;
-    private int laneId;
+    private Integer laneId;
     private int stationId;    
     private String vehicleType;
 
@@ -86,7 +86,7 @@ public class TransactionDTO {
         return laneId;
     }
 
-    public void setLaneId(int laneId) {
+    public void setLaneId(Integer laneId) {
         this.laneId = laneId;
     }
 

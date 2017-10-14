@@ -8,7 +8,7 @@ import java.util.List;
 public class Lane {
 
     @Id
-    private int id;
+    private Integer id;
 
     private String name;
 
@@ -31,7 +31,7 @@ public class Lane {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
