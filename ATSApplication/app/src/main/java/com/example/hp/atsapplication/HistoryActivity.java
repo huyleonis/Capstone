@@ -43,20 +43,15 @@ import java.util.Objects;
 public class HistoryActivity extends AppCompatActivity {
 
     public static String DEFAULT_URL = "";
-//    final ProgressDialog dialog = new ProgressDialog(this);
 
     private TextView fromDate;
     private TextView toDate;
-    private Button search;
     private int year, month, day, hours, minus, second;
 
     String date_time = "";
     ArrayList<Transaction> lstData = new ArrayList<Transaction>();
     private CustomerAdapter adapter;
 
-//    FragmentManager fm = getFragmentManager();
-//    Fragment fragmentHistoryResult;
-//    private boolean isDisplayHistoryResultFragment = false;
 
 
 
@@ -67,7 +62,6 @@ public class HistoryActivity extends AppCompatActivity {
 
         fromDate = (TextView) findViewById(R.id.txtFromDate);
         toDate = (TextView) findViewById(R.id.txtToDate);
-        search = (Button) findViewById(R.id.btSearch);
 
 
 
@@ -175,10 +169,6 @@ public class HistoryActivity extends AppCompatActivity {
         toDate = (TextView) findViewById(R.id.txtToDate);
         String toDateString = toDate.getText().toString();
         Date date2 = format.parse(toDateString);
-
-//        if(fromDateString.equals("##-##-####") || toDateString.equals("##-##-####") || fromDateString.equals("##-##-####") && toDateString.equals("##-##-####")){
-//
-//        }
 
         // check validate ngày bắt đầu lớn hơn ngày kết thúc
         if (date1.compareTo(date2) > 0 ){

@@ -265,7 +265,7 @@ public class HomeActivity extends AppCompatActivity implements RequestServer.Req
     }
 
     public void clickToGetDetail(View view){
-        Intent intent = new Intent(this, DetailTransactionActivity.class);
-        startActivity(intent);        
+        //Intent intent = new Intent(this, DetailTransactionActivity.class);
+        //startActivity(intent);
     }
 }

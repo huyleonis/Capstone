@@ -1,5 +1,6 @@
 package fpt.capstone.ats.activities;
 
+import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.estimote.coresdk.common.requirements.SystemRequirementsChecker;
@@ -23,15 +25,22 @@ import com.estimote.coresdk.observation.region.beacon.BeaconRegion;
 import com.estimote.coresdk.recognition.packets.Beacon;
 import com.estimote.coresdk.service.BeaconManager;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import fpt.capstone.ats.R;
 import fpt.capstone.ats.app.AtsApplication;
+import fpt.capstone.ats.dto.Transaction;
+import fpt.capstone.ats.dto.TransactionAdapter;
 import fpt.capstone.ats.fragments.AccountFragment;
 import fpt.capstone.ats.fragments.HistoryFragment;
 import fpt.capstone.ats.fragments.HomeFragment;
@@ -41,6 +50,7 @@ import fpt.capstone.ats.utils.RequestServer;
 
 public class MainActivity extends AppCompatActivity {
 
+    //Constant Values
     private static final String TAG = "MAIN ACTIVITY";
     private static final String DEFAULT_BEACON_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
     private static final String DEFAULT_BEACON_IDENTIFIER = "rid";
@@ -48,19 +58,16 @@ public class MainActivity extends AppCompatActivity {
             UUID.fromString(DEFAULT_BEACON_UUID), null, null);
 
 
+    //Fields for controlling bottom navigation
     BottomNavigationView navigation;
-
-    private AtsApplication app;
-
-    private BeaconManager bm;
-    private List<String> beaconInfo = new ArrayList<>();
-
     private FragmentManager fm = getFragmentManager();
     private HomeFragment homeFragment = HomeFragment.newInstance();
     private HistoryFragment historyFragment = HistoryFragment.newInstance();
     private AccountFragment accountFragment = AccountFragment.newInstance();
 
-    private TextView textMessage;
+    //Field for controlling beacon
+    private BeaconManager bm;
+    private List<BeaconRegion> beaconReagions = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                beaconInfo.clear();
                 Fragment selectedFragment = null;
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
@@ -113,10 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }
-
-        textMessage = homeFragment.getTextViewMessage();
     }
-
 
     public void stopBeaconRanging() {
         if (bm != null) {
@@ -133,12 +136,16 @@ public class MainActivity extends AppCompatActivity {
 
                 for (Beacon beacon: beacons) {
                     String uuid = beacon.getProximityUUID().toString();
-                    String major = beacon.getMajor() + "";
-                    String minor = beacon.getMinor() + "";
+                    int major = beacon.getMajor();
+                    int minor = beacon.getMinor();
 
-                    String info = uuid + ":" + major + ":" + minor;
-                    if (beaconInfo.indexOf(info) < 0) {
-                        beaconInfo.add(info);
+                    String info = uuid + ";" + major + ";" + minor;
+
+                    BeaconRegion region = new BeaconRegion(info, UUID.fromString(uuid), major, minor);
+
+                    if (!beaconReagions.contains(region)) {
+                        beaconReagions.add(region);
+                        bm.startMonitoring(region);
 
                         RequestServer rs = new RequestServer();
                         rs.delegate = new RequestServer.RequestResult() {
@@ -152,10 +159,10 @@ public class MainActivity extends AppCompatActivity {
                                     int laneId = jsonBeacon.getInt("laneId");
                                     switch (type) {
                                         case "BEACON_PAYMENT":
-                                            processPaymentBeacon(textMessage, stationId, username, homeFragment);
+                                            processPaymentBeacon(stationId, username, homeFragment);
                                             break;
                                         case "BEACON_RESULT":
-                                            processResultBeacon(textMessage, laneId, homeFragment);
+                                            processResultBeacon(laneId, homeFragment);
                                             break;
                                     }
 
@@ -167,19 +174,30 @@ public class MainActivity extends AppCompatActivity {
 
                         List<String> params = new ArrayList<String>();
                         params.add(uuid);
-                        params.add(major);
-                        params.add(minor);
+                        params.add(major + "");
+                        params.add(minor + "");
 
                         rs.execute(params, "beacon", "get", "GET");
                     }
                 }
+            }
+        });
 
+        bm.setMonitoringListener(new BeaconManager.BeaconMonitoringListener() {
+            @Override
+            public void onEnteredRegion(BeaconRegion beaconRegion, List<Beacon> beacons) {
+            }
+
+            @Override
+            public void onExitedRegion(BeaconRegion beaconRegion) {
+                beaconReagions.remove(beaconRegion);
+                bm.stopMonitoring(beaconRegion.getIdentifier());
             }
         });
     }
 
-    private void processPaymentBeacon(TextView message, int idStation, String username, final HomeFragment homeFragment) {
-        message.setText("Trạng thái: Đi vào khu vực thu phí");
+    private void processPaymentBeacon(int idStation, String username, final HomeFragment homeFragment) {
+        homeFragment.updateStatusOfTransaction("Đi vào khu vực thu phí");
 
         List<String> params = new ArrayList<>();
 
@@ -224,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
         rs.execute(params, "price", "findPriceDriver", "GET");
     }
 
-    private void processResultBeacon(final TextView message, int idLane, HomeFragment homeFragment) {
+    private void processResultBeacon(int idLane, final HomeFragment homeFragment) {
         RequestServer rs = new RequestServer();
 
         List<String> params = new ArrayList<>();
@@ -233,9 +251,9 @@ public class MainActivity extends AppCompatActivity {
         rs.delegate = new RequestServer.RequestResult() {
             @Override
             public void processFinish(String result) {
-                Log.d("Exit Beacon","Send Transaction success");
+                Log.d("Second Beacon","Send Transaction success");
 
-                message.setText("Trạng thái: đang kiểm tra kết quả giao dịch");
+                homeFragment.updateStatusOfTransaction("Đang kiểm tra kết quả giao dịch");
             }
         };
         rs.execute(params, "transaction", "checkResult", "GET");
@@ -260,12 +278,7 @@ public class MainActivity extends AppCompatActivity {
                         String reason =  infos.getString("failReason");
                         homeFragment.showsResultFragment("Thanh toán thất bại. \nLý do: " + reason, "#ff0015");
                     }
-
-
-                    textMessage.setText("Trạng thái: đã xử lý thanh toán.");
-
-
-
+                    homeFragment.updateStatusOfTransaction("Đã xử lý thanh toán.");
                     String idTrans = infos.getString("id");
                     setting.edit().putString("IdTransaction",idTrans).commit();
                 } catch (JSONException e) {
@@ -293,12 +306,13 @@ public class MainActivity extends AppCompatActivity {
         params.add(setting.getString("IdStation", ""));
 
         rs.execute(params, "transaction", "makePayment", "GET");
-        textMessage.setText("Trạng thái: đang thanh toán phí...");
+        homeFragment.updateStatusOfTransaction("đang thanh toán phí...");
     }
 
     public void clickToCancelPayment(View view) {
 
         homeFragment.hideConfirmFragment();
+        homeFragment.updateStatusOfTransaction("Không thực hiện thanh toán.");
     }
 
     public void clickToCloseResult(View view) {
@@ -313,4 +327,76 @@ public class MainActivity extends AppCompatActivity {
 
         item.addView(badge);
     }
+
+    public void clickToLogOut(final View view) {
+
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Đăng xuất")
+                .setMessage("Bạn chắc chắn muốn đăng xuất khỏi tài khoản này? ")
+                .setPositiveButton("Đăng xuất", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        stopBeaconRanging();
+                        SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = setting.edit();
+
+                        editor.putBoolean("hasLoggedIn", false);
+                        editor.putString("Username", "");
+                        editor.commit();
+
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        MainActivity.this.finish();
+                    }
+                })
+                .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .create().show();
+    }
+
+    public void clickToSetFromDate(final View view){
+        final Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH);
+        int year = c.get(Calendar.YEAR);
+
+        Log.d(TAG, "day month year: " + day + " - " + month + " - " + year);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int monthOfDay, int dayOfMonth   ) {
+                String dateTime = dayOfMonth + "/" + (monthOfDay+1) + "/" + year ;
+                ((TextView) view).setText(dateTime);
+            }
+        }, year, month, day);
+        datePickerDialog.show();
+    }
+
+    public void clickToSetToDate(final View view){
+        final Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH);
+        int year = c.get(Calendar.YEAR);
+
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int monthOfDay, int dayOfMonth   ) {
+                String dateTime = dayOfMonth + "/" + (monthOfDay+1) + "/" + year ;
+                ((TextView) view).setText(dateTime);
+            }
+        }, year, month, day);
+        datePickerDialog.show();
+    }
+
+
+    public void clickToShowHistory(View view) throws ParseException {
+
+        historyFragment.showHistory();
+
+    }
+
 }

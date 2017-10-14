@@ -123,8 +123,8 @@ public class HomeFragment extends Fragment {
         fm.beginTransaction().remove(resultFragment).commit();
     }
 
-    public TextView getTextViewMessage() {
-        return textMessage;
+    public void updateStatusOfTransaction(String status) {
+        textMessage.setText("Trạng thái: " + status);
     }
 
     public String getIdTransaction() {

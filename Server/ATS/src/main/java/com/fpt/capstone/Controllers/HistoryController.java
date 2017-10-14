@@ -22,11 +22,15 @@ public class HistoryController {
     @RequestMapping(value = "getByDate/{username}/{fromDate}/{toDate}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<TransactionDTO> getHistoryTransaction(@PathVariable String username, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date fromDate, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date toDate){
+    public List<TransactionDTO> getHistoryTransaction(@PathVariable String username, 
+            @PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") Date fromDate, 
+            @PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") Date toDate){
 
-        List<TransactionDTO> result = transactionServiceImpl.getHistoryTransaction(username, fromDate, toDate);
+        List<TransactionDTO> result = 
+                transactionServiceImpl.getHistoryTransaction(username, fromDate, toDate);
 
-        System.out.println("Get history from date " + fromDate + " to date: " + toDate + " result : " + result.size() + "username: " + username);
+        System.out.println("Get history from date " + fromDate + " to date: " 
+                + toDate + " result : " + result.size() + "username: " + username);
         return result;
     }
 }

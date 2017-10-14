@@ -52,8 +52,8 @@ public class AutoPaymentRequest extends TimerTask {
                     JSONObject trans = (JSONObject) transaction;
                     if (!trans.isEmpty()) {
                         String id = (String) trans.get("id");
-                        String typeName = (String) trans.get("vehicle_id");
-                        Double price = (Double) trans.get("price_id");
+                        String typeName = (String) trans.get("vehicleType");
+                        Double price = (Double) trans.get("price");
                         String status = (String) trans.get("status");
 
                         VehiclePayment vp = new VehiclePayment(id, typeName, status, price);

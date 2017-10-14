@@ -45,10 +45,10 @@ public class ManualPaymentRequest{
                 String id = (String) payment.get("id");
                 vehiclePayment.setId(id);
                 // Get type of vehicle
-                String typeName = (String) payment.get("vehicle_id");
+                String typeName = (String) payment.get("vehicleType");
                 vehiclePayment.setTypeName(typeName);
                 // Get price of vehicle
-                Double price = (Double) payment.get("price_id");    
+                Double price = (Double) payment.get("price");    
                 vehiclePayment.setFee(price);
                 // Get status of transaction
                 String status = (String) payment.get("status");
@@ -78,10 +78,10 @@ public class ManualPaymentRequest{
             while ((inputLine = in.readLine()) != null) {
                 JSONObject payment = (JSONObject) parser.parse(inputLine);
 
-                String typeName = (String) payment.get("vehicle_id");
+                String typeName = (String) payment.get("vehicleType");
                 vehiclePayment.setTypeName(typeName);
 
-                Double price = (Double) payment.get("price_id");
+                Double price = (Double) payment.get("price");
                 vehiclePayment.setFee(price);
 
                 String status = (String) payment.get("status");
@@ -113,10 +113,10 @@ public class ManualPaymentRequest{
 
 //               String id = (String) payment.get("id");
 //                vehiclePayment.setId(id);
-                String typeName = (String) payment.get("vehicle_id");
+                String typeName = (String) payment.get("vehicleType");
                 vehiclePayment.setTypeName(typeName);
 
-                Double price = (Double) payment.get("price_id");
+                Double price = (Double) payment.get("price");
                 vehiclePayment.setFee(price);
 
                 String status = (String) payment.get("status");
