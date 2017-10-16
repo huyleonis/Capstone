@@ -262,13 +262,11 @@ public class DetailTransactionActivity extends AppCompatActivity implements Requ
     }
 
     public void clickToGetDetail(View view){
-
         getTransactionDetail();
 
     }
 
     public void clickToUpdateTransStatus(View view){
-        
         updateTransactionStatus();
         getTransactionDetail();
     }

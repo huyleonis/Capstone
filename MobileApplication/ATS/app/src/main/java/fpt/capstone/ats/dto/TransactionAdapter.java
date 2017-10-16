@@ -2,7 +2,9 @@ package fpt.capstone.ats.dto;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -18,7 +22,9 @@ import java.util.Date;
 import java.util.List;
 
 import fpt.capstone.ats.R;
+import fpt.capstone.ats.activities.TransactionDetailActivity;
 import fpt.capstone.ats.utils.Commons;
+import fpt.capstone.ats.utils.ConstantValues;
 
 /**
  * Created by tinpb on 10/12/2017.
@@ -42,6 +48,7 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
         TextView txtDate;
         TextView txtInfo;
         TextView txtStatus;
+        ImageView btnDetail;
     }
 
     @NonNull
@@ -56,6 +63,7 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
             holder.txtDate = (TextView) convertView.findViewById(R.id.txtDate);
             holder.txtInfo = (TextView) convertView.findViewById(R.id.txtInfo);
             holder.txtStatus = (TextView) convertView.findViewById(R.id.txtStatus);
+            holder.btnDetail = (ImageView) convertView.findViewById(R.id.btnDetail);
 
             convertView.setTag(holder);
         } else {
@@ -63,15 +71,15 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
         }
 
 
-        Transaction dataItem = list.get(position);
+        final Transaction dataItem = list.get(position);
         Date date = new Date(dataItem.getDateTime());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         String dateText = sdf.format(date);
 
 
         holder.txtDate.setText(dateText);
-        holder.txtInfo.setText("Trạm: ["+ dataItem.getStationId() + "] " + dataItem.getStationName() + "- Giá: "
-                + Commons.formatDouble(dataItem.getPrice()));
+        holder.txtInfo.setText("["+ dataItem.getStationId() + "] " + dataItem.getStationName() + " - "
+                + Commons.formatDouble(dataItem.getPrice()) + "đ");
 
         String statusText = dataItem.getStatus();
         Log.d("status: " , statusText);
@@ -83,6 +91,17 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
             holder.txtStatus.setTextColor(Color.parseColor("#ee4035"));
         }
         holder.txtStatus.setText(dataItem.getStatus());
+
+        holder.btnDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), TransactionDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(ConstantValues.TRANSACTION_ID_PARAM, dataItem.getId());
+                intent.putExtras(bundle);
+                v.getContext().startActivity(intent);
+            }
+        });
 
         return convertView;
     }

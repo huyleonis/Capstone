@@ -6,4 +6,6 @@ package fpt.capstone.ats.utils;
 
 public class ConstantValues {
     public static final String PREF_NAME = "ATS_Preference";
+
+    public static final String TRANSACTION_ID_PARAM = "TransactionId";
 }

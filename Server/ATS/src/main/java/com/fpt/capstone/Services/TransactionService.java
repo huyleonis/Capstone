@@ -1,6 +1,7 @@
 package com.fpt.capstone.Services;
 
 import com.fpt.capstone.Dtos.TransactionDTO;
+import com.fpt.capstone.Dtos.TransactionDetailDTO;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -16,6 +17,8 @@ public interface TransactionService {
     TransactionDTO updateTransactionStatus(String id, String status);
 
     TransactionDTO getById(String id);
+    
+    TransactionDetailDTO getDetailById(String id);
 
     List<TransactionDTO> getTransactionsForStaff(int laneId, String status);
 

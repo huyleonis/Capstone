@@ -392,8 +392,7 @@ public class MainActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-
-    public void clickToShowHistory(View view) throws ParseException {
+    public void clickToShowHistory(View view) {
 
         historyFragment.showHistory();
 

@@ -4,12 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context="fpt.capstone.ats.activities.TransactionDetailActivity">
 
-    android:splitMotionEvents="true"
-    android:theme="@style/AppTheme"
-    tools:context="com.example.hp.atsapplication.DetailTransactionActivity"
-    tools:layout_editor_absoluteX="0dp"
-    tools:layout_editor_absoluteY="25dp">
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="58dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="20dp"
+        android:text="Hình thức"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
     <TextView
         android:id="@+id/textStatus"
@@ -19,7 +27,7 @@
         android:text="-"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textPrice" />
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
     <TextView
         android:id="@+id/textPrice"
@@ -27,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="90dp"
         android:layout_marginStart="90dp"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="20dp"
         android:text="-"
         app:layout_constraintLeft_toRightOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textDateTime" />
@@ -38,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="90dp"
         android:layout_marginStart="90dp"
-        android:layout_marginTop="33dp"
+        android:layout_marginTop="20dp"
         android:text="-"
         app:layout_constraintLeft_toRightOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textZone" />
@@ -49,7 +57,20 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
+        android:text="Loại xe:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="20dp"
         android:text="Giá Tiền:"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -62,7 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="Thời gian:"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -75,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="30dp"
         android:text="Tên trạm:"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -88,7 +109,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="20dp"
         android:text="Khu vực:"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -101,7 +122,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="20dp"
         android:text="Mã trạm:"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -114,7 +135,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="90dp"
         android:layout_marginStart="90dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="30dp"
         android:text="-"
         app:layout_constraintLeft_toRightOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -125,7 +146,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="90dp"
         android:layout_marginStart="90dp"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="20dp"
         android:text="-"
         app:layout_constraintLeft_toRightOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textStationId" />
@@ -136,7 +157,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="90dp"
         android:layout_marginStart="90dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:text="-"
         app:layout_constraintLeft_toRightOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textStationName" />
@@ -168,26 +189,38 @@
         tools:layout_editor_absoluteY="0dp" />
 
     <Button
-        android:id="@+id/btnGetTransDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:onClick="clickToGetDetail"
-        android:text="Xem Thông Tin Thanh Toán"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textStatus" />
-
-    <Button
         android:id="@+id/btnUpdateTransStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Thanh Toán Ngay"
-        android:layout_marginTop="21dp"
-        app:layout_constraintTop_toBottomOf="@+id/btnGetTransDetail"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/textStatus"
         app:layout_constraintRight_toRightOf="parent"
         android:onClick="clickToUpdateTransStatus"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:visibility="invisible"
+        android:enabled="false" />
+
+    <TextView
+        android:id="@+id/textVehicleType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="90dp"
+        android:layout_marginStart="90dp"
+        android:layout_marginTop="20dp"
+        android:text="-"
+        app:layout_constraintLeft_toRightOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/textPrice" />
+
+    <TextView
+        android:id="@+id/textType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="90dp"
+        android:layout_marginStart="90dp"
+        android:layout_marginTop="20dp"
+        android:text="-"
+        app:layout_constraintLeft_toRightOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/textVehicleType" />
 
 </android.support.constraint.ConstraintLayout>

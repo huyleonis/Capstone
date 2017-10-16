@@ -1,6 +1,7 @@
 package com.fpt.capstone.Services;
 
 import com.fpt.capstone.Dtos.TransactionDTO;
+import com.fpt.capstone.Dtos.TransactionDetailDTO;
 import com.fpt.capstone.Entities.Price;
 import com.fpt.capstone.Entities.Transaction;
 import com.fpt.capstone.Repositories.AccountRepos;
@@ -103,6 +104,11 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public TransactionDTO getById(String id) {
         return TransactionDTO.convertFromEntity(transactionRepos.findById(id));
+    }
+    
+    @Override
+    public TransactionDetailDTO getDetailById(String id) {
+        return TransactionDetailDTO.covertFromEntity(transactionRepos.findById(id));
     }
 
     @Override

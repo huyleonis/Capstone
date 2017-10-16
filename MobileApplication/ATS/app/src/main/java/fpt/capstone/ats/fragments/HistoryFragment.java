@@ -131,10 +131,12 @@ public class HistoryFragment extends Fragment {
                     for (int i = 0; i < list.length(); i++) {
                         JSONObject trans = list.getJSONObject(i);
                         Transaction transaction = new Transaction();
-                        transaction.setDateTime((Long) trans.get("dateTime"));
-                        transaction.setStationId((Integer) trans.get("stationId"));
-                        transaction.setPrice((Double) trans.get("price"));
-                        transaction.setStatus((String) trans.get("status"));
+                        transaction.setDateTime(trans.getLong("dateTime"));
+                        transaction.setStationId(trans.getInt("stationId"));
+                        transaction.setStationName(trans.getString("stationName"));
+                        transaction.setPrice(trans.getDouble("price"));
+                        transaction.setStatus(trans.getString("status"));
+                        transaction.setId(trans.getString("id"));
 
                         lstData.add(transaction);
                     }

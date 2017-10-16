@@ -5,8 +5,6 @@
  */
 package com.fpt.capstone.PaymentModule;
 
-import com.sun.org.apache.xml.internal.utils.NSInfo;
-import com.sun.xml.internal.ws.wsdl.parser.WSDLConstants;
 import org.apache.tomcat.util.security.MD5Encoder;
 
 /**

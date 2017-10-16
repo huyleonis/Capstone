@@ -5,6 +5,7 @@ package fpt.capstone.ats.dto;
  */
 
 public class Transaction {
+    private String id;
     private Long dateTime;
     private int stationId;
     private String stationName;
@@ -51,5 +52,13 @@ public class Transaction {
 
     public void setStationName(String stationName) {
         this.stationName = stationName;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

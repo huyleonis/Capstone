@@ -12,13 +12,10 @@ public class Transaction {
     @Id
     private String id;
 
-<<<<<<< HEAD
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="date_time")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-=======
-    @Column(name = "date_time")
->>>>>>> origin/CapstoneProjectOfSon
     private Date dateTime;
 
     private String photo;

@@ -115,16 +115,6 @@ public class AccountDTO {
         this.vehicleType = vehicleType;
     }
 
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
-    public static Account convertFromEntity(com.fpt.capstone.Entities.Account account) {
-        Account dto = new Account();
 
     
     public static AccountDTO convertFromEntity(Account account){

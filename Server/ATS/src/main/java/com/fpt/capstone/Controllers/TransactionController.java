@@ -3,6 +3,7 @@ package com.fpt.capstone.Controllers;
 import com.fpt.capstone.Dtos.LaneDTO;
 import com.fpt.capstone.Dtos.ResponseDTO;
 import com.fpt.capstone.Dtos.TransactionDTO;
+import com.fpt.capstone.Dtos.TransactionDetailDTO;
 import com.fpt.capstone.Entities.Transaction;
 import com.fpt.capstone.Services.AccountServiceImpl;
 import com.fpt.capstone.Services.LaneService;
@@ -27,12 +28,6 @@ public class TransactionController {
     @Autowired
     private AccountServiceImpl accountServiceImpl;
 
-//    @RequestMapping(value = "findByLicensePlate/{license_plate}/{id}")
-//    @ResponseStatus(HttpStatus.OK)
-//    @ResponseBody
-//    public TransactionDTO findByLicensePlate(@PathVariable String license_plate, @PathVariable int id){
-//        return transactionServiceImpl.findByLicensePlate(license_plate, id);
-//    }
 
     /**
      * Tạo transaction thu phí thủ công khi staff enter biển số xe
@@ -161,5 +156,17 @@ public class TransactionController {
         return result;
     }
 
-
+    /**
+     * Lấy transaction detail theo id
+     * @param transactionId
+     * @return 
+     */
+    @RequestMapping(value = "getDetail/{transactionId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public TransactionDetailDTO getById(@PathVariable String transactionId) {
+        TransactionDetailDTO dto = transactionServiceImpl.getDetailById(transactionId);
+                
+        return dto;
+    }
 }
