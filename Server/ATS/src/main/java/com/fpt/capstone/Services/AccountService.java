@@ -9,4 +9,6 @@ public interface AccountService {
     int updateAccountBalance(double amountToBeDeducted, int accountId);
 
     Account getAccountById(int id);
+    
+    Account checkLoginFromDesktopApp(String username, String password);
 }

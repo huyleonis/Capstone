@@ -41,4 +41,8 @@ public class AccountServiceImpl implements AccountService {
 
         return Account.convertFromEntity(accountRepos.findAccountById(id));
     }
+
+    public Account checkLoginFromDesktopApp(String username, String password) {
+        return Account.convertFromEntity(accountRepos.checkLoginFromDesktopApp(username, password));
+    }
 }

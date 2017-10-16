@@ -5,15 +5,14 @@
  */
 package ats.swing.gui;
 
-import ats.connection.AutoPaymentRequest;
-import ats.connection.ManualPaymentRequest;
+import ats.request.AutoPaymentRequest;
+import ats.request.ManualPaymentRequest;
 import ats.dtos.VehicleDTO;
 import ats.dtos.VehiclePayment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +25,7 @@ import javax.swing.Timer;
 public class MainForm extends javax.swing.JFrame {
 
     Timer timer = new Timer(1000, new MyTimerActionListener());
+    String localhost = "";
 
     /**
      * Creates new form MainForm
@@ -34,8 +34,9 @@ public class MainForm extends javax.swing.JFrame {
         //Timer timer;
         initComponents();
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-        lbId.setVisible(true);
+        //lbId.setVisible(false);
         timer.start();
+
 //        try {
 //            Thread.sleep(10000);
 //        } catch (InterruptedException e) {
@@ -43,21 +44,13 @@ public class MainForm extends javax.swing.JFrame {
         //timer.stop();
     }
     AutoPaymentRequest apr = new AutoPaymentRequest();
-    Queue<VehiclePayment> qe = apr.getAutoTrans(1);
-    
+    Queue<VehiclePayment> qe = apr.getAutoTrans(1, localhost);
 
     class MyTimerActionListener implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
-            
-//            if(txtLicensePlate.getText().isEmpty()){
-//                timer.stop();
-//            }else{
-//                timer.start();
-//            }        
-            //Queue<VehiclePayment> qe = apr.getAutoTrans(1);
-            String id = lbId.getText();
-            qe.addAll(apr.getAutoTrans(1));
+            int idLane = Integer.parseInt(txtLane.getText().trim());
+            qe.addAll(apr.getAutoTrans(idLane, localhost));
             if (!qe.isEmpty()) {
                 timer.stop();
                 VehiclePayment vp = qe.poll();
@@ -113,6 +106,15 @@ public class MainForm extends javax.swing.JFrame {
         btnSearch = new javax.swing.JButton();
         tabReport = new javax.swing.JPanel();
         tabSetting = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        txtLocalhost = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        txtLane = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        txtLogOut = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -141,7 +143,7 @@ public class MainForm extends javax.swing.JFrame {
         tabHome.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         tabHome.setPreferredSize(new java.awt.Dimension(1280, 720));
 
-        InfoPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Xe hiện tại", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Arial", 0, 24), new java.awt.Color(102, 102, 255))); // NOI18N
+        InfoPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Xe hiện tại", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Arial", 0, 24), new java.awt.Color(0, 51, 255))); // NOI18N
         InfoPane.setMaximumSize(new java.awt.Dimension(270, 350));
         InfoPane.setMinimumSize(new java.awt.Dimension(270, 350));
         InfoPane.setPreferredSize(new java.awt.Dimension(270, 350));
@@ -313,7 +315,7 @@ public class MainForm extends javax.swing.JFrame {
                         .addComponent(InfoPane, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnOpenCarrier, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(133, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Thu Phí", tabHome);
@@ -396,15 +398,115 @@ public class MainForm extends javax.swing.JFrame {
         tabReport.getAccessibleContext().setAccessibleName("");
         tabReport.getAccessibleContext().setAccessibleDescription("");
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông số kĩ thuật", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 24), new java.awt.Color(0, 51, 255))); // NOI18N
+
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel3.setText("LOCALHOST: ");
+
+        txtLocalhost.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        txtLocalhost.setText("http://localhost:8080");
+        txtLocalhost.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtLocalhostActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtLocalhost, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(164, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtLocalhost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(262, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin thu phí", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 24), new java.awt.Color(0, 51, 255))); // NOI18N
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel7.setText("Làn xe");
+
+        txtLane.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        txtLane.setText("1");
+
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel8.setText("Tên trạm thu");
+
+        jTextField1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+
+        txtLogOut.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        txtLogOut.setText("Đăng nhập với tài khoản khác");
+        txtLogOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtLogOutActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtLane, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtLogOut)
+                .addGap(23, 23, 23))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel7)
+                    .addComponent(txtLane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                .addComponent(txtLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout tabSettingLayout = new javax.swing.GroupLayout(tabSetting);
         tabSetting.setLayout(tabSettingLayout);
         tabSettingLayout.setHorizontalGroup(
             tabSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1275, Short.MAX_VALUE)
+            .addGroup(tabSettingLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tabSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(704, Short.MAX_VALUE))
         );
         tabSettingLayout.setVerticalGroup(
             tabSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 677, Short.MAX_VALUE)
+            .addGroup(tabSettingLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Cài Đặt", tabSetting);
@@ -494,14 +596,14 @@ public class MainForm extends javax.swing.JFrame {
         ManualPaymentRequest rs = new ManualPaymentRequest();
         VehiclePayment vp;
         String licensePlate = txtLicensePlate.getText().trim();
-        String status = "";
+        localhost = txtLocalhost.getText().trim();
+        int idLane = Integer.parseInt(txtLane.getText().trim());
         if (!lbTypeName.getText().equals("-")) {
             try {
-                vp = rs.insertManualPayment(licensePlate, 1);
+                vp = rs.insertManualPayment(licensePlate, idLane, localhost);
                 lbId.setText(vp.getId());
                 String id = lbId.getText();
-
-                status = rs.finishManualPayment(id).getStatus();
+                String status = rs.finishManualPayment(id, localhost).getStatus();
                 lbStatus.setText(status);
             } catch (Exception ex) {
                 Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -527,15 +629,17 @@ public class MainForm extends javax.swing.JFrame {
      */
     private void txtLicensePlateCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtLicensePlateCaretUpdate
         timer.stop();
-        if(txtLicensePlate.getText().isEmpty()){
+        localhost = txtLocalhost.getText().trim();
+        if (txtLicensePlate.getText().isEmpty()) {
             timer.start();
         }
         String licensePlate = txtLicensePlate.getText();
         ManualPaymentRequest mpr = new ManualPaymentRequest();
-        VehicleDTO dto = new VehicleDTO();
+        // VehicleDTO dto = new VehicleDTO();
         DecimalFormat formatter = new DecimalFormat("###,###,###.##");
+        int idLane = Integer.parseInt(txtLane.getText().trim());
         try {
-            dto = mpr.getInfoVehicle(licensePlate, 1);
+            VehicleDTO dto = mpr.getInfoVehicle(licensePlate, idLane, localhost);
             if (dto != null) {
                 if (dto.getPrice() != null) {
                     lbPirce.setText(formatter.format(dto.getPrice()) + " đồng");
@@ -577,16 +681,13 @@ public class MainForm extends javax.swing.JFrame {
 
 
     private void btnOpenCarrierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenCarrierActionPerformed
-        // AutoPaymentRequest apr = new AutoPaymentRequest();
-        //Queue<VehiclePayment> qe = apr.getAutoTrans(1);
-        //Queue<VehiclePayment> qe = new PriorityQueue<>();
-        //timer.stop();
+
+        localhost = txtLocalhost.getText().trim();
         String id = lbId.getText();
-       // qe.addAll(apr.getAutoTrans(1));
-        if (id != "id") {
+        if (!"id".equals(id)) {
             ManualPaymentRequest mpr = new ManualPaymentRequest();
             try {
-                mpr.finishManualPayment(id);
+                mpr.finishManualPayment(id, localhost);
             } catch (Exception ex) {
                 Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -614,21 +715,30 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnOpenCarrierKeyPressed
 
+    private void txtLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLogOutActionPerformed
+        this.setVisible(false);
+        GlobalVar.login.setVisible(true);
+    }//GEN-LAST:event_txtLogOutActionPerformed
+
+    private void txtLocalhostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLocalhostActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLocalhostActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                new MainForm().setVisible(true);
-
-            }
-        });
-
-    }
+//    public static void main(String args[]) {
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//
+//            public void run() {
+//                new MainForm().setVisible(true);
+//
+//            }
+//        });
+//
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel InfoPane;
@@ -646,12 +756,18 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu helpMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lbId;
     private javax.swing.JLabel lbPirce;
     private javax.swing.JLabel lbStatus;
@@ -666,7 +782,10 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel tabReport;
     private javax.swing.JPanel tabSetting;
     private javax.swing.JTable tblHistory;
+    private javax.swing.JTextField txtLane;
     private javax.swing.JTextField txtLicensePlate;
+    private javax.swing.JTextField txtLocalhost;
+    private javax.swing.JButton txtLogOut;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 

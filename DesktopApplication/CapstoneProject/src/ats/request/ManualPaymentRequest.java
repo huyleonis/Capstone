@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ats.connection;
+package ats.request;
 
 import ats.dtos.VehicleDTO;
 import ats.dtos.VehiclePayment;
@@ -23,17 +23,18 @@ import java.util.TimerTask;
  */
 public class ManualPaymentRequest {
 
-    public static final String LOCALHOST = "http://localhost:8080";
+//    public static final String LOCALHOST = "http://localhost:8080";
 
     /**
      * Tìm thông tin xe khi nhập biển số xe thủ công
      *
      * @param licensePlate biển số xe
      * @param idLane làn xe ứng với mỗi list
+     * @param localhost
      * @return trả về thông tin loại xe, giá xe tương ứng với biển số xe
      */
-    public VehicleDTO getInfoVehicle(String licensePlate, int idLane) throws Exception {
-        String urlName = LOCALHOST + "/price/findByLicensePlate/" + licensePlate + "/" + idLane;
+    public VehicleDTO getInfoVehicle(String licensePlate, int idLane, String localhost) throws Exception {
+        String urlName = localhost + "/price/findByLicensePlate/" + licensePlate + "/" + idLane;
         JSONParser parser = new JSONParser();
         VehicleDTO vehicleDTO = new VehicleDTO();
         try {
@@ -66,8 +67,8 @@ public class ManualPaymentRequest {
      * @param idLane làn xe ứng với mỗi list
      * @return trả về thông tin loại xe, giá xe tương ứng với biển số xe
      */
-    public VehiclePayment insertManualPayment(String licensePlate, int idLane) throws Exception {
-        String urlName = LOCALHOST + "/transaction/makeManualPayment/" + licensePlate + "/" + idLane;
+    public VehiclePayment insertManualPayment(String licensePlate, int idLane, String localhost) throws Exception {
+        String urlName = localhost + "/transaction/makeManualPayment/" + licensePlate + "/" + idLane;
         JSONParser parser = new JSONParser();
         VehiclePayment vehiclePayment = new VehiclePayment();
         try {
@@ -133,8 +134,8 @@ public class ManualPaymentRequest {
      * @return trả về Object có chứa thông tin transaction với status là "Kết
      * thúc"
      */
-    public VehiclePayment finishManualPayment(String id) throws Exception {
-        String urlName = LOCALHOST + "/transaction/finish/" + id;
+    public VehiclePayment finishManualPayment(String id, String localhost) throws Exception {
+        String urlName = localhost + "/transaction/finish/" + id;
         JSONParser parser = new JSONParser();
         VehiclePayment vehiclePayment = new VehiclePayment();
         try {

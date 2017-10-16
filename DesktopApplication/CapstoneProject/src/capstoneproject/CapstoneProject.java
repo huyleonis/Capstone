@@ -5,6 +5,7 @@
  */
 package capstoneproject;
 
+import ats.swing.gui.Login;
 import ats.swing.gui.MainForm;
 import javax.swing.UIManager;
 
@@ -21,8 +22,11 @@ public class CapstoneProject {
     public static void main(String[] args) throws Exception {
         String theme = "com.jtattoo.plaf.texture.TextureLookAndFeel";  //theme for FORM
         UIManager.setLookAndFeel(theme);
-        MainForm mainform = new MainForm();
-        mainform.setVisible(true);
+//        MainForm mainform = new MainForm();
+//        mainform.setVisible(true);
+        
+        Login login = new Login();
+        login.setVisible(true);
 
     }
 

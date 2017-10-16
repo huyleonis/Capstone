@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ats.connection;
+package ats.request;
 
 import ats.dtos.VehiclePayment;
+import ats.swing.gui.MainForm;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -29,19 +30,20 @@ import org.json.simple.parser.JSONParser;
  */
 public class AutoPaymentRequest extends TimerTask {
 
-    public static final String LOCALHOST = "http://localhost:8080";
-
+    //public static final String LOCALHOST = "http://localhost:8080";
+    
     /**
      * Lấy các transaction theo từng làn xe khi thanh toán tự động với status là "Chờ xử lý" và lưu vào queue
      *
      * @param idLane làn xe ứng với mỗi list
+     * @param localhost tên
      * @return trả về thông tin list transaction "Chờ xử lý"
      */
-    public Queue<VehiclePayment> getAutoTrans(int idLane) {
+    public Queue<VehiclePayment> getAutoTrans(int idLane, String localhost) {
         JSONParser parser = new JSONParser();
         Queue<VehiclePayment> list = new PriorityQueue<>();
         try {
-            URL oracle = new URL(LOCALHOST
+            URL oracle = new URL(localhost
                     + "/transaction/getResult/" + idLane); // URL to Parse
             URLConnection yc = oracle.openConnection();  // Open Connection
             BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
