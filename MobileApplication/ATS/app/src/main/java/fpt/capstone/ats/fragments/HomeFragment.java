@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,9 +85,43 @@ public class HomeFragment extends Fragment {
         return rootView;
     }
 
+
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        displayStationInfo();
+        Log.e(TAG, "onAttach: hehe");
+    }
+
+    @Override
+    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
+        super.onInflate(context, attrs, savedInstanceState);
+        displayStationInfo();
+        Log.e(TAG, "onInflate: haha");
+    }
+
+    public void displayStationInfo() {
+        Log.e(TAG, "Có lấy bundle ra hok dị?");
+        //notificationManager.cancel(idNotification);
+
+        Bundle bundle = this.getActivity().getIntent().getExtras();
+        if (bundle != null) {
+            String status = bundle.getString("status");
+            this.updateStatusOfTransaction(status);
+
+            boolean inside = bundle.getBoolean("inside");
+
+            Log.e(TAG, "Cũng có lấy dc nè, mà có inside ko? " + inside);
+            if (inside) {
+                String nameStation = bundle.getString("nameStation");
+                String idStation = bundle.getString("idStation");
+                String zone = bundle.getString("zoneStation");
+                double price = bundle.getDouble("price");
+
+                this.setUpStationInfo(nameStation, idStation, zone, price);
+            }
+
+        }
     }
 
     public void setUpStationInfo(String city, String idStation, String zone, double price ) {

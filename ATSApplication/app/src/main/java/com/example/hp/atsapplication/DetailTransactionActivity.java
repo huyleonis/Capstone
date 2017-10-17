@@ -103,9 +103,8 @@ public class DetailTransactionActivity extends AppCompatActivity implements Requ
             String status = infos.getString("status");
 
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//            String dateTime = dateFormat.format(infos.getString("dateTime"));
 
-            String dateTime = infos.getString("dateTime");
+            long dateTime = infos.getLong("dateTime");
 
             DecimalFormat formatter = new DecimalFormat("###,###,###.##");
 
@@ -114,12 +113,8 @@ public class DetailTransactionActivity extends AppCompatActivity implements Requ
             textZone.setText(zone);
             textPrice.setText(formatter.format(price) + "đồng");
             textStatus.setText(status);
-            textDateTime.setText(dateTime);
+            textDateTime.setText(dateFormat.format(new Date(dateTime)));
 
-//            SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
-//            showConfirmFragment();
-//            isDisplayedConfirmFragment = true;
-//            setting.edit().putString("IdStation", idStation).commit();
 
         } catch (Exception e) {
             Log.e("TransDetail Activity", e.getMessage());
@@ -137,7 +132,6 @@ public class DetailTransactionActivity extends AppCompatActivity implements Requ
                         }
                     })
                     .create().show();
-            //Toast.makeText(this, "Cannot parse json with result: " + result, Toast.LENGTH_LONG).show();
         }
 
     }
@@ -205,10 +199,6 @@ public class DetailTransactionActivity extends AppCompatActivity implements Requ
 //        textMessage.setText("Trạng thái: đang thanh toán phí...");
     }
 
-//    public String getIdTransaction() {
-//        final SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
-//        return setting.getString("IdTransaction", "");
-//    }
 
     public void updateTransactionStatus(){
         Log.d("Request updTransStatus", "Send Request updateTransStatus");
@@ -223,8 +213,6 @@ public class DetailTransactionActivity extends AppCompatActivity implements Requ
                     String status = infos.getString("status");
 
                     Log.d(TAG, "processFinish() returned: " + status);
-//                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//                    String dateTime = dateFormat.format(infos.getString("dateTime"));
 
                     
                 } catch (Exception e) {
@@ -249,16 +237,10 @@ public class DetailTransactionActivity extends AppCompatActivity implements Requ
 
         List<String> params = new ArrayList<>();
         params.add("1507602350726");
-//        params.add(setting.getString("IdStation", ""));
 
-//        Map<String, String> params = new HashMap<>();
-//        params.put("Username", setting.getString("Username", ""));
-//        params.put("IdStation", setting.getString("IdStation", ""));
 
         rs.execute(params, "transaction", "updateProcessingTransaction", "GET");
-//        isDisplayedConfirmFragment = false;
-//        hideConfirmFragment();
-//        textMessage.setText("Trạng thái: đang thanh toán phí...");
+
     }
 
     public void clickToGetDetail(View view){

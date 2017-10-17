@@ -169,4 +169,38 @@ public class TransactionController {
                 
         return dto;
     }
+    
+    /**
+     * Khi xe qua trạm nhưng thanh toán thất bại, tài xế yêu cầu thanh toán lại thì thực hiện
+     * @param transactionId
+     * @return 
+     */
+    @RequestMapping(value = "updateProcessingTransaction/{transactionId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public String requestPaymentLater(@PathVariable String transactionId) {
+        String res  = "{'status': ";
+        
+        TransactionDetailDTO transDTO = transactionServiceImpl.getDetailById(transactionId);
+        
+        System.out.println("   + get transaction ["+transDTO.getId()+"] success with status [" + transDTO.getStatus() + "]");
+
+        // Gọi module paypal
+        String result = accountServiceImpl.makePayment(transDTO.getUsername(), transDTO.getStationId());
+        if (result.equals("")) {
+            transactionServiceImpl.updateTransactionStatus(transDTO.getId(), "Kết thúc");
+            res += "'Thanh toán thành công'";
+        } else {
+            transactionServiceImpl.updateTransactionStatus(transDTO.getId(), "Thất bại");
+            res += "'Thanh toán thất bại: " + result + "'";
+        }
+        
+        // status:
+
+        System.out.println("   + update transaction success with status [" + transDTO.getStatus() + "]");
+        
+        
+        res += "}";
+        return res;
+    }
 }

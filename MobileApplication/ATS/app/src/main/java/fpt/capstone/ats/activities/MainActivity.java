@@ -4,15 +4,20 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.service.notification.StatusBarNotification;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -69,6 +74,10 @@ public class MainActivity extends AppCompatActivity {
     private BeaconManager bm;
     private List<BeaconRegion> beaconReagions = new ArrayList<>();
 
+    //Fields for notification
+    private int idNotification = 0;
+    private NotificationManager notificationManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 Fragment selectedFragment = null;
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
+                        notificationManager.cancel(idNotification);
                         selectedFragment = homeFragment;
                         break;
                     case R.id.navigation_history:
@@ -99,12 +109,8 @@ public class MainActivity extends AppCompatActivity {
 
         fm.beginTransaction().replace(R.id.content, homeFragment).commit();
 
-        setUpBeaconRanging(Commons.getUsername(this));
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+        setUpBeaconRanging(Commons.getUsername(this));
 
         if (!SystemRequirementsChecker.checkWithDefaultDialogs(this)) {
             Log.e(TAG, "Bluetooth is turned off");
@@ -121,6 +127,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     public void stopBeaconRanging() {
         if (bm != null) {
             bm.stopRanging(ALL_BEACON_REGION);
@@ -135,15 +146,17 @@ public class MainActivity extends AppCompatActivity {
             public void onBeaconsDiscovered(BeaconRegion beaconRegion, List<Beacon> beacons) {
 
                 for (Beacon beacon: beacons) {
+
                     String uuid = beacon.getProximityUUID().toString();
                     int major = beacon.getMajor();
                     int minor = beacon.getMinor();
 
-                    String info = uuid + ";" + major + ";" + minor;
+                    String key = beacon.getUniqueKey();
 
-                    BeaconRegion region = new BeaconRegion(info, UUID.fromString(uuid), major, minor);
+                    BeaconRegion region = new BeaconRegion(key, UUID.fromString(uuid), major, minor);
 
                     if (!beaconReagions.contains(region)) {
+                        Log.e(TAG, "Detect one beacon");
                         beaconReagions.add(region);
                         bm.startMonitoring(region);
 
@@ -159,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                                     int laneId = jsonBeacon.getInt("laneId");
                                     switch (type) {
                                         case "BEACON_PAYMENT":
-                                            processPaymentBeacon(stationId, username, homeFragment);
+                                            processPaymentBeacon(stationId, username);
                                             break;
                                         case "BEACON_RESULT":
                                             processResultBeacon(laneId, homeFragment);
@@ -190,15 +203,45 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onExitedRegion(BeaconRegion beaconRegion) {
+                Log.e(TAG, "Thoát khỏi 1 beacon rồi");
                 beaconReagions.remove(beaconRegion);
                 bm.stopMonitoring(beaconRegion.getIdentifier());
+
+                Bundle bundle = getIntent().getExtras();
+                bundle.putBoolean("inside", false);
+                getIntent().putExtras(bundle);
             }
         });
     }
 
-    private void processPaymentBeacon(int idStation, String username, final HomeFragment homeFragment) {
-        homeFragment.updateStatusOfTransaction("Đi vào khu vực thu phí");
+    private void showNotification(String title, String message, String display, Bundle bundle) {
+        if (notificationManager == null) {
+            notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        }
 
+        Intent resultIntent = new Intent(this.getApplication(), MainActivity.class);
+
+        if (bundle != null) {
+            resultIntent.putExtras(bundle);
+        }
+
+        PendingIntent intent = PendingIntent.getActivity(this.getApplication(), 0,
+                resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification notification = new NotificationCompat.Builder(this.getApplication())
+                .setSmallIcon(R.drawable.logo)
+                .setContentInfo(display)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(intent)
+                .build();
+
+        notificationManager.notify(++idNotification, notification);
+    }
+
+    private void processPaymentBeacon(int idStation, String username) {
+        Log.e(TAG, "Detected beacon is Payment Beacon");
         List<String> params = new ArrayList<>();
 
         params.add(idStation + "");
@@ -208,18 +251,37 @@ public class MainActivity extends AppCompatActivity {
         rs.delegate = new RequestServer.RequestResult() {
             @Override
             public void processFinish(String result) {
+                Log.e(TAG, "Get info of Payment Beacon");
                 try {
                     JSONObject infos = new JSONObject(result);
 
-                    String city = infos.getString("nameStation");
+                    String nameStation = infos.getString("nameStation");
                     String idStation = infos.getString("idStation");
                     String zone = infos.getString("zoneStation");
                     double price = infos.getDouble("price");
 
-                    SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
-                    setting.edit().putString("IdStation", idStation).commit();
 
-                    homeFragment.setUpStationInfo(city, idStation, zone, price);
+
+                    if (homeFragment.getView() != null && homeFragment.isVisible()) {
+                        homeFragment.setUpStationInfo(nameStation, idStation, zone, price);
+                    } else {
+                        Log.e(TAG, "Tạo bundle cho dzui cái nè");
+                        Bundle bundle = new Bundle();
+                        bundle.putString("nameStation", nameStation);
+                        bundle.putString("idStation", idStation);
+                        bundle.putString("zoneStation", zone);
+                        bundle.putDouble("price", price);
+                        bundle.putString("status", "Đi vào khu vực thu phí");
+                        bundle.putBoolean("inside", true);
+
+                        showNotification("Thu phí tự động",
+                                "Xe đã di chuyển vào khu vực thu phí tự động", "Đi vào khu vực thu phí", bundle);
+                    }
+
+                    //SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
+                    //setting.edit().putString("IdStation", idStation).commit();
+
+
                 } catch (JSONException e) {
                     Log.e("Home Activity", e.getMessage());
                     new AlertDialog.Builder(MainActivity.this)
@@ -243,6 +305,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void processResultBeacon(int idLane, final HomeFragment homeFragment) {
+        Log.e(TAG, "Detected beacon is Result Beacon");
         RequestServer rs = new RequestServer();
 
         List<String> params = new ArrayList<>();
@@ -251,9 +314,16 @@ public class MainActivity extends AppCompatActivity {
         rs.delegate = new RequestServer.RequestResult() {
             @Override
             public void processFinish(String result) {
-                Log.d("Second Beacon","Send Transaction success");
+                Log.e("Second Beacon","Send Transaction success");
 
-                homeFragment.updateStatusOfTransaction("Đang kiểm tra kết quả giao dịch");
+                if (homeFragment.getView() != null && homeFragment.isVisible()) {
+                    homeFragment.updateStatusOfTransaction("Đang kiểm tra kết quả giao dịch");
+                } else {
+                    Bundle bundle = getIntent().getExtras();
+                    bundle.putString("status", "Đang kiểm tra kết quả giao dịch");
+                    getIntent().putExtras(bundle);
+                }
+
             }
         };
         rs.execute(params, "transaction", "checkResult", "GET");
@@ -393,9 +463,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickToShowHistory(View view) {
-
         historyFragment.showHistory();
-
     }
 
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+
+        Log.e(TAG, "Dô đây đi mà");
+        if (fragment instanceof HomeFragment) {
+            HomeFragment home = (HomeFragment) fragment;
+            home.displayStationInfo();
+        }
+    }
 }

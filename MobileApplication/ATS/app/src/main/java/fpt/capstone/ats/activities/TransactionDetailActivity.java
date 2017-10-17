@@ -1,11 +1,15 @@
 package fpt.capstone.ats.activities;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONObject;
@@ -22,6 +26,8 @@ import fpt.capstone.ats.utils.RequestServer;
 
 public class TransactionDetailActivity extends AppCompatActivity {
 
+    private static final String TAG = "TRANS_DETAIL_ACTIVITY";
+
     private TextView textStationName;
     private TextView textStationId;
     private TextView textZone;
@@ -30,6 +36,9 @@ public class TransactionDetailActivity extends AppCompatActivity {
     private TextView textStatus;
     private TextView textVehicleType;
     private TextView textType;
+    private Button btnPayment;
+
+    private ProgressDialog pdial;
     String transactionId;
 
     @Override
@@ -45,6 +54,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
         textStatus = (TextView) findViewById(R.id.textStatus);
         textVehicleType = (TextView) findViewById(R.id.textVehicleType);
         textType = (TextView) findViewById(R.id.textType);
+        btnPayment = (Button) findViewById(R.id.btnUpdateTransStatus);
 
         Bundle bundle = getIntent().getExtras();
         transactionId = bundle.getString(ConstantValues.TRANSACTION_ID_PARAM);
@@ -61,6 +71,10 @@ public class TransactionDetailActivity extends AppCompatActivity {
             public void processFinish(String result) {
                 try {
                     Log.d("Receive TransDetail", "Transaction Detail Json: " + result);
+
+                    if (pdial != null) {
+                        pdial.dismiss();
+                    }
                     JSONObject infos = new JSONObject(result);
 
                     String stationName = infos.getString("stationName");
@@ -83,6 +97,20 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     textDateTime.setText(sdf.format(datetime));
                     textType.setText("Thu phí " + type);
                     textVehicleType.setText(vehicleType);
+
+                    Log.d("status: " , status);
+                    if(status.equals("Thành công")){
+                        textStatus.setTextColor(Color.parseColor("#7bc043"));
+                    } else if (status.equals("Kết thúc")) {
+                        textStatus.setTextColor(Color.parseColor("#0392cf"));
+                    } else {
+                        textStatus.setTextColor(Color.parseColor("#ee4035"));
+                    }
+
+                    if (!(status.contains("Thành công") || status.equals("Kết thúc"))) {
+                        btnPayment.setVisibility(View.VISIBLE);
+                        btnPayment.setEnabled(true);
+                    }
                 } catch (Exception e) {
                     Log.e("Transaction Detail", e.getMessage());
                     new AlertDialog.Builder(TransactionDetailActivity.this)
@@ -109,6 +137,56 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
         rs.execute(params, "transaction", "getDetail", "GET");
 
+    }
+
+    public void updateTransactionStatus(){
+        pdial.setMessage("Đang xử lý thanh toán phí...");
+        pdial.setTitle("Thanh toán");
+        pdial.show();
+
+        Log.d("Request updTransStatus", "Send Request updateTransStatus");
+        RequestServer rs = new RequestServer();
+        rs.delegate = new RequestServer.RequestResult() {
+            @Override
+            public void processFinish(String result) {
+                try {
+                    Log.d("Receive TransStatus", "Transaction Status Json: " + result);
+                    JSONObject infos = new JSONObject(result);
+
+                    String status = infos.getString("status");
+
+                    Log.d(TAG, "processFinish() returned: " + status);
+
+                } catch (Exception e) {
+                    Log.e("Transaction Detail", e.getMessage());
+                    new AlertDialog.Builder(TransactionDetailActivity.this)
+                            .setTitle("Exception")
+                            .setMessage("Cannot parse json with result: " + result)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .create().show();
+                }
+            }
+        };
+
+        List<String> params = new ArrayList<>();
+        params.add(transactionId);
+
+
+        rs.execute(params, "transaction", "updateProcessingTransaction", "GET");
+    }
+
+    public void clickToUpdateTransStatus(View view){
+        updateTransactionStatus();
+        getTransactionDetail();
     }
 
 }

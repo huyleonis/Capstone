@@ -23,8 +23,9 @@
         android:id="@+id/textStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="-"
+        android:layout_marginTop="30dp"
+        android:text="Kết quả"
+        android:textSize="30sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
@@ -35,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="90dp"
         android:layout_marginStart="90dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="22dp"
         android:text="-"
         app:layout_constraintLeft_toRightOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textDateTime" />
@@ -46,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="90dp"
         android:layout_marginStart="90dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="22dp"
         android:text="-"
         app:layout_constraintLeft_toRightOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textZone" />
@@ -135,7 +136,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="90dp"
         android:layout_marginStart="90dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="33dp"
         android:text="-"
         app:layout_constraintLeft_toRightOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -146,7 +147,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="90dp"
         android:layout_marginStart="90dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="22dp"
         android:text="-"
         app:layout_constraintLeft_toRightOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textStationId" />
@@ -157,7 +158,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="90dp"
         android:layout_marginStart="90dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="22dp"
         android:text="-"
         app:layout_constraintLeft_toRightOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textStationName" />
@@ -207,7 +208,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="90dp"
         android:layout_marginStart="90dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="22dp"
         android:text="-"
         app:layout_constraintLeft_toRightOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textPrice" />
@@ -218,7 +219,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="90dp"
         android:layout_marginStart="90dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="22dp"
         android:text="-"
         app:layout_constraintLeft_toRightOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textVehicleType" />
