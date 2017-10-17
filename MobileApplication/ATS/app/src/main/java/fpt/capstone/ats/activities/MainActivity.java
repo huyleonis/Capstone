@@ -470,7 +470,6 @@ public class MainActivity extends AppCompatActivity {
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
 
-        Log.e(TAG, "Dô đây đi mà");
         if (fragment instanceof HomeFragment) {
             HomeFragment home = (HomeFragment) fragment;
             home.displayStationInfo();

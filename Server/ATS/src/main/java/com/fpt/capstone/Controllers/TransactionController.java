@@ -196,7 +196,7 @@ public class TransactionController {
         
         // status:
 
-        System.out.println("   + update transaction success with status [" + transDTO.getStatus() + "]");
+        System.out.println("   + update transaction success with status: " +  res);
         
         
         res += "}";

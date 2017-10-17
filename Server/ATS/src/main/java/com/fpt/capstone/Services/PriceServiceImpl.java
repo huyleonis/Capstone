@@ -34,8 +34,7 @@ public class PriceServiceImpl implements PriceService{
             return null;
         }
     }
-<<<<<<< HEAD
-=======
+
 
     @Override
     public PriceDTO findPriceById(int priceId) {
@@ -54,5 +53,5 @@ public class PriceServiceImpl implements PriceService{
             return null;
         }
     }
->>>>>>> origin/CapstoneProjectOfHieu
+
 }

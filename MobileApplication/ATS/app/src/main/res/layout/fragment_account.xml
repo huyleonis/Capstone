@@ -16,7 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/nav_menu_header_bg"
-            android:elevation="3dp">
+            android:elevation="3dp"
+            android:layout_alignParentEnd="true">
 
             <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
 
@@ -233,30 +234,15 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
-            <TextView
-                android:id="@+id/textWarning"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Số tiền trong tài khoản của quý khách còn rất thấp.\nVui lòng nạp tiền để tiếp tục sử dụng!"
-                android:textAlignment="center"
-                android:textColor="#ff0015"
-                android:textSize="10sp"
-                android:textStyle="italic"
-                android:visibility="invisible"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textBalance" />
-
             <Button
                 android:id="@+id/button7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:text="Nạp tiền"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textWarning" />
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/textBalance" />
 
             <TextView
                 android:id="@+id/textView15"
@@ -271,6 +257,16 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/button7"
                 android:onClick="clickToLogOut"/>
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="0dp"
+                app:layout_constraintLeft_toRightOf="@+id/textBalance"
+                app:layout_constraintTop_toTopOf="@+id/textBalance"
+                app:srcCompat="@drawable/warning" />
 
         </android.support.constraint.ConstraintLayout>
     </RelativeLayout>

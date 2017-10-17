@@ -37,7 +37,7 @@ public class AccountServiceImpl implements AccountService{
         String result = "";
         Account accountEntity = accountRepos.getAccount(username);
         if (accountEntity == null) {
-            return "Tài khoản không tồn tại";
+            return "Tài khoản ["+username+"] không tồn tại";
         }
         AccountDTO accountDto = AccountDTO.convertFromEntity(accountEntity);
                 
@@ -69,12 +69,19 @@ public class AccountServiceImpl implements AccountService{
         }
         return null;
     }
-<<<<<<< HEAD
-    
-=======
 
-    public Account checkLoginFromDesktopApp(String username, String password) {
-        return Account.convertFromEntity(accountRepos.checkLoginFromDesktopApp(username, password));
+    @Override
+    public AccountDTO checkLoginFromDesktopApp(String username, String password) {
+        return AccountDTO.convertFromEntity(accountRepos.checkLoginFromDesktopApp(username, password));
     }
->>>>>>> origin/CapstoneProjectOfHieu
+
+    @Override
+    public AccountDTO getAccountById(int id) {
+        Account account = accountRepos.findAccountById(id);
+        if (account != null) {
+            return AccountDTO.convertFromEntity(account);
+        }
+        return null;
+    }
+
 }

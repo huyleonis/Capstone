@@ -5,7 +5,7 @@
  */
 package com.fpt.capstone.Controllers;
 
-import com.fpt.capstone.Dtos.Account;
+import com.fpt.capstone.Dtos.AccountDTO;
 import com.fpt.capstone.Services.AccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ public class LoginDesktopAppController {
     @RequestMapping(value = "/checkLogin/{username}/{password}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Account checkLogin(@PathVariable String username, @PathVariable String password) {
+    public AccountDTO checkLogin(@PathVariable String username, @PathVariable String password) {
         
         return accountServiceImpl.checkLoginFromDesktopApp(username, password);
     }

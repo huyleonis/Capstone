@@ -173,6 +173,7 @@ public class TransactionDetailDTO {
         dto.setStatus(tran.getStatus()); 
         
         if (tran.getAccount() != null) {
+            dto.setUsername(tran.getAccount().getUsername());
             if (tran.getAccount().getVehicle() != null) {
                 dto.setLicensePlate(tran.getAccount().getVehicle().getLicensePlate());
                 dto.setVehicleType(tran.getAccount().getVehicle().getVehicletype().getName());                

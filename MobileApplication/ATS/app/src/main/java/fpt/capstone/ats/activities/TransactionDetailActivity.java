@@ -140,6 +140,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
     }
 
     public void updateTransactionStatus(){
+        pdial = new ProgressDialog(this);
         pdial.setMessage("Đang xử lý thanh toán phí...");
         pdial.setTitle("Thanh toán");
         pdial.show();
