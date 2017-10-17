@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ats.connection;
+package ats.request;
 
 import ats.dtos.VehiclePayment;
+import ats.swing.gui.MainForm;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -29,43 +30,44 @@ import org.json.simple.parser.JSONParser;
  */
 public class AutoPaymentRequest extends TimerTask {
 
-    public static final String localhost = "http://172.20.10.4:8080";
-
-    //Get all Automatic Payment to Queue
-    public Queue<VehiclePayment> getAutoTrans(int idLane) {
-
+    //public static final String LOCALHOST = "http://localhost:8080";
+    
+    /**
+     * Lấy các transaction theo từng làn xe khi thanh toán tự động với status là "Chờ xử lý" và lưu vào queue
+     *
+     * @param idLane làn xe ứng với mỗi list
+     * @param localhost tên
+     * @return trả về thông tin list transaction "Chờ xử lý"
+     */
+    public Queue<VehiclePayment> getAutoTrans(int idLane, String localhost) {
         JSONParser parser = new JSONParser();
         Queue<VehiclePayment> list = new PriorityQueue<>();
         try {
-
-            URL oracle = new URL("http://localhost:8080/transaction/getResult/" + idLane); // URL to Parse
-            URLConnection yc = oracle.openConnection();
+            URL oracle = new URL(localhost
+                    + "/transaction/getResult/" + idLane); // URL to Parse
+            URLConnection yc = oracle.openConnection();  // Open Connection
             BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 JSONArray array = (JSONArray) parser.parse(inputLine);
-
                 // Loop through each item
                 for (Object transaction : array) {
-
                     JSONObject trans = (JSONObject) transaction;
                     if (!trans.isEmpty()) {
-                        String id = (String) trans.get("id");
+                        String licensePlate = (String) trans.get("licensePlate");
+                        String id = (String) trans.get("transactionId");
                         String typeName = (String) trans.get("vehicleType");
                         Double price = (Double) trans.get("price");
                         String status = (String) trans.get("status");
 
-                        VehiclePayment vp = new VehiclePayment(id, typeName, status, price);
+                        VehiclePayment vp = new VehiclePayment(id, licensePlate, typeName, status, price);
                         list.offer(vp);
                     }
                 }
             }
             in.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
         } catch (org.json.simple.parser.ParseException ex) {
             Logger.getLogger(AutoPaymentRequest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -73,14 +75,6 @@ public class AutoPaymentRequest extends TimerTask {
 
     }
 
-//    @Override
-//    public void run() {
-//        try {
-//            getAutoTrans(1);
-//        } catch (Exception ex) {
-//            Logger.getLogger(AutoPaymentRequest.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
     @Override
     public void run() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

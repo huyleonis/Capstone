@@ -28,7 +28,6 @@ public class TransactionController {
     @Autowired
     private AccountServiceImpl accountServiceImpl;
 
-
     /**
      * Tạo transaction thu phí thủ công khi staff enter biển số xe
      * @param licensePlate biển số xe do staff nhập vào

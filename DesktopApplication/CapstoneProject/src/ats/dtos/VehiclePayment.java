@@ -28,7 +28,7 @@ public class VehiclePayment implements Comparable<VehiclePayment>{
     public void setStatus(String status) {
         this.status = status;
     }
-
+    
     
     
     public VehiclePayment() {

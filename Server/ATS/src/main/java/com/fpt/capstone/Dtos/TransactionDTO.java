@@ -27,6 +27,7 @@ public class TransactionDTO {
         this.failReason = failReason;
         this.laneId = laneId;
         this.stationId = stationId;
+
     }
     
     public String getId() {
@@ -110,6 +111,7 @@ public class TransactionDTO {
         }
         
         dto.setStatus(tran.getStatus());        
+
         return dto;
     }
     

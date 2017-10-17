@@ -22,4 +22,11 @@ public interface AccountRepos extends JpaRepository<Account, Integer> {
     @Transactional
     @Query(value = "update account set balance = :newBalance where id = :id", nativeQuery = true)
     int updateBalance(@Param("id") int id, @Param("newBalance") double newBalance);
+
+    @Query(value = "SELECT * FROM account WHERE id = ?1", nativeQuery = true)
+    Account findAccountById(Integer id);
+    
+    @Query(value = "SELECT * FROM account WHERE username = ?1 AND password = ?2", nativeQuery = true)
+    Account checkLoginFromDesktopApp(String username, String password);
+      
 }

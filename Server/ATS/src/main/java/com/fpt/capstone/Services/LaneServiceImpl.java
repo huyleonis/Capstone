@@ -14,7 +14,7 @@ public class LaneServiceImpl implements LaneService {
 
     @Override
     public LaneDTO getLaneByBeacon(String uuid) {
-        Lane lane =  laneRepos.getLaneByBeacon(uuid);
+        Lane lane = laneRepos.getLaneByBeacon(uuid);
         if (lane != null) {
             return LaneDTO.convertFromEntity(lane);
         }

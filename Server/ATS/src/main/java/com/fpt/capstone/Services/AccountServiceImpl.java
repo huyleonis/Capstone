@@ -69,5 +69,12 @@ public class AccountServiceImpl implements AccountService{
         }
         return null;
     }
+<<<<<<< HEAD
     
+=======
+
+    public Account checkLoginFromDesktopApp(String username, String password) {
+        return Account.convertFromEntity(accountRepos.checkLoginFromDesktopApp(username, password));
+    }
+>>>>>>> origin/CapstoneProjectOfHieu
 }

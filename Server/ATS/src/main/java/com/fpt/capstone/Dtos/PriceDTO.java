@@ -13,8 +13,24 @@ public class PriceDTO {
     private double price;
     private String nameVehicleType;
     private Date fromDate;
-    private int idStation;
+    private int stationId;    
+    private String typeVehicle;
 
+    public PriceDTO() {
+    }        
+
+    public PriceDTO(int id, String nameStation, String locationStation, String zoneStation, double price, String nameVehicleType, Date fromDate, int stationId, String typeVehicle) {
+        this.id = id;
+        this.nameStation = nameStation;
+        this.locationStation = locationStation;
+        this.zoneStation = zoneStation;
+        this.price = price;
+        this.nameVehicleType = nameVehicleType;
+        this.fromDate = fromDate;
+        this.stationId = stationId;
+        this.typeVehicle = typeVehicle;
+    }
+    
     public int getId() {
         return id;
     }
@@ -22,10 +38,14 @@ public class PriceDTO {
     public void setId(int id) {
         this.id = id;
     }
-
-    public String getNameStation() {
-        return nameStation;
+   
+    public String getTypeVehicle() {
+        return typeVehicle;
     }
+
+    public void setTypeVehicle(String typeVehicle) {
+        this.typeVehicle = typeVehicle;
+    }    
 
     public void setNameStation(String nameStation) {
         this.nameStation = nameStation;
@@ -71,31 +91,35 @@ public class PriceDTO {
         this.fromDate = fromDate;
     }
 
-    public int getIdStation() {
-        return idStation;
+    public int getStationId() {
+        return stationId;
     }
 
-    public void setIdStation(int idStation) {
-        this.idStation = idStation;
+    public void setStationId(int stationId) {
+        this.stationId = stationId;
     }
-        
 
-    public static PriceDTO convertFromEntity(Price price){
+    
+    public static PriceDTO convertFromEntity(Price price) {
         PriceDTO dto = new PriceDTO();
-
-        dto.setId(price.getId());
-        if (price.getStation() != null) {
-            dto.setNameStation(price.getStation().getName());
-            dto.setLocationStation(price.getStation().getLocation());
-            dto.setZoneStation(price.getStation().getZone());
-            dto.setIdStation(price.getStation().getId());
+        if (price == null) {
+            dto = null;
+        } else {
+            dto.setId(price.getId());
+            dto.setFromDate(price.getFromDate());
+            if (price.getPrice() <= 0) {
+                dto.setPrice(0);
+            } else {
+                dto.setPrice(price.getPrice());
+            }
+            dto.setStationId(price.getStation().getId());
+         
+            if ("".equals(price.getVehicletype().getName())) {
+                dto.setTypeVehicle(null);
+            } else {
+                dto.setTypeVehicle(price.getVehicletype().getName());
+            }
         }
-        
-        dto.setPrice(price.getPrice());
-        dto.setNameVehicleType(price.getVehicletype().getName());
-        dto.setFromDate(price.getFromDate());
-        
-        
         return dto;
     }
 }

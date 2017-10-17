@@ -37,17 +37,6 @@ public class TransactionServiceImpl implements TransactionService {
     private EntityManager entityManager;
 
 
-//    @Override
-//    public TransactionDTO findByLicensePlate(String license_plate, int id) {
-//        Transaction transaction = transactionRepos.findByLicensePlate(license_plate, id);
-//        if (transaction != null) {
-//            TransactionDTO transactionDTO = TransactionDTO.convertFromEntity(transaction);
-//            return transactionDTO;
-//        } else {
-//            return null;
-//        }
-//    }
-
     @Override
     public TransactionDTO insertManualTransaction(String licensePlate, int laneId) {
 
@@ -88,11 +77,11 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionDTO updateTransactionStatus(String id, String status) {
-        int transaction = transactionRepos.updateTransaction(id, status);   
-        
-        if(transaction >0){
+        int transaction = transactionRepos.updateTransaction(id, status);
+
+        if (transaction > 0) {
             Transaction transaction1 = transactionRepos.findById(id);
-            if (transaction1 != null){
+            if (transaction1 != null) {
                 TransactionDTO dto = TransactionDTO.convertFromEntity(transaction1);
                 //dto.setStatus(status);
                 return dto;
@@ -114,9 +103,9 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public TransactionDTO updateTransactionLane(String id, int laneId) {
         int transaction = transactionRepos.updateTransaction(id, laneId);
-        if(transaction >0){
+        if (transaction > 0) {
             Transaction transaction1 = transactionRepos.findById(id);
-            if (transaction1 != null){
+            if (transaction1 != null) {
                 TransactionDTO dto = TransactionDTO.convertFromEntity(transaction1);
                 //dto.setLaneId(laneId);
                 return dto;
@@ -142,14 +131,12 @@ public class TransactionServiceImpl implements TransactionService {
     public List<TransactionDTO> getTransactionsForStaff(int laneId, String status) {
         List<Transaction> list = transactionRepos.getTransactionForStaff(laneId, status);
         List<TransactionDTO> result = new ArrayList<>();
-        for (Transaction tran: list) {
+        for (Transaction tran : list) {
             TransactionDTO dto = TransactionDTO.convertFromEntity(tran);
             result.add(dto);
         }
         return result;
     }
-
-
 
 //    @Override
 //    public TransactionDTO finishTransaction(String id) {

@@ -12,7 +12,13 @@ import com.fpt.capstone.Dtos.AccountDTO;
  * @author hp
  */
 public interface AccountService {
+
     public String makePayment(String username, int priceId);        
  
-    public AccountDTO getAccount(String username);
+    public AccountDTO getAccount(String username);        
+
+    AccountDTO getAccountById(int id);
+    
+    AccountDTO checkLoginFromDesktopApp(String username, String password);
+
 }

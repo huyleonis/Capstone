@@ -5,19 +5,17 @@
  */
 package ats.swing.gui;
 
-import ats.connection.AutoPaymentRequest;
-import ats.connection.ManualPaymentRequest;
-import ats.connection.LoopRequest;
+import ats.request.AutoPaymentRequest;
+import ats.request.ManualPaymentRequest;
+import ats.dtos.VehicleDTO;
 import ats.dtos.VehiclePayment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 /**
@@ -26,13 +24,8 @@ import javax.swing.Timer;
  */
 public class MainForm extends javax.swing.JFrame {
 
-    Timer timer;
-    AutoPaymentRequest apr = new AutoPaymentRequest();
-    //LoopRequest lp = new LoopRequest();
-    
-    
-   Queue<VehiclePayment> qe = apr.getAutoTrans(1);
-    //Queue<VehiclePayment> qe = lp.getListTransaction(1);
+    Timer timer = new Timer(1000, new MyTimerActionListener());
+    String localhost = "";
 
     /**
      * Creates new form MainForm
@@ -41,59 +34,39 @@ public class MainForm extends javax.swing.JFrame {
         //Timer timer;
         initComponents();
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-        lbId.setVisible(true);
-        //updateForm();
-//        String licensePlate = txtLicensePlate.getText().trim();
-//        if ("".equals(licensePlate)) {
-//            timer = new Timer(1000, new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    if (!qe.isEmpty()) {
-//                        VehiclePayment vp = qe.poll();
-//                        DecimalFormat formatter = new DecimalFormat("###,###,###.##");
-//                        if (vp.getLicensePlate().length() > 0 && vp.getFee() > 0 && vp.getTypeName().length() > 0) {
-//                            txtLicensePlate.setText(vp.getLicensePlate());
-//                            lbPirce.setText(formatter.format(vp.getFee()) + " đồng");
-//                            lbTypeName.setText(vp.getTypeName());
-//                            lbStatus.setText(vp.getStatus());
-//                        }
-//                    } else {
-//                        txtLicensePlate.setText("");
-//                        lbPirce.setText("Chưa có xe mới...");
-//                        lbTypeName.setText("Chưa có xe mới...");
-//                        lbStatus.setText("Chưa có xe mới...");
-//                    }
-//                }
-//            });
-//        }
-//        timer.start();
-    }
+        //lbId.setVisible(false);
+        timer.start();
 
-    public void updateForm() {
-        String licensePlate = txtLicensePlate.getText().trim();
-        if ("".equals(licensePlate) || licensePlate.isEmpty()) {
-            timer = new Timer(1000, btnOpenCarrier.getAction());
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    if (!qe.isEmpty()) {
-//                        VehiclePayment vp = qe.poll();
-//                        DecimalFormat formatter = new DecimalFormat("###,###,###.##");
-//                        if (vp.getLicensePlate().length() > 0 && vp.getFee() > 0 && vp.getTypeName().length() > 0) {
-//                            txtLicensePlate.setText(vp.getLicensePlate());
-//                            lbPirce.setText(formatter.format(vp.getFee()) + " đồng");
-//                            lbTypeName.setText(vp.getTypeName());
-//                            lbStatus.setText(vp.getStatus());
-//                        }
-//                    } else {
-//                        txtLicensePlate.setText("");
-//                        lbPirce.setText("Chưa có xe mới...");
-//                        lbTypeName.setText("Chưa có xe mới...");
-//                        lbStatus.setText("Chưa có xe mới...");
-//                    }
-//                }
-//            });
-//        } else {
-//            //timer.stop();
+
+    }
+    AutoPaymentRequest apr = new AutoPaymentRequest();
+    Queue<VehiclePayment> qe = apr.getAutoTrans(1, localhost);
+
+    class MyTimerActionListener implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+            int idLane = Integer.parseInt(txtLane.getText().trim());
+            qe.addAll(apr.getAutoTrans(idLane, localhost));
+            if (!qe.isEmpty()) {
+                timer.stop();
+                VehiclePayment vp = qe.poll();
+                DecimalFormat formatter = new DecimalFormat("###,###,###.##");
+                if (vp != null) {
+                    txtLicensePlate.setText(vp.getLicensePlate());
+                    lbPirce.setText(formatter.format(vp.getFee()) + " đồng");
+                    lbTypeName.setText(vp.getTypeName());
+                    lbStatus.setText(vp.getStatus());
+                    lbId.setText(vp.getId());
+                }
+            } else {
+                timer.restart();
+                txtLicensePlate.setText("");
+                lbPirce.setText("Chưa có xe mới...");
+                lbTypeName.setText("Chưa có xe mới...");
+                lbStatus.setText("Chưa có xe mới...");
+                lbId.setText("id");
+            }
+
         }
     }
 
@@ -129,6 +102,15 @@ public class MainForm extends javax.swing.JFrame {
         btnSearch = new javax.swing.JButton();
         tabReport = new javax.swing.JPanel();
         tabSetting = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        txtLocalhost = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        txtLane = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        txtLogOut = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -157,7 +139,7 @@ public class MainForm extends javax.swing.JFrame {
         tabHome.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         tabHome.setPreferredSize(new java.awt.Dimension(1280, 720));
 
-        InfoPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Xe hiện tại", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Arial", 0, 24), new java.awt.Color(102, 102, 255))); // NOI18N
+        InfoPane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Xe hiện tại", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Arial", 0, 24), new java.awt.Color(0, 51, 255))); // NOI18N
         InfoPane.setMaximumSize(new java.awt.Dimension(270, 350));
         InfoPane.setMinimumSize(new java.awt.Dimension(270, 350));
         InfoPane.setPreferredSize(new java.awt.Dimension(270, 350));
@@ -190,21 +172,21 @@ public class MainForm extends javax.swing.JFrame {
 
         lbPirce.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         lbPirce.setForeground(new java.awt.Color(255, 0, 51));
-        lbPirce.setText("VNĐ");
+        lbPirce.setText("-");
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel5.setText("Giá tiền:");
 
         lbTypeName.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         lbTypeName.setForeground(new java.awt.Color(255, 0, 51));
-        lbTypeName.setText("Loại xe");
+        lbTypeName.setText("-");
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel6.setText("Tình trạng:");
 
         lbStatus.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         lbStatus.setForeground(new java.awt.Color(255, 0, 51));
-        lbStatus.setText("Đã thu phí");
+        lbStatus.setText("-");
 
         btnManualPayment.setFont(new java.awt.Font("Arial", 0, 22)); // NOI18N
         btnManualPayment.setText("Đã Thu");
@@ -329,7 +311,7 @@ public class MainForm extends javax.swing.JFrame {
                         .addComponent(InfoPane, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnOpenCarrier, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(133, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Thu Phí", tabHome);
@@ -412,15 +394,115 @@ public class MainForm extends javax.swing.JFrame {
         tabReport.getAccessibleContext().setAccessibleName("");
         tabReport.getAccessibleContext().setAccessibleDescription("");
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông số kĩ thuật", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 24), new java.awt.Color(0, 51, 255))); // NOI18N
+
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel3.setText("LOCALHOST: ");
+
+        txtLocalhost.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        txtLocalhost.setText("http://localhost:8080");
+        txtLocalhost.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtLocalhostActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtLocalhost, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(164, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtLocalhost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(262, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin thu phí", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 24), new java.awt.Color(0, 51, 255))); // NOI18N
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel7.setText("Làn xe");
+
+        txtLane.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        txtLane.setText("1");
+
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel8.setText("Tên trạm thu");
+
+        jTextField1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+
+        txtLogOut.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        txtLogOut.setText("Đăng nhập với tài khoản khác");
+        txtLogOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtLogOutActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtLane, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtLogOut)
+                .addGap(23, 23, 23))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel7)
+                    .addComponent(txtLane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                .addComponent(txtLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout tabSettingLayout = new javax.swing.GroupLayout(tabSetting);
         tabSetting.setLayout(tabSettingLayout);
         tabSettingLayout.setHorizontalGroup(
             tabSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1275, Short.MAX_VALUE)
+            .addGroup(tabSettingLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tabSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(704, Short.MAX_VALUE))
         );
         tabSettingLayout.setVerticalGroup(
             tabSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 677, Short.MAX_VALUE)
+            .addGroup(tabSettingLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Cài Đặt", tabSetting);
@@ -498,26 +580,33 @@ public class MainForm extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
+    /**
+     * Event của button "Đã thu" Staff nhập biển số xe và gửi request lên server
+     * yêu cầu thanh toán thủ công
+     *
+     * input licensePlate, idLane
+     *
+     * @return typeVehicle, price
+     */
     private void btnManualPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManualPaymentActionPerformed
         ManualPaymentRequest rs = new ManualPaymentRequest();
         VehiclePayment vp;
-        String id = lbId.getText();
-        String status = "";
-        if (id.length() > 0) {
-
+        String licensePlate = txtLicensePlate.getText().trim();
+        localhost = txtLocalhost.getText().trim();
+        int idLane = Integer.parseInt(txtLane.getText().trim());
+        if (!lbTypeName.getText().equals("-")) {
             try {
-                vp = rs.updateManualPayment(id);
-                status = vp.getStatus();
+
+                vp = rs.insertManualPayment(licensePlate, idLane, localhost);
+                lbId.setText(vp.getId());
+                String id = lbId.getText();
+                String status = rs.finishManualPayment(id, localhost).getStatus();
+
                 lbStatus.setText(status);
             } catch (Exception ex) {
                 Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        if (status.length() > 0) {
-            JOptionPane.showMessageDialog(null, status, "Thông báo",
-                    JOptionPane.INFORMATION_MESSAGE);
-        }
-
 
     }//GEN-LAST:event_btnManualPaymentActionPerformed
 
@@ -530,55 +619,74 @@ public class MainForm extends javax.swing.JFrame {
 
     }//GEN-LAST:event_txtLicensePlateActionPerformed
 
+    /**
+     * Event lấy dữ liệu xe gồm loại xe, giá xe từ biển số xe do Staff nhập vào
+     *
+     * input licensePlate, idLane
+     *
+     * @return typeVehicle, price
+     */
     private void txtLicensePlateCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtLicensePlateCaretUpdate
+        timer.stop();
+        localhost = txtLocalhost.getText().trim();
+        if (txtLicensePlate.getText().isEmpty()) {
+            timer.start();
+        }
+        String licensePlate = txtLicensePlate.getText();
+        ManualPaymentRequest mpr = new ManualPaymentRequest();
+        // VehicleDTO dto = new VehicleDTO();
+        DecimalFormat formatter = new DecimalFormat("###,###,###.##");
+        int idLane = Integer.parseInt(txtLane.getText().trim());
+        try {
+            VehicleDTO dto = mpr.getInfoVehicle(licensePlate, idLane, localhost);
+            if (dto != null) {
+                if (dto.getPrice() != null) {
+                    lbPirce.setText(formatter.format(dto.getPrice()) + " đồng");
+                } else {
+                    lbPirce.setText("-");
+                }
+                if (dto.getTypeVehicle() != null) {
+                    lbTypeName.setText(dto.getTypeVehicle());
+                } else {
+                    lbTypeName.setText("-");
+                }
+                lbStatus.setText("-");
+            } else {
+                lbPirce.setText("-");
+                lbTypeName.setText("-");
+                lbStatus.setText("-");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-
+        //dto = null;
     }//GEN-LAST:event_txtLicensePlateCaretUpdate
 
+    /**
+     * Event ấn nút Enter của button "Đã thu"
+     *
+     * @return
+     */
     private void btnManualPaymentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnManualPaymentKeyPressed
-//        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-//            timer.stop();
-//            btnManualPayment.doClick();
-//        }
-
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            btnManualPayment.doClick();
+        }
     }//GEN-LAST:event_btnManualPaymentKeyPressed
 
     private void txtLicensePlateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLicensePlateKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_SPACE) {
-            //timer.stop();
-            String licensePlate = txtLicensePlate.getText();
-            ManualPaymentRequest rs = new ManualPaymentRequest();
-            VehiclePayment vp = new VehiclePayment();
-            try {
-                vp = rs.insertManualPayment(licensePlate, 1);
-            } catch (Exception ex) {
-                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            DecimalFormat formatter = new DecimalFormat("###,###,###.##");
-            if (licensePlate.length() > 0 && vp.getFee() > 0 && vp.getTypeName().length() > 0) {
-                lbPirce.setText(formatter.format(vp.getFee()) + " đồng");
-                lbTypeName.setText(vp.getTypeName());
-                lbStatus.setText(vp.getStatus());
-                lbId.setText(vp.getId());
-            } else {
-                lbPirce.setText("");
-                lbTypeName.setText("");
-                lbStatus.setText("");
-                lbId.setText("");
-            }
-        }
+
     }//GEN-LAST:event_txtLicensePlateKeyPressed
-    // list transaction
 
 
     private void btnOpenCarrierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenCarrierActionPerformed
-        //timer.stop();
+
+        localhost = txtLocalhost.getText().trim();
         String id = lbId.getText();
-        qe.addAll(apr.getAutoTrans(1));
-        if(id != "id"){
+        if (!"id".equals(id)) {
             ManualPaymentRequest mpr = new ManualPaymentRequest();
             try {
-                mpr.finishManualPayment(id);
+                mpr.finishManualPayment(id, localhost);
             } catch (Exception ex) {
                 Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -599,39 +707,37 @@ public class MainForm extends javax.swing.JFrame {
             lbTypeName.setText("Chưa có xe mới...");
             lbStatus.setText("Chưa có xe mới...");
             lbId.setText("id");
-            //timer.start();
         }
-
-//        ManualPaymentRequest mpr = new ManualPaymentRequest();
-//        try {
-//            VehiclePayment vp = mpr.finishManualPayment(lbId.getText());
-//            lbPirce.setText("");
-//            lbTypeName.setText("");
-//            lbStatus.setText("");
-//            lbId.setText("");
-//        } catch (Exception ex) {
-//            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-
     }//GEN-LAST:event_btnOpenCarrierActionPerformed
 
     private void btnOpenCarrierKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnOpenCarrierKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnOpenCarrierKeyPressed
 
+    private void txtLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLogOutActionPerformed
+        this.setVisible(false);
+        GlobalVar.login.setVisible(true);
+    }//GEN-LAST:event_txtLogOutActionPerformed
+
+    private void txtLocalhostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLocalhostActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLocalhostActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainForm().setVisible(true);
-
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//
+//            public void run() {
+//                new MainForm().setVisible(true);
+//
+//            }
+//        });
+//
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel InfoPane;
@@ -649,12 +755,18 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu helpMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lbId;
     private javax.swing.JLabel lbPirce;
     private javax.swing.JLabel lbStatus;
@@ -669,7 +781,10 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel tabReport;
     private javax.swing.JPanel tabSetting;
     private javax.swing.JTable tblHistory;
+    private javax.swing.JTextField txtLane;
     private javax.swing.JTextField txtLicensePlate;
+    private javax.swing.JTextField txtLocalhost;
+    private javax.swing.JButton txtLogOut;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 
