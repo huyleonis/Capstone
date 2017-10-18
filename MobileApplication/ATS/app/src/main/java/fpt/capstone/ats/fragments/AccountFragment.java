@@ -69,7 +69,7 @@ public class AccountFragment extends Fragment {
         textLicenseId = (TextView) rootView.findViewById(R.id.textLicenseId);
         textNumberId = (TextView) rootView.findViewById(R.id.textNumberId);
         textBalance = (TextView) rootView.findViewById(R.id.textBalance);
-        textWarning = (TextView) rootView.findViewById(R.id.textWarning);
+//        textWarning = (TextView) rootView.findViewById(R.id.textWarning);
         return rootView;
     }
 

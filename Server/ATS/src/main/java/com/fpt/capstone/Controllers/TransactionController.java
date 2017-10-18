@@ -11,11 +11,14 @@ import com.fpt.capstone.Services.LaneServiceImpl;
 import com.fpt.capstone.Services.TransactionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-@RestController
+@Controller
 @RequestMapping("/transaction")
 public class TransactionController {
 
@@ -177,8 +180,10 @@ public class TransactionController {
     @RequestMapping(value = "updateProcessingTransaction/{transactionId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public String requestPaymentLater(@PathVariable String transactionId) {
-        String res  = "{'status': ";
+    public Map<String, String> requestPaymentLater(@PathVariable String transactionId) {
+        Map<String, String> map = new HashMap<>();
+
+        String status = "";
         
         TransactionDetailDTO transDTO = transactionServiceImpl.getDetailById(transactionId);
         
@@ -188,18 +193,18 @@ public class TransactionController {
         String result = accountServiceImpl.makePayment(transDTO.getUsername(), transDTO.getStationId());
         if (result.equals("")) {
             transactionServiceImpl.updateTransactionStatus(transDTO.getId(), "Kết thúc");
-            res += "'Thanh toán thành công'";
+            status = "Thành Công";
         } else {
             transactionServiceImpl.updateTransactionStatus(transDTO.getId(), "Thất bại");
-            res += "'Thanh toán thất bại: " + result + "'";
+            status = "Thành Công";
         }
         
         // status:
 
-        System.out.println("   + update transaction success with status: " +  res);
-        
-        
-        res += "}";
-        return res;
+        System.out.println("   + update transaction success with status: " +  status);
+
+        map.put("status", status);
+
+        return map;
     }
 }

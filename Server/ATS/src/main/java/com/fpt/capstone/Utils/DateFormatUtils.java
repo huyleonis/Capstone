@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class DateFormatUtils {
+
     public Date formatDateFromString (String dateTime) throws ParseException {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         Date date = dateFormat.parse(dateTime);

@@ -21,6 +21,8 @@ import java.util.Date;
 import java.util.List;
 
 import fpt.capstone.ats.R;
+import fpt.capstone.ats.sqlite.DBAdapter;
+import fpt.capstone.ats.sqlite.TransactionDetail;
 import fpt.capstone.ats.utils.ConstantValues;
 import fpt.capstone.ats.utils.RequestServer;
 
@@ -78,7 +80,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     JSONObject infos = new JSONObject(result);
 
                     String stationName = infos.getString("stationName");
-                    String stationId = infos.getString("stationId");
+                    int stationId = infos.getInt("stationId");
                     String zone = infos.getString("zone");
                     double price = infos.getDouble("price");
                     String status = infos.getString("status");
@@ -90,13 +92,22 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     DecimalFormat formatter = new DecimalFormat("###,###,###.##");
 
                     textStationName.setText(stationName);
-                    textStationId.setText(stationId);
+                    textStationId.setText(String.valueOf(stationId));
                     textZone.setText(zone);
                     textPrice.setText(formatter.format(price) + " đồng");
                     textStatus.setText(status);
                     textDateTime.setText(sdf.format(datetime));
                     textType.setText("Thu phí " + type);
                     textVehicleType.setText(vehicleType);
+
+                    DBAdapter database = new DBAdapter(TransactionDetailActivity.this);
+                    database.open();
+
+                    long re = database.insertInfo(transactionId, stationName, stationId, zone,
+                            sdf.format(datetime), price, status, vehicleType, type);
+                    Log.d("database", String.valueOf(re));
+                    database.close();
+
 
                     Log.d("status: " , status);
                     if(status.equals("Thành công")){
@@ -110,6 +121,8 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     if (!(status.contains("Thành công") || status.equals("Kết thúc"))) {
                         btnPayment.setVisibility(View.VISIBLE);
                         btnPayment.setEnabled(true);
+                    } else {
+                        btnPayment.setEnabled(false);
                     }
                 } catch (Exception e) {
                     Log.e("Transaction Detail", e.getMessage());
