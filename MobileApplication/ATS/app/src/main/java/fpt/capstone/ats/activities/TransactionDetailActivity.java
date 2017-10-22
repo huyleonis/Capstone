@@ -2,11 +2,11 @@ package fpt.capstone.ats.activities;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +22,6 @@ import java.util.List;
 
 import fpt.capstone.ats.R;
 import fpt.capstone.ats.sqlite.DBAdapter;
-import fpt.capstone.ats.sqlite.TransactionDetail;
 import fpt.capstone.ats.utils.ConstantValues;
 import fpt.capstone.ats.utils.RequestServer;
 
@@ -41,7 +40,9 @@ public class TransactionDetailActivity extends AppCompatActivity {
     private Button btnPayment;
 
     private ProgressDialog pdial;
-    String transactionId;
+    private String transactionId;
+
+    private DBAdapter database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,18 @@ public class TransactionDetailActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         transactionId = bundle.getString(ConstantValues.TRANSACTION_ID_PARAM);
 
-        getTransactionDetail();
+        database = new DBAdapter(TransactionDetailActivity.this);
+        database.open();
+        Cursor resultSet = database.getInfo(transactionId);
+        if (resultSet.moveToFirst()) {
+            Log.d("GET DETAIL TRANSACTION", "VIEW FROM LOCAL");
+            viewFromLocal(resultSet);
+        } else {
+            Log.d("GET DETAIL TRANSACTION", "VIEW FROM SERVER");
+            getTransactionDetail();
+        }
+        database.close();
+
     }
 
 
@@ -100,17 +112,18 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     textType.setText("Thu phí " + type);
                     textVehicleType.setText(vehicleType);
 
-                    DBAdapter database = new DBAdapter(TransactionDetailActivity.this);
+                    database = new DBAdapter(TransactionDetailActivity.this);
                     database.open();
 
                     long re = database.insertInfo(transactionId, stationName, stationId, zone,
                             sdf.format(datetime), price, status, vehicleType, type);
-                    Log.d("database", String.valueOf(re));
+                    Log.d("DATABASE INSERT", String.valueOf(re));
+
                     database.close();
 
 
-                    Log.d("status: " , status);
-                    if(status.equals("Thành công")){
+                    Log.d("status: ", status);
+                    if (status.equals("Thành công")) {
                         textStatus.setTextColor(Color.parseColor("#7bc043"));
                     } else if (status.equals("Kết thúc")) {
                         textStatus.setTextColor(Color.parseColor("#0392cf"));
@@ -118,7 +131,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         textStatus.setTextColor(Color.parseColor("#ee4035"));
                     }
 
-                    if (!(status.contains("Thành công") || status.equals("Kết thúc"))) {
+                    if (!(status.equalsIgnoreCase("Thành công") || status.equalsIgnoreCase("Kết thúc"))) {
                         btnPayment.setVisibility(View.VISIBLE);
                         btnPayment.setEnabled(true);
                     } else {
@@ -143,16 +156,12 @@ public class TransactionDetailActivity extends AppCompatActivity {
                 }
             }
         };
-
         List<String> params = new ArrayList<>();
         params.add(transactionId);
-
-
         rs.execute(params, "transaction", "getDetail", "GET");
-
     }
 
-    public void updateTransactionStatus(){
+    public void updateTransactionStatus() {
         pdial = new ProgressDialog(this);
         pdial.setMessage("Đang xử lý thanh toán phí...");
         pdial.setTitle("Thanh toán");
@@ -166,10 +175,38 @@ public class TransactionDetailActivity extends AppCompatActivity {
                 try {
                     Log.d("Receive TransStatus", "Transaction Status Json: " + result);
                     JSONObject infos = new JSONObject(result);
+                    String newStatus = infos.getString("status");
 
-                    String status = infos.getString("status");
+                    database = new DBAdapter(TransactionDetailActivity.this);
+                    database.open();
 
-                    Log.d(TAG, "processFinish() returned: " + status);
+                    Cursor resultSet = database.getInfo(transactionId);
+                    if (resultSet.moveToFirst()) {
+                        String stationName = resultSet.getString(1);
+                        int stationId = resultSet.getInt(2);
+                        String zone = resultSet.getString(3);
+                        String dateTime = resultSet.getString(4);
+                        double price = resultSet.getDouble(5);
+//                        String status = resultSet.getString(6);
+                        String vehicleType = resultSet.getString(7);
+                        String type = resultSet.getString(8);
+
+                        boolean isSuccessful = database.updateInfo(transactionId, stationName, stationId,
+                                zone, dateTime, price, newStatus, vehicleType, type);
+
+                        Log.d("DATABASE UPDATE", String.valueOf(isSuccessful));
+
+                        resultSet = database.getInfo(transactionId);
+                        if (resultSet.moveToFirst()) {
+                            Log.d("GET DETAIL TRANSACTION", "VIEW FROM LOCAL");
+                            viewFromLocal(resultSet);
+                        } else {
+                            Log.d("GET DETAIL TRANSACTION", "VIEW FROM SERVER");
+                            getTransactionDetail();
+                        }
+                    }
+                    database.close();
+                    Log.d(TAG, "processFinish() returned: " + newStatus);
 
                 } catch (Exception e) {
                     Log.e("Transaction Detail", e.getMessage());
@@ -194,13 +231,72 @@ public class TransactionDetailActivity extends AppCompatActivity {
         List<String> params = new ArrayList<>();
         params.add(transactionId);
 
-
         rs.execute(params, "transaction", "updateProcessingTransaction", "GET");
     }
 
-    public void clickToUpdateTransStatus(View view){
+    public void viewFromLocal(Cursor resultSet) {
+        try {
+//            Log.d("Receive TransDetail", "Transaction Detail Json: " + resultSet);
+
+            if (pdial != null) {
+                pdial.dismiss();
+            }
+
+            String stationName = resultSet.getString(1);
+            int stationId = resultSet.getInt(2);
+            String zone = resultSet.getString(3);
+            String dateTime = resultSet.getString(4);
+            double price = resultSet.getDouble(5);
+            String status = resultSet.getString(6);
+            String vehicleType = resultSet.getString(7);
+            String type = resultSet.getString(8);
+
+            DecimalFormat formatter = new DecimalFormat("###,###,###.##");
+
+            textStationName.setText(stationName);
+            textStationId.setText(String.valueOf(stationId));
+            textZone.setText(zone);
+            textPrice.setText(formatter.format(price) + " đồng");
+            textStatus.setText(status);
+            textDateTime.setText(dateTime);
+            textType.setText("Thu phí " + type);
+            textVehicleType.setText(vehicleType);
+
+            if (status.equals("Thành công")) {
+                textStatus.setTextColor(Color.parseColor("#7bc043"));
+            } else if (status.equals("Kết thúc")) {
+                textStatus.setTextColor(Color.parseColor("#0392cf"));
+            } else {
+                textStatus.setTextColor(Color.parseColor("#ee4035"));
+            }
+
+            if (!(status.equalsIgnoreCase("Thành công") || status.equalsIgnoreCase("Kết thúc"))) {
+                btnPayment.setVisibility(View.VISIBLE);
+                btnPayment.setEnabled(true);
+            } else {
+                btnPayment.setEnabled(false);
+            }
+        } catch (Exception e) {
+            Log.e("Transaction Detail", e.getMessage());
+            new AlertDialog.Builder(TransactionDetailActivity.this)
+                    .setTitle("Exception")
+                    .setMessage("Cannot parse json with result: " + resultSet)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .create().show();
+        }
+    }
+
+    public void clickToUpdateTransStatus(View view) {
         updateTransactionStatus();
-        getTransactionDetail();
     }
 
 }

@@ -193,10 +193,10 @@ public class TransactionController {
         String result = accountServiceImpl.makePayment(transDTO.getUsername(), transDTO.getStationId());
         if (result.equals("")) {
             transactionServiceImpl.updateTransactionStatus(transDTO.getId(), "Kết thúc");
-            status = "Thành Công";
+            status = "Kết Thúc";
         } else {
             transactionServiceImpl.updateTransactionStatus(transDTO.getId(), "Thất bại");
-            status = "Thành Công";
+            status = "Kết Thúc";
         }
         
         // status:
