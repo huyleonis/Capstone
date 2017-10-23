@@ -41,7 +41,8 @@ public class DBAdapter {
                     + TransactionDetail.PRICE + " REAL NOT NULL, "
                     + TransactionDetail.STATUS + " TEXT NOT NULL, "
                     + TransactionDetail.VEHICLE_TYPE + " TEXT NOT NULL, "
-                    + TransactionDetail.TYPE + " TEXT NOT NULL);");
+                    + TransactionDetail.TYPE + " TEXT NOT NULL, "
+                    + TransactionDetail.LAST_MODIFIED + " TEXT NOT NULL);");
         }
 
         @Override
@@ -66,7 +67,7 @@ public class DBAdapter {
 
     // chèn một record đến cơ sở dữ liệu
     public long insertInfo(String transactionId, String stationName, int stationId, String zone, String dateTime,
-                           double price, String status, String vehicleType, String type) {
+                           double price, String status, String vehicleType, String type, String lastModified) {
         ContentValues cv = new ContentValues();
         cv.put(TransactionDetail.TRANSACTION_ID, transactionId);
         cv.put(TransactionDetail.STATION_NAME, stationName);
@@ -77,6 +78,7 @@ public class DBAdapter {
         cv.put(TransactionDetail.STATUS, status);
         cv.put(TransactionDetail.VEHICLE_TYPE, vehicleType);
         cv.put(TransactionDetail.TYPE, type);
+        cv.put(TransactionDetail.LAST_MODIFIED, lastModified);
         return database.insert(TransactionDetail.TABLE_NAME, null, cv);
     }
 
@@ -84,6 +86,12 @@ public class DBAdapter {
     public boolean deleteInfo(String transactionId) {
         String[] whereArgs = new String[]{transactionId};
         return database.delete(TransactionDetail.TABLE_NAME, TransactionDetail.TRANSACTION_ID + "= ? ", whereArgs) > 0;
+    }
+
+    // xóa các records sau 30 ngày
+    public boolean deleteInfoAfter30Days() {
+        String[] whereArgs = new String[]{"date('now','-29 day')"};
+        return database.delete(TransactionDetail.TABLE_NAME, TransactionDetail.LAST_MODIFIED + "<= ? ", whereArgs) > 0;
     }
 
     // xóa toàn bộ cơ sở dữ liệu
@@ -94,14 +102,14 @@ public class DBAdapter {
     // lấy tất cả các record
     public Cursor getAllInfo() {
         String[] columns = {TransactionDetail.TRANSACTION_ID, TransactionDetail.STATION_NAME, TransactionDetail.STATION_ID, TransactionDetail.ZONE,
-                TransactionDetail.DATE_TIME, TransactionDetail.PRICE, TransactionDetail.STATUS, TransactionDetail.VEHICLE_TYPE, TransactionDetail.TYPE};
+                TransactionDetail.DATE_TIME, TransactionDetail.PRICE, TransactionDetail.STATUS, TransactionDetail.VEHICLE_TYPE, TransactionDetail.TYPE, TransactionDetail.LAST_MODIFIED};
         return database.query(TransactionDetail.TABLE_NAME, columns, null, null, null, null, null);
     }
 
     // lấy một record chỉ định
     public Cursor getInfo(String transactionId) {
         String[] columns = {TransactionDetail.TRANSACTION_ID, TransactionDetail.STATION_NAME, TransactionDetail.STATION_ID, TransactionDetail.ZONE,
-                TransactionDetail.DATE_TIME, TransactionDetail.PRICE, TransactionDetail.STATUS, TransactionDetail.VEHICLE_TYPE, TransactionDetail.TYPE};
+                TransactionDetail.DATE_TIME, TransactionDetail.PRICE, TransactionDetail.STATUS, TransactionDetail.VEHICLE_TYPE, TransactionDetail.TYPE, TransactionDetail.LAST_MODIFIED};
         String[] selectionArgs = new String[]{transactionId};
         Cursor cursor = database.query(true, TransactionDetail.TABLE_NAME, columns,
                 TransactionDetail.TRANSACTION_ID + "= ? ", selectionArgs, null, null, null, null);
@@ -111,7 +119,7 @@ public class DBAdapter {
 
     // cập nhật một record
     public boolean updateInfo(String transactionId, String stationName, int stationId, String zone, String dateTime,
-                              double price, String status, String vehicleType, String type) {
+                              double price, String status, String vehicleType, String type, String lastModified) {
         ContentValues cv = new ContentValues();
         cv.put(TransactionDetail.STATION_NAME, stationName);
         cv.put(TransactionDetail.STATION_ID, stationId);
@@ -121,6 +129,7 @@ public class DBAdapter {
         cv.put(TransactionDetail.STATUS, status);
         cv.put(TransactionDetail.VEHICLE_TYPE, vehicleType);
         cv.put(TransactionDetail.TYPE, type);
+        cv.put(TransactionDetail.LAST_MODIFIED, lastModified);
         String[] selectionArgs = new String[]{transactionId};
         return database.update(TransactionDetail.TABLE_NAME, cv, TransactionDetail.TRANSACTION_ID + "= ? ", selectionArgs) > 0;
     }

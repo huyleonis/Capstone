@@ -7,11 +7,13 @@ import android.app.FragmentTransaction;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.service.notification.StatusBarNotification;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.widget.BottomNavigationView;
@@ -30,25 +32,19 @@ import com.estimote.coresdk.observation.region.beacon.BeaconRegion;
 import com.estimote.coresdk.recognition.packets.Beacon;
 import com.estimote.coresdk.service.BeaconManager;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import fpt.capstone.ats.R;
-import fpt.capstone.ats.app.AtsApplication;
-import fpt.capstone.ats.dto.Transaction;
-import fpt.capstone.ats.dto.TransactionAdapter;
 import fpt.capstone.ats.fragments.AccountFragment;
 import fpt.capstone.ats.fragments.HistoryFragment;
 import fpt.capstone.ats.fragments.HomeFragment;
+import fpt.capstone.ats.service.TransactionDetailService;
 import fpt.capstone.ats.utils.Commons;
 import fpt.capstone.ats.utils.ConstantValues;
 import fpt.capstone.ats.utils.RequestServer;
@@ -125,6 +121,19 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }
+
+        Context context = null;
+
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        if (isConnected) {
+            Log.d("TRANSACTION DETAIL", "INTERNET CONNECTED - SYNCHRONIZATION BEGIN");
+            startService(new Intent(getBaseContext(), TransactionDetailService.class));
+        }
     }
 
     @Override
@@ -145,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onBeaconsDiscovered(BeaconRegion beaconRegion, List<Beacon> beacons) {
 
-                for (Beacon beacon: beacons) {
+                for (Beacon beacon : beacons) {
 
                     String uuid = beacon.getProximityUUID().toString();
                     int major = beacon.getMajor();
@@ -261,7 +270,6 @@ public class MainActivity extends AppCompatActivity {
                     double price = infos.getDouble("price");
 
 
-
                     if (homeFragment.getView() != null && homeFragment.isVisible()) {
                         homeFragment.setUpStationInfo(nameStation, idStation, zone, price);
                     } else {
@@ -314,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
         rs.delegate = new RequestServer.RequestResult() {
             @Override
             public void processFinish(String result) {
-                Log.e("Second Beacon","Send Transaction success");
+                Log.e("Second Beacon", "Send Transaction success");
 
                 if (homeFragment.getView() != null && homeFragment.isVisible()) {
                     homeFragment.updateStatusOfTransaction("Đang kiểm tra kết quả giao dịch");
@@ -345,12 +353,12 @@ public class MainActivity extends AppCompatActivity {
                     if (status.equals("Thành công")) {
                         homeFragment.showsResultFragment("Thanh toán thành công", "#46cc2b");
                     } else {
-                        String reason =  infos.getString("failReason");
+                        String reason = infos.getString("failReason");
                         homeFragment.showsResultFragment("Thanh toán thất bại. \nLý do: " + reason, "#ff0015");
                     }
                     homeFragment.updateStatusOfTransaction("Đã xử lý thanh toán.");
                     String idTrans = infos.getString("id");
-                    setting.edit().putString("IdTransaction",idTrans).commit();
+                    setting.edit().putString("IdTransaction", idTrans).commit();
                 } catch (JSONException e) {
                     Log.e("Make Payment", e.getMessage());
                     new AlertDialog.Builder(MainActivity.this)
@@ -427,7 +435,7 @@ public class MainActivity extends AppCompatActivity {
                 .create().show();
     }
 
-    public void clickToSetFromDate(final View view){
+    public void clickToSetFromDate(final View view) {
         final Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
         int month = c.get(Calendar.MONTH);
@@ -437,15 +445,15 @@ public class MainActivity extends AppCompatActivity {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int monthOfDay, int dayOfMonth   ) {
-                String dateTime = dayOfMonth + "/" + (monthOfDay+1) + "/" + year ;
+            public void onDateSet(DatePicker datePicker, int year, int monthOfDay, int dayOfMonth) {
+                String dateTime = dayOfMonth + "/" + (monthOfDay + 1) + "/" + year;
                 ((TextView) view).setText(dateTime);
             }
         }, year, month, day);
         datePickerDialog.show();
     }
 
-    public void clickToSetToDate(final View view){
+    public void clickToSetToDate(final View view) {
         final Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
         int month = c.get(Calendar.MONTH);
@@ -454,8 +462,8 @@ public class MainActivity extends AppCompatActivity {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int monthOfDay, int dayOfMonth   ) {
-                String dateTime = dayOfMonth + "/" + (monthOfDay+1) + "/" + year ;
+            public void onDateSet(DatePicker datePicker, int year, int monthOfDay, int dayOfMonth) {
+                String dateTime = dayOfMonth + "/" + (monthOfDay + 1) + "/" + year;
                 ((TextView) view).setText(dateTime);
             }
         }, year, month, day);

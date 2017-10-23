@@ -16,4 +16,5 @@ public interface TransactionDetail {
     String STATUS = "status";
     String VEHICLE_TYPE = "vehicle_type";
     String TYPE = "type";
+    String LAST_MODIFIED = "last_modified";
 }

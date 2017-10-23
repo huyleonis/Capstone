@@ -30,6 +30,10 @@
             android:label="@string/title_activity_login" />
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.TransactionDetailActivity"></activity>
+
+        <service
+            android:name=".service.TransactionDetailService"
+            android:exported="false"/>
     </application>
 
 </manifest>

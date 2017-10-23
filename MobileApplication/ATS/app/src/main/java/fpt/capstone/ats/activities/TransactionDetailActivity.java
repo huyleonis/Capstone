@@ -115,8 +115,12 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     database = new DBAdapter(TransactionDetailActivity.this);
                     database.open();
 
+                    Date lastModifiedDate = new Date();
+                    sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    String lastModified = sdf.format(lastModifiedDate);
+
                     long re = database.insertInfo(transactionId, stationName, stationId, zone,
-                            sdf.format(datetime), price, status, vehicleType, type);
+                            sdf.format(datetime), price, status, vehicleType, type, lastModified);
                     Log.d("DATABASE INSERT", String.valueOf(re));
 
                     database.close();
@@ -191,8 +195,12 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         String vehicleType = resultSet.getString(7);
                         String type = resultSet.getString(8);
 
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                        Date lastModifiedDate = new Date();
+                        String lastModified = sdf.format(lastModifiedDate);
+
                         boolean isSuccessful = database.updateInfo(transactionId, stationName, stationId,
-                                zone, dateTime, price, newStatus, vehicleType, type);
+                                zone, dateTime, price, newStatus, vehicleType, type, lastModified);
 
                         Log.d("DATABASE UPDATE", String.valueOf(isSuccessful));
 

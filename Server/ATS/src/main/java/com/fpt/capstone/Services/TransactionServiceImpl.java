@@ -152,4 +152,17 @@ public class TransactionServiceImpl implements TransactionService {
 //    }
 
 
+    @Override
+    public List<TransactionDetailDTO> getAllDetail() {
+
+        List<TransactionDetailDTO> dtos = new ArrayList<>();
+
+        List<Transaction> transactions = transactionRepos.findAll();
+
+        for (Transaction transaction: transactions) {
+            dtos.add(TransactionDetailDTO.covertFromEntity(transaction));
+        }
+
+        return dtos;
+    }
 }

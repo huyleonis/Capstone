@@ -171,6 +171,18 @@ public class TransactionController {
                 
         return dto;
     }
+
+    /**
+     * Lấy list transaction detail
+     * @return
+     */
+    @RequestMapping(value = "/getDetail")
+    @ResponseBody
+    public List<TransactionDetailDTO> getAllTransDetail() {
+        List<TransactionDetailDTO> dtos = transactionServiceImpl.getAllDetail();
+
+        return dtos;
+    }
     
     /**
      * Khi xe qua trạm nhưng thanh toán thất bại, tài xế yêu cầu thanh toán lại thì thực hiện
