@@ -178,10 +178,13 @@ public class TransactionController {
      */
     @RequestMapping(value = "/getDetail")
     @ResponseBody
-    public List<TransactionDetailDTO> getAllTransDetail() {
+    public Map<String, Object> getAllTransDetail() {
         List<TransactionDetailDTO> dtos = transactionServiceImpl.getAllDetail();
 
-        return dtos;
+        Map<String, Object> map = new HashMap<>();
+        map.put("TransactionDetails", dtos);
+
+        return map;
     }
     
     /**

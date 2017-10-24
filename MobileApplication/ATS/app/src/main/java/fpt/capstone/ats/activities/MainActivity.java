@@ -122,17 +122,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        Context context = null;
-
-        ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        if (isConnected) {
+        if (isOnline()) {
             Log.d("TRANSACTION DETAIL", "INTERNET CONNECTED - SYNCHRONIZATION BEGIN");
             startService(new Intent(getBaseContext(), TransactionDetailService.class));
+        } else {
+            Log.d("TRANSACTION DETAIL", "INTERNET CONNECTING...");
         }
     }
 
@@ -482,5 +476,15 @@ public class MainActivity extends AppCompatActivity {
             HomeFragment home = (HomeFragment) fragment;
             home.displayStationInfo();
         }
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm.getActiveNetworkInfo() != null) {
+            NetworkInfo netInfo = cm.getActiveNetworkInfo();
+            return netInfo != null && netInfo.isConnectedOrConnecting();
+        }
+        return false;
     }
 }
