@@ -85,25 +85,17 @@ public class HomeFragment extends Fragment {
         return rootView;
     }
 
-
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onResume() {
+        super.onResume();
         displayStationInfo();
-        Log.e(TAG, "onAttach: hehe");
-    }
-
-    @Override
-    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
-        super.onInflate(context, attrs, savedInstanceState);
-        displayStationInfo();
-        Log.e(TAG, "onInflate: haha");
     }
 
     public void displayStationInfo() {
-        Log.e(TAG, "Có lấy bundle ra hok dị?");
+        Log.e(TAG, "Lấy bundle");
         //notificationManager.cancel(idNotification);
 
+//        Bundle bundle = this.getArguments();
         Bundle bundle = this.getActivity().getIntent().getExtras();
         if (bundle != null) {
             String status = bundle.getString("status");
@@ -111,7 +103,7 @@ public class HomeFragment extends Fragment {
 
             boolean inside = bundle.getBoolean("inside");
 
-            Log.e(TAG, "Cũng có lấy dc nè, mà có inside ko? " + inside);
+            Log.e(TAG, "Kiểm tra giá trị <inside>: " + inside);
             if (inside) {
                 String nameStation = bundle.getString("nameStation");
                 String idStation = bundle.getString("idStation");
@@ -119,6 +111,22 @@ public class HomeFragment extends Fragment {
                 double price = bundle.getDouble("price");
 
                 this.setUpStationInfo(nameStation, idStation, zone, price);
+            }
+
+            boolean isDisplayConfirm = bundle.getBoolean("isDisplayedConfirm");
+            boolean isDisplayResult = bundle.getBoolean("isDisplayResult");
+            String result = bundle.getString("result");
+            String resultColor = bundle.getString("resultColor");
+
+            if (isDisplayConfirm) {
+                showsConfirmFragment();
+                hideResultFragment();
+            } else if (isDisplayResult) {
+                showsResultFragment(result, resultColor);
+                hideConfirmFragment();
+            } else {
+                hideConfirmFragment();
+                hideResultFragment();
             }
 
         }
@@ -130,6 +138,8 @@ public class HomeFragment extends Fragment {
         textZone.setText(zone);
         textPrice.setText(Commons.formatDouble(price) + " đồng");
 
+        SharedPreferences setting = this.getActivity().getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
+        setting.edit().putString("IdStation", idStation).commit();
 
         showsConfirmFragment();
     }

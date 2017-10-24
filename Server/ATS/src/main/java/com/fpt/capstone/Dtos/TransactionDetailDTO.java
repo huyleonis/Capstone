@@ -29,7 +29,6 @@ public class TransactionDetailDTO {
     private String licensePlate;
     private String vehicleType;
     private String type;
-
     public TransactionDetailDTO() {
     }
 

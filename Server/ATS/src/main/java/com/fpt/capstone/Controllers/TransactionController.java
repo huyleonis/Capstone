@@ -143,10 +143,10 @@ public class TransactionController {
     @RequestMapping(value = "getResult/{laneId}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<TransactionDTO> getListResultTransactionByLane(@PathVariable int laneId) {
-        List<TransactionDTO> result = transactionServiceImpl.getTransactionsForStaff(laneId, "Chờ xử lý");
+    public List<TransactionDetailDTO> getListResultTransactionByLane(@PathVariable int laneId) {
+        List<TransactionDetailDTO> result = transactionServiceImpl.getTransactionsForStaff(laneId, "Chờ xử lý");
 
-        for (TransactionDTO tran: result) {
+        for (TransactionDetailDTO tran: result) {
             if (!tran.getStatus().endsWith("Đang xử lý")) {
                 String status = tran.getStatus().replace("Chờ xử lý", "Đang xử lý");
                 transactionServiceImpl.updateTransactionStatus(tran.getId(), status);

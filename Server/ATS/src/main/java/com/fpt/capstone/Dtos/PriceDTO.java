@@ -10,8 +10,7 @@ public class PriceDTO {
     private String nameStation;
     private String locationStation;
     private String zoneStation;
-    private double price;
-    private String nameVehicleType;
+    private double price;    
     private Date fromDate;
     private int stationId;    
     private String typeVehicle;
@@ -24,8 +23,7 @@ public class PriceDTO {
         this.nameStation = nameStation;
         this.locationStation = locationStation;
         this.zoneStation = zoneStation;
-        this.price = price;
-        this.nameVehicleType = nameVehicleType;
+        this.price = price;        
         this.fromDate = fromDate;
         this.stationId = stationId;
         this.typeVehicle = typeVehicle;
@@ -51,6 +49,10 @@ public class PriceDTO {
         this.nameStation = nameStation;
     }
 
+    public String getNameStation() {
+        return nameStation;
+    }    
+
     public String getLocationStation() {
         return locationStation;
     }
@@ -73,14 +75,6 @@ public class PriceDTO {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public String getNameVehicleType() {
-        return nameVehicleType;
-    }
-
-    public void setNameVehicleType(String nameVehicleType) {
-        this.nameVehicleType = nameVehicleType;
     }
 
     public Date getFromDate() {
@@ -112,13 +106,17 @@ public class PriceDTO {
             } else {
                 dto.setPrice(price.getPrice());
             }
-            dto.setStationId(price.getStation().getId());
-         
-            if ("".equals(price.getVehicletype().getName())) {
-                dto.setTypeVehicle(null);
-            } else {
-                dto.setTypeVehicle(price.getVehicletype().getName());
+            
+            if (price.getStation() != null) {
+                dto.setStationId(price.getStation().getId());
+                dto.setNameStation(price.getStation().getName());
+                dto.setZoneStation(price.getStation().getZone());
             }
+            
+         
+            if (price.getVehicletype() != null) {
+                dto.setTypeVehicle(price.getVehicletype().getName());
+            }            
         }
         return dto;
     }

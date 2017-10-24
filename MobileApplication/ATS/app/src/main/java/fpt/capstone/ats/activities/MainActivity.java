@@ -10,10 +10,13 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -30,22 +33,15 @@ import com.estimote.coresdk.observation.region.beacon.BeaconRegion;
 import com.estimote.coresdk.recognition.packets.Beacon;
 import com.estimote.coresdk.service.BeaconManager;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import fpt.capstone.ats.R;
-import fpt.capstone.ats.app.AtsApplication;
-import fpt.capstone.ats.dto.Transaction;
-import fpt.capstone.ats.dto.TransactionAdapter;
 import fpt.capstone.ats.fragments.AccountFragment;
 import fpt.capstone.ats.fragments.HistoryFragment;
 import fpt.capstone.ats.fragments.HomeFragment;
@@ -83,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -91,12 +89,15 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
                         notificationManager.cancel(idNotification);
+                        removeBadgeNoti(0);
                         selectedFragment = homeFragment;
                         break;
                     case R.id.navigation_history:
+                        removeBadgeNoti(1);
                         selectedFragment = historyFragment;
                         break;
                     case R.id.navigation_account:
+                        removeBadgeNoti(2);
                         selectedFragment = accountFragment;
                         break;
                 }
@@ -114,22 +115,25 @@ public class MainActivity extends AppCompatActivity {
 
         if (!SystemRequirementsChecker.checkWithDefaultDialogs(this)) {
             Log.e(TAG, "Bluetooth is turned off");
-        } else {
-            //Start scanning to detect beacon device
-            if (bm != null) {
-                bm.connect(new BeaconManager.ServiceReadyCallback() {
-                    @Override
-                    public void onServiceReady() {
-                        bm.startRanging(ALL_BEACON_REGION);
-                    }
-                });
-            }
         }
+
+        //Start scanning to detect beacon device
+        if (bm != null) {
+            bm.connect(new BeaconManager.ServiceReadyCallback() {
+                @Override
+                public void onServiceReady() {
+                    bm.startRanging(ALL_BEACON_REGION);
+                }
+            });
+        }
+
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
     }
 
     public void stopBeaconRanging() {
@@ -220,13 +224,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Intent resultIntent = new Intent(this.getApplication(), MainActivity.class);
-
-        if (bundle != null) {
-            resultIntent.putExtras(bundle);
-        }
+        resultIntent.putExtras(bundle);
 
         PendingIntent intent = PendingIntent.getActivity(this.getApplication(), 0,
                 resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
 
         Notification notification = new NotificationCompat.Builder(this.getApplication())
                 .setSmallIcon(R.drawable.logo)
@@ -235,6 +238,9 @@ public class MainActivity extends AppCompatActivity {
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(intent)
+                .setVibrate(new long[] {500, 500, 500, 500})
+                .setLights(Color.BLUE, 1000, 1000)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .build();
 
         notificationManager.notify(++idNotification, notification);
@@ -256,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject infos = new JSONObject(result);
 
                     String nameStation = infos.getString("nameStation");
-                    String idStation = infos.getString("idStation");
+                    String idStation = infos.getString("stationId");
                     String zone = infos.getString("zoneStation");
                     double price = infos.getDouble("price");
 
@@ -265,21 +271,24 @@ public class MainActivity extends AppCompatActivity {
                     if (homeFragment.getView() != null && homeFragment.isVisible()) {
                         homeFragment.setUpStationInfo(nameStation, idStation, zone, price);
                     } else {
-                        Log.e(TAG, "Tạo bundle cho dzui cái nè");
                         Bundle bundle = new Bundle();
                         bundle.putString("nameStation", nameStation);
                         bundle.putString("idStation", idStation);
                         bundle.putString("zoneStation", zone);
                         bundle.putDouble("price", price);
                         bundle.putString("status", "Đi vào khu vực thu phí");
+                        bundle.putBoolean("isDisplayedConfirm", true);
+                        bundle.putBoolean("isDisplayResult", false);
                         bundle.putBoolean("inside", true);
 
+//                        homeFragment = HomeFragment.newInstance();
+//                        homeFragment.setArguments(bundle);
+                        getIntent().putExtras(bundle);
+
+                        setBadgeNoti(0);
                         showNotification("Thu phí tự động",
                                 "Xe đã di chuyển vào khu vực thu phí tự động", "Đi vào khu vực thu phí", bundle);
                     }
-
-                    //SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
-                    //setting.edit().putString("IdStation", idStation).commit();
 
 
                 } catch (JSONException e) {
@@ -319,9 +328,11 @@ public class MainActivity extends AppCompatActivity {
                 if (homeFragment.getView() != null && homeFragment.isVisible()) {
                     homeFragment.updateStatusOfTransaction("Đang kiểm tra kết quả giao dịch");
                 } else {
-                    Bundle bundle = getIntent().getExtras();
+                    Bundle bundle = homeFragment.getArguments();
                     bundle.putString("status", "Đang kiểm tra kết quả giao dịch");
-                    getIntent().putExtras(bundle);
+
+                    setBadgeNoti(0);
+                    homeFragment.setArguments(bundle);
                 }
 
             }
@@ -341,16 +352,41 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject infos = new JSONObject(result);
 
                     String status = infos.getString("status");
-                    homeFragment.hideConfirmFragment();
-                    if (status.equals("Thành công")) {
-                        homeFragment.showsResultFragment("Thanh toán thành công", "#46cc2b");
+
+                    if (homeFragment.getView() != null && homeFragment.isVisible()) {
+                        homeFragment.hideConfirmFragment();
+                        if (status.equals("Thành công")) {
+                            homeFragment.showsResultFragment("Thanh toán thành công", "#46cc2b");
+                        } else {
+                            String reason =  infos.getString("failReason");
+                            homeFragment.showsResultFragment("Thanh toán thất bại. \nLý do: " + reason, "#ff0015");
+                        }
+                        homeFragment.updateStatusOfTransaction("Đã xử lý thanh toán.");
                     } else {
-                        String reason =  infos.getString("failReason");
-                        homeFragment.showsResultFragment("Thanh toán thất bại. \nLý do: " + reason, "#ff0015");
+                        Bundle bundle = homeFragment.getArguments();
+                        if (bundle == null) {
+                            bundle = new Bundle();
+                        }
+                        bundle.putBoolean("isDisplayedConfirm", false);
+                        bundle.putBoolean("isDisplayResult", true);
+                        bundle.putString("status", "Đã xử lý thanh toán.");
+
+                        if (status.equals("Thành công")) {
+                            bundle.putString("result","Thanh toán thành công");
+                            bundle.putString("resultColor", "#46cc2b");
+                        } else {
+                            String reason =  infos.getString("failReason");
+                            bundle.putString("result","Thanh toán thất bại. \nLý do: " + reason);
+                            bundle.putString("resultColor", "#ff0015");
+                        }
+
+                        setBadgeNoti(0);
+                        showNotification("Thu phí tự động",
+                                "Quá trình thanh toán hoàn tất, mời bạn xem kết quả", "Thanh toán kết thúc", null);
                     }
-                    homeFragment.updateStatusOfTransaction("Đã xử lý thanh toán.");
+
                     String idTrans = infos.getString("id");
-                    setting.edit().putString("IdTransaction",idTrans).commit();
+                    setting.edit().putString("IdTransaction", idTrans).commit();
                 } catch (JSONException e) {
                     Log.e("Make Payment", e.getMessage());
                     new AlertDialog.Builder(MainActivity.this)
@@ -377,20 +413,61 @@ public class MainActivity extends AppCompatActivity {
 
         rs.execute(params, "transaction", "makePayment", "GET");
         homeFragment.updateStatusOfTransaction("đang thanh toán phí...");
+
+        setting.edit().putString("IdStation", "");
     }
 
     public void clickToCancelPayment(View view) {
+        if (homeFragment.getView() != null && homeFragment.isVisible()) {
+            homeFragment.hideConfirmFragment();
+            homeFragment.updateStatusOfTransaction("Không thực hiện thanh toán.");
+        }
 
-        homeFragment.hideConfirmFragment();
-        homeFragment.updateStatusOfTransaction("Không thực hiện thanh toán.");
+
+        //Tạo bundle lưu trạng thái hiện tại của Home fragment
+//        Bundle bundle = homeFragment.getArguments();
+//        if (bundle == null) {
+//            bundle = new Bundle();
+//        }
+//        bundle.putBoolean("isDisplayedConfirm", false);
+//        bundle.putBoolean("isDisplayResult", false);
+//        bundle.putString("status", "Không thực hiện thanh toán.");
+//
+//        homeFragment.setArguments(bundle);
     }
 
     public void clickToCloseResult(View view) {
-        homeFragment.hideResultFragment();
+        if (homeFragment.getView() != null && homeFragment.isVisible()) {
+            homeFragment.hideResultFragment();
+        }
+
+        //Tạo bundle lưu trạng thái hiện tại của Home fragment
+//        Bundle bundle = homeFragment.getArguments();
+//        if (bundle == null) {
+//            bundle = new Bundle();
+//        }
+//        bundle.putBoolean("isDisplayedConfirm", false);
+//        bundle.putBoolean("isDisplayResult", false);
+//
+//        homeFragment.setArguments(bundle);
+
+
     }
 
-    public void setBadgeNoti(int pos, int count) {
-        BottomNavigationItemView item = (BottomNavigationItemView) navigation.getChildAt(pos);
+    public void removeBadgeNoti(int pos) {
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);
+
+        BottomNavigationItemView item  = (BottomNavigationItemView) menuView.getChildAt(pos);
+
+        if (item.findViewById(R.id.textNotiCount) != null) {
+            item.removeViewAt(item.getChildCount() - 1);
+        }
+    }
+
+    public void setBadgeNoti(int pos) {
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);
+
+        BottomNavigationItemView item  = (BottomNavigationItemView) menuView.getChildAt(pos);
 
         View badge = LayoutInflater.from(this)
                 .inflate(R.layout.notification_badge, navigation, false);
@@ -466,13 +543,4 @@ public class MainActivity extends AppCompatActivity {
         historyFragment.showHistory();
     }
 
-    @Override
-    public void onAttachFragment(Fragment fragment) {
-        super.onAttachFragment(fragment);
-
-        if (fragment instanceof HomeFragment) {
-            HomeFragment home = (HomeFragment) fragment;
-            home.displayStationInfo();
-        }
-    }
 }

@@ -128,11 +128,11 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionDTO> getTransactionsForStaff(int laneId, String status) {
+    public List<TransactionDetailDTO> getTransactionsForStaff(int laneId, String status) {
         List<Transaction> list = transactionRepos.getTransactionForStaff(laneId, status);
-        List<TransactionDTO> result = new ArrayList<>();
+        List<TransactionDetailDTO> result = new ArrayList<>();
         for (Transaction tran : list) {
-            TransactionDTO dto = TransactionDTO.convertFromEntity(tran);
+            TransactionDetailDTO dto = TransactionDetailDTO.covertFromEntity(tran);
             result.add(dto);
         }
         return result;

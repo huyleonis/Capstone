@@ -20,7 +20,7 @@ public interface TransactionService {
     
     TransactionDetailDTO getDetailById(String id);
 
-    List<TransactionDTO> getTransactionsForStaff(int laneId, String status);
+    List<TransactionDetailDTO> getTransactionsForStaff(int laneId, String status);
 
     TransactionDTO updateTransactionLane(String id, int laneId);
 

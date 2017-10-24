@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -35,7 +36,7 @@ public class AccountFragment extends Fragment {
     private TextView textLicenseId;
     private TextView textNumberId;
     private TextView textBalance;
-    private TextView textWarning;
+    private ImageView imgWarning;
 
 
     public AccountFragment() {
@@ -69,14 +70,13 @@ public class AccountFragment extends Fragment {
         textLicenseId = (TextView) rootView.findViewById(R.id.textLicenseId);
         textNumberId = (TextView) rootView.findViewById(R.id.textNumberId);
         textBalance = (TextView) rootView.findViewById(R.id.textBalance);
-        textWarning = (TextView) rootView.findViewById(R.id.textWarning);
+        imgWarning = (ImageView) rootView.findViewById(R.id.imgWarning);
         return rootView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
         loadData();
     }
 
@@ -111,9 +111,9 @@ public class AccountFragment extends Fragment {
                     textBalance.setText(Commons.formatDouble(balance) + " đồng");
 
                     if (balance < 50000f) {
-                        textWarning.setVisibility(View.VISIBLE);
+                        imgWarning.setVisibility(View.VISIBLE);
                     } else {
-                        textWarning.setVisibility(View.INVISIBLE);
+                        imgWarning.setVisibility(View.INVISIBLE);
                     }
 
 
