@@ -28,4 +28,6 @@ public interface TransactionService {
 
     List<TransactionDetailDTO> getAllDetail();
 
+    List<TransactionDetailDTO> getDetailsByAccountId(int accountId);
+
 }

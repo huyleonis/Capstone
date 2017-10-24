@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = setting.edit();
 
-        editor.putString("ID","123");
+        editor.putString("ID","6");
         editor.putString("Username", username);
         editor.putString("Fullname", "Nguyễn Văn A");
         editor.putString("LicensePlaste", "22B-22222");

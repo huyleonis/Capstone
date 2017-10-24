@@ -94,7 +94,7 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionDTO getById(String id) {
         return TransactionDTO.convertFromEntity(transactionRepos.findById(id));
     }
-    
+
     @Override
     public TransactionDetailDTO getDetailById(String id) {
         return TransactionDetailDTO.covertFromEntity(transactionRepos.findById(id));
@@ -160,6 +160,20 @@ public class TransactionServiceImpl implements TransactionService {
         List<Transaction> transactions = transactionRepos.findAll();
 
         for (Transaction transaction: transactions) {
+            dtos.add(TransactionDetailDTO.covertFromEntity(transaction));
+        }
+
+        return dtos;
+    }
+
+    @Override
+    public List<TransactionDetailDTO> getDetailsByAccountId(int accountId) {
+
+        List<Transaction> transactions = transactionRepos.findByUsernameId(accountId);
+
+        List<TransactionDetailDTO> dtos = new ArrayList<>();
+
+        for (Transaction transaction : transactions){
             dtos.add(TransactionDetailDTO.covertFromEntity(transaction));
         }
 

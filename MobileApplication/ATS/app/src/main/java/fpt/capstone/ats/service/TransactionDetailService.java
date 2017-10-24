@@ -24,6 +24,7 @@ public class TransactionDetailService extends IntentService {
 
     private DBAdapter database;
     private RequestServer rs;
+    private String accountId = "6";
 
     public TransactionDetailService() {
         super("TransactionDetailService");
@@ -84,7 +85,8 @@ public class TransactionDetailService extends IntentService {
             }
         };
         List<String> params = new ArrayList<>();
-        rs.execute(params, "transaction", "getDetail", "GET");
+        params.add(accountId);
+        rs.execute(params, "transaction", "getDetailByAccount", "GET");
     }
 
     public boolean deleteRecord30DaysOld() {

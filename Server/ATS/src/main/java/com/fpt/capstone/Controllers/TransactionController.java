@@ -173,6 +173,23 @@ public class TransactionController {
     }
 
     /**
+     * Lấy transaction detail theo id
+     * @param accountId
+     * @return
+     */
+    @RequestMapping(value = "/getDetailByAccount/{accountId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getDetailByAccount(@PathVariable String accountId) {
+        int usernameId = Integer.parseInt(accountId);
+        List<TransactionDetailDTO> dtos = transactionServiceImpl.getDetailsByAccountId(usernameId);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("TransactionDetails", dtos);
+
+        return map;
+    }
+
+    /**
      * Lấy list transaction detail
      * @return
      */
