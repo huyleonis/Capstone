@@ -2,6 +2,7 @@ package fpt.capstone.ats.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.database.Cursor;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -53,22 +54,28 @@ public class TransactionDetailService extends IntentService {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         String transactionId = jsonObject.getString("id");
-                        String stationName = jsonObject.getString("stationName");
-                        int stationId = jsonObject.getInt("stationId");
-                        String zone = jsonObject.getString("zone");
-                        double price = jsonObject.getDouble("price");
-                        String status = jsonObject.getString("status");
-                        String type = jsonObject.getString("type");
-                        String vehicleType = jsonObject.getString("vehicleType");
-                        Date datetime = new Date(jsonObject.getLong("dateTime"));
 
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                        Date lastModifiedDate = new Date();
-                        String lastModified = sdf.format(lastModifiedDate);
+                        Cursor resultSet = database.getInfo(transactionId);
+                        if (resultSet.moveToFirst()) {
+                            Log.d("DATABASE INSERT", "RECORD DUPLICATED");
+                        } else {
+                            String stationName = jsonObject.getString("stationName");
+                            int stationId = jsonObject.getInt("stationId");
+                            String zone = jsonObject.getString("zone");
+                            double price = jsonObject.getDouble("price");
+                            String status = jsonObject.getString("status");
+                            String type = jsonObject.getString("type");
+                            String vehicleType = jsonObject.getString("vehicleType");
+                            Date datetime = new Date(jsonObject.getLong("dateTime"));
 
-                        long re = database.insertInfo(transactionId, stationName, stationId, zone,
-                                sdf.format(datetime), price, status, vehicleType, type, lastModified);
-                        Log.d("DATABASE INSERT", String.valueOf(re));
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                            Date lastModifiedDate = new Date();
+                            String lastModified = sdf.format(lastModifiedDate);
+
+                            long re = database.insertInfo(transactionId, stationName, stationId, zone,
+                                    sdf.format(datetime), price, status, vehicleType, type, lastModified);
+                            Log.d("DATABASE INSERT", String.valueOf(re));
+                        }
                     }
                     database.close();
                 } catch (Exception e) {

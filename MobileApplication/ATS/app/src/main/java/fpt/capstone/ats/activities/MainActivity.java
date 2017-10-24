@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        // luu local cua transaction detail
         if (isOnline()) {
             Log.d("TRANSACTION DETAIL", "INTERNET CONNECTED - SYNCHRONIZATION BEGIN");
             startService(new Intent(getBaseContext(), TransactionDetailService.class));
@@ -478,6 +479,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // check internet connection
     public boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
