@@ -15,6 +15,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.TimerTask;
@@ -39,12 +41,12 @@ public class AutoPaymentRequest extends TimerTask {
      * @param localhost tên
      * @return trả về thông tin list transaction "Chờ xử lý"
      */
-    public Queue<VehiclePayment> getAutoTrans(int idLane, String localhost) {
+    public List<VehiclePayment> getListVehicleUnpaid(String localhost) {
         JSONParser parser = new JSONParser();
-        Queue<VehiclePayment> list = new PriorityQueue<>();
+        List<VehiclePayment> list = new ArrayList<>();
         try {
             URL oracle = new URL(localhost
-                    + "/transaction/getResult/" + idLane); // URL to Parse
+                    + "/transaction/getResult"); // URL to Parse
             URLConnection yc = oracle.openConnection();  // Open Connection
             BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
             String inputLine;
@@ -61,7 +63,7 @@ public class AutoPaymentRequest extends TimerTask {
                         String status = (String) trans.get("status");
 
                         VehiclePayment vp = new VehiclePayment(id, licensePlate, typeName, status, price);
-                        list.offer(vp);
+                        list.add(vp);
                     }
                 }
             }

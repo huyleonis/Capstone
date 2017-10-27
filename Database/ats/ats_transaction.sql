@@ -24,23 +24,23 @@ DROP TABLE IF EXISTS `transaction`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `transaction` (
   `id` varchar(50) NOT NULL,
-  `username_id` int(11) NOT NULL,
+  `vehicle_id` int(11) NOT NULL,
   `station_id` int(11) NOT NULL,
   `date_time` datetime NOT NULL,
   `status` varchar(45) NOT NULL,
   `price_id` int(11) NOT NULL,
   `lane_id` int(11) DEFAULT NULL,
-  `type` tinyint(1) NOT NULL,
+  `type` tinyint(1) DEFAULT NULL,
   `photo` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_transaction_station_idx` (`station_id`),
   KEY `fk_transaction_price_idx` (`price_id`),
-  KEY `fk_transaction_account_idx` (`username_id`),
   KEY `fk_transaction_lane_idx` (`lane_id`),
-  CONSTRAINT `fk_transaction_account` FOREIGN KEY (`username_id`) REFERENCES `account` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  KEY `fk_transaction_vehicle_idx` (`vehicle_id`),
   CONSTRAINT `fk_transaction_lane` FOREIGN KEY (`lane_id`) REFERENCES `lane` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_transaction_price` FOREIGN KEY (`price_id`) REFERENCES `price` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_transaction_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_transaction_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_transaction_vehicle` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicle` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -50,7 +50,7 @@ CREATE TABLE `transaction` (
 
 LOCK TABLES `transaction` WRITE;
 /*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
-INSERT INTO `transaction` VALUES ('1507602350726',7,1,'2017-10-10 09:25:51','Thành công',3,NULL,1,NULL),('1507665848746',7,1,'2017-10-11 03:04:09','Thành công',3,NULL,1,NULL),('1507665862401',7,1,'2017-10-11 03:04:22','Thành công',3,NULL,1,NULL),('1507665865594',7,1,'2017-10-11 03:04:26','Thành công',3,NULL,1,NULL);
+INSERT INTO `transaction` VALUES ('11223344',1,1,'2017-10-28 08:00:00','Chưa Thanh Toán',1,1,0,NULL);
 /*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -63,4 +63,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-11  9:21:47
+-- Dump completed on 2017-10-28  3:25:08

@@ -27,8 +27,9 @@ CREATE TABLE `station` (
   `name` varchar(255) NOT NULL,
   `location` varchar(255) NOT NULL,
   `zone` varchar(45) NOT NULL,
+  `isActive` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +38,7 @@ CREATE TABLE `station` (
 
 LOCK TABLES `station` WRITE;
 /*!40000 ALTER TABLE `station` DISABLE KEYS */;
-INSERT INTO `station` VALUES (1,'Cai Lậy','[342,1034324]','Tiền Giang'),(2,'Trảm Bom','[131,2323]','Đồng Nai');
+INSERT INTO `station` VALUES (1,'Cai Lậy','[0, 0]','QL1A',1),(2,'Tây Ninh','[1, 1]','Tây Ninh',1),(3,'Bảo Lộc','[2, 2]','Đồng Nai',1);
 /*!40000 ALTER TABLE `station` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-11  9:21:47
+-- Dump completed on 2017-10-28  3:25:13

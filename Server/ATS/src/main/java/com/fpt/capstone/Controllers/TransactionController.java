@@ -69,7 +69,7 @@ public class TransactionController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public TransactionDTO finishTransaction(@PathVariable String id) {
-        return transactionService.updateTransactionStatus(id, "Kết thúc");
+        return transactionService.updateTransactionStatus(id, "Hoàn thành giao dịch");
     }
 
 
@@ -141,11 +141,11 @@ public class TransactionController {
      * @param laneId
      * @return
      */
-    @RequestMapping(value = "getResult/{laneId}")
+    @RequestMapping(value = "getResult")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<TransactionDTO> getListResultTransactionByLane(@PathVariable int laneId) {
-        List<TransactionDTO> result = transactionService.getTransactionsForStaff(laneId, "Chờ xử lý");
+    public List<TransactionDTO> getListResultTransactionByLane() {
+        List<TransactionDTO> result = transactionService.getTransactionsForStaff("Chưa thanh toán");
 
         for (TransactionDTO tran : result) {
             if (!tran.getStatus().endsWith("Đang xử lý")) {

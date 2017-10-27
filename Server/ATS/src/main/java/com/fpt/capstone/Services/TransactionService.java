@@ -15,7 +15,7 @@ public interface TransactionService {
 
     TransactionDTO getById(String id);
 
-    List<TransactionDTO> getTransactionsForStaff(int laneId, String status);
+    List<TransactionDTO> getTransactionsForStaff(String status);
 
     TransactionDTO updateTransactionLane(String id, int laneId);
 

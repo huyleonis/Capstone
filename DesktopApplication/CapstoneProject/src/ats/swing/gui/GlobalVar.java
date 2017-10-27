@@ -11,5 +11,5 @@ package ats.swing.gui;
  */
 public abstract class GlobalVar {
     public static Login login = new Login();
-    public static MainForm mainForm = new MainForm();
+   // public static MainForm mainForm = new MainForm();
 }

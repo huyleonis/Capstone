@@ -110,8 +110,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionDTO> getTransactionsForStaff(int laneId, String status) {
-        List<Transaction> list = transactionRepos.getTransactionForStaff(laneId, status);
+    public List<TransactionDTO> getTransactionsForStaff(String status) {
+        List<Transaction> list = transactionRepos.getTransactionForStaff(status);
         List<TransactionDTO> result = new ArrayList<>();
         for (Transaction tran : list) {
             TransactionDTO dto = TransactionDTO.convertFromEntity(tran);

@@ -155,7 +155,7 @@ public class TransactionDTO {
         dto.setPriceId(transaction.getPrice().getId());
 //        dto.setLaneId(transaction.getLane().getId());
         dto.setLaneId(-1);
-        dto.setType(transaction.getType());
+        dto.setType(-1);
         if (transaction.getPhoto() != null) {
             dto.setPhoto(transaction.getPhoto());
         } else {

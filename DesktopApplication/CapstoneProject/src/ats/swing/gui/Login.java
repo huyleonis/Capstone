@@ -24,6 +24,8 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
     }
+    
+ 
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -50,7 +52,6 @@ public class Login extends javax.swing.JFrame {
         setMaximumSize(new java.awt.Dimension(850, 500));
         setMinimumSize(new java.awt.Dimension(850, 500));
         setName("LoginFrame"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(850, 500));
         setResizable(false);
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/user-login.png"))); // NOI18N
@@ -152,9 +153,7 @@ public class Login extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 500, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -177,10 +176,10 @@ public class Login extends javax.swing.JFrame {
                 if (dto.getRole() != null) {
                     if (dto.getRole() == 1) {                                               
                         this.setVisible(false);
-                        GlobalVar.mainForm.setVisible(true);
+                        new MainForm(dto).setVisible(true);
                     } else if (dto.getRole() == 2) {
                         this.setVisible(false);
-                        new MainForm().setVisible(true);
+                        new MainForm(dto).setVisible(true);
                     } else {
                         JOptionPane.showMessageDialog(null, "Tài khoản của bạn không thể đăng nhập vào hệ thống này!", "Lỗi đăng nhập", JOptionPane.OK_OPTION);
                     }
