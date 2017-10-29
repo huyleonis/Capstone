@@ -82,7 +82,7 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
                 + Commons.formatDouble(dataItem.getPrice()) + "đ");
 
         String statusText = dataItem.getStatus();
-        Log.d("status: " , statusText);
+        Log.w("status: " , statusText);
         if(statusText.equals("Thành công")){
             holder.txtStatus.setTextColor(Color.parseColor("#7bc043"));
         } else if (statusText.equals("Kết thúc")) {

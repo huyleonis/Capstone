@@ -29,7 +29,15 @@
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity android:name=".activities.MainActivity" />
-        <activity android:name=".activities.TransactionDetailActivity"></activity>
+        <activity android:name=".activities.TransactionDetailActivity" />
+
+        <service
+            android:name=".services.BeaconService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="fpt.capstone.ats.BEACON_SERVICE_PERMISSION" />
+
+        <activity android:name=".activities.TopupActivity"></activity>
     </application>
 
 </manifest>

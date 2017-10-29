@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import fpt.capstone.ats.R;
+import fpt.capstone.ats.app.AtsApplication;
 import fpt.capstone.ats.utils.ConstantValues;
 import fpt.capstone.ats.utils.RequestServer;
 
@@ -62,15 +63,26 @@ public class TransactionDetailActivity extends AppCompatActivity {
         getTransactionDetail();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AtsApplication.onResumeApp();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AtsApplication.onPausedApp();
+    }
 
     public void getTransactionDetail() {
-        Log.d("Request TransDetail", "Send Request TransDetail");
+        Log.w("Request TransDetail", "Send Request TransDetail");
         RequestServer rs = new RequestServer();
         rs.delegate = new RequestServer.RequestResult() {
             @Override
             public void processFinish(String result) {
                 try {
-                    Log.d("Receive TransDetail", "Transaction Detail Json: " + result);
+                    Log.w("Receive TransDetail", "Transaction Detail Json: " + result);
 
                     if (pdial != null) {
                         pdial.dismiss();
@@ -98,7 +110,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     textType.setText("Thu phí " + type);
                     textVehicleType.setText(vehicleType);
 
-                    Log.d("status: " , status);
+                    Log.w("status: " , status);
                     if(status.equals("Thành công")){
                         textStatus.setTextColor(Color.parseColor("#7bc043"));
                     } else if (status.equals("Kết thúc")) {
@@ -145,18 +157,18 @@ public class TransactionDetailActivity extends AppCompatActivity {
         pdial.setTitle("Thanh toán");
         pdial.show();
 
-        Log.d("Request updTransStatus", "Send Request updateTransStatus");
+        Log.w("Request updTransStatus", "Send Request updateTransStatus");
         RequestServer rs = new RequestServer();
         rs.delegate = new RequestServer.RequestResult() {
             @Override
             public void processFinish(String result) {
                 try {
-                    Log.d("Receive TransStatus", "Transaction Status Json: " + result);
+                    Log.w("Receive TransStatus", "Transaction Status Json: " + result);
                     JSONObject infos = new JSONObject(result);
 
                     String status = infos.getString("status");
 
-                    Log.d(TAG, "processFinish() returned: " + status);
+                    Log.w(TAG, "processFinish() returned: " + status);
 
                 } catch (Exception e) {
                     Log.e("Transaction Detail", e.getMessage());

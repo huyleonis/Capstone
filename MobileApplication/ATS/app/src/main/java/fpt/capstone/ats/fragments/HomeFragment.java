@@ -3,33 +3,18 @@ package fpt.capstone.ats.fragments;
 
 import android.app.FragmentManager;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-
 import fpt.capstone.ats.R;
-import fpt.capstone.ats.activities.LoginActivity;
-import fpt.capstone.ats.activities.MainActivity;
 import fpt.capstone.ats.utils.Commons;
 import fpt.capstone.ats.utils.ConstantValues;
-import fpt.capstone.ats.utils.RequestServer;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -43,7 +28,7 @@ public class HomeFragment extends Fragment {
     private static final String TAG = "HOME_FRAGMENT";
     private View rootView;
     private TextView textMessage;
-    private TextView textCity;
+    private TextView textNameStation;
     private TextView textIdStation;
     private TextView textZone;
     private TextView textPrice;
@@ -56,7 +41,6 @@ public class HomeFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         return fragment;
@@ -64,6 +48,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.w(TAG, "Create home fragment");
         super.onCreate(savedInstanceState);
 
         fm = getChildFragmentManager();
@@ -73,79 +58,97 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.w(TAG, "Create view home fragment");
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         textMessage = (TextView) rootView.findViewById(R.id.textMessage);
-        textCity = (TextView) rootView.findViewById(R.id.textCity);
+        textNameStation = (TextView) rootView.findViewById(R.id.textNameStation);
         textIdStation = (TextView) rootView.findViewById(R.id.textIdStation);
         textZone = (TextView) rootView.findViewById(R.id.textZone);
         textPrice = (TextView) rootView.findViewById(R.id.textPrice);
 
+        setUpDefaultInfo(null);
         return rootView;
     }
 
     @Override
     public void onResume() {
+        Log.w(TAG, "Resume home fragment");
         super.onResume();
-        displayStationInfo();
+
+        Bundle bundle = this.getActivity().getIntent().getExtras();
+
+        if (bundle != null) {
+            Log.w(TAG, "Resolve bundle of Main Activity");
+            resolveBundle(bundle);
+        }
+
     }
 
-    public void displayStationInfo() {
-        Log.e(TAG, "Lấy bundle");
-        //notificationManager.cancel(idNotification);
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.w(TAG, "Pause Home fragment");
+    }
 
-//        Bundle bundle = this.getArguments();
-        Bundle bundle = this.getActivity().getIntent().getExtras();
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.w(TAG, "Destroy Home Fragment");
+    }
+
+    public void resolveBundle(Bundle bundle) {
+        Log.w(TAG, "Resolve bundle in Home Fragment");
+
         if (bundle != null) {
-            String status = bundle.getString("status");
+            String status = bundle.getString("status", "");
             this.updateStatusOfTransaction(status);
 
             boolean inside = bundle.getBoolean("inside");
 
-            Log.e(TAG, "Kiểm tra giá trị <inside>: " + inside);
+            Log.w(TAG, "Kiểm tra giá trị <inside>: " + inside);
             if (inside) {
-                String nameStation = bundle.getString("nameStation");
-                String idStation = bundle.getString("idStation");
-                String zone = bundle.getString("zoneStation");
-                double price = bundle.getDouble("price");
+                String nameStation = bundle.getString(ConstantValues.NAME_STATION_PARAM);
+                String idStation = bundle.getString(ConstantValues.ID_STATION_PARAM);
+                String zone = bundle.getString(ConstantValues.ZONE_PARAM);
+                double price = bundle.getDouble(ConstantValues.PRICE_PARAM);
 
                 this.setUpStationInfo(nameStation, idStation, zone, price);
             }
 
-            boolean isDisplayConfirm = bundle.getBoolean("isDisplayedConfirm");
-            boolean isDisplayResult = bundle.getBoolean("isDisplayResult");
-            String result = bundle.getString("result");
-            String resultColor = bundle.getString("resultColor");
+            boolean isDisplayConfirm = bundle.getBoolean(ConstantValues.DISPLAY_CONFIRM_PARAM, false);
+            boolean isDisplayResult = bundle.getBoolean(ConstantValues.DISPLAY_RESULT_PARAM, false);
+            String result = bundle.getString(ConstantValues.RESULT_PARAM);
+            String resultColor = bundle.getString(ConstantValues.RESULT_COLOR_PARAM);
 
             if (isDisplayConfirm) {
+                Log.w(TAG, "Display Confirm Dialog");
                 showsConfirmFragment();
-                hideResultFragment();
             } else if (isDisplayResult) {
+                Log.w(TAG, "Display Result Dialog");
                 showsResultFragment(result, resultColor);
-                hideConfirmFragment();
             } else {
+                Log.w(TAG, "Display no dialog");
                 hideConfirmFragment();
                 hideResultFragment();
             }
-
         }
+        Log.w(TAG, "Done resolving bundle in Home Fragment");
     }
 
     public void setUpStationInfo(String city, String idStation, String zone, double price ) {
-        textCity.setText(city);
+        textNameStation.setText(city);
         textIdStation.setText(idStation);
         textZone.setText(zone);
         textPrice.setText(Commons.formatDouble(price) + " đồng");
 
         SharedPreferences setting = this.getActivity().getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
         setting.edit().putString("IdStation", idStation).commit();
-
-        showsConfirmFragment();
     }
 
     public void setUpDefaultInfo(View view) {
-        textCity.setText("-");
+        textNameStation.setText("-");
         textIdStation.setText("-");
         textZone.setText("-");
         textPrice.setText("0  đồng");
@@ -161,20 +164,19 @@ public class HomeFragment extends Fragment {
     }
 
     public void hideConfirmFragment() {
-        fm.beginTransaction().remove(confirmFragment).commit();
+        if (confirmFragment != null && confirmFragment.isVisible()) {
+            fm.beginTransaction().remove(confirmFragment).commit();
+        }
     }
 
     public void hideResultFragment() {
-        fm.beginTransaction().remove(resultFragment).commit();
+
+        if (resultFragment != null && resultFragment.isVisible()) {
+            fm.beginTransaction().remove(resultFragment).commit();
+        }
     }
 
     public void updateStatusOfTransaction(String status) {
         textMessage.setText("Trạng thái: " + status);
     }
-
-    public String getIdTransaction() {
-        final SharedPreferences setting = this.getActivity().getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
-        return setting.getString("IdTransaction", "");
-    }
-
 }
