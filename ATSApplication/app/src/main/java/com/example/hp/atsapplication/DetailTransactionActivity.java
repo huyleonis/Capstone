@@ -238,7 +238,6 @@ public class DetailTransactionActivity extends AppCompatActivity implements Requ
         List<String> params = new ArrayList<>();
         params.add("1507602350726");
 
-
         rs.execute(params, "transaction", "updateProcessingTransaction", "GET");
 
     }

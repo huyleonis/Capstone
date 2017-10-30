@@ -21,4 +21,10 @@ public class Commons {
         String username = setting.getString("Username", "");
         return username;
     }
+
+    public static String getAccountId(Context context) {
+        SharedPreferences setting = context.getSharedPreferences(ConstantValues.PREF_NAME, Context.MODE_PRIVATE);
+        String username = setting.getString("ID", "");
+        return username;
+    }
 }

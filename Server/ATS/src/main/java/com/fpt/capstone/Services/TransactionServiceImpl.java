@@ -2,6 +2,7 @@ package com.fpt.capstone.Services;
 
 import com.fpt.capstone.Dtos.TransactionDTO;
 import com.fpt.capstone.Dtos.TransactionDetailDTO;
+import com.fpt.capstone.Entities.Account;
 import com.fpt.capstone.Entities.Price;
 import com.fpt.capstone.Entities.Transaction;
 import com.fpt.capstone.Repositories.AccountRepos;
@@ -94,7 +95,7 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionDTO getById(String id) {
         return TransactionDTO.convertFromEntity(transactionRepos.findById(id));
     }
-    
+
     @Override
     public TransactionDetailDTO getDetailById(String id) {
         return TransactionDetailDTO.covertFromEntity(transactionRepos.findById(id));
@@ -152,4 +153,33 @@ public class TransactionServiceImpl implements TransactionService {
 //    }
 
 
+    @Override
+    public List<TransactionDetailDTO> getAllDetail() {
+
+        List<TransactionDetailDTO> dtos = new ArrayList<>();
+
+        List<Transaction> transactions = transactionRepos.findAll();
+
+        for (Transaction transaction: transactions) {
+            dtos.add(TransactionDetailDTO.covertFromEntity(transaction));
+        }
+
+        return dtos;
+    }
+
+    @Override
+    public List<TransactionDetailDTO> getDetailsByAccountId(String username) {
+
+        //List<Transaction> transactions = transactionRepos.findByUsernameId(username);
+        Account account = accountRepos.getAccount(username);
+        List<Transaction> transactions = account.getTransactions();
+
+        List<TransactionDetailDTO> dtos = new ArrayList<>();
+
+        for (Transaction transaction : transactions){
+            dtos.add(TransactionDetailDTO.covertFromEntity(transaction));
+        }
+
+        return dtos;
+    }
 }

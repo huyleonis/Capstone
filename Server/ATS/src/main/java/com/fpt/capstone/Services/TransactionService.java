@@ -26,4 +26,8 @@ public interface TransactionService {
 
     List<TransactionDTO> getHistoryTransaction(String username, Date fromDate, Date toDate);
 
+    List<TransactionDetailDTO> getAllDetail();
+
+    List<TransactionDetailDTO> getDetailsByAccountId(String username);
+
 }

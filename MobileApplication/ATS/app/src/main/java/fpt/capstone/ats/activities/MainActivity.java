@@ -4,31 +4,25 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.media.AudioAttributes;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.provider.Settings;
-import android.service.notification.StatusBarNotification;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -36,10 +30,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
-import com.estimote.coresdk.common.requirements.SystemRequirementsChecker;
 import com.estimote.coresdk.observation.region.beacon.BeaconRegion;
-import com.estimote.coresdk.recognition.packets.Beacon;
-import com.estimote.coresdk.service.BeaconManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,6 +45,7 @@ import fpt.capstone.ats.app.AtsApplication;
 import fpt.capstone.ats.fragments.AccountFragment;
 import fpt.capstone.ats.fragments.HistoryFragment;
 import fpt.capstone.ats.fragments.HomeFragment;
+import fpt.capstone.ats.services.TransactionDetailService;
 import fpt.capstone.ats.services.BeaconService;
 import fpt.capstone.ats.utils.Commons;
 import fpt.capstone.ats.utils.ConstantValues;
@@ -154,6 +146,14 @@ public class MainActivity extends AppCompatActivity {
 
         fm.beginTransaction().replace(R.id.content, homeFragment).commit();
 
+
+        // luu local cua transaction detail
+        if (isOnline()) {
+            Log.d("TRANSACTION DETAIL", "INTERNET CONNECTED - SYNCHRONIZATION BEGIN");
+            startService(new Intent(getBaseContext(), TransactionDetailService.class));
+        } else {
+            Log.d("TRANSACTION DETAIL", "INTERNET CONNECTING...");
+        }
     }
 
     @Override
@@ -316,18 +316,6 @@ public class MainActivity extends AppCompatActivity {
         if (homeFragment.getView() != null && homeFragment.isVisible()) {
             homeFragment.hideResultFragment();
         }
-
-        //Tạo bundle lưu trạng thái hiện tại của Home fragment
-//        Bundle bundle = homeFragment.getArguments();
-//        if (bundle == null) {
-//            bundle = new Bundle();
-//        }
-//        bundle.putBoolean("isDisplayedConfirm", false);
-//        bundle.putBoolean("isDisplayResult", false);
-//
-//        homeFragment.setArguments(bundle);
-
-
     }
 
     public void clickToLogOut(final View view) {
@@ -361,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
                 .create().show();
     }
 
-    public void clickToSetFromDate(final View view){
+    public void clickToSetFromDate(final View view) {
         final Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
         int month = c.get(Calendar.MONTH);
@@ -371,15 +359,15 @@ public class MainActivity extends AppCompatActivity {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int monthOfDay, int dayOfMonth   ) {
-                String dateTime = dayOfMonth + "/" + (monthOfDay+1) + "/" + year ;
+            public void onDateSet(DatePicker datePicker, int year, int monthOfDay, int dayOfMonth) {
+                String dateTime = dayOfMonth + "/" + (monthOfDay + 1) + "/" + year;
                 ((TextView) view).setText(dateTime);
             }
         }, year, month, day);
         datePickerDialog.show();
     }
 
-    public void clickToSetToDate(final View view){
+    public void clickToSetToDate(final View view) {
         final Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
         int month = c.get(Calendar.MONTH);
@@ -388,8 +376,8 @@ public class MainActivity extends AppCompatActivity {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int monthOfDay, int dayOfMonth   ) {
-                String dateTime = dayOfMonth + "/" + (monthOfDay+1) + "/" + year ;
+            public void onDateSet(DatePicker datePicker, int year, int monthOfDay, int dayOfMonth) {
+                String dateTime = dayOfMonth + "/" + (monthOfDay + 1) + "/" + year;
                 ((TextView) view).setText(dateTime);
             }
         }, year, month, day);
@@ -400,4 +388,15 @@ public class MainActivity extends AppCompatActivity {
         historyFragment.showHistory();
     }
 
+
+    // check internet connection
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm.getActiveNetworkInfo() != null) {
+            NetworkInfo netInfo = cm.getActiveNetworkInfo();
+            return netInfo != null && netInfo.isConnectedOrConnecting();
+        }
+        return false;
+    }
 }
