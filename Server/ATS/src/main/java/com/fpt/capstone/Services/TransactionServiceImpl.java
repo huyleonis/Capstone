@@ -125,17 +125,20 @@ public class TransactionServiceImpl implements TransactionService {
         }
         return result;
     }
-
+    
     @Override
-    public List<TransactionDetailDTO> getTransactionsForStaff(int laneId, String status) {
-        List<Transaction> list = transactionRepos.getTransactionForStaff(laneId, status);
-        List<TransactionDetailDTO> result = new ArrayList<>();
+    public List<TransactionDTO> getHistoryTransaction(String username, Date fromDate, Date toDate) {
+//        fromDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//        toDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        List<Transaction> list = transactionRepos.getHistoryTransaction(username, fromDate, toDate);
+        List<TransactionDTO> result = new ArrayList<>();
         for (Transaction tran : list) {
-            TransactionDetailDTO dto = TransactionDetailDTO.covertFromEntity(tran);
+            TransactionDTO dto = TransactionDTO.convertFromEntity(tran);
             result.add(dto);
         }
         return result;
     }
+
 
 //    @Override
 //    public TransactionDTO finishTransaction(String id) {
