@@ -26,7 +26,7 @@ CREATE TABLE `vehicletype` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,6 +35,7 @@ CREATE TABLE `vehicletype` (
 
 LOCK TABLES `vehicletype` WRITE;
 /*!40000 ALTER TABLE `vehicletype` DISABLE KEYS */;
+INSERT INTO `vehicletype` VALUES (1,'Xe 4-5 chỗ'),(2,'Xe 7-8 chỗ'),(3,'Xe 13-16 chỗ'),(4,'Xe 18-21 chỗ'),(5,'Xe tải nhẹ'),(6,'Xe tải nặng'),(7,'Xe container');
 /*!40000 ALTER TABLE `vehicletype` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -47,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-04 14:00:05
+-- Dump completed on 2017-10-28  3:25:14

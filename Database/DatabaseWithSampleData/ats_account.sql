@@ -33,6 +33,8 @@ CREATE TABLE `account` (
   `number_id` varchar(45) DEFAULT NULL,
   `e_wallet` varchar(45) DEFAULT NULL,
   `vehicle_id` int(11) DEFAULT NULL,
+  `isActive` tinyint(1) NOT NULL DEFAULT '1',
+  `isEnable` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`),
   KEY `fk_account_vehicle_idx` (`vehicle_id`),
@@ -46,7 +48,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'admin','admin',1,'admin','admin@gmail.com','0123456789',NULL,NULL,NULL),(2,'huy','123',2,'huy','huy@gmail.com','0121456789',NULL,NULL,NULL),(3,'son','123',2,'son','son@gmail.com','0122456789',NULL,NULL,NULL),(4,'tin','123',2,'tin','tin@gmail.com','0133456789',NULL,NULL,NULL),(5,'hieu','123',3,'hieu','hieu@gmail.com','0122334455','123456789','12345',1),(6,'tuan','123',3,'tuan','tuan@gmail.com','0122334456','123456788','12344',2),(7,'quan','123',3,'quan','quan@gmail.com','011223344','123456798','12354',3),(8,'canh','123',3,'canh','canh@gmail.com','011223345','123456777','12333',4),(9,'chi','123',3,'chi','chi@gmail.com','012223333','011111111','11111',5),(10,'hiep','123',3,'hiep','hiep@gmail.com','012222222','012222222','22222',6);
+INSERT INTO `account` VALUES (1,'admin','admin',1,'Admin',NULL,NULL,NULL,NULL,NULL,NULL,1,1),(2,'hieunc','123',2,'Nguy?n Chí Hi?u',NULL,NULL,NULL,NULL,NULL,NULL,1,1),(3,'huylvq','123',2,'Lê Vuong Qu?c Huy',NULL,NULL,NULL,NULL,NULL,NULL,1,1),(4,'tinpb','123',3,'Ph?m B?o Tín','tin@gmail.com','0903380457','012345678',NULL,1,50000,1,1),(5,'sonnv','123',3,'Nguy?n Vi?t Son','son@gmail.com','0909354974','025308080',NULL,2,70000,1,1),(6,'thanhth','123',3,'Truong H?u Thành','thanh@gmail.com','0939354974','025251414',NULL,3,5000,1,1);
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -59,4 +61,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-04 23:36:56
+-- Dump completed on 2017-10-28  3:25:11

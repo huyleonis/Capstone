@@ -116,10 +116,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionDTO> getHistoryTransaction(String username, Date fromDate, Date toDate) {
-//        fromDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//        toDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        List<Transaction> list = transactionRepos.getHistoryTransaction(username, fromDate, toDate);
+    public List<TransactionDTO> getTransactionsForStaff(String status) {
+        List<Transaction> list = transactionRepos.getTransactionForStaff(status);
         List<TransactionDTO> result = new ArrayList<>();
         for(Transaction tran : list){
             TransactionDTO dto = TransactionDTO.convertFromEntity(tran);

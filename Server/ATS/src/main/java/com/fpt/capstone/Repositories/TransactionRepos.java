@@ -83,14 +83,14 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
     int updateTransaction(String idTransaction, String status);
 
     /**
-     * Lấy transaction cho staff theo status cho trước
+     * Lấy transaction cho staff theo status cho trước trong vòng 5 phút trước đó 
      *
      * @param laneId
      * @param status
      * @return
      */
-    @Query(value = "select * from transaction where lane_id = ?1 and status like CONCAT('%',?2,'%') order by date_time asc", nativeQuery = true)
-    List<Transaction> getTransactionForStaff(int laneId, String status);
+    @Query(value = "select * from transaction where status like CONCAT('%',?1,'%') AND date_time between date_sub(now(), interval 5 minute) AND now() order by date_time asc", nativeQuery = true)
+    List<Transaction> getTransactionForStaff(String status);
 
     /**
      * Cập nhật làn đường mà xe chạy vào khi xe qua beacon 2
