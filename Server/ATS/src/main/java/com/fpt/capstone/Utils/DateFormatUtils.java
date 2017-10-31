@@ -1,4 +1,4 @@
-package com.fpt.capstone.Utils;
+package com.fpt.capstone.utils;
 
 import java.text.DateFormat;
 import java.text.ParseException;
