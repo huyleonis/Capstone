@@ -1,34 +1,66 @@
 package com.fpt.capstone.Entities;
 
-import javax.persistence.*;
-import java.util.List;
+import java.io.Serializable;
+import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ *
+ * @author Chi Hieu
+ */
 @Entity
 @Table(name = "lane")
-public class Lane {
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Lane.findAll", query = "SELECT l FROM Lane l")
+    , @NamedQuery(name = "Lane.findById", query = "SELECT l FROM Lane l WHERE l.id = :id")
+    , @NamedQuery(name = "Lane.findByName", query = "SELECT l FROM Lane l WHERE l.name = :name")})
+public class Lane implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
     private Integer id;
-
+    @Basic(optional = false)
+    @Column(name = "name")
     private String name;
-
-    //bi-directional many-to-one association to Beacon
-    @OneToMany(mappedBy="lane")
-    private List<Beacon> beacons;
-
-    //bi-directional many-to-one association to Station
-    @ManyToOne
-    private Station station;
-
-    //bi-directional many-to-one association to Transaction
-    @OneToMany(mappedBy="lane")
-    private List<Transaction> transactions;
+    @OneToMany(mappedBy = "laneId")
+    private Collection<Beacon> beaconCollection;
+    @JoinColumn(name = "station_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Station stationId;
+    @OneToMany(mappedBy = "laneId")
+    private Collection<Transaction> transactionCollection;
 
     public Lane() {
     }
 
-    public int getId() {
-        return this.id;
+    public Lane(Integer id) {
+        this.id = id;
+    }
+
+    public Lane(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public void setId(Integer id) {
@@ -36,62 +68,62 @@ public class Lane {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public List<Beacon> getBeacons() {
-        return this.beacons;
+    @XmlTransient
+    public Collection<Beacon> getBeaconCollection() {
+        return beaconCollection;
     }
 
-    public void setBeacons(List<Beacon> beacons) {
-        this.beacons = beacons;
+    public void setBeaconCollection(Collection<Beacon> beaconCollection) {
+        this.beaconCollection = beaconCollection;
     }
 
-    public Beacon addBeacon(Beacon beacon) {
-        getBeacons().add(beacon);
-        beacon.setLane(this);
-
-        return beacon;
+    public Station getStationId() {
+        return stationId;
     }
 
-    public Beacon removeBeacon(Beacon beacon) {
-        getBeacons().remove(beacon);
-        beacon.setLane(null);
-
-        return beacon;
+    public void setStationId(Station stationId) {
+        this.stationId = stationId;
     }
 
-    public Station getStation() {
-        return this.station;
+    @XmlTransient
+    public Collection<Transaction> getTransactionCollection() {
+        return transactionCollection;
     }
 
-    public void setStation(Station station) {
-        this.station = station;
+    public void setTransactionCollection(Collection<Transaction> transactionCollection) {
+        this.transactionCollection = transactionCollection;
     }
 
-    public List<Transaction> getTransactions() {
-        return this.transactions;
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Lane)) {
+            return false;
+        }
+        Lane other = (Lane) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
-    public Transaction addTransaction(Transaction transaction) {
-        getTransactions().add(transaction);
-        transaction.setLane(this);
-
-        return transaction;
+    @Override
+    public String toString() {
+        return "com.fpt.capstone.Entities.Lane[ id=" + id + " ]";
     }
-
-    public Transaction removeTransaction(Transaction transaction) {
-        getTransactions().remove(transaction);
-        transaction.setLane(null);
-
-        return transaction;
-    }
+    
 }

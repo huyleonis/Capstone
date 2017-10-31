@@ -157,29 +157,29 @@ public class TransactionDetailDTO {
         
         dto.setId(tran.getId());
         dto.setDateTime(tran.getDateTime());
-        if (tran.getLane() != null) {
-            dto.setLaneId(tran.getLane().getId());
+        if (tran.getLaneId()!= null) {
+            dto.setLaneId(tran.getLaneId().getId());
         }
-        if (tran.getStation() != null) {
-            dto.setStationId(tran.getStation().getId());
-            dto.setStationName(tran.getStation().getName());
-            dto.setZone(tran.getStation().getZone());
+        if (tran.getStationId()!= null) {
+            dto.setStationId(tran.getStationId().getId());
+            dto.setStationName(tran.getStationId().getName());
+            dto.setZone(tran.getStationId().getZone());
         }
-        if (tran.getPrice() != null) {
-            dto.setPrice(tran.getPrice().getPrice());
+        if (tran.getPriceId()!= null) {
+            dto.setPrice(tran.getPriceId().getPrice());
         }
         
         dto.setStatus(tran.getStatus()); 
         
-        if (tran.getAccount() != null) {
-            dto.setUsername(tran.getAccount().getUsername());
-            if (tran.getAccount().getVehicle() != null) {
-                dto.setLicensePlate(tran.getAccount().getVehicle().getLicensePlate());
-                dto.setVehicleType(tran.getAccount().getVehicle().getVehicletype().getName());                
+        if (tran.getVehicleId()!= null) {
+            dto.setUsername(tran.getVehicleId().getAccount().getUsername());
+            if (tran.getVehicleId() != null) {
+                dto.setLicensePlate(tran.getVehicleId().getLicensePlate());
+                dto.setVehicleType(tran.getVehicleId().getTypeId().getName());                
             }                        
         }
         
-        dto.setType(tran.getType() == 1? "tự động" : "thủ công");
+        dto.setType(tran.getType() == true? "tự động" : "thủ công");
                 
         return dto;
     }

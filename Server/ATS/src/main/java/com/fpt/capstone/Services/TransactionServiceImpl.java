@@ -168,12 +168,12 @@ public class TransactionServiceImpl implements TransactionService {
         return dtos;
     }
 
+    //Bị lỗi ở chỗ lấy List Transaction từ Account. 
     @Override
     public List<TransactionDetailDTO> getDetailsByAccountId(String username) {
-
         //List<Transaction> transactions = transactionRepos.findByUsernameId(username);
         Account account = accountRepos.getAccount(username);
-        List<Transaction> transactions = account.getTransactions();
+        List<Transaction> transactions = null; // loi o day nen la null. Sửa lại
 
         List<TransactionDetailDTO> dtos = new ArrayList<>();
 

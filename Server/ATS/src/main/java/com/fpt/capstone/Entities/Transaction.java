@@ -1,51 +1,80 @@
 package com.fpt.capstone.Entities;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author Chi Hieu
+ */
 @Entity
 @Table(name = "transaction")
-public class Transaction {
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Transaction.findAll", query = "SELECT t FROM Transaction t")
+    , @NamedQuery(name = "Transaction.findById", query = "SELECT t FROM Transaction t WHERE t.id = :id")
+    , @NamedQuery(name = "Transaction.findByDateTime", query = "SELECT t FROM Transaction t WHERE t.dateTime = :dateTime")
+    , @NamedQuery(name = "Transaction.findByStatus", query = "SELECT t FROM Transaction t WHERE t.status = :status")
+    , @NamedQuery(name = "Transaction.findByType", query = "SELECT t FROM Transaction t WHERE t.type = :type")
+    , @NamedQuery(name = "Transaction.findByPhoto", query = "SELECT t FROM Transaction t WHERE t.photo = :photo")})
+public class Transaction implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
+    @Basic(optional = false)
+    @Column(name = "id")
     private String id;
-
-
+    @Basic(optional = false)
+    @Column(name = "date_time")
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="date_time")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date dateTime;
-
-    private String photo;
-
+    @Basic(optional = false)
+    @Column(name = "status")
     private String status;
-
-    private byte type;
-
-    //bi-directional many-to-one association to Account
+    @Column(name = "type")
+    private Boolean type;
+    @Column(name = "photo")
+    private String photo;
+    @JoinColumn(name = "lane_id", referencedColumnName = "id")
     @ManyToOne
-    @JoinColumn(name = "username_id")
-    private Account account;
-
-    //bi-directional many-to-one association to Lane
-    @ManyToOne
-    private Lane lane;
-
-    //bi-directional many-to-one association to Price
-    @ManyToOne
-    private Price price;
-
-    //bi-directional many-to-one association to Station
-    @ManyToOne
-    private Station station;
+    private Lane laneId;
+    @JoinColumn(name = "price_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Price priceId;
+    @JoinColumn(name = "station_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Station stationId;
+    @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Vehicle vehicleId;
 
     public Transaction() {
     }
 
+    public Transaction(String id) {
+        this.id = id;
+    }
+
+    public Transaction(String id, Date dateTime, String status) {
+        this.id = id;
+        this.dateTime = dateTime;
+        this.status = status;
+    }
+
     public String getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(String id) {
@@ -53,66 +82,92 @@ public class Transaction {
     }
 
     public Date getDateTime() {
-        return this.dateTime;
+        return dateTime;
     }
 
     public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
     }
 
-    public String getPhoto() {
-        return this.photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
     public String getStatus() {
-        return this.status;
+        return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
     }
 
-    public byte getType() {
-        return this.type;
+    public Boolean getType() {
+        return type;
     }
 
-    public void setType(byte type) {
+    public void setType(Boolean type) {
         this.type = type;
     }
 
-    public Account getAccount() {
-        return this.account;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
-    public Lane getLane() {
-        return this.lane;
+    public Lane getLaneId() {
+        return laneId;
     }
 
-    public void setLane(Lane lane) {
-        this.lane = lane;
+    public void setLaneId(Lane laneId) {
+        this.laneId = laneId;
     }
 
-    public Price getPrice() {
-        return this.price;
+    public Price getPriceId() {
+        return priceId;
     }
 
-    public void setPrice(Price price) {
-        this.price = price;
+    public void setPriceId(Price priceId) {
+        this.priceId = priceId;
     }
 
-    public Station getStation() {
-        return this.station;
+    public Station getStationId() {
+        return stationId;
     }
 
-    public void setStation(Station station) {
-        this.station = station;
+    public void setStationId(Station stationId) {
+        this.stationId = stationId;
     }
+
+    public Vehicle getVehicleId() {
+        return vehicleId;
+    }
+
+    public void setVehicleId(Vehicle vehicleId) {
+        this.vehicleId = vehicleId;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Transaction)) {
+            return false;
+        }
+        Transaction other = (Transaction) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "com.fpt.capstone.Entities.Transaction[ id=" + id + " ]";
+    }
+    
 }

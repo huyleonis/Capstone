@@ -99,15 +99,15 @@ public class TransactionDTO {
         
         dto.setId(tran.getId());
         dto.setDateTime(tran.getDateTime());
-        if (tran.getLane() != null) {
-            dto.setLaneId(tran.getLane().getId());
+        if (tran.getLaneId()!= null) {
+            dto.setLaneId(tran.getLaneId().getId());
         }
-        if (tran.getStation() != null) {
-            dto.setStationId(tran.getStation().getId());
-            dto.setStationName(tran.getStation().getName());
+        if (tran.getStationId()!= null) {
+            dto.setStationId(tran.getStationId().getId());
+            dto.setStationName(tran.getStationId().getName());
         }
-        if (tran.getPrice() != null) {
-            dto.setPrice(tran.getPrice().getPrice());
+        if (tran.getPriceId()!= null) {
+            dto.setPrice(tran.getPriceId().getPrice());
         }
         
         dto.setStatus(tran.getStatus());        

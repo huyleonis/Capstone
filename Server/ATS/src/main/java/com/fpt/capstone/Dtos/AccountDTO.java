@@ -14,6 +14,7 @@ public class AccountDTO {
     private String licenseId;   
     private String vehicleType;
     private double balance;
+    
 
     public AccountDTO() {
     }
@@ -123,8 +124,8 @@ public class AccountDTO {
         
         dto.setId(account.getId());
         dto.setUsername(account.getUsername());
-        if (account.getVehicle() != null) {
-            dto.setLicensePlate(account.getVehicle().getLicensePlate());
+        if (account.getVehicleId() != null) {
+            dto.setLicensePlate(account.getVehicleId().getLicensePlate());
         }
         
         dto.setNumberId(account.getNumberId());
@@ -135,9 +136,9 @@ public class AccountDTO {
         dto.setBalance(account.getBalance());
         dto.setLicenseId("123-456-xxx");        
         dto.setFullname(account.getFullname());
-        if (account.getVehicle() != null) {
-            dto.setVehicleType(account.getVehicle().getVehicletype().getName());
-        }        
+        if (account.getVehicleId()!= null) {
+            dto.setVehicleType(account.getVehicleId().getTypeId().getName());
+        } 
         return dto;
     }
 }

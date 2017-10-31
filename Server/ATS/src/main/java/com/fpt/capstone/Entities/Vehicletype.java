@@ -1,88 +1,115 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.fpt.capstone.Entities;
 
+import java.io.Serializable;
+import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.List;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ *
+ * @author Chi Hieu
+ */
 @Entity
 @Table(name = "vehicletype")
-public class Vehicletype {
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Vehicletype_1.findAll", query = "SELECT v FROM Vehicletype_1 v")
+    , @NamedQuery(name = "Vehicletype_1.findById", query = "SELECT v FROM Vehicletype_1 v WHERE v.id = :id")
+    , @NamedQuery(name = "Vehicletype_1.findByName", query = "SELECT v FROM Vehicletype_1 v WHERE v.name = :name")})
+public class Vehicletype implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
-    private int id;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "name")
     private String name;
-
-    //bi-directional many-to-one association to Price
-    @OneToMany(mappedBy="vehicletype")
-    private List<Price> prices;
-
-    //bi-directional many-to-one association to Vehicle
-    @OneToMany(mappedBy="vehicletype")
-    private List<Vehicle> vehicles;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "typeId")
+    private Collection<Vehicle> vehicleCollection;
 
     public Vehicletype() {
     }
 
-    public int getId() {
-        return this.id;
+    public Vehicletype(Integer id) {
+        this.id = id;
     }
 
-    public void setId(int id) {
+    public Vehicletype(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
         this.id = id;
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public List<Price> getPrices() {
-        return this.prices;
+    @XmlTransient
+    public Collection<Vehicle> getVehicleCollection() {
+        return vehicleCollection;
     }
 
-    public void setPrices(List<Price> prices) {
-        this.prices = prices;
+    public void setVehicleCollection(Collection<Vehicle> vehicleCollection) {
+        this.vehicleCollection = vehicleCollection;
     }
 
-    public Price addPrice(Price price) {
-        getPrices().add(price);
-        price.setVehicletype(this);
-
-        return price;
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
     }
 
-    public Price removePrice(Price price) {
-        getPrices().remove(price);
-        price.setVehicletype(null);
-
-        return price;
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Vehicletype)) {
+            return false;
+        }
+        Vehicletype other = (Vehicletype) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
-    public List<Vehicle> getVehicles() {
-        return this.vehicles;
+    @Override
+    public String toString() {
+        return "com.fpt.capstone.Entities.Vehicletype[ id=" + id + " ]";
     }
-
-    public void setVehicles(List<Vehicle> vehicles) {
-        this.vehicles = vehicles;
-    }
-
-    public Vehicle addVehicle(Vehicle vehicle) {
-        getVehicles().add(vehicle);
-        vehicle.setVehicletype(this);
-
-        return vehicle;
-    }
-
-    public Vehicle removeVehicle(Vehicle vehicle) {
-        getVehicles().remove(vehicle);
-        vehicle.setVehicletype(null);
-
-        return vehicle;
-    }
+    
 }
