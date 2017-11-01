@@ -1,146 +1,134 @@
 package com.fpt.capstone.Entities;
 
 import javax.persistence.*;
-import java.util.List;
 
-@Entity
-@Table(name = "account")
+@Entity(name = "account")
 public class Account {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private int id;
 
-    @Column(name="e_wallet")
-    private String eWallet;
-
-    private String email;
-
-    private String fullname;
-
-    @Column(name="number_id")
-    private String numberId;
-
-    private String password;
-
-    private String phone;
-
-    private int role;
-    
-    private double balance;
-
+    @Column(name = "username")
     private String username;
 
-    //bi-directional many-to-one association to Vehicle
-    @ManyToOne
+    @Transient
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "role")
+    private int role;
+
+    @Column(name = "fullname")
+    private String fullname;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "number_id")
+    private String numberId;
+
+    @Column(name = "e_wallet")
+    private String eWallet;
+
+    @OneToOne
+    @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 
-    //bi-directional many-to-one association to Transaction
-    @OneToMany(mappedBy="account")
-    private List<Transaction> transactions;
+    @Column(name = "balance")
+    private Double balance;
+
+    @Column(name = "is_active")
+    private int active;
+
+    @Column(name = "is_enable")
+    private int enable;
 
     public Account() {
     }
 
+    public Account(String username, String password, int role, String fullname, String email, String phone,
+                   String numberId, String eWallet, Vehicle vehicle, Double balance, int active, int enable) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.fullname = fullname;
+        this.email = email;
+        this.phone = phone;
+        this.numberId = numberId;
+        this.eWallet = eWallet;
+        this.vehicle = vehicle;
+        this.balance = balance;
+        this.active = active;
+        this.enable = enable;
+    }
+
     public int getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public String getEWallet() {
-        return this.eWallet;
-    }
-
-    public void setEWallet(String eWallet) {
-        this.eWallet = eWallet;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFullname() {
-        return this.fullname;
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
-    public String getNumberId() {
-        return this.numberId;
-    }
-
-    public void setNumberId(String numberId) {
-        this.numberId = numberId;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPhone() {
-        return this.phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public int getRole() {
-        return this.role;
-    }
-
-    public void setRole(int role) {
-        this.role = role;
-    }
-
     public String getUsername() {
-        return this.username;
+        return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
-    public Vehicle getVehicle() {
-        return this.vehicle;
+    public String getPassword() {
+        return password;
     }
 
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public List<Transaction> getTransactions() {
-        return this.transactions;
+    public int getRole() {
+        return role;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
+    public void setRole(int role) {
+        this.role = role;
     }
 
-    public Transaction addTransaction(Transaction transaction) {
-        getTransactions().add(transaction);
-        transaction.setAccount(this);
-
-        return transaction;
+    public String getFullname() {
+        return fullname;
     }
 
-    public Transaction removeTransaction(Transaction transaction) {
-        getTransactions().remove(transaction);
-        transaction.setAccount(null);
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
 
-        return transaction;
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getNumberId() {
+        return numberId;
+    }
+
+    public void setNumberId(String numberId) {
+        this.numberId = numberId;
     }
 
     public String geteWallet() {
@@ -151,13 +139,35 @@ public class Account {
         this.eWallet = eWallet;
     }
 
-    public double getBalance() {
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
-    
-    
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+
+    public int getEnable() {
+        return enable;
+    }
+
+    public void setEnable(int enable) {
+        this.enable = enable;
+    }
 }

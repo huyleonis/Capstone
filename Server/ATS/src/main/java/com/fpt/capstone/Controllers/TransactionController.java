@@ -173,15 +173,16 @@ public class TransactionController {
     }
 
     /**
-     * Lấy transaction detail theo id
-     * @param accountId
+     * Lấy transaction detail theo vehicle id
+     * @param vehicleId
      * @return
      */
-    @RequestMapping(value = "/getDetailByAccount/{accountId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getDetailByVehicleIdIn24Hours/{vehicleId}", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getDetailByAccount(@PathVariable String accountId) {
-        int usernameId = Integer.parseInt(accountId);
-        List<TransactionDetailDTO> dtos = transactionServiceImpl.getDetailsByAccountId(usernameId);
+    public Map<String, Object> getDetailByVehicleIdIn24Hours(@PathVariable String vehicleId) {
+        System.out.println("GET DETAILS BY VEHICLE ID IN 24 HOURS");
+        List<TransactionDetailDTO> dtos =
+                transactionServiceImpl.getDetailByVehicleIdIn24Hours(Integer.parseInt(vehicleId));
 
         Map<String, Object> map = new HashMap<>();
         map.put("TransactionDetails", dtos);

@@ -1,33 +1,36 @@
 package com.fpt.capstone.Entities;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.List;
 
-@Entity
-@Table(name = "vehicle")
-public class Vehicle implements Serializable{
+@Entity(name = "vehicle")
+public class Vehicle {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private int id;
 
-    @Column(name="license_plate")
+    @Column(name = "license_plate")
     private String licensePlate;
 
-    //bi-directional many-to-one association to Account
-    @OneToMany(mappedBy="vehicle")
-    private List<Account> accounts;
-
-    //bi-directional many-to-one association to Vehicletype
     @ManyToOne
-    @JoinColumn(name="type_id")
-    private Vehicletype vehicletype;
+    @JoinColumn(name = "type_id")
+    private VehicleType vehicleType;
+
+    @OneToOne(mappedBy = "vehicle")
+    private Account account;
 
     public Vehicle() {
     }
 
+    public Vehicle(String licensePlate, VehicleType vehicleType, Account account) {
+        this.licensePlate = licensePlate;
+        this.vehicleType = vehicleType;
+        this.account = account;
+    }
+
     public int getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(int id) {
@@ -35,40 +38,26 @@ public class Vehicle implements Serializable{
     }
 
     public String getLicensePlate() {
-        return this.licensePlate;
+        return licensePlate;
     }
 
     public void setLicensePlate(String licensePlate) {
         this.licensePlate = licensePlate;
     }
 
-    public List<Account> getAccounts() {
-        return this.accounts;
+    public VehicleType getVehicleType() {
+        return vehicleType;
     }
 
-    public void setAccounts(List<Account> accounts) {
-        this.accounts = accounts;
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
     }
 
-    public Account addAccount(Account account) {
-        getAccounts().add(account);
-        account.setVehicle(this);
-
+    public Account getAccount() {
         return account;
     }
 
-    public Account removeAccount(Account account) {
-        getAccounts().remove(account);
-        account.setVehicle(null);
-
-        return account;
-    }
-
-    public Vehicletype getVehicletype() {
-        return this.vehicletype;
-    }
-
-    public void setVehicletype(Vehicletype vehicletype) {
-        this.vehicletype = vehicletype;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

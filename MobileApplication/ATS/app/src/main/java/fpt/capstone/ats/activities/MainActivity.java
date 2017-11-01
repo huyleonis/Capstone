@@ -124,13 +124,13 @@ public class MainActivity extends AppCompatActivity {
 
         // luu local cua transaction detail
         if (isOnline()) {
-            Log.d("TRANSACTION DETAIL", "INTERNET CONNECTED - SYNCHRONIZATION BEGIN");
-            startService(new Intent(getBaseContext(), TransactionDetailService.class));
+            Log.d("\nTRANSACTION DETAIL", "INTERNET CONNECTED - SYNCHRONIZATION BEGIN");
+            startService(new Intent(this, TransactionDetailService.class));
         } else {
-            Log.d("TRANSACTION DETAIL", "INTERNET CONNECTING...");
+            Log.d("\nTRANSACTION DETAIL", "INTERNET CONNECTING...");
         }
     }
-
+    
     @Override
     protected void onResume() {
         super.onResume();

@@ -117,6 +117,6 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
             "date_time > :fromDate and date_time < :toDate", nativeQuery = true)
     List<Transaction> getHistoryTransaction(@Param("user") String username, @Param("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date fromDate, @Param("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date toDate);
 
-    @Query(value = "SELECT * FROM transaction WHERE username_id = ?1", nativeQuery = true)
-    List<Transaction> findByUsernameId(Integer usernameId);
+    @Query(value = "SELECT * FROM transaction WHERE vehicle_id = :vehicleId AND date_time >= CURRENT_DATE - INTERVAL 24 HOUR", nativeQuery = true)
+    List<Transaction> findByVehicleId(@Param("vehicleId") Integer vehicleId);
 }

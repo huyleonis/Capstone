@@ -4,37 +4,47 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table(name = "price")
+@Entity(name = "price")
 public class Price {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="from_date")
     private Date fromDate;
 
+    @Column(name = "price")
     private double price;
 
-    //bi-directional many-to-one association to Station
     @ManyToOne
+    @JoinColumn(name = "station_id")
     private Station station;
 
-    //bi-directional many-to-one association to Vehicletype
     @ManyToOne
     @JoinColumn(name="type_id")
-    private Vehicletype vehicletype;
+    private VehicleType vehicleType;
 
-    //bi-directional many-to-one association to Transaction
+    @Column(name = "is_active")
+    private int active;
+
     @OneToMany(mappedBy="price")
     private List<Transaction> transactions;
 
     public Price() {
     }
 
+    public Price(Date fromDate, double price, Station station, VehicleType vehicleType, int active, List<Transaction> transactions) {
+        this.fromDate = fromDate;
+        this.price = price;
+        this.station = station;
+        this.vehicleType = vehicleType;
+        this.active = active;
+        this.transactions = transactions;
+    }
+
     public int getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(int id) {
@@ -42,7 +52,7 @@ public class Price {
     }
 
     public Date getFromDate() {
-        return this.fromDate;
+        return fromDate;
     }
 
     public void setFromDate(Date fromDate) {
@@ -50,7 +60,7 @@ public class Price {
     }
 
     public double getPrice() {
-        return this.price;
+        return price;
     }
 
     public void setPrice(double price) {
@@ -58,40 +68,34 @@ public class Price {
     }
 
     public Station getStation() {
-        return this.station;
+        return station;
     }
 
     public void setStation(Station station) {
         this.station = station;
     }
 
-    public Vehicletype getVehicletype() {
-        return this.vehicletype;
+    public VehicleType getVehicleType() {
+        return vehicleType;
     }
 
-    public void setVehicletype(Vehicletype vehicletype) {
-        this.vehicletype = vehicletype;
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
     }
 
     public List<Transaction> getTransactions() {
-        return this.transactions;
+        return transactions;
     }
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
-    }
-
-    public Transaction addTransaction(Transaction transaction) {
-        getTransactions().add(transaction);
-        transaction.setPrice(this);
-
-        return transaction;
-    }
-
-    public Transaction removeTransaction(Transaction transaction) {
-        getTransactions().remove(transaction);
-        transaction.setPrice(null);
-
-        return transaction;
     }
 }

@@ -3,28 +3,47 @@ package com.fpt.capstone.Dtos;
 import com.fpt.capstone.Entities.Account;
 
 public class AccountDTO {
+
     private int id;
     private String username;
-    private String fullname;
+    private String password;
     private int role;
-    private String numberId;
-    private String licensePlate;
+    private String fullname;
     private String email;
     private String phone;
-    private String licenseId;   
-    private String vehicleType;
+    private String numberId;
+    private String eWallet;
+    private int vehicleId;
     private double balance;
+    private boolean isActive;
+    private boolean isEnable;
 
     public AccountDTO() {
     }
 
-    public AccountDTO(int id, String username, int role, String numberId, String licensePlate, double balance) {
+    public AccountDTO(int id, String username, String password, int role, String fullname, String email, String phone,
+                      String numberId, String eWallet, int vehicleId, double balance, boolean isActive, boolean isEnable) {
         this.id = id;
         this.username = username;
+        this.password = password;
         this.role = role;
+        this.fullname = fullname;
+        this.email = email;
+        this.phone = phone;
         this.numberId = numberId;
-        this.licensePlate = licensePlate;
+        this.eWallet = eWallet;
+        this.vehicleId = vehicleId;
         this.balance = balance;
+        this.isActive = isActive;
+        this.isEnable = isEnable;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -35,6 +54,14 @@ public class AccountDTO {
         this.username = username;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public int getRole() {
         return role;
     }
@@ -43,37 +70,13 @@ public class AccountDTO {
         this.role = role;
     }
 
-    public String getNumberId() {
-        return numberId;
+    public String getFullname() {
+        return fullname;
     }
 
-    public void setNumberId(String numberId) {
-        this.numberId = numberId;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
-
-    public String getLicensePlate() {
-        return licensePlate;
-    }
-
-    public void setLicensePlate(String licensePlate) {
-        this.licensePlate = licensePlate;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }    
 
     public String getEmail() {
         return email;
@@ -91,53 +94,75 @@ public class AccountDTO {
         this.phone = phone;
     }
 
-    public String getLicenseId() {
-        return licenseId;
+    public String getNumberId() {
+        return numberId;
     }
 
-    public void setLicenseId(String licenseId) {
-        this.licenseId = licenseId;
+    public void setNumberId(String numberId) {
+        this.numberId = numberId;
     }
 
-    public String getFullname() {
-        return fullname;
+    public String geteWallet() {
+        return eWallet;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }    
-
-    public String getVehicleType() {
-        return vehicleType;
+    public void seteWallet(String eWallet) {
+        this.eWallet = eWallet;
     }
 
-    public void setVehicleType(String vehicleType) {
-        this.vehicleType = vehicleType;
+    public int getVehicleId() {
+        return vehicleId;
     }
 
+    public void setVehicleId(int vehicleId) {
+        this.vehicleId = vehicleId;
+    }
 
+    public double getBalance() {
+        return balance;
+    }
 
-    
-    public static AccountDTO convertFromEntity(Account account){
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public boolean isEnable() {
+        return isEnable;
+    }
+
+    public void setEnable(boolean enable) {
+        isEnable = enable;
+    }
+
+    public static AccountDTO convertFromEntity(Account account) {
         AccountDTO dto = new AccountDTO();
-        
+
         dto.setId(account.getId());
         dto.setUsername(account.getUsername());
-        if (account.getVehicle() != null) {
-            dto.setLicensePlate(account.getVehicle().getLicensePlate());
-        }
-        
-        dto.setNumberId(account.getNumberId());
-        dto.setBalance(account.getBalance());
+        dto.setPassword(account.getPassword());
         dto.setRole(account.getRole());
-        dto.setPhone(account.getPhone());
-        dto.setEmail(account.getEmail());
-        dto.setBalance(account.getBalance());
-        dto.setLicenseId("123-456-xxx");        
         dto.setFullname(account.getFullname());
+        dto.setEmail(account.getEmail());
+        dto.setPhone(account.getPhone());
+        dto.setNumberId(account.getNumberId());
+        dto.seteWallet(account.geteWallet());
         if (account.getVehicle() != null) {
-            dto.setVehicleType(account.getVehicle().getVehicletype().getName());
-        }        
+            dto.setVehicleId(account.getVehicle().getId());
+        }
+        if (account.getBalance() != null) {
+            dto.setBalance(account.getBalance());
+        }
+        dto.setActive((account.getActive() == 1) ? true : false);
+        dto.setEnable((account.getEnable() == 1) ? true : false);
+
         return dto;
     }
 }

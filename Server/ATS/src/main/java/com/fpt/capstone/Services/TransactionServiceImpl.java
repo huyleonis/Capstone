@@ -33,10 +33,6 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private AccountRepos accountRepos;
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-
     @Override
     public TransactionDTO insertManualTransaction(String licensePlate, int laneId) {
 
@@ -167,9 +163,9 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionDetailDTO> getDetailsByAccountId(int accountId) {
+    public List<TransactionDetailDTO> getDetailByVehicleIdIn24Hours(int vehicleId) {
 
-        List<Transaction> transactions = transactionRepos.findByUsernameId(accountId);
+        List<Transaction> transactions = transactionRepos.findByVehicleId(vehicleId);
 
         List<TransactionDetailDTO> dtos = new ArrayList<>();
 

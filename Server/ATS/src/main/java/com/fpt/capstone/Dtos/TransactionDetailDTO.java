@@ -6,24 +6,24 @@
 package com.fpt.capstone.Dtos;
 
 import com.fpt.capstone.Entities.Transaction;
+
 import java.util.Date;
 
 /**
- *
  * @author hp
  */
 public class TransactionDetailDTO {
     private String id;
-    
+
     private Date dateTime;
-    private String status;    
+    private String status;
     private double price;
     private String failReason;
-    
+
     private Integer laneId;
-    private int stationId; 
+    private int stationId;
     private String zone;
-    
+
     private String stationName;
     private String username;
     private String licensePlate;
@@ -152,37 +152,29 @@ public class TransactionDetailDTO {
     public void setType(String type) {
         this.type = type;
     }
-    
+
     public static TransactionDetailDTO covertFromEntity(Transaction tran) {
         TransactionDetailDTO dto = new TransactionDetailDTO();
-        
+
         dto.setId(tran.getId());
         dto.setDateTime(tran.getDateTime());
+        dto.setStatus(tran.getStatus());
+        dto.setPrice(tran.getPrice().getPrice());
+        dto.setFailReason("Unknown");
         if (tran.getLane() != null) {
             dto.setLaneId(tran.getLane().getId());
         }
-        if (tran.getStation() != null) {
-            dto.setStationId(tran.getStation().getId());
-            dto.setStationName(tran.getStation().getName());
-            dto.setZone(tran.getStation().getZone());
+        dto.setStationId(tran.getStation().getId());
+        dto.setZone(tran.getStation().getZone());
+        dto.setStationName(tran.getStation().getName());
+        if (tran.getVehicle().getAccount() != null) {
+            dto.setUsername(tran.getVehicle().getAccount().getUsername());
         }
-        if (tran.getPrice() != null) {
-            dto.setPrice(tran.getPrice().getPrice());
-        }
-        
-        dto.setStatus(tran.getStatus()); 
-        
-        if (tran.getAccount() != null) {
-            dto.setUsername(tran.getAccount().getUsername());
-            if (tran.getAccount().getVehicle() != null) {
-                dto.setLicensePlate(tran.getAccount().getVehicle().getLicensePlate());
-                dto.setVehicleType(tran.getAccount().getVehicle().getVehicletype().getName());                
-            }                        
-        }
-        
-        dto.setType(tran.getType() == 1? "tự động" : "thủ công");
-                
+        dto.setLicensePlate(tran.getVehicle().getLicensePlate());
+        dto.setVehicleType(tran.getVehicle().getVehicleType().getName());
+        dto.setType((tran.getType() == 1) ? "Tự động" : "Thủ công");
+
         return dto;
     }
-    
+
 }

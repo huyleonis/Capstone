@@ -1,8 +1,5 @@
 package com.fpt.capstone.Dtos;
 
-import com.fpt.capstone.Entities.Vehicle;
-import com.fpt.capstone.Entities.Vehicletype;
-
 public class VehicleDTO {
     private String licensePlate;
     private int vehicletype;
@@ -27,7 +24,7 @@ public class VehicleDTO {
 //        VehicleDTO dto = new VehicleDTO();
 //
 //        String licensePlate = vehicle.getLicensePlate();
-//        Vehicletype vehicletype = vehicle.getVehicletype();
+//        VehicleType vehicletype = vehicle.getVehicleType();
 //
 //        return dto;
 //    }

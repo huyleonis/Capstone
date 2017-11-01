@@ -5,114 +5,126 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-@Table(name = "transaction")
+@Entity(name = "transaction")
 public class Transaction {
 
     @Id
+    @Column(name = "id")
     private String id;
 
+    @ManyToOne
+    @JoinColumn(name = "vehicle_id")
+    private Vehicle vehicle;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="date_time")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @ManyToOne
+    @JoinColumn(name = "station_id")
+    private Station station;
+
+    @Column(name = "date_time")
     private Date dateTime;
 
-    private String photo;
-
+    @Column(name = "status")
     private String status;
 
-    private byte type;
-
-    //bi-directional many-to-one association to Account
     @ManyToOne
-    @JoinColumn(name = "username_id")
-    private Account account;
-
-    //bi-directional many-to-one association to Lane
-    @ManyToOne
-    private Lane lane;
-
-    //bi-directional many-to-one association to Price
-    @ManyToOne
+    @JoinColumn(name = "price_id")
     private Price price;
 
-    //bi-directional many-to-one association to Station
     @ManyToOne
-    private Station station;
+    @JoinColumn(name = "lane_id")
+    private Lane lane;
+
+    @Column(name = "type")
+    private int type;
+
+    @Column(name = "photo")
+    private String photo;
 
     public Transaction() {
     }
 
+    public Transaction(String id, Vehicle vehicle, Station station, Date dateTime,
+                       String status, Price price, Lane lane, int type, String photo) {
+        this.id = id;
+        this.vehicle = vehicle;
+        this.station = station;
+        this.dateTime = dateTime;
+        this.status = status;
+        this.price = price;
+        this.lane = lane;
+        this.type = type;
+        this.photo = photo;
+    }
+
     public String getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(String id) {
         this.id = id;
     }
 
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public Station getStation() {
+        return station;
+    }
+
+    public void setStation(Station station) {
+        this.station = station;
+    }
+
     public Date getDateTime() {
-        return this.dateTime;
+        return dateTime;
     }
 
     public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
     }
 
-    public String getPhoto() {
-        return this.photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
     public String getStatus() {
-        return this.status;
+        return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
     }
 
-    public byte getType() {
-        return this.type;
-    }
-
-    public void setType(byte type) {
-        this.type = type;
-    }
-
-    public Account getAccount() {
-        return this.account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
-    public Lane getLane() {
-        return this.lane;
-    }
-
-    public void setLane(Lane lane) {
-        this.lane = lane;
-    }
-
     public Price getPrice() {
-        return this.price;
+        return price;
     }
 
     public void setPrice(Price price) {
         this.price = price;
     }
 
-    public Station getStation() {
-        return this.station;
+    public Lane getLane() {
+        return lane;
     }
 
-    public void setStation(Station station) {
-        this.station = station;
+    public void setLane(Lane lane) {
+        this.lane = lane;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

@@ -88,7 +88,7 @@ public class DBAdapter {
         return database.delete(TransactionDetail.TABLE_NAME, TransactionDetail.TRANSACTION_ID + "= ? ", whereArgs) > 0;
     }
 
-    // xóa các records sau 30 ngày
+    // xóa các records sửa đổi lần cuối quá 30 ngày
     public boolean deleteInfoAfter30Days() {
         String[] whereArgs = new String[]{"date('now','-29 day')"};
         return database.delete(TransactionDetail.TABLE_NAME, TransactionDetail.LAST_MODIFIED + "<= ? ", whereArgs) > 0;

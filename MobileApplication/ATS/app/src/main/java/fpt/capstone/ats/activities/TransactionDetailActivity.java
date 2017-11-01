@@ -238,7 +238,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
         List<String> params = new ArrayList<>();
         params.add(transactionId);
-
         rs.execute(params, "transaction", "updateProcessingTransaction", "GET");
     }
 

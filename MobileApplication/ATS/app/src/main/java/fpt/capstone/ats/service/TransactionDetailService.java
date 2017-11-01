@@ -1,8 +1,11 @@
 package fpt.capstone.ats.service;
 
-import android.app.IntentService;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.IBinder;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -14,31 +17,47 @@ import java.util.Date;
 import java.util.List;
 
 import fpt.capstone.ats.sqlite.DBAdapter;
+import fpt.capstone.ats.utils.Commons;
 import fpt.capstone.ats.utils.RequestServer;
 
 /**
  * Created by dovie on 10/20/2017.
  */
 
-public class TransactionDetailService extends IntentService {
+public class TransactionDetailService extends Service {
 
     private DBAdapter database;
     private RequestServer rs;
-    private String accountId = "6";
 
-    public TransactionDetailService() {
-        super("TransactionDetailService");
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        Log.d("\nTRANSACTION DETAIL", "SYNCHRONIZING...");
+
+        saveRecentDetail(Commons.getVehicleId(this));
+        deleteRecord30DaysOld();
+        stopSelf();
+
+        return START_NOT_STICKY;
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-        Log.d("TRANSACTION DETAIL", "SYNCHRONIZING...");
-        saveAllDetail();
-        deleteRecord30DaysOld();
-
+    public void onDestroy() {
+        // restart this service again in 24 hours
+        AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarm.set(
+                alarm.RTC_WAKEUP,
+                System.currentTimeMillis() + (1000 * 60 * 60 *24),
+                PendingIntent.getService(this, 0, new Intent(this, TransactionDetailService.class), 0)
+        );
     }
 
-    public void saveAllDetail() {
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    public void saveRecentDetail(String vehicleId) {
         Log.d("Request TransDetail", "Send Request TransDetail");
         rs = new RequestServer();
         rs.delegate = new RequestServer.RequestResult() {
@@ -85,8 +104,8 @@ public class TransactionDetailService extends IntentService {
             }
         };
         List<String> params = new ArrayList<>();
-        params.add(accountId);
-        rs.execute(params, "transaction", "getDetailByAccount", "GET");
+        params.add(vehicleId);
+        rs.execute(params, "transaction", "getDetailByVehicleIdIn24Hours", "GET");
     }
 
     public boolean deleteRecord30DaysOld() {
