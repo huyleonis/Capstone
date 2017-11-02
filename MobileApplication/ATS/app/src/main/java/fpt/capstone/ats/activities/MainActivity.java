@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("\nTRANSACTION DETAIL", "INTERNET CONNECTING...");
         }
     }
-    
+
     @Override
     protected void onResume() {
         super.onResume();

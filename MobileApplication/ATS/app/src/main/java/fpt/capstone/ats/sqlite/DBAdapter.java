@@ -49,8 +49,8 @@ public class DBAdapter {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion +
                     ", which will destroy all old data");
-            db.execSQL("DROP TABLE IF EXISTS " + TransactionDetail.TABLE_NAME);
-            onCreate(db);
+//            db.execSQL("DROP TABLE IF EXISTS " + TransactionDetail.TABLE_NAME);
+//            onCreate(db);
         }
     } // end of DatabaseHelper
 

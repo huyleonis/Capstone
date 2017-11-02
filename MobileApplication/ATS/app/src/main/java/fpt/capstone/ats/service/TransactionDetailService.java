@@ -35,7 +35,10 @@ public class TransactionDetailService extends Service {
         Log.d("\nTRANSACTION DETAIL", "SYNCHRONIZING...");
 
         saveRecentDetail(Commons.getVehicleId(this));
-        deleteRecord30DaysOld();
+//        boolean isSuccessful = deleteRecord30DaysOld();
+//        if (isSuccessful) {
+//            Log.d("\nDELETE OLD RECORDS", "SUCCESS");
+//        }
         stopSelf();
 
         return START_NOT_STICKY;
@@ -47,7 +50,8 @@ public class TransactionDetailService extends Service {
         AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarm.set(
                 alarm.RTC_WAKEUP,
-                System.currentTimeMillis() + (1000 * 60 * 60 *24),
+                System.currentTimeMillis() + (1000 * 60),
+//                System.currentTimeMillis() + (1000 * 60 * 60 * 24),
                 PendingIntent.getService(this, 0, new Intent(this, TransactionDetailService.class), 0)
         );
     }
@@ -76,7 +80,7 @@ public class TransactionDetailService extends Service {
                         String transactionId = jsonObject.getString("id");
 
                         Cursor resultSet = database.getInfo(transactionId);
-                        if (resultSet.moveToFirst()) {
+                        if (resultSet.getCount() > 0) {
                             Log.d("DATABASE INSERT", "RECORD DUPLICATED");
                         } else {
                             String stationName = jsonObject.getString("stationName");
@@ -99,6 +103,7 @@ public class TransactionDetailService extends Service {
                     }
                     database.close();
                 } catch (Exception e) {
+                    Log.e("Transaction Detail", "SAVE RECENT DETAIL ERROR");
                     Log.e("Transaction Detail", e.getMessage());
                 }
             }
@@ -119,6 +124,7 @@ public class TransactionDetailService extends Service {
             database.close();
         } catch (Exception e) {
             Log.e("TRANS DETAIL ERROR", "DELETE RECORDS 30 DAYS ERROR");
+            Log.e("TRANS DETAIL ERROR", e.getMessage());
         }
 
         return isSuccessful;

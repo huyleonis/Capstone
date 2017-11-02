@@ -165,7 +165,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<TransactionDetailDTO> getDetailByVehicleIdIn24Hours(int vehicleId) {
 
-        List<Transaction> transactions = transactionRepos.findByVehicleId(vehicleId);
+        List<Transaction> transactions = transactionRepos.findByVehicleIdIn24Hours(vehicleId);
 
         List<TransactionDetailDTO> dtos = new ArrayList<>();
 

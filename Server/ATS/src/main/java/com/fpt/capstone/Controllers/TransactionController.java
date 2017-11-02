@@ -173,7 +173,7 @@ public class TransactionController {
     }
 
     /**
-     * Lấy transaction detail theo vehicle id
+     * Lấy transaction detail theo vehicle id trong vòng 24h
      * @param vehicleId
      * @return
      */
