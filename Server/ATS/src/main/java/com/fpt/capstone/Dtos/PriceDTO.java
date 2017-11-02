@@ -107,15 +107,15 @@ public class PriceDTO {
                 dto.setPrice(price.getPrice());
             }
             
-            if (price.getStation() != null) {
-                dto.setStationId(price.getStation().getId());
-                dto.setNameStation(price.getStation().getName());
-                dto.setZoneStation(price.getStation().getZone());
+            if (price.getStationId()!= null) {
+                dto.setStationId(price.getStationId().getId());
+                dto.setNameStation(price.getStationId().getName());
+                dto.setZoneStation(price.getStationId().getZone());
             }
             
          
-            if (price.getVehicletype() != null) {
-                dto.setTypeVehicle(price.getVehicletype().getName());
+            if (price.getTypeId() != null) {
+                dto.setTypeVehicle(price.getTypeId().getName());
             }            
         }
         return dto;

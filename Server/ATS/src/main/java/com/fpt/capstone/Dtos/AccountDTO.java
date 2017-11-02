@@ -13,12 +13,30 @@ public class AccountDTO {
     private String phone;
     private String licenseId;   
     private String vehicleType;
-    private double balance;
+    private Double balance;
+    private boolean isActive;
+    private boolean isEnable;
 
     public AccountDTO() {
     }
 
-    public AccountDTO(int id, String username, int role, String numberId, String licensePlate, double balance) {
+    public AccountDTO(int id, String username, String fullname, int role, String numberId, String licensePlate, String email, String phone, String licenseId, String vehicleType, Double balance, boolean isActive, boolean isEnable) {
+        this.id = id;
+        this.username = username;
+        this.fullname = fullname;
+        this.role = role;
+        this.numberId = numberId;
+        this.licensePlate = licensePlate;
+        this.email = email;
+        this.phone = phone;
+        this.licenseId = licenseId;
+        this.vehicleType = vehicleType;
+        this.balance = balance;
+        this.isActive = isActive;
+        this.isEnable = isEnable;
+    }
+
+    public AccountDTO(int id, String username, int role, String numberId, String licensePlate, Double balance) {
         this.id = id;
         this.username = username;
         this.role = role;
@@ -27,6 +45,24 @@ public class AccountDTO {
         this.balance = balance;
     }
 
+    public boolean isIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public boolean isIsEnable() {
+        return isEnable;
+    }
+
+    public void setIsEnable(boolean isEnable) {
+        this.isEnable = isEnable;
+    }
+
+    
+    
     public String getUsername() {
         return username;
     }
@@ -59,11 +95,11 @@ public class AccountDTO {
         this.licensePlate = licensePlate;
     }
 
-    public double getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 
@@ -123,8 +159,8 @@ public class AccountDTO {
         
         dto.setId(account.getId());
         dto.setUsername(account.getUsername());
-        if (account.getVehicle() != null) {
-            dto.setLicensePlate(account.getVehicle().getLicensePlate());
+        if (account.getVehicleId() != null) {
+            dto.setLicensePlate(account.getVehicleId().getLicensePlate());
         }
         
         dto.setNumberId(account.getNumberId());
@@ -132,12 +168,24 @@ public class AccountDTO {
         dto.setRole(account.getRole());
         dto.setPhone(account.getPhone());
         dto.setEmail(account.getEmail());
+        if(account.getBalance() != null){
+            account.setBalance(account.getBalance());
+        }else{
+            account.setBalance(0.0);
+        }
         dto.setBalance(account.getBalance());
-        dto.setLicenseId("123-456-xxx");        
+        if(account.getVehicleId() != null){
+            dto.setLicenseId(account.getVehicleId().getLicensePlate());
+        }else{
+             dto.setLicenseId(null);   
+        }
+            
         dto.setFullname(account.getFullname());
-        if (account.getVehicle() != null) {
-            dto.setVehicleType(account.getVehicle().getVehicletype().getName());
-        }        
+        if (account.getVehicleId()!= null) {
+            dto.setVehicleType(account.getVehicleId().getTypeId().getName());
+        }
+        dto.setIsActive(account.getIsActive());
+        dto.setIsEnable(account.getIsEnable());
         return dto;
     }
 }

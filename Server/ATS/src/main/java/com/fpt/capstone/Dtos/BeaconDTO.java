@@ -85,12 +85,12 @@ public class BeaconDTO {
         dto.setUuid(beacon.getUuid());
         dto.setMajor(beacon.getMajor());
         dto.setMinor(beacon.getMinor());
-        dto.setType(beacon.getType() == 0? BEACON_PAYMENT : BEACON_RESULT );
-        if (beacon.getLane() != null) {
-            dto.setLaneId(beacon.getLane().getId());
+        dto.setType(beacon.getType() == false? BEACON_PAYMENT : BEACON_RESULT );
+        if (beacon.getLaneId()!= null) {
+            dto.setLaneId(beacon.getLaneId().getId());
         }
-        if (beacon.getStation() != null) {
-            dto.setStationId(beacon.getStation().getId());
+        if (beacon.getStationId()!= null) {
+            dto.setStationId(beacon.getStationId().getId());
         }     
         return dto;
     }

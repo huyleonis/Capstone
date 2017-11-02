@@ -16,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -173,7 +174,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         //List<Transaction> transactions = transactionRepos.findByUsernameId(username);
         Account account = accountRepos.getAccount(username);
-        List<Transaction> transactions = account.getTransactions();
+        Collection<Transaction> transactions = account.getVehicleId().getTransactionCollection();
 
         List<TransactionDetailDTO> dtos = new ArrayList<>();
 

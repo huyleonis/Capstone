@@ -11,6 +11,8 @@ import com.fpt.capstone.Entities.Account;
 import com.fpt.capstone.Entities.Price;
 import com.fpt.capstone.Repositories.AccountRepos;
 import com.fpt.capstone.Repositories.PriceRepos;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -82,6 +84,17 @@ public class AccountServiceImpl implements AccountService{
             return AccountDTO.convertFromEntity(account);
         }
         return null;
+    }
+    
+    @Override
+    public List<AccountDTO> getListAccount(){
+        List<Account> list = accountRepos.getListAccount();
+        List<AccountDTO> result = new ArrayList<>();
+        for(Account acc : list){
+            AccountDTO dto = AccountDTO.convertFromEntity(acc);
+            result.add(dto);
+        }
+        return result;
     }
 
 }

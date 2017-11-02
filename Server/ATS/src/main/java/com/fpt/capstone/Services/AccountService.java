@@ -6,6 +6,7 @@
 package com.fpt.capstone.Services;
 
 import com.fpt.capstone.Dtos.AccountDTO;
+import java.util.List;
 
 /**
  *
@@ -20,5 +21,7 @@ public interface AccountService {
     AccountDTO getAccountById(int id);
     
     AccountDTO checkLoginFromDesktopApp(String username, String password);
+    
+    public List<AccountDTO> getListAccount();
 
 }

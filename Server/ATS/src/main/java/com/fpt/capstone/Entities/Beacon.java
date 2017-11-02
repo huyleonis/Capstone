@@ -1,46 +1,105 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.fpt.capstone.Entities;
 
+import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author Chi Hieu
+ */
 @Entity
 @Table(name = "beacon")
-public class Beacon {
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Beacon.findAll", query = "SELECT b FROM Beacon b")
+    , @NamedQuery(name = "Beacon.findById", query = "SELECT b FROM Beacon b WHERE b.id = :id")
+    , @NamedQuery(name = "Beacon.findByUuid", query = "SELECT b FROM Beacon b WHERE b.uuid = :uuid")
+    , @NamedQuery(name = "Beacon.findByMajor", query = "SELECT b FROM Beacon b WHERE b.major = :major")
+    , @NamedQuery(name = "Beacon.findByMinor", query = "SELECT b FROM Beacon b WHERE b.minor = :minor")
+    , @NamedQuery(name = "Beacon.findByType", query = "SELECT b FROM Beacon b WHERE b.type = :type")})
+public class Beacon implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
-    private int id;
-
-    private int major;
-
-    private int minor;
-
-    private int type;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "uuid")
     private String uuid;
-
-    //bi-directional many-to-one association to Lane
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "major")
+    private int major;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "minor")
+    private int minor;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "type")
+    private boolean type;
+    @JoinColumn(name = "lane_id", referencedColumnName = "id")
     @ManyToOne
-    private Lane lane;
-
-    //bi-directional many-to-one association to Station
-    @ManyToOne
-    private Station station;
+    private Lane laneId;
+    @JoinColumn(name = "station_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Station stationId;
 
     public Beacon() {
     }
 
-    public int getId() {
-        return this.id;
-    }
-
-    public void setId(int id) {
+    public Beacon(Integer id) {
         this.id = id;
     }
 
+    public Beacon(Integer id, String uuid, int major, int minor, boolean type) {
+        this.id = id;
+        this.uuid = uuid;
+        this.major = major;
+        this.minor = minor;
+        this.type = type;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
     public int getMajor() {
-        return this.major;
+        return major;
     }
 
     public void setMajor(int major) {
@@ -48,42 +107,60 @@ public class Beacon {
     }
 
     public int getMinor() {
-        return this.minor;
+        return minor;
     }
 
     public void setMinor(int minor) {
         this.minor = minor;
     }
 
-    public int getType() {
-        return this.type;
+    public boolean getType() {
+        return type;
     }
 
-    public void setType(int type) {
+    public void setType(boolean type) {
         this.type = type;
     }
 
-    public String getUuid() {
-        return this.uuid;
+    public Lane getLaneId() {
+        return laneId;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setLaneId(Lane laneId) {
+        this.laneId = laneId;
     }
 
-    public Lane getLane() {
-        return this.lane;
+    public Station getStationId() {
+        return stationId;
     }
 
-    public void setLane(Lane lane) {
-        this.lane = lane;
+    public void setStationId(Station stationId) {
+        this.stationId = stationId;
     }
 
-    public Station getStation() {
-        return this.station;
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
     }
 
-    public void setStation(Station station) {
-        this.station = station;
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Beacon)) {
+            return false;
+        }
+        Beacon other = (Beacon) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
+
+    @Override
+    public String toString() {
+        return "com.fpt.capstone.Entities.Beacon[ id=" + id + " ]";
+    }
+    
 }
