@@ -3,189 +3,145 @@ package com.fpt.capstone.Dtos;
 import com.fpt.capstone.Entities.Account;
 
 public class AccountDTO {
-    private int id;
-    private String username;
-    private String fullname;
-    private int role;
-    private String numberId;
-    private String licensePlate;
-    private String email;
-    private String phone;
-    private String licenseId;   
-    private String vehicleType;
-    private Double balance;
-    private boolean isActive;
-    private boolean isEnable;
+	private int id;
+	private String username;
+	private String password;
+	private int role;
+	private String fullname;
+	private String email;
+	private String phone;
+	private String numberId;
+	private String eWallet;
+	private int vehicleId;
+	private double balance;
+	private boolean isActive;
+	private boolean isEnable;
 
-    public AccountDTO() {
-    }
+	public int getId() {
+		return id;
+	}
 
-    public AccountDTO(int id, String username, String fullname, int role, String numberId, String licensePlate, String email, String phone, String licenseId, String vehicleType, Double balance, boolean isActive, boolean isEnable) {
-        this.id = id;
-        this.username = username;
-        this.fullname = fullname;
-        this.role = role;
-        this.numberId = numberId;
-        this.licensePlate = licensePlate;
-        this.email = email;
-        this.phone = phone;
-        this.licenseId = licenseId;
-        this.vehicleType = vehicleType;
-        this.balance = balance;
-        this.isActive = isActive;
-        this.isEnable = isEnable;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public AccountDTO(int id, String username, int role, String numberId, String licensePlate, Double balance) {
-        this.id = id;
-        this.username = username;
-        this.role = role;
-        this.numberId = numberId;
-        this.licensePlate = licensePlate;
-        this.balance = balance;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public boolean isIsActive() {
-        return isActive;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public boolean isIsEnable() {
-        return isEnable;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public void setIsEnable(boolean isEnable) {
-        this.isEnable = isEnable;
-    }
+	public int getRole() {
+		return role;
+	}
 
-    
-    
-    public String getUsername() {
-        return username;
-    }
+	public void setRole(int role) {
+		this.role = role;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public String getFullname() {
+		return fullname;
+	}
 
-    public int getRole() {
-        return role;
-    }
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
+	}
 
-    public void setRole(int role) {
-        this.role = role;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getNumberId() {
-        return numberId;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public void setNumberId(String numberId) {
-        this.numberId = numberId;
-    }
+	public String getPhone() {
+		return phone;
+	}
 
-    public String getLicensePlate() {
-        return licensePlate;
-    }
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
-    public void setLicensePlate(String licensePlate) {
-        this.licensePlate = licensePlate;
-    }
+	public String getNumberId() {
+		return numberId;
+	}
 
-    public Double getBalance() {
-        return balance;
-    }
+	public void setNumberId(String numberId) {
+		this.numberId = numberId;
+	}
 
-    public void setBalance(Double balance) {
-        this.balance = balance;
-    }
+	public String geteWallet() {
+		return eWallet;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public void seteWallet(String eWallet) {
+		this.eWallet = eWallet;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }    
+	public int getVehicleId() {
+		return vehicleId;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public void setVehicleId(int vehicleId) {
+		this.vehicleId = vehicleId;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public double getBalance() {
+		return balance;
+	}
 
-    public String getPhone() {
-        return phone;
-    }
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+	public boolean isActive() {
+		return isActive;
+	}
 
-    public String getLicenseId() {
-        return licenseId;
-    }
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
 
-    public void setLicenseId(String licenseId) {
-        this.licenseId = licenseId;
-    }
+	public boolean isEnable() {
+		return isEnable;
+	}
 
-    public String getFullname() {
-        return fullname;
-    }
+	public void setEnable(boolean isEnable) {
+		this.isEnable = isEnable;
+	}
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }    
+	public static AccountDTO convertFromEntity(Account account) {
+		AccountDTO dto = new AccountDTO();
 
-    public String getVehicleType() {
-        return vehicleType;
-    }
+		dto.setId(account.getId());
+		dto.setUsername(account.getUsername());
+		dto.setPassword(account.getPassword());
+		dto.setRole(account.getRole());
+		dto.setFullname(account.getFullname());
+		dto.setEmail(account.getEmail());
+		dto.setPhone(account.getPhone());
+		dto.setNumberId(account.getNumberId());
+		dto.seteWallet(account.geteWallet());
+		if (account.getVehicle() != null) {
+			dto.setVehicleId(account.getVehicle().getId());
+		}
+		if (account.getBalance() != null) {
+			dto.setBalance(account.getBalance());
+		}
+		dto.setActive((account.getActive() == 1) ? true : false);
+		dto.setEnable((account.getEnable() == 1) ? true : false);
 
-    public void setVehicleType(String vehicleType) {
-        this.vehicleType = vehicleType;
-    }
-
-
-
-    
-    public static AccountDTO convertFromEntity(Account account){
-        AccountDTO dto = new AccountDTO();
-        
-        dto.setId(account.getId());
-        dto.setUsername(account.getUsername());
-        if (account.getVehicleId() != null) {
-            dto.setLicensePlate(account.getVehicleId().getLicensePlate());
-        }
-        
-        dto.setNumberId(account.getNumberId());
-        dto.setBalance(account.getBalance());
-        dto.setRole(account.getRole());
-        dto.setPhone(account.getPhone());
-        dto.setEmail(account.getEmail());
-        if(account.getBalance() != null){
-            account.setBalance(account.getBalance());
-        }else{
-            account.setBalance(0.0);
-        }
-        dto.setBalance(account.getBalance());
-        if(account.getVehicleId() != null){
-            dto.setLicenseId(account.getVehicleId().getLicensePlate());
-        }else{
-             dto.setLicenseId(null);   
-        }
-            
-        dto.setFullname(account.getFullname());
-        if (account.getVehicleId()!= null) {
-            dto.setVehicleType(account.getVehicleId().getTypeId().getName());
-        }
-        dto.setIsActive(account.getIsActive());
-        dto.setIsEnable(account.getIsEnable());
-        return dto;
-    }
+		return dto;
+	}
 }

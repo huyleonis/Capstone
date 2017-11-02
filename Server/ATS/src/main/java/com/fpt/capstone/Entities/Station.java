@@ -5,188 +5,116 @@
  */
 package com.fpt.capstone.Entities;
 
-import java.io.Serializable;
-import java.util.Collection;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author Chi Hieu
- */
-@Entity
-@Table(name = "station")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Station.findAll", query = "SELECT s FROM Station s")
-    , @NamedQuery(name = "Station.findById", query = "SELECT s FROM Station s WHERE s.id = :id")
-    , @NamedQuery(name = "Station.findByName", query = "SELECT s FROM Station s WHERE s.name = :name")
-    , @NamedQuery(name = "Station.findByLocation", query = "SELECT s FROM Station s WHERE s.location = :location")
-    , @NamedQuery(name = "Station.findByZone", query = "SELECT s FROM Station s WHERE s.zone = :zone")
-    , @NamedQuery(name = "Station.findByIsActive", query = "SELECT s FROM Station s WHERE s.isActive = :isActive")})
-public class Station implements Serializable {
+@Entity(name = "station")
+public class Station {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
-    private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "name")
-    private String name;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "location")
-    private String location;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "zone")
-    private String zone;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "isActive")
-    private boolean isActive;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "stationId")
-    private Collection<Beacon> beaconCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "stationId")
-    private Collection<Price> priceCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "stationId")
-    private Collection<Lane> laneCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "stationId")
-    private Collection<Transaction> transactionCollection;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int id;
 
-    public Station() {
-    }
+	@Column(name = "name")
+	private String name;
 
-    public Station(Integer id) {
-        this.id = id;
-    }
+	@Column(name = "location")
+	private String location;
 
-    public Station(Integer id, String name, String location, String zone, boolean isActive) {
-        this.id = id;
-        this.name = name;
-        this.location = location;
-        this.zone = zone;
-        this.isActive = isActive;
-    }
+	@Column(name = "zone")
+	private String zone;
 
-    public Integer getId() {
-        return id;
-    }
+	@Column(name = "is_active")
+	private int active;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	@OneToMany(mappedBy = "station")
+	private List<Beacon> beacons;
 
-    public String getName() {
-        return name;
-    }
+	@OneToMany(mappedBy = "station")
+	private List<Lane> lanes;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	@OneToMany(mappedBy = "station")
+	private List<Price> prices;
 
-    public String getLocation() {
-        return location;
-    }
+	@OneToMany(mappedBy = "station")
+	private List<Transaction> transactions;
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public String getZone() {
-        return zone;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setZone(String zone) {
-        this.zone = zone;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public boolean getIsActive() {
-        return isActive;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
-    }
+	public String getLocation() {
+		return location;
+	}
 
-    @XmlTransient
-    public Collection<Beacon> getBeaconCollection() {
-        return beaconCollection;
-    }
+	public void setLocation(String location) {
+		this.location = location;
+	}
 
-    public void setBeaconCollection(Collection<Beacon> beaconCollection) {
-        this.beaconCollection = beaconCollection;
-    }
+	public String getZone() {
+		return zone;
+	}
 
-    @XmlTransient
-    public Collection<Price> getPriceCollection() {
-        return priceCollection;
-    }
+	public void setZone(String zone) {
+		this.zone = zone;
+	}
 
-    public void setPriceCollection(Collection<Price> priceCollection) {
-        this.priceCollection = priceCollection;
-    }
+	public int getActive() {
+		return active;
+	}
 
-    @XmlTransient
-    public Collection<Lane> getLaneCollection() {
-        return laneCollection;
-    }
+	public void setActive(int active) {
+		this.active = active;
+	}
 
-    public void setLaneCollection(Collection<Lane> laneCollection) {
-        this.laneCollection = laneCollection;
-    }
+	public List<Beacon> getBeacons() {
+		return beacons;
+	}
 
-    @XmlTransient
-    public Collection<Transaction> getTransactionCollection() {
-        return transactionCollection;
-    }
+	public void setBeacons(List<Beacon> beacons) {
+		this.beacons = beacons;
+	}
 
-    public void setTransactionCollection(Collection<Transaction> transactionCollection) {
-        this.transactionCollection = transactionCollection;
-    }
+	public List<Lane> getLanes() {
+		return lanes;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
+	public void setLanes(List<Lane> lanes) {
+		this.lanes = lanes;
+	}
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Station)) {
-            return false;
-        }
-        Station other = (Station) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
+	public List<Price> getPrices() {
+		return prices;
+	}
 
-    @Override
-    public String toString() {
-        return "com.fpt.capstone.Entities.Station[ id=" + id + " ]";
-    }
-    
+	public void setPrices(List<Price> prices) {
+		this.prices = prices;
+	}
+
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public void setTransactions(List<Transaction> transactions) {
+		this.transactions = transactions;
+	}
+
 }

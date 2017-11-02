@@ -12,87 +12,89 @@ import com.fpt.capstone.Entities.Beacon;
  * @author hp
  */
 public class BeaconDTO {
-    private static final String BEACON_PAYMENT = "BEACON_PAYMENT";
-    private static final String BEACON_RESULT = "BEACON_RESULT";
-    private int id;
-    private String uuid;
-    private int major;
-    private int minor;
-    private String type;
-    private int laneId;
-    private int stationId;
 
-    public int getId() {
-        return id;
-    }
+	private static final String BEACON_PAYMENT = "BEACON_PAYMENT";
+	private static final String BEACON_RESULT = "BEACON_RESULT";
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	private int id;
+	private String uuid;
+	private int major;
+	private int minor;
+	private String type;
+	private int laneId;
+	private int stationId;
 
-    public String getUuid() {
-        return uuid;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public int getMajor() {
-        return major;
-    }
+	public String getUuid() {
+		return uuid;
+	}
 
-    public void setMajor(int major) {
-        this.major = major;
-    }
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
 
-    public int getMinor() {
-        return minor;
-    }
+	public int getMajor() {
+		return major;
+	}
 
-    public void setMinor(int minor) {
-        this.minor = minor;
-    }
+	public void setMajor(int major) {
+		this.major = major;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public int getMinor() {
+		return minor;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public void setMinor(int minor) {
+		this.minor = minor;
+	}
 
-    public int getLaneId() {
-        return laneId;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public void setLaneId(int laneId) {
-        this.laneId = laneId;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public int getStationId() {
-        return stationId;
-    }
+	public int getLaneId() {
+		return laneId;
+	}
 
-    public void setStationId(int stationId) {
-        this.stationId = stationId;
-    }
-    
-    public static BeaconDTO convertFromEntity(Beacon beacon) {
-        BeaconDTO dto = new BeaconDTO();
-        
-        dto.setId(beacon.getId());
-        dto.setUuid(beacon.getUuid());
-        dto.setMajor(beacon.getMajor());
-        dto.setMinor(beacon.getMinor());
-        dto.setType(beacon.getType() == false? BEACON_PAYMENT : BEACON_RESULT );
-        if (beacon.getLaneId()!= null) {
-            dto.setLaneId(beacon.getLaneId().getId());
-        }
-        if (beacon.getStationId()!= null) {
-            dto.setStationId(beacon.getStationId().getId());
-        }     
-        return dto;
-    }
-    
+	public void setLaneId(int laneId) {
+		this.laneId = laneId;
+	}
+
+	public int getStationId() {
+		return stationId;
+	}
+
+	public void setStationId(int stationId) {
+		this.stationId = stationId;
+	}
+
+	public static BeaconDTO convertFromEntity(Beacon beacon) {
+		BeaconDTO dto = new BeaconDTO();
+
+		dto.setId(beacon.getId());
+		dto.setUuid(beacon.getUuid());
+		dto.setMajor(beacon.getMajor());
+		dto.setMinor(beacon.getMinor());
+		dto.setType(beacon.getType() == 0 ? BEACON_PAYMENT : BEACON_RESULT);
+		if (beacon.getLane() != null) {
+			dto.setLaneId(beacon.getLane().getId());
+		}
+		if (beacon.getStation() != null) {
+			dto.setStationId(beacon.getStation().getId());
+		}
+		return dto;
+	}
+
 }
