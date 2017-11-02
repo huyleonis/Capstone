@@ -64,9 +64,9 @@
         });
     </script>-->
 
-<script src="js/tables.js"></script>
-<script src="datatables/js/jquery.dataTables.min.js"></script>
-<script src="datatables/dataTables.bootstrap.js"></script>
-<link href="datatables/dataTables.bootstrap.css" rel="stylesheet"
+<script src="../js/tables.js"></script>
+<script src="../datatables/js/jquery.dataTables.min.js"></script>
+<script src="../datatables/dataTables.bootstrap.js"></script>
+<link href="../datatables/dataTables.bootstrap.css" rel="stylesheet"
       media="screen">
 </head>

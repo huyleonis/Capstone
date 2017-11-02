@@ -113,9 +113,6 @@ $(document)
                                                 "visible": false
                                             },
                                             {
-                                                "data": "number_id"
-                                            },
-                                            {
                                                 "data": "role"
                                             },
                                             {// column for view

@@ -174,7 +174,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         //List<Transaction> transactions = transactionRepos.findByUsernameId(username);
         Account account = accountRepos.getAccount(username);
-        Collection<Transaction> transactions = account.getVehicleId().getTransactionCollection();
+        List<Transaction> transactions = account.getVehicle().getTransactions();
 
         List<TransactionDetailDTO> dtos = new ArrayList<>();
 

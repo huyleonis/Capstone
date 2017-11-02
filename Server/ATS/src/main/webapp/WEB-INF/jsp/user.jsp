@@ -129,7 +129,7 @@
                                     <th class="text-center">Username</th>
                                     <th class="text-center">Full Name</th>
                                     <th class="text-center">Phone</th>
-                                    <th class="text-center">Number ID</th>
+                                    <th class="text-center">isAcctive</th>
                                     <th class="text-center">Role</th>
                                     <th class="text-center">Update/Delete</th>
                                         <%--<th class="pull-left">Delete/Update</th>--%>
@@ -149,5 +149,5 @@
 
     </body>
     <script
-    src="js/account.js"></script>
+    src="../js/account.js"></script>
 </html>
