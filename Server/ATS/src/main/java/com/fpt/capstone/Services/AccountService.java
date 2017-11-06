@@ -6,6 +6,8 @@
 package com.fpt.capstone.Services;
 
 import com.fpt.capstone.Dtos.AccountDTO;
+import com.fpt.capstone.Entities.Account;
+
 import java.util.List;
 
 /**
@@ -14,14 +16,18 @@ import java.util.List;
  */
 public interface AccountService {
 
-    public String makePayment(String username, int priceId);        
- 
-    public AccountDTO getAccount(String username);        
+	String makePayment(String username, int priceId);
 
-    AccountDTO getAccountById(int id);
-    
-    AccountDTO checkLoginFromDesktopApp(String username, String password);
-    
-    public List<AccountDTO> getListAccount();
+	AccountDTO getAccountByUsername(String username);
+
+	AccountDTO getAccountById(int id);
+
+	AccountDTO checkLoginFromDesktopApp(String username, String password);
+
+	List<AccountDTO> getListAccount();
+
+	AccountDTO insert(Account account);
+
+	AccountDTO update(Account account);
 
 }

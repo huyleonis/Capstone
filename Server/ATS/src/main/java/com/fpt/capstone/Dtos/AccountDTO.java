@@ -3,6 +3,11 @@ package com.fpt.capstone.Dtos;
 import com.fpt.capstone.Entities.Account;
 
 public class AccountDTO {
+
+	private static final String ROLE_ADMIN = "Admin";
+	private static final String ROLE_STAFF = "Staff";
+	private static final String ROLE_DRIVER = "Driver";
+
 	private int id;
 	private String username;
 	private String password;
@@ -14,8 +19,34 @@ public class AccountDTO {
 	private String eWallet;
 	private int vehicleId;
 	private double balance;
-	private boolean isActive;
-	private boolean isEnable;
+	private int active;
+	private int enable;
+	private String licensePlate;
+	private int vehicletypeId;
+
+	public AccountDTO() {
+	}
+
+	public AccountDTO(int id, String username, String password, int role, String fullname, String email, String phone,
+			String numberId, String eWallet, int vehicleId, double balance, int active, int enable, String licensePlate,
+			int vehicletypeId) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.role = role;
+		this.fullname = fullname;
+		this.email = email;
+		this.phone = phone;
+		this.numberId = numberId;
+		this.eWallet = eWallet;
+		this.vehicleId = vehicleId;
+		this.balance = balance;
+		this.active = active;
+		this.enable = enable;
+		this.licensePlate = licensePlate;
+		this.vehicletypeId = vehicletypeId;
+	}
 
 	public int getId() {
 		return id;
@@ -105,20 +136,36 @@ public class AccountDTO {
 		this.balance = balance;
 	}
 
-	public boolean isActive() {
-		return isActive;
+	public int getActive() {
+		return active;
 	}
 
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
+	public void setActive(int active) {
+		this.active = active;
 	}
 
-	public boolean isEnable() {
-		return isEnable;
+	public int getEnable() {
+		return enable;
 	}
 
-	public void setEnable(boolean isEnable) {
-		this.isEnable = isEnable;
+	public void setEnable(int enable) {
+		this.enable = enable;
+	}
+
+	public String getLicensePlate() {
+		return licensePlate;
+	}
+
+	public void setLicensePlate(String licensePlate) {
+		this.licensePlate = licensePlate;
+	}
+
+	public int getVehicletypeId() {
+		return vehicletypeId;
+	}
+
+	public void setVehicletypeId(int vehicletypeId) {
+		this.vehicletypeId = vehicletypeId;
 	}
 
 	public static AccountDTO convertFromEntity(Account account) {
@@ -127,6 +174,23 @@ public class AccountDTO {
 		dto.setId(account.getId());
 		dto.setUsername(account.getUsername());
 		dto.setPassword(account.getPassword());
+		// switch (account.getRole()) {
+		// case 1:
+		//
+		// dto.setRole(ROLE_ADMIN);
+		// break;
+		// case 2:
+		//
+		// dto.setRole(ROLE_STAFF);
+		// break;
+		// case 3:
+		//
+		// dto.setRole(ROLE_DRIVER);
+		// break;
+		//
+		// default:
+		// break;
+		// }
 		dto.setRole(account.getRole());
 		dto.setFullname(account.getFullname());
 		dto.setEmail(account.getEmail());
@@ -135,12 +199,23 @@ public class AccountDTO {
 		dto.seteWallet(account.geteWallet());
 		if (account.getVehicle() != null) {
 			dto.setVehicleId(account.getVehicle().getId());
+			dto.setLicensePlate(account.getVehicle().getLicensePlate());
+			if (account.getVehicle().getVehicletype() != null) {
+				dto.setVehicletypeId(account.getVehicle().getVehicletype().getId());
+			} else {
+				dto.setVehicletypeId(0);
+			}
+		} else {
+			dto.setVehicleId(0);
+			dto.setLicensePlate("");
 		}
 		if (account.getBalance() != null) {
 			dto.setBalance(account.getBalance());
+		} else {
+			dto.setBalance(0);
 		}
-		dto.setActive((account.getActive() == 1) ? true : false);
-		dto.setEnable((account.getEnable() == 1) ? true : false);
+		dto.setActive(account.getActive());
+		dto.setEnable(account.getEnable());
 
 		return dto;
 	}

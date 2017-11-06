@@ -5,6 +5,7 @@
  */
 package com.fpt.capstone.Entities;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -40,6 +41,9 @@ public class Beacon {
 
 	@Column(name = "type")
 	private int type;
+
+	@Column(name = "is_active")
+	private int active;
 
 	public int getId() {
 		return id;
@@ -95,6 +99,14 @@ public class Beacon {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+
+	public int getActive() {
+		return active;
+	}
+
+	public void setActive(int active) {
+		this.active = active;
 	}
 
 }

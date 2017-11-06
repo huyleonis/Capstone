@@ -7,6 +7,7 @@ package com.fpt.capstone.Entities;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,7 +30,7 @@ public class Vehicle {
 
 	@ManyToOne
 	@JoinColumn(name = "type_id")
-	private Vehicletype vechicletype;
+	private Vehicletype vehicletype;
 
 	@OneToOne(mappedBy = "vehicle")
 	private Account account;
@@ -53,12 +54,12 @@ public class Vehicle {
 		this.licensePlate = licensePlate;
 	}
 
-	public Vehicletype getVechicletype() {
-		return vechicletype;
+	public Vehicletype getVehicletype() {
+		return vehicletype;
 	}
 
-	public void setVechicletype(Vehicletype vechicletype) {
-		this.vechicletype = vechicletype;
+	public void setVehicletype(Vehicletype vehicletype) {
+		this.vehicletype = vehicletype;
 	}
 
 	public Account getAccount() {

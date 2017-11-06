@@ -18,7 +18,6 @@ public class Account {
 	@Column(name = "username")
 	private String username;
 
-	@Transient
 	@Column(name = "password")
 	private String password;
 
@@ -40,7 +39,7 @@ public class Account {
 	@Column(name = "e_wallet")
 	private String eWallet;
 
-	@OneToOne
+	@OneToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "vehicle_id")
 	private Vehicle vehicle;
 

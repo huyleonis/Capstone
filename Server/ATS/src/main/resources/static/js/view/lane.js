@@ -53,8 +53,8 @@ $(document)
         .ready(
                 function ($) {
                     /*
-                     * define dataTables
-                     */
+					 * define dataTables
+					 */
                     var index = 1;
                     var table = $('#table')
                             .DataTable(
@@ -81,7 +81,7 @@ $(document)
                                         // bottom of the table
                                         "ajax": {
                                             "url":
-                                                    "../account/getListAccount", // get
+                                                    "../lane/get", // get
                                             // the
                                             // list
                                             "dataSrc": "" // returned list
@@ -97,26 +97,17 @@ $(document)
                                             {
                                                 "data": "id",
                                                 "visible": false
-                                                        // hide the column processID
+                                                        // hide the column
+														// processID
                                             },
                                             {
-                                                "data": "username"
+                                                "data": "name"
                                             },
                                             {
-                                                "data": "fullname"
+                                                "data": "stationId"
                                             },
                                             {
-                                                "data": "phone"
-                                            },
-                                            {
-                                                "data": "isActive",
-                                                "visible": false
-                                            },
-                                            {
-                                                "data": "number_id"
-                                            },
-                                            {
-                                                "data": "role"
+                                                "data": "active"
                                             },
                                             {// column for view
                                                 // detail-update-delete
@@ -147,15 +138,18 @@ $(document)
  */
 // perform ajax call to save report
 function submitAddForm() {
-    var skill = {
-        "skillName": $("#add-form-skillName").val(),
-        "approved": $("#add-form-approved").val()
-    };
+	var lane = {
+	        "name": $("#add-form-name").val(),
+	        "station": {
+	        	"id": $("#add-form-stationId").val()
+	        },
+	        "active": $("#add-form-active").val()
+	};
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: contextPath + "/skills/add-skill",
-        data: JSON.stringify(skill),
+        url: "../lane/create",
+        data: JSON.stringify(lane),
         success: function (result) {
             if (result == "fail") {
                 setStatus("Something was wrong! Please check again!", "#ff0000");
@@ -175,16 +169,19 @@ function submitAddForm() {
 
 var curr;
 function submitUpdateForm() {
-    var skill = {
-        "skillId": $("#update-form-skillId").val(),
-        "skillName": $("#update-form-skillName").val(),
-        "approved": $("#update-form-approved").val()
-    };
+	var lane = {
+			"id": $("#update-form-id").val(),
+	        "name": $("#update-form-name").val(),
+	        "station": {
+	        	"id": $("#update-form-stationId").val()
+	        },
+	        "active": $("#update-form-active").val()
+	};
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: contextPath + "/skills/update-skill/" + curr.skillName.replace(/[/]/g, '_'),
-        data: JSON.stringify(skill),
+        url: "../lane/update",
+        data: JSON.stringify(lane),
         success: function (result) {
             if (result == "fail") {
                 setStatus("Update fail!", "#ff0000");
@@ -203,14 +200,31 @@ function submitUpdateForm() {
 }
 // handle delete form submit
 function submitDeleteForm() {
-    var skill = {
-        "skillId": $("#delete-form-skillId").val()
-    };
+	var account = {
+			"id": $("#update-form-id").val(),
+	        "username": $("#update-form-username").val(),
+	        "password": $("#update-form-password").val(),
+	        "role": $("#update-form-role").val(),
+	        "fullname": $("#update-form-fullname").val(),
+	        "email": $("#update-form-email").val(),
+	        "phone": $("#update-form-phone").val(),
+	        "numberId": $("#update-form-numberId").val(),
+	        "vehicle": {
+	        		"id": $("#update-form-vehicleId").val(),
+	        		"licensePlate": $("#update-form-licensePlate").val(),
+	        		"vehicletype": {
+	        			"id": $("#update-form-typeId").val()
+	        		}
+	        },
+	        "balance": $("#update-form-balance").val(),
+	        "isActive": $("#update-form-isActive").val(),
+	        "isEnable": $("#update-form-isEnable").val()
+	    };
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: contextPath + "/skills/delete-skill",
-        data: JSON.stringify(skill),
+        url: "../account/delete",
+        data: JSON.stringify(account),
         success: function (result) {
             if (result == "fail") {
                 setStatus("Delete fail!", "#ff0000");
@@ -219,7 +233,7 @@ function submitDeleteForm() {
             }
         },
         error: function (result) {
-            setStatus("This skill does not exist! Please check again!", "#ff0000");
+            setStatus("This account does not exist! Please check again!", "#ff0000");
         }
     });
     $("#delete-modal").modal("hide");
@@ -245,13 +259,17 @@ function reloadTable() {
 // open updateModal
 function openUpdateModal(element) {
     var data = $("#table").DataTable().row($(element).parents('tr')).data();
-    $("#update-form-skillId").val(data.skillId);
-    $("#update-form-skillName").val(data.skillName);
-    $("#update-form-approved").val(data.approved);
+    $("#update-form-id").val(data.id);
+    $("#update-form-name").val(data.name);
+    $("#update-form-stationId").val(data.stationId);
+    $("#update-form-active").val(data.active);
     curr = {
-        "skillId": data.skillId,
-        "skillName": data.skillName,
-        "approved": data.approved
+        "id": data.id,
+        "name": data.name,
+        "station": {
+        	"id": data.stationId
+        },
+        "active": data.active
     };
     clearErrorUpdate();
     $("#update-modal").modal('toggle');
@@ -350,7 +368,7 @@ function checkValidateNameUpdate() {
 
 function clearError() {
     document.getElementById("nameError").innerHTML = "";
-    document.getElementById("add-form-skillName").value = "";
+//    document.getElementById("add-form-skillName").value = "";
     $("#save").prop('disabled', false);
 }
 

@@ -8,14 +8,14 @@ import java.util.Locale;
 
 public class DateFormatUtils {
 
-    public Date formatDateFromString (String dateTime) throws ParseException {
+    public static Date formatDateFromString (String dateTime) throws ParseException {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         Date date = dateFormat.parse(dateTime);
 
         return date;
     }
 
-    public String formatStringFromDate (Date dateTime) {
+    public static String formatStringFromDate (Date dateTime) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         String date = dateFormat.format(dateTime);
 

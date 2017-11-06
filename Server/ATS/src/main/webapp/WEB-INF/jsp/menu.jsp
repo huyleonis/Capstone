@@ -9,14 +9,14 @@
 
     <div class="sidebar-wrapper">
         <div class="logo">
-            <a href="http://localhost:8080/home" class="simple-text">
+            <a href="/home" class="simple-text">
                 ATS Management
             </a>
         </div>
 
         <ul class="nav">
             <li class="active">
-                <a href="dashboard.html">
+                <a href="/home">
                     <i class="pe-7s-graph"></i>
                     <p>Dashboard</p>
                 </a>
@@ -28,13 +28,37 @@
                 </a>
             </li>
             <li>
-                <a href="table.html">
+                <a href="/beacon">
                     <i class="pe-7s-plugin"></i>
                     <p>Beacon</p>
                 </a>
             </li>
             <li>
-                <a href="typography.html">
+                <a href="/lane">
+                    <i class="pe-7s-plugin"></i>
+                    <p>Lane</p>
+                </a>
+            </li>
+            <li>
+                <a href="/price">
+                    <i class="pe-7s-plugin"></i>
+                    <p>Price</p>
+                </a>
+            </li>
+            <li>
+                <a href="/station">
+                    <i class="pe-7s-plugin"></i>
+                    <p>Station</p>
+                </a>
+            </li>
+            <li>
+                <a href="/vehicletype">
+                    <i class="pe-7s-plugin"></i>
+                    <p>Vehicle Type</p>
+                </a>
+            </li>
+            <li>
+                <a href="/transaction">
                     <i class="pe-7s-news-paper"></i>
                     <p>Transaction</p>
                 </a>

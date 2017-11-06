@@ -20,9 +20,25 @@ public class BeaconDTO {
 	private String uuid;
 	private int major;
 	private int minor;
-	private String type;
+	private int type;
 	private int laneId;
 	private int stationId;
+	private int active;
+
+	public BeaconDTO() {
+	}
+
+	public BeaconDTO(int id, String uuid, int major, int minor, int type, int laneId, int stationId, int active) {
+		super();
+		this.id = id;
+		this.uuid = uuid;
+		this.major = major;
+		this.minor = minor;
+		this.type = type;
+		this.laneId = laneId;
+		this.stationId = stationId;
+		this.active = active;
+	}
 
 	public int getId() {
 		return id;
@@ -56,11 +72,11 @@ public class BeaconDTO {
 		this.minor = minor;
 	}
 
-	public String getType() {
+	public int getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(int type) {
 		this.type = type;
 	}
 
@@ -80,6 +96,14 @@ public class BeaconDTO {
 		this.stationId = stationId;
 	}
 
+	public int getActive() {
+		return active;
+	}
+
+	public void setActive(int active) {
+		this.active = active;
+	}
+
 	public static BeaconDTO convertFromEntity(Beacon beacon) {
 		BeaconDTO dto = new BeaconDTO();
 
@@ -87,13 +111,15 @@ public class BeaconDTO {
 		dto.setUuid(beacon.getUuid());
 		dto.setMajor(beacon.getMajor());
 		dto.setMinor(beacon.getMinor());
-		dto.setType(beacon.getType() == 0 ? BEACON_PAYMENT : BEACON_RESULT);
+		dto.setType(beacon.getType());
 		if (beacon.getLane() != null) {
 			dto.setLaneId(beacon.getLane().getId());
 		}
 		if (beacon.getStation() != null) {
 			dto.setStationId(beacon.getStation().getId());
 		}
+		dto.setActive(beacon.getActive());
+		
 		return dto;
 	}
 

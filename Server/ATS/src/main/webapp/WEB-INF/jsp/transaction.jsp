@@ -30,7 +30,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">New Account</h4>
+                                            <h4 class="modal-title">New Beacon</h4>
                                         </div>
                                         <div class="modal-body">
                                         
@@ -89,7 +89,14 @@
                                                 <div class="form-group">
                                                 <label class="control-label">Type of Vehicle:</label>
                                                 <select id="add-form-typeId" class="form-control">
-                                                	
+                                                	<option value="" selected="selected"> -- Select an option -- </option>
+                                                	<option value="1">Xe 4-5 chỗ</option>
+                                                	<option value="2">Xe 7-8 chỗ</option>
+                                                	<option value="3">Xe 13-16 chỗ</option>
+                                                	<option value="4">Xe 18-21 chỗ</option>
+                                                	<option value="5">Xe tải nhẹ</option>
+                                                	<option value="6">Xe tải nặng</option>
+                                                	<option value="7">Xe container</option>
                                                 </select>  
                                                 <label id="nameError" class="error"></label>
                                                 </div>
@@ -102,7 +109,7 @@
                                                 
                                                 <div class="form-group">
                                                 <label class="control-label">Active:</label>
-                                                <select id="add-form-active" class="form-control">
+                                                <select id="add-form-isActive" class="form-control">
                                                 	<option value="0">Inactive</option>
                                                 	<option value="1">Active</option>
                                                 </select>  
@@ -111,7 +118,7 @@
                                                 
                                                 <div class="form-group">
                                                 <label class="control-label">Enable:</label>
-                                                <select id="add-form-enable" class="form-control">
+                                                <select id="add-form-isEnable" class="form-control">
                                                 	<option value="0">Disable</option>
                                                 	<option value="1">Enable</option>
                                                 </select>  
@@ -161,7 +168,7 @@
                                             
                                             <div class="form-group hidden">
                                                 <label class="control-label">Password:</label> 
-                                                <input type="password" class="form-control" id="update-form-password" /> 
+                                                <input type="password" class="form-control" id="update-form-password" required /> 
                                                 <label id="nameErrorUpdate" class="error"></label>
                                             </div>
                                             
@@ -172,7 +179,7 @@
                                                 	<option value="2">Staff</option>
                                                 	<option value="3">Driver</option>
                                                 </select>  
-											<label id="nameErrorUpdate" class="error"></label>
+											<label id="nameError" class="error"></label>
 											</div>
 											
 											<div class="form-group">
@@ -212,9 +219,16 @@
                                             <div class="form-group">
                                                 <label class="control-label">Type of Vehicle:</label>
                                                 <select id="update-form-typeId" class="form-control">
-                                                	
+                                                	<option value=""> -- Select an option -- </option>
+                                                	<option value="1">Xe 4-5 chỗ</option>
+                                                	<option value="2">Xe 7-8 chỗ</option>
+                                                	<option value="3">Xe 13-16 chỗ</option>
+                                                	<option value="4">Xe 18-21 chỗ</option>
+                                                	<option value="5">Xe tải nhẹ</option>
+                                                	<option value="6">Xe tải nặng</option>
+                                                	<option value="7">Xe container</option>
                                                 </select>  
-                                                <label id="nameErrorUpdate" class="error"></label>
+                                                <label id="nameError" class="error"></label>
                                             </div>
                                             
                                             <div class="form-group">
@@ -225,20 +239,20 @@
                                             
                                             <div class="form-group">
                                                 <label class="control-label">Active:</label>
-                                                <select id="update-form-active" class="form-control">
+                                                <select id="update-form-isActive" class="form-control">
                                                 	<option value="0">Inactive</option>
                                                 	<option value="1">Active</option>
                                                 </select>  
-                                                <label id="nameErrorUpdate" class="error"></label>
+                                                <label id="nameError" class="error"></label>
                                             </div>
                                             
                                             <div class="form-group">
                                                 <label class="control-label">Enable:</label>
-                                                <select id="update-form-enable" class="form-control">
+                                                <select id="update-form-isEnable" class="form-control">
                                                 	<option value="0">Disable</option>
                                                 	<option value="1">Enable</option>
                                                 </select>  
-                                                <label id="nameErrorUpdate" class="error"></label>
+                                                <label id="nameError" class="error"></label>
                                             </div>
 
                                         </div>
@@ -284,19 +298,18 @@
                             <thead>
                                 <tr>
                                     <th>id</th>
+                                    <th class="text-center">Date Time</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Price</th>
+                                    <th class="text-center">Fail Reason</th>
+                                    <th class="text-center">Lane ID</th>
+                                    <th class="text-center">Station ID</th>
+                                    <th class="text-center">Zone</th>
+                                    <th class="text-center">Station Name</th>
                                     <th class="text-center">Username</th>
-                                    <th class="text-center">Password</th>
-                                    <th class="text-center">Full Name</th>
-                                    <th class="text-center">Role</th>
-                                    <th class="text-center">Email</th>
-                                    <th class="text-center">Phone</th>
-                                    <th class="text-center">Number ID</th>
-                                    <th class="text-center">Vehicle ID</th>
-                                    <th class="text-center">Balance</th>
                                     <th class="text-center">License Plate</th>
-                                    <th class="text-center">Vehicle Type ID</th>
-                                    <th class="text-center">Active</th>
-                                    <th class="text-center">Enable</th>
+                                    <th class="text-center">Type of Vehicle</th>
+                                    <th class="text-center">Type</th>
                                     <th class="text-center">Update/Delete</th>
                                         <%--<th class="pull-left">Delete/Update</th>--%>
                                 </tr>
@@ -315,5 +328,5 @@
 
     </body>
     <script
-    src="js/view/account.js"></script>
+    src="js/view/transaction.js"></script>
 </html>

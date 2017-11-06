@@ -1,15 +1,14 @@
 package com.fpt.capstone.Repositories;
 
-import com.fpt.capstone.Entities.Price;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import org.springframework.data.repository.query.Param;
+import com.fpt.capstone.Entities.Price;
 
 @Repository
-public interface PriceRepos extends JpaRepository<Price, String> {
+public interface PriceRepos extends JpaRepository<Price, Integer> {
 
     /**
      * Tìm giá tiền dựa trên username và id của station cho thu phi tự động

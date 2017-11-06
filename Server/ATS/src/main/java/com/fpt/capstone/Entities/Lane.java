@@ -37,6 +37,9 @@ public class Lane {
 	@OneToMany(mappedBy = "lane")
 	private List<Transaction> transactions;
 
+	@Column(name = "is_active")
+	private int active;
+
 	public int getId() {
 		return id;
 	}
@@ -75,6 +78,14 @@ public class Lane {
 
 	public void setTransactions(List<Transaction> transactions) {
 		this.transactions = transactions;
+	}
+
+	public int getActive() {
+		return active;
+	}
+
+	public void setActive(int active) {
+		this.active = active;
 	}
 
 }

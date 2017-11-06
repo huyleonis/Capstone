@@ -27,7 +27,7 @@ public class Vehicletype {
 	@OneToMany(mappedBy = "vehicletype")
 	private List<Price> prices;
 
-	@OneToMany(mappedBy = "vechicletype")
+	@OneToMany(mappedBy = "vehicletype")
 	private List<Vehicle> vehicles;
 
 	public int getId() {

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,45 +12,39 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fpt.capstone.Dtos.StationDTO;
-import com.fpt.capstone.Entities.Station;
-import com.fpt.capstone.Services.StationService;
+import com.fpt.capstone.Dtos.LaneDTO;
+import com.fpt.capstone.Entities.Lane;
+import com.fpt.capstone.Services.LaneService;
 import com.google.gson.Gson;
 
 @RestController
-@RequestMapping("/station")
-public class StationController {
+@RequestMapping(value = "/lane")
+public class LaneController {
 
 	@Autowired
-	private StationService stationService;
-
-	@RequestMapping(value = "/get/{uuid}", method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	public StationDTO findByUuid(@PathVariable String uuid) {
-		return stationService.findByUuid(uuid);
-	}
-
+	private LaneService laneService;
+	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public ModelAndView viewAccount() {
-		ModelAndView m = new ModelAndView("station");
+		ModelAndView m = new ModelAndView("lane");
 		return m;
 	}
-
+	
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public String getAllLane() throws JsonProcessingException {
+	public String getAllLane() throws JsonProcessingException{
 
-		List<StationDTO> dtos = stationService.getAllStation();
-
+		List<LaneDTO> dtos = laneService.getAlllane();
+				
 		return new Gson().toJson(dtos);
 	}
-
+	
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@RequestBody Station station) {
+	public String create(@RequestBody Lane lane) {
 
 		boolean isSuccessful = false;
-
-		StationDTO dto = stationService.insert(station);
+		
+		LaneDTO dto = laneService.insert(lane);
 
 		if (dto != null) {
 			isSuccessful = true;
@@ -61,10 +54,10 @@ public class StationController {
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@RequestBody Station station) {
+	public String update(@RequestBody Lane lane) {
 		boolean isSuccessful = false;
 
-		StationDTO dto = stationService.update(station);
+		LaneDTO dto = laneService.update(lane);
 
 		if (dto != null) {
 			isSuccessful = true;
