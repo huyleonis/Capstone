@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.fpt.capstone.Entities;
 
 import javax.persistence.*;
@@ -10,150 +5,169 @@ import javax.persistence.*;
 @Entity(name = "account")
 public class Account {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id")
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private int id;
 
-	@Column(name = "username")
-	private String username;
+    @Column(name = "username")
+    private String username;
 
-	@Column(name = "password")
-	private String password;
+    @Transient
+    @Column(name = "password")
+    private String password;
 
-	@Column(name = "role")
-	private int role;
+    @Column(name = "role")
+    private int role;
 
-	@Column(name = "fullname")
-	private String fullname;
+    @Column(name = "fullname")
+    private String fullname;
 
-	@Column(name = "email")
-	private String email;
+    @Column(name = "email")
+    private String email;
 
-	@Column(name = "phone")
-	private String phone;
+    @Column(name = "phone")
+    private String phone;
 
-	@Column(name = "number_id")
-	private String numberId;
+    @Column(name = "number_id")
+    private String numberId;
 
-	@Column(name = "e_wallet")
-	private String eWallet;
+    @Column(name = "e_wallet")
+    private String eWallet;
 
-	@OneToOne(cascade = {CascadeType.ALL})
-	@JoinColumn(name = "vehicle_id")
-	private Vehicle vehicle;
+    @OneToOne
+    @JoinColumn(name = "vehicle_id")
+    private Vehicle vehicle;
 
-	@Column(name = "balance")
-	private Double balance;
+    @Column(name = "balance")
+    private Double balance;
 
-	@Column(name = "is_active")
-	private int active;
+    @Column(name = "is_active")
+    private int active;
 
-	@Column(name = "is_enable")
-	private int enable;
+    @Column(name = "is_enable")
+    private int enable;
 
-	public int getId() {
-		return id;
-	}
+    public Account() {
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public Account(String username, String password, int role, String fullname, String email, String phone,
+                   String numberId, String eWallet, Vehicle vehicle, Double balance, int active, int enable) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.fullname = fullname;
+        this.email = email;
+        this.phone = phone;
+        this.numberId = numberId;
+        this.eWallet = eWallet;
+        this.vehicle = vehicle;
+        this.balance = balance;
+        this.active = active;
+        this.enable = enable;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public int getRole() {
-		return role;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setRole(int role) {
-		this.role = role;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public String getFullname() {
-		return fullname;
-	}
+    public int getRole() {
+        return role;
+    }
 
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
-	}
+    public void setRole(int role) {
+        this.role = role;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getFullname() {
+        return fullname;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
 
-	public String getPhone() {
-		return phone;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getNumberId() {
-		return numberId;
-	}
+    public String getPhone() {
+        return phone;
+    }
 
-	public void setNumberId(String numberId) {
-		this.numberId = numberId;
-	}
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
-	public String geteWallet() {
-		return eWallet;
-	}
+    public String getNumberId() {
+        return numberId;
+    }
 
-	public void seteWallet(String eWallet) {
-		this.eWallet = eWallet;
-	}
+    public void setNumberId(String numberId) {
+        this.numberId = numberId;
+    }
 
-	public Vehicle getVehicle() {
-		return vehicle;
-	}
+    public String geteWallet() {
+        return eWallet;
+    }
 
-	public void setVehicle(Vehicle vehicle) {
-		this.vehicle = vehicle;
-	}
+    public void seteWallet(String eWallet) {
+        this.eWallet = eWallet;
+    }
 
-	public Double getBalance() {
-		return balance;
-	}
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
 
-	public void setBalance(Double balance) {
-		this.balance = balance;
-	}
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
 
-	public int getActive() {
-		return active;
-	}
+    public Double getBalance() {
+        return balance;
+    }
 
-	public void setActive(int active) {
-		this.active = active;
-	}
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
 
-	public int getEnable() {
-		return enable;
-	}
+    public int getActive() {
+        return active;
+    }
 
-	public void setEnable(int enable) {
-		this.enable = enable;
-	}
+    public void setActive(int active) {
+        this.active = active;
+    }
 
+    public int getEnable() {
+        return enable;
+    }
+
+    public void setEnable(int enable) {
+        this.enable = enable;
+    }
 }

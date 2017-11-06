@@ -1,122 +1,130 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.fpt.capstone.Entities;
 
-import java.util.Date;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity(name = "transaction")
 public class Transaction {
 
-	@Id
-	private String id;
+    @Id
+    @Column(name = "id")
+    private String id;
 
-	@ManyToOne
-	@JoinColumn(name = "vehicle_id")
-	private Vehicle vehicle;
+    @ManyToOne
+    @JoinColumn(name = "vehicle_id")
+    private Vehicle vehicle;
 
-	@ManyToOne
-	@JoinColumn(name = "station_id")
-	private Station station;
+    @ManyToOne
+    @JoinColumn(name = "station_id")
+    private Station station;
 
-	@Column(name = "date_time")
-	private Date dateTime;
+    @Column(name = "date_time")
+    private Date dateTime;
 
-	@Column(name = "status")
-	private String status;
+    @Column(name = "status")
+    private String status;
 
-	@ManyToOne
-	@JoinColumn(name = "price_id")
-	private Price price;
+    @ManyToOne
+    @JoinColumn(name = "price_id")
+    private Price price;
 
-	@ManyToOne
-	@JoinColumn(name = "lane_id")
-	private Lane lane;
+    @ManyToOne
+    @JoinColumn(name = "lane_id")
+    private Lane lane;
 
-	@Column(name = "type")
-	private int type;
+    @Column(name = "type")
+    private int type;
 
-	@Column(name = "photo")
-	private String photo;
+    @Column(name = "photo")
+    private String photo;
 
-	public String getId() {
-		return id;
-	}
+    public Transaction() {
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public Transaction(String id, Vehicle vehicle, Station station, Date dateTime,
+                       String status, Price price, Lane lane, int type, String photo) {
+        this.id = id;
+        this.vehicle = vehicle;
+        this.station = station;
+        this.dateTime = dateTime;
+        this.status = status;
+        this.price = price;
+        this.lane = lane;
+        this.type = type;
+        this.photo = photo;
+    }
 
-	public Vehicle getVehicle() {
-		return vehicle;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setVehicle(Vehicle vehicle) {
-		this.vehicle = vehicle;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public Station getStation() {
-		return station;
-	}
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
 
-	public void setStation(Station station) {
-		this.station = station;
-	}
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
 
-	public Date getDateTime() {
-		return dateTime;
-	}
+    public Station getStation() {
+        return station;
+    }
 
-	public void setDateTime(Date dateTime) {
-		this.dateTime = dateTime;
-	}
+    public void setStation(Station station) {
+        this.station = station;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public Date getDateTime() {
+        return dateTime;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
+    }
 
-	public Price getPrice() {
-		return price;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public void setPrice(Price price) {
-		this.price = price;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public Lane getLane() {
-		return lane;
-	}
+    public Price getPrice() {
+        return price;
+    }
 
-	public void setLane(Lane lane) {
-		this.lane = lane;
-	}
+    public void setPrice(Price price) {
+        this.price = price;
+    }
 
-	public int getType() {
-		return type;
-	}
+    public Lane getLane() {
+        return lane;
+    }
 
-	public void setType(int type) {
-		this.type = type;
-	}
+    public void setLane(Lane lane) {
+        this.lane = lane;
+    }
 
-	public String getPhoto() {
-		return photo;
-	}
+    public int getType() {
+        return type;
+    }
 
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
+    public void setType(int type) {
+        this.type = type;
+    }
 
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 }

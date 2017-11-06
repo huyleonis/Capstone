@@ -1,8 +1,11 @@
 package fpt.capstone.ats.services;
 
-import android.app.IntentService;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.IBinder;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -21,24 +24,44 @@ import fpt.capstone.ats.utils.RequestServer;
  * Created by dovie on 10/20/2017.
  */
 
-public class TransactionDetailService extends IntentService {
+public class TransactionDetailService extends Service {
 
     private DBAdapter database;
     private RequestServer rs;
 
-    public TransactionDetailService() {
-        super("TransactionDetailService");
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        Log.d("\nTRANSACTION DETAIL", "SYNCHRONIZING...");
+
+        saveRecentDetail(Commons.getVehicleId(this));
+//        boolean isSuccessful = deleteRecord30DaysOld();
+//        if (isSuccessful) {
+//            Log.d("\nDELETE OLD RECORDS", "SUCCESS");
+//        }
+        stopSelf();
+
+        return START_NOT_STICKY;
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-        Log.d("TRANSACTION DETAIL", "SYNCHRONIZING...");
-        saveAllDetail();
-        deleteRecord30DaysOld();
-
+    public void onDestroy() {
+        // restart this service again in 24 hours
+        AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarm.set(
+                alarm.RTC_WAKEUP,
+                System.currentTimeMillis() + (1000 * 60),
+//                System.currentTimeMillis() + (1000 * 60 * 60 * 24),
+                PendingIntent.getService(this, 0, new Intent(this, TransactionDetailService.class), 0)
+        );
     }
 
-    public void saveAllDetail() {
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    public void saveRecentDetail(String vehicleId) {
         Log.d("Request TransDetail", "Send Request TransDetail");
         rs = new RequestServer();
         rs.delegate = new RequestServer.RequestResult() {
@@ -57,7 +80,7 @@ public class TransactionDetailService extends IntentService {
                         String transactionId = jsonObject.getString("id");
 
                         Cursor resultSet = database.getInfo(transactionId);
-                        if (resultSet.moveToFirst()) {
+                        if (resultSet.getCount() > 0) {
                             Log.d("DATABASE INSERT", "RECORD DUPLICATED");
                         } else {
                             String stationName = jsonObject.getString("stationName");
@@ -80,13 +103,14 @@ public class TransactionDetailService extends IntentService {
                     }
                     database.close();
                 } catch (Exception e) {
+                    Log.e("Transaction Detail", "SAVE RECENT DETAIL ERROR");
                     Log.e("Transaction Detail", e.getMessage());
                 }
             }
         };
         List<String> params = new ArrayList<>();
-        params.add(Commons.getUsername(this));
-        rs.execute(params, "transaction", "getDetailByAccount", "GET");
+        params.add(vehicleId);
+        rs.execute(params, "transaction", "getDetailByVehicleIdIn24Hours", "GET");
     }
 
     public boolean deleteRecord30DaysOld() {
@@ -100,6 +124,7 @@ public class TransactionDetailService extends IntentService {
             database.close();
         } catch (Exception e) {
             Log.e("TRANS DETAIL ERROR", "DELETE RECORDS 30 DAYS ERROR");
+            Log.e("TRANS DETAIL ERROR", e.getMessage());
         }
 
         return isSuccessful;

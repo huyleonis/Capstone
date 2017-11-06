@@ -1,103 +1,101 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.fpt.capstone.Entities;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity(name = "price")
 public class Price {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
 
-	@ManyToOne
-	@JoinColumn(name = "station_id")
-	private Station station;
+    @Column(name="from_date")
+    private Date fromDate;
 
-	@Column(name = "price")
-	private double price;
+    @Column(name = "price")
+    private double price;
 
-	@ManyToOne
-	@JoinColumn(name = "type_id")
-	private Vehicletype vehicletype;
+    @ManyToOne
+    @JoinColumn(name = "station_id")
+    private Station station;
 
-	@Column(name = "from_date")
-	private Date fromDate;
+    @ManyToOne
+    @JoinColumn(name="type_id")
+    private VehicleType vehicleType;
 
-	@Column(name = "is_active")
-	private int active;
+    @Column(name = "is_active")
+    private int active;
 
-	@OneToMany(mappedBy = "price")
-	private List<Transaction> transactions;
+    @OneToMany(mappedBy="price")
+    private List<Transaction> transactions;
 
-	public int getId() {
-		return id;
-	}
+    public Price() {
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public Price(Date fromDate, double price, Station station, VehicleType vehicleType, int active, List<Transaction> transactions) {
+        this.fromDate = fromDate;
+        this.price = price;
+        this.station = station;
+        this.vehicleType = vehicleType;
+        this.active = active;
+        this.transactions = transactions;
+    }
 
-	public Station getStation() {
-		return station;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setStation(Station station) {
-		this.station = station;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public double getPrice() {
-		return price;
-	}
+    public Date getFromDate() {
+        return fromDate;
+    }
 
-	public void setPrice(double price) {
-		this.price = price;
-	}
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
+    }
 
-	public Vehicletype getVehicletype() {
-		return vehicletype;
-	}
+    public double getPrice() {
+        return price;
+    }
 
-	public void setVehicletype(Vehicletype vehicletype) {
-		this.vehicletype = vehicletype;
-	}
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
-	public Date getFromDate() {
-		return fromDate;
-	}
+    public Station getStation() {
+        return station;
+    }
 
-	public void setFromDate(Date fromDate) {
-		this.fromDate = fromDate;
-	}
+    public void setStation(Station station) {
+        this.station = station;
+    }
 
-	public int getActive() {
-		return active;
-	}
+    public VehicleType getVehicleType() {
+        return vehicleType;
+    }
 
-	public void setActive(int active) {
-		this.active = active;
-	}
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
+    }
 
-	public List<Transaction> getTransactions() {
-		return transactions;
-	}
+    public int getActive() {
+        return active;
+    }
 
-	public void setTransactions(List<Transaction> transactions) {
-		this.transactions = transactions;
-	}
+    public void setActive(int active) {
+        this.active = active;
+    }
 
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
 }

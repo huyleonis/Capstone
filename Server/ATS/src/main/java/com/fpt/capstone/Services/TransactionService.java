@@ -28,6 +28,6 @@ public interface TransactionService {
 
     List<TransactionDetailDTO> getAllDetail();
 
-    List<TransactionDetailDTO> getDetailsByAccountId(String username);
+    List<TransactionDetailDTO> getDetailByVehicleIdIn24Hours(int vehicleId);
 
 }

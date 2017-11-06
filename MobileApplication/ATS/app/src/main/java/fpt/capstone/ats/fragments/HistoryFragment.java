@@ -155,10 +155,6 @@ public class HistoryFragment extends Fragment {
         params.add(fromDateString.replace('/','-'));
         params.add(toDateString.replace('/','-'));
 
-        System.out.println(Commons.getUsername(this.getContext()));
-        System.out.println(fromDateString.replace('/','-'));
-        System.out.println(toDateString.replace('/','-'));
-
         rs.execute(params, "history", "getByDate", "GET");
     }
 

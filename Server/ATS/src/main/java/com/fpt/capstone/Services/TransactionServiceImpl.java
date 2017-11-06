@@ -171,12 +171,20 @@ public class TransactionServiceImpl implements TransactionService {
 		Account account = accountRepos.findByUsername(username);
 		List<Transaction> transactions = account.getVehicle().getTransactions();
 
-		List<TransactionDetailDTO> dtos = new ArrayList<>();
+    @Override
+    public List<TransactionDetailDTO> getDetailByVehicleIdIn24Hours(int vehicleId) {
 
-		for (Transaction transaction : transactions) {
-			dtos.add(TransactionDetailDTO.covertFromEntity(transaction));
-		}
+        List<Transaction> transactions = transactionRepos.findByVehicleIdIn24Hours(vehicleId);
 
+        List<TransactionDetailDTO> dtos = new ArrayList<>();
+
+        for (Transaction transaction : transactions){
+            dtos.add(TransactionDetailDTO.covertFromEntity(transaction));
+        }
+
+        return dtos;
+    }
+}
 		return dtos;
 	}
 }

@@ -57,10 +57,12 @@ public class LoginActivity extends AppCompatActivity {
         //Here is the code for saving user's information
         EditText edtUsername = (EditText) findViewById(R.id.edtUsername);
         String username = edtUsername.getText().toString();
+        int vehicleId = 1;
 
         SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = setting.edit();
 
+        editor.putString("VehicleId", String.valueOf(vehicleId));
         editor.putString("Username", username);
         editor.putBoolean("hasLoggedIn", true);
 

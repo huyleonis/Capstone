@@ -148,7 +148,23 @@ public class TransactionController {
 				"   + Update trans (2) lane [" + transDTO.getLaneId() + "] and status [" + transDTO.getStatus() + "]");
 		return transDTO;
 	}
+    /**
+     * Lấy transaction detail theo vehicle id trong vòng 24h
+     * @param vehicleId
+     * @return
+     */
+    @RequestMapping(value = "/getDetailByVehicleIdIn24Hours/{vehicleId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getDetailByVehicleIdIn24Hours(@PathVariable String vehicleId) {
+        System.out.println("GET DETAILS BY VEHICLE ID IN 24 HOURS");
+        List<TransactionDetailDTO> dtos =
+                transactionServiceImpl.getDetailByVehicleIdIn24Hours(Integer.parseInt(vehicleId));
 
+        Map<String, Object> map = new HashMap<>();
+        map.put("TransactionDetails", dtos);
+
+        return map;
+    }
 	/**
 	 * Staff gửi yêu cầu lấy danh sách các xe đang vào lane mình trực Server gửi
 	 * danh sách các xe này và cập nhật trạng thái thành Đang xử lý

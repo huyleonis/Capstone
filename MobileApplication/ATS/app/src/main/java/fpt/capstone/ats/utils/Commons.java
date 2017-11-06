@@ -22,9 +22,9 @@ public class Commons {
         return username;
     }
 
-    public static String getAccountId(Context context) {
+    public static String getVehicleId(Context context) {
         SharedPreferences setting = context.getSharedPreferences(ConstantValues.PREF_NAME, Context.MODE_PRIVATE);
-        String username = setting.getString("ID", "");
-        return username;
+        String vehicleId = setting.getString("VehicleId", "1");
+        return vehicleId;
     }
 }
