@@ -7,11 +7,15 @@ public class AccountDTO {
 	private static final String ROLE_ADMIN = "Admin";
 	private static final String ROLE_STAFF = "Staff";
 	private static final String ROLE_DRIVER = "Driver";
+	private static final String ACTIVE = "Active";
+	private static final String INACTIVE = "Inactive";
+	private static final String ENABLE = "Enable";
+	private static final String DISABLE = "Disable";
 
 	private int id;
 	private String username;
 	private String password;
-	private int role;
+	private String role;
 	private String fullname;
 	private String email;
 	private String phone;
@@ -19,18 +23,17 @@ public class AccountDTO {
 	private String eWallet;
 	private int vehicleId;
 	private double balance;
-	private int active;
-	private int enable;
+	private String active;
+	private String enable;
 	private String licensePlate;
 	private int vehicletypeId;
 
 	public AccountDTO() {
 	}
 
-	public AccountDTO(int id, String username, String password, int role, String fullname, String email, String phone,
-			String numberId, String eWallet, int vehicleId, double balance, int active, int enable, String licensePlate,
-			int vehicletypeId) {
-		super();
+	public AccountDTO(int id, String username, String password, String role, String fullname, String email,
+			String phone, String numberId, String eWallet, int vehicleId, double balance, String active, String enable,
+			String licensePlate, int vehicletypeId) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
@@ -72,11 +75,11 @@ public class AccountDTO {
 		this.password = password;
 	}
 
-	public int getRole() {
+	public String getRole() {
 		return role;
 	}
 
-	public void setRole(int role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 
@@ -136,19 +139,19 @@ public class AccountDTO {
 		this.balance = balance;
 	}
 
-	public int getActive() {
+	public String getActive() {
 		return active;
 	}
 
-	public void setActive(int active) {
+	public void setActive(String active) {
 		this.active = active;
 	}
 
-	public int getEnable() {
+	public String getEnable() {
 		return enable;
 	}
 
-	public void setEnable(int enable) {
+	public void setEnable(String enable) {
 		this.enable = enable;
 	}
 
@@ -174,29 +177,31 @@ public class AccountDTO {
 		dto.setId(account.getId());
 		dto.setUsername(account.getUsername());
 		dto.setPassword(account.getPassword());
-		// switch (account.getRole()) {
-		// case 1:
-		//
-		// dto.setRole(ROLE_ADMIN);
-		// break;
-		// case 2:
-		//
-		// dto.setRole(ROLE_STAFF);
-		// break;
-		// case 3:
-		//
-		// dto.setRole(ROLE_DRIVER);
-		// break;
-		//
-		// default:
-		// break;
-		// }
-		dto.setRole(account.getRole());
+		
+		switch (account.getRole()) {
+		case 1:
+
+			dto.setRole(ROLE_ADMIN);
+			break;
+		case 2:
+
+			dto.setRole(ROLE_STAFF);
+			break;
+		case 3:
+
+			dto.setRole(ROLE_DRIVER);
+			break;
+
+		default:
+			break;
+		}
+		
 		dto.setFullname(account.getFullname());
 		dto.setEmail(account.getEmail());
 		dto.setPhone(account.getPhone());
 		dto.setNumberId(account.getNumberId());
 		dto.seteWallet(account.geteWallet());
+		
 		if (account.getVehicle() != null) {
 			dto.setVehicleId(account.getVehicle().getId());
 			dto.setLicensePlate(account.getVehicle().getLicensePlate());
@@ -209,13 +214,15 @@ public class AccountDTO {
 			dto.setVehicleId(0);
 			dto.setLicensePlate("");
 		}
+		
 		if (account.getBalance() != null) {
 			dto.setBalance(account.getBalance());
 		} else {
 			dto.setBalance(0);
 		}
-		dto.setActive(account.getActive());
-		dto.setEnable(account.getEnable());
+		
+		dto.setActive((account.getActive() == 1) ? ACTIVE : INACTIVE);
+		dto.setEnable((account.getEnable() == 1) ? ENABLE : DISABLE);
 
 		return dto;
 	}

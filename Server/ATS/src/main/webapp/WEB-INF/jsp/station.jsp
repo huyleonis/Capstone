@@ -55,8 +55,8 @@
                                           	<div class="form-group">
                                                 <label class="control-label">Active:</label>
                                                 <select id="add-form-active" class="form-control">
-                                                	<option value="0">Inactive</option>
-                                                	<option value="1">Active</option>
+                                                	<option value="Inactive">Inactive</option>
+                                                	<option value="Active">Active</option>
                                                 </select>  
                                                 <label id="nameError" class="error"></label>
                                            	</div>
@@ -111,8 +111,8 @@
                                           	<div class="form-group">
                                                 <label class="control-label">Active:</label>
                                                 <select id="update-form-active" class="form-control">
-                                                	<option value="0">Inactive</option>
-                                                	<option value="1">Active</option>
+                                                	<option value="Inactive">Inactive</option>
+                                                	<option value="Active">Active</option>
                                                 </select>  
                                                 <label id="nameErrorUpdate" class="error"></label>
                                            	</div>

@@ -7,7 +7,6 @@ public class VehicleDTO {
 	private int typeId;
 
 	public VehicleDTO() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public VehicleDTO(int id, String licensePlate, int typeId) {

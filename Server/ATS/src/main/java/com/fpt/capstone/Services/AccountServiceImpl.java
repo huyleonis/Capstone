@@ -114,6 +114,9 @@ public class AccountServiceImpl implements AccountService {
 
 		AccountDTO dto = null;
 
+		// system will generate password automatically
+		account.setPassword("123");
+
 		try {
 			// neu user dang ki xe ma xe da co trong he thong
 			if (account.getVehicle() != null) {
@@ -143,16 +146,15 @@ public class AccountServiceImpl implements AccountService {
 
 			if (existingAccount != null) {
 				account.setPassword(existingAccount.getPassword());
-				
+
 				// neu user dang ki xe ma xe da co trong he thong
 				if (account.getVehicle() != null) {
-					Vehicle vehicle = vehicleRepos
-							.findByLicensePlate(account.getVehicle().getLicensePlate());
+					Vehicle vehicle = vehicleRepos.findByLicensePlate(account.getVehicle().getLicensePlate());
 					if (vehicle != null) {
 						account.setVehicle(vehicle);
 					}
 				}
-				
+
 				Account processedAccount = accountRepos.save(account);
 				dto = AccountDTO.convertFromEntity(processedAccount);
 			}

@@ -111,7 +111,8 @@ $(document)
                                                 "data": "zone"
                                             },
                                             {
-                                                "data": "active"
+                                                "data": "active",
+                                                "visible": false
                                             },
                                             {// column for view
                                                 // detail-update-delete
@@ -134,7 +135,7 @@ $(document)
                     $("#add-form").submit(function (event) {
                         event.preventDefault();
                         submitAddForm();
-                        clearAddForm();
+//                        clearAddForm();
                     });
                 });
 /*
@@ -142,11 +143,18 @@ $(document)
  */
 // perform ajax call to save report
 function submitAddForm() {
+	var active = $("#add-form-active").val();
+    if (active == "Active") {
+		active = "1";
+	} else {
+		active = "0";
+	}
+	
 	var station = {
 	        "name": $("#add-form-name").val(),
 	        "location": $("#add-form-location").val(),
 	        "zone": $("#add-form-zone").val(),
-	        "active": $("#add-form-active").val()
+	        "active": active
 	};
     $.ajax({
         type: "POST",
@@ -172,12 +180,19 @@ function submitAddForm() {
 
 var curr;
 function submitUpdateForm() {
+	var active = $("#update-form-active").val();
+    if (active == "Active") {
+		active = "1";
+	} else {
+		active = "0";
+	}
+	
 	var station = {
 			"id": $("#update-form-id").val(),
 	        "name": $("#update-form-name").val(),
 	        "location": $("#update-form-location").val(),
 	        "zone": $("#update-form-zone").val(),
-	        "active": $("#update-form-active").val()
+	        "active": active
 	};
     $.ajax({
         type: "POST",

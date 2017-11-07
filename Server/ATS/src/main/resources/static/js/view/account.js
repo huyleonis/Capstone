@@ -131,7 +131,7 @@ $(document)
                                             },
                                             {
                                                 "data": "balance",
-//                                                "visible": false
+                                                "visible": false
                                             },
                                             {
                                                 "data": "licensePlate",
@@ -142,7 +142,8 @@ $(document)
                                                 "visible": false
                                             },
                                             {
-                                                "data": "active"
+                                                "data": "active",
+                                                "visible": false
                                             },
                                             {
                                                 "data": "enable",
@@ -169,7 +170,7 @@ $(document)
                     $("#add-form").submit(function (event) {
                         event.preventDefault();
                         submitAddForm();
-                        clearAddForm();
+//                        clearAddForm();
                     });
                 });
 /*
@@ -178,26 +179,49 @@ $(document)
 // perform ajax call to save report
 function submitAddForm() {
 	var account;
+	
     var role = $("#add-form-role").val();
+    if (role == "Admin") {
+		role = "1";
+	} else if (role == "Staff") {
+		role = "2";
+	} else {
+		role = "3";
+	}
+    
+    var active = $("#add-form-active").val();
+    if (active == "Active") {
+		active = "1";
+	} else {
+		active = "0";
+	}
+    
+    var enable = $("#add-form-enable").val();
+    if (enable == "Enable") {
+    	enable = "1";
+	} else {
+		enable = "0";
+	}
+    
     if (role != "3") {
     	account = {
                 "username": $("#add-form-username").val(),
                 "password": $("#add-form-password").val(),
-                "role": $("#add-form-role").val(),
+                "role": role,
                 "fullname": $("#add-form-fullname").val(),
                 "email": $("#add-form-email").val(),
                 "phone": $("#add-form-phone").val(),
                 "numberId": $("#add-form-numberId").val(),
                 "vehicle": null,
                 "balance": "0",
-                "active": $("#add-form-active").val(),
-                "enable": $("#add-form-enable").val()
+                "active": active,
+                "enable": enable
         };
 	} else {
 		account = {
 		        "username": $("#add-form-username").val(),
 		        "password": $("#add-form-password").val(),
-		        "role": $("#add-form-role").val(),
+		        "role": role,
 		        "fullname": $("#add-form-fullname").val(),
 		        "email": $("#add-form-email").val(),
 		        "phone": $("#add-form-phone").val(),
@@ -209,8 +233,8 @@ function submitAddForm() {
 		        		}
 		        },
 		        "balance": $("#add-form-balance").val(),
-		        "active": $("#add-form-active").val(),
-		        "enable": $("#add-form-enable").val()
+		        "active": active,
+		        "enable": enable
 		    };
 	}
     $.ajax({
@@ -239,27 +263,48 @@ var curr;
 function submitUpdateForm() {
 	var account;
 	var role = $("#update-form-role").val();
+    if (role == "Admin") {
+		role = "1";
+	} else if (role == "Staff") {
+		role = "2";
+	} else {
+		role = "3";
+	}
+    
+    var active = $("#update-form-active").val();
+    if (active == "Active") {
+		active = "1";
+	} else {
+		active = "0";
+	}
+    
+    var enable = $("#update-form-enable").val();
+    if (enable == "Enable") {
+    	enable = "1";
+	} else {
+		enable = "0";
+	}
 	if (role != "3") {
 		account = {
 				"id": $("#update-form-id").val(),
 		        "username": $("#update-form-username").val(),
 		        "password": $("#update-form-password").val(),
-		        "role": $("#update-form-role").val(),
+		        "role": role,
 		        "fullname": $("#update-form-fullname").val(),
 		        "email": $("#update-form-email").val(),
 		        "phone": $("#update-form-phone").val(),
 		        "numberId": $("#update-form-numberId").val(),
 		        "vehicle": null,
 		        "balance": "0",
-		        "active": $("#update-form-active").val(),
-		        "enable": $("#update-form-enable").val()
+		        "active": active,
+		        "enable": enable
 		    };
 	} else {
 		account = {
 				"id": $("#update-form-id").val(),
 		        "username": $("#update-form-username").val(),
 		        "password": $("#update-form-password").val(),
-		        "role": $("#update-form-role").val(),
+		        "role": role,
 		        "fullname": $("#update-form-fullname").val(),
 		        "email": $("#update-form-email").val(),
 		        "phone": $("#update-form-phone").val(),
@@ -272,8 +317,8 @@ function submitUpdateForm() {
 		        		}
 		        },
 		        "balance": $("#update-form-balance").val(),
-		        "active": $("#update-form-active").val(),
-		        "enable": $("#update-form-enable").val()
+		        "active": active,
+		        "enable": enable
 		    };
 	}
     $.ajax({
@@ -500,23 +545,23 @@ function clearErrorUpdate() {
 
 // set data to select tag type of vehicle from database
 $(document).ready(function(){
-$.ajax({
-    type: "GET",
-    contentType: "application/json",
-    url: "../vehicletype/get",
-    success: function (result) {
-    	$.each(JSON.parse(result), function (i, item) {
-    		$('#add-form-typeId').append($('<option>', { 
-    			value: item.id,
-    			text : item.name 
-    		}));
-    	});
-    	$.each(JSON.parse(result), function (i, item) {
-    		$('#update-form-typeId').append($('<option>', { 
-    			value: item.id,
-    			text : item.name 
-    		}));
-    	});
-    }
-});
+	$.ajax({
+	    type: "GET",
+	    contentType: "application/json",
+	    url: "../vehicletype/get",
+	    success: function (result) {
+	    	$.each(JSON.parse(result), function (i, item) {
+	    		$('#add-form-typeId').append($('<option>', { 
+	    			value: item.id,
+	    			text : item.name 
+	    		}));
+	    	});
+	    	$.each(JSON.parse(result), function (i, item) {
+	    		$('#update-form-typeId').append($('<option>', { 
+	    			value: item.id,
+	    			text : item.name 
+	    		}));
+	    	});
+	    }
+	});
 });

@@ -124,7 +124,7 @@ $(document)
                     $("#add-form").submit(function (event) {
                         event.preventDefault();
                         submitAddForm();
-                        clearAddForm();
+//                        clearAddForm();
                     });
                 });
 /*

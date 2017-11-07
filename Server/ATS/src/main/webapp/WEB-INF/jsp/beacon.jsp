@@ -55,18 +55,16 @@
                                             <div class="form-group">
                                                 <label class="control-label">Type:</label>
                                                 <select id="add-form-type" class="form-control">
-                                                	<option value="0">Type 0</option>
-                                                	<option value="1">Type 1</option>
+                                                	<option value="BEACON_PAYMENT">BEACON PAYMENT</option>
+                                                	<option value="BEACON_RESULT">BEACON RESULT</option>
                                                 </select>  
                                                 <label id="nameError" class="error"></label>
                                             </div>
                                                 
                                            	<div class="form-group">
                                                 <label class="control-label">Station:</label>
-                                                <select id="add-form-stationId" class="form-control">
-                                                	<option value="1">Cai Lậy</option>
-                                                	<option value="2">Tây Ninh</option>
-                                                	<option value="3">Bảo Lộc</option>
+                                                <select id="add-form-stationId" class="form-control" >
+                                                	
                                                 </select>  
                                                 <label id="nameError" class="error"></label>
                                             </div>
@@ -74,9 +72,7 @@
                                           	<div class="form-group">
                                                 <label class="control-label">Lane:</label>
                                                 <select id="add-form-laneId" class="form-control">
-                                                	<option value="0"> -- Select an option -- </option>
-                                                	<option value="1">Lane 1</option>
-                                                	<option value="2">Lane 2</option>
+                                                	
                                                 </select>  
                                                 <label id="nameError" class="error"></label>
                                          	</div>
@@ -84,8 +80,8 @@
                                            	<div class="form-group">
                                                 <label class="control-label">Active:</label>
                                                 <select id="add-form-active" class="form-control">
-                                                	<option value="0">Inactive</option>
-                                                	<option value="1">Active</option>
+                                                	<option value="Inactive">Inactive</option>
+                                                	<option value="Active">Active</option>
                                                 </select>  
                                                 <label id="nameError" class="error"></label>
                                           	</div>
@@ -140,8 +136,8 @@
                                             <div class="form-group">
                                                 <label class="control-label">Type:</label>
                                                 <select id="update-form-type" class="form-control">
-                                                	<option value="0">Type 0</option>
-                                                	<option value="1">Type 1</option>
+                                                	<option value="BEACON_PAYMENT">BEACON PAYMENT</option>
+                                                	<option value="BEACON_RESULT">BEACON RESULT</option>
                                                 </select>  
                                                 <label id="nameErrorUpdate" class="error"></label>
                                             </div>
@@ -149,9 +145,7 @@
                                            	<div class="form-group">
                                                 <label class="control-label">Station:</label>
                                                 <select id="update-form-stationId" class="form-control">
-                                                	<option value="1">Cai Lậy</option>
-                                                	<option value="2">Tây Ninh</option>
-                                                	<option value="3">Bảo Lộc</option>
+                                                	
                                                 </select>  
                                                 <label id="nameErrorUpdate" class="error"></label>
                                             </div>
@@ -159,9 +153,7 @@
                                           	<div class="form-group">
                                                 <label class="control-label">Lane:</label>
                                                 <select id="update-form-laneId" class="form-control">
-                                                	<option value="0"> -- Select an option -- </option>
-                                                	<option value="1">Lane 1</option>
-                                                	<option value="2">Lane 2</option>
+                                                	
                                                 </select>  
                                                 <label id="nameErrorUpdate" class="error"></label>
                                          	</div>
@@ -169,8 +161,8 @@
                                            	<div class="form-group">
                                                 <label class="control-label">Active:</label>
                                                 <select id="update-form-active" class="form-control">
-                                                	<option value="0">Inactive</option>
-                                                	<option value="1">Active</option>
+                                                	<option value="Inactive">Inactive</option>
+                                                	<option value="Active">Active</option>
                                                 </select>  
                                                 <label id="nameErrorUpdate" class="error"></label>
                                           	</div>
@@ -223,7 +215,9 @@
                                     <th class="text-center">Minor</th>
                                     <th class="text-center">Type</th>
                                     <th class="text-center">Lane ID</th>
+                                    <th class="text-center">Lane Name</th>
                                     <th class="text-center">Station ID</th>
+                                    <th class="text-center">Station Name</th>
                                     <th class="text-center">Active</th>
                                     <th class="text-center">Update/Delete</th>
                                         <%--<th class="pull-left">Delete/Update</th>--%>

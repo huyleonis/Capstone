@@ -104,10 +104,18 @@ $(document)
                                                 "data": "name"
                                             },
                                             {
-                                                "data": "stationId"
+                                                "data": "stationId",
+                                                "visible": false
                                             },
                                             {
-                                                "data": "active"
+                                                "data": "stationName"
+                                            },
+                                            {
+                                                "data": "stationZone"
+                                            },
+                                            {
+                                                "data": "active",
+                                                "visible": false
                                             },
                                             {// column for view
                                                 // detail-update-delete
@@ -130,7 +138,7 @@ $(document)
                     $("#add-form").submit(function (event) {
                         event.preventDefault();
                         submitAddForm();
-                        clearAddForm();
+//                        clearAddForm();
                     });
                 });
 /*
@@ -138,12 +146,19 @@ $(document)
  */
 // perform ajax call to save report
 function submitAddForm() {
+	var active = $("#add-form-active").val();
+    if (active == "Active") {
+		active = "1";
+	} else {
+		active = "0";
+	}
+	
 	var lane = {
 	        "name": $("#add-form-name").val(),
 	        "station": {
 	        	"id": $("#add-form-stationId").val()
 	        },
-	        "active": $("#add-form-active").val()
+	        "active": active
 	};
     $.ajax({
         type: "POST",
@@ -169,13 +184,20 @@ function submitAddForm() {
 
 var curr;
 function submitUpdateForm() {
+	var active = $("#update-form-active").val();
+    if (active == "Active") {
+		active = "1";
+	} else {
+		active = "0";
+	}
+	
 	var lane = {
 			"id": $("#update-form-id").val(),
 	        "name": $("#update-form-name").val(),
 	        "station": {
 	        	"id": $("#update-form-stationId").val()
 	        },
-	        "active": $("#update-form-active").val()
+	        "active": active
 	};
     $.ajax({
         type: "POST",
@@ -376,3 +398,26 @@ function clearErrorUpdate() {
     document.getElementById("nameErrorUpdate").innerHTML = "";
     $("#update").prop('disabled', false);
 }
+
+//set data to select tag station from database
+$(document).ready(function(){
+	$.ajax({
+	    type: "GET",
+	    contentType: "application/json",
+	    url: "../station/get",
+	    success: function (result) {
+	    	$.each(JSON.parse(result), function (i, item) {
+	    		$('#add-form-stationId').append($('<option>', { 
+	    			value: item.id,
+	    			text : item.name 
+	    		}));
+	    	});
+	    	$.each(JSON.parse(result), function (i, item) {
+	    		$('#update-form-stationId').append($('<option>', { 
+	    			value: item.id,
+	    			text : item.name 
+	    		}));
+	    	});
+	    }
+	});
+});

@@ -6,6 +6,9 @@ import com.fpt.capstone.Entities.Price;
 
 public class PriceDTO {
 
+	private static final String ACTIVE = "Active";
+	private static final String INACTIVE = "Inactive";
+
 	private int id;
 	private String stationName;
 	private String stationLocation;
@@ -15,14 +18,13 @@ public class PriceDTO {
 	private int stationId;
 	private String vehicleType;
 	private int vehicleTypeId;
-	private int active;
+	private String active;
 
 	public PriceDTO() {
 	}
 
-	public PriceDTO(int id, String stationName, String stationLocation, String stationZone, double price, String fromDate,
-			int stationId, String vehicleType, int vehicleTypeId, int active) {
-		super();
+	public PriceDTO(int id, String stationName, String stationLocation, String stationZone, double price,
+			String fromDate, int stationId, String vehicleType, int vehicleTypeId, String active) {
 		this.id = id;
 		this.stationName = stationName;
 		this.stationLocation = stationLocation;
@@ -99,11 +101,11 @@ public class PriceDTO {
 		this.vehicleType = vehicleType;
 	}
 
-	public int getActive() {
+	public String getActive() {
 		return active;
 	}
 
-	public void setActive(int active) {
+	public void setActive(String active) {
 		this.active = active;
 	}
 
@@ -122,9 +124,8 @@ public class PriceDTO {
 			dto = null;
 		} else {
 			dto.setId(price.getId());
-			
+
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			
 			dto.setFromDate(sdf.format(price.getFromDate()));
 
 			if (price.getPrice() <= 0) {
@@ -144,7 +145,7 @@ public class PriceDTO {
 				dto.setVehicleType(price.getVehicletype().getName());
 			}
 
-			dto.setActive(price.getActive());
+			dto.setActive((price.getActive() == 1) ? ACTIVE : INACTIVE);
 		}
 		return dto;
 	}

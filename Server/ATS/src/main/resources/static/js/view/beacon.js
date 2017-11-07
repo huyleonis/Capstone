@@ -113,13 +113,22 @@ $(document)
                                                 "data": "type"
                                             },
                                             {
-                                                "data": "laneId"
+                                                "data": "laneId",
+                                                "visible": false
                                             },
                                             {
-                                                "data": "stationId"
+                                                "data": "laneName"
                                             },
                                             {
-                                                "data": "active"
+                                                "data": "stationId",
+                                                "visible": false
+                                            },
+                                            {
+                                                "data": "stationName"
+                                            },
+                                            {
+                                                "data": "active",
+                                                "visible": false
                                             },
                                             {// column for view
                                                 // detail-update-delete
@@ -142,7 +151,7 @@ $(document)
                     $("#add-form").submit(function (event) {
                         event.preventDefault();
                         submitAddForm();
-                        clearAddForm();
+//                        clearAddForm();
                     });
                 });
 /*
@@ -152,31 +161,46 @@ $(document)
 function submitAddForm() {
 	var beacon;
 	var lane = $("#add-form-laneId").val();
+	
+	var type = $("#add-form-type").val();
+	if (type == "BEACON_PAYMENT") {
+		type = "0";
+	} else {
+		type = "1";
+	}
+	
+	var active = $("#add-form-active").val();
+    if (active == "Active") {
+		active = "1";
+	} else {
+		active = "0";
+	}
+	
 	if (lane == "0") {
 		beacon = {
 	            "uuid": $("#add-form-uuid").val(),
 	            "major": $("#add-form-major").val(),
 	            "minor": $("#add-form-minor").val(),
-	            "type": $("#add-form-type").val(),
+	            "type": type,
 	            "lane": null,
 	            "station": {
 	            	"id": $("#add-form-stationId").val()
 	            },
-	            "active": $("#add-form-active").val()
+	            "active": active
 	    };
 	} else {
 		beacon = {
 	            "uuid": $("#add-form-uuid").val(),
 	            "major": $("#add-form-major").val(),
 	            "minor": $("#add-form-minor").val(),
-	            "type": $("#add-form-type").val(),
+	            "type": type,
 	            "lane": {
 	            	"id": $("#add-form-laneId").val()
 	            },
 	            "station": {
 	            	"id": $("#add-form-stationId").val()
 	            },
-	            "active": $("#add-form-active").val()
+	            "active": active
 	    };
 	}
     $.ajax({
@@ -205,18 +229,33 @@ var curr;
 function submitUpdateForm() {
 	var beacon;
 	var lane = $("#update-form-laneId").val();
+	
+	var type = $("#update-form-type").val();
+	if (type == "BEACON_PAYMENT") {
+		type = "0";
+	} else {
+		type = "1";
+	}
+	
+	var active = $("#update-form-active").val();
+    if (active == "Active") {
+		active = "1";
+	} else {
+		active = "0";
+	}
+    
 	if (lane == "0") {
 		beacon = {
 				"id": $("#update-form-id").val(),
 	            "uuid": $("#update-form-uuid").val(),
 	            "major": $("#update-form-major").val(),
 	            "minor": $("#update-form-minor").val(),
-	            "type": $("#update-form-type").val(),
+	            "type": type,
 	            "lane": null,
 	            "station": {
 	            	"id": $("#update-form-stationId").val()
 	            },
-	            "active": $("#update-form-active").val()
+	            "active": active
 	    };
 	} else {
 		beacon = {
@@ -224,14 +263,14 @@ function submitUpdateForm() {
 	            "uuid": $("#update-form-uuid").val(),
 	            "major": $("#update-form-major").val(),
 	            "minor": $("#update-form-minor").val(),
-	            "type": $("#update-form-type").val(),
+	            "type": type,
 	            "lane": {
 	            	"id": $("#update-form-laneId").val()
 	            },
 	            "station": {
 	            	"id": $("#update-form-stationId").val()
 	            },
-	            "active": $("#update-form-active").val()
+	            "active": active
 	    };
 	}
     $.ajax({
@@ -443,3 +482,113 @@ function clearErrorUpdate() {
     document.getElementById("nameErrorUpdate").innerHTML = "";
     $("#update").prop('disabled', false);
 }
+
+//set data to select tag station from database
+$(document).ready(function(){
+	$.ajax({
+	    type: "GET",
+	    contentType: "application/json",
+	    url: "../station/get",
+	    success: function (result) {
+	    	$.each(JSON.parse(result), function (i, item) {
+	    		$('#add-form-stationId').append($('<option>', { 
+	    			value: item.id,
+	    			text : item.name 
+	    		}));
+	    	});
+	    	$.each(JSON.parse(result), function (i, item) {
+	    		$('#update-form-stationId').append($('<option>', { 
+	    			value: item.id,
+	    			text : item.name 
+	    		}));
+	    	});
+	    }
+	});
+});
+
+//set data to select tag lane from database
+$(document).ready(function(){
+		  $.ajax({
+			    type: "GET",
+			    contentType: "application/json",
+			    url: "../lane/getByStation",
+			    data: {
+			    	"stationId": 1
+			    },
+			    success: function (result) {
+			    	$('#add-form-laneId').append($('<option>', { 
+		    			value: 0,
+		    			text : "-- Select an option --"
+		    		}));
+			    	$.each(result, function (i, item) {
+			    		$('#add-form-laneId').append($('<option>', { 
+			    			value: item.id,
+			    			text : item.name
+			    		}));
+			    	});
+			    	$('#update-form-laneId').append($('<option>', { 
+		    			value: 0,
+		    			text : "-- Select an option --"
+		    		}));
+			    	$.each(result, function (i, item) {
+			    		$('#update-form-laneId').append($('<option>', { 
+			    			value: item.id,
+			    			text : item.name 
+			    		}));
+			    	});
+			    }
+		  });
+});
+
+// set data to select tag lane from database depend on station
+$(document).ready(function(){
+	$('#add-form-stationId').on('change', function() {
+		  $.ajax({
+			    type: "GET",
+			    contentType: "application/json",
+			    url: "../lane/getByStation",
+			    data: {
+			    	"stationId": this.value
+			    },
+			    success: function (result) {
+			    	$('#add-form-laneId').html("");
+			    	$('#add-form-laneId').append($('<option>', { 
+		    			value: 0,
+		    			text : "-- Select an option --"
+		    		}));
+			    	$.each(result, function (i, item) {
+			    		$('#add-form-laneId').append($('<option>', { 
+			    			value: item.id,
+			    			text : item.name
+			    		}));
+			    	});
+			    }
+		  });
+	});
+});
+
+$(document).ready(function(){
+	$('#update-form-stationId').on('change', function() {
+		  $.ajax({
+			    type: "GET",
+			    contentType: "application/json",
+			    url: "../lane/getByStation",
+			    data: {
+			    	"stationId": this.value
+			    },
+			    success: function (result) {
+			    	$('#update-form-laneId').html("");
+			    	$('#update-form-laneId').append($('<option>', { 
+		    			value: 0,
+		    			text : "-- Select an option --"
+		    		}));
+			    	$.each(result, function (i, item) {
+			    		$('#update-form-laneId').append($('<option>', { 
+			    			value: item.id,
+			    			text : item.name 
+			    		}));
+			    	});
+			    }
+		  });
+	});
+});

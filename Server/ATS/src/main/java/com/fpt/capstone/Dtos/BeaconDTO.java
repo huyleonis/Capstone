@@ -15,28 +15,34 @@ public class BeaconDTO {
 
 	private static final String BEACON_PAYMENT = "BEACON_PAYMENT";
 	private static final String BEACON_RESULT = "BEACON_RESULT";
+	private static final String ACTIVE = "Active";
+	private static final String INACTIVE = "Inactive";
 
 	private int id;
 	private String uuid;
 	private int major;
 	private int minor;
-	private int type;
+	private String type;
 	private int laneId;
+	private String laneName;
 	private int stationId;
-	private int active;
+	private String stationName;
+	private String active;
 
 	public BeaconDTO() {
 	}
 
-	public BeaconDTO(int id, String uuid, int major, int minor, int type, int laneId, int stationId, int active) {
-		super();
+	public BeaconDTO(int id, String uuid, int major, int minor, String type, int laneId, String laneName, int stationId,
+			String stationName, String active) {
 		this.id = id;
 		this.uuid = uuid;
 		this.major = major;
 		this.minor = minor;
 		this.type = type;
 		this.laneId = laneId;
+		this.laneName = laneName;
 		this.stationId = stationId;
+		this.stationName = stationName;
 		this.active = active;
 	}
 
@@ -72,11 +78,11 @@ public class BeaconDTO {
 		this.minor = minor;
 	}
 
-	public int getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(int type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 
@@ -88,6 +94,14 @@ public class BeaconDTO {
 		this.laneId = laneId;
 	}
 
+	public String getLaneName() {
+		return laneName;
+	}
+
+	public void setLaneName(String laneName) {
+		this.laneName = laneName;
+	}
+
 	public int getStationId() {
 		return stationId;
 	}
@@ -96,11 +110,19 @@ public class BeaconDTO {
 		this.stationId = stationId;
 	}
 
-	public int getActive() {
+	public String getStationName() {
+		return stationName;
+	}
+
+	public void setStationName(String stationName) {
+		this.stationName = stationName;
+	}
+
+	public String getActive() {
 		return active;
 	}
 
-	public void setActive(int active) {
+	public void setActive(String active) {
 		this.active = active;
 	}
 
@@ -111,15 +133,25 @@ public class BeaconDTO {
 		dto.setUuid(beacon.getUuid());
 		dto.setMajor(beacon.getMajor());
 		dto.setMinor(beacon.getMinor());
-		dto.setType(beacon.getType());
+		dto.setType((beacon.getType() == 0) ? BEACON_PAYMENT : BEACON_RESULT);
+
 		if (beacon.getLane() != null) {
 			dto.setLaneId(beacon.getLane().getId());
+			dto.setLaneName(beacon.getLane().getName());
+		} else {
+			dto.setLaneId(0);
+			dto.setLaneName("");
 		}
 		if (beacon.getStation() != null) {
 			dto.setStationId(beacon.getStation().getId());
+			dto.setStationName(beacon.getStation().getName());
+		} else {
+			dto.setStationId(0);
+			dto.setStationName("");
 		}
-		dto.setActive(beacon.getActive());
-		
+
+		dto.setActive((beacon.getActive() == 1) ? ACTIVE : INACTIVE);
+
 		return dto;
 	}
 

@@ -4,17 +4,19 @@ import com.fpt.capstone.Entities.Station;
 
 public class StationDTO {
 
+	private static final String ACTIVE = "Active";
+	private static final String INACTIVE = "Inactive";
+
 	private int id;
 	private String name;
 	private String location;
 	private String zone;
-	private int active;
+	private String active;
 
 	public StationDTO() {
 	}
 
-	public StationDTO(int id, String name, String location, String zone, int active) {
-		super();
+	public StationDTO(int id, String name, String location, String zone, String active) {
 		this.id = id;
 		this.name = name;
 		this.location = location;
@@ -54,23 +56,23 @@ public class StationDTO {
 		this.zone = zone;
 	}
 
-	public int getActive() {
+	public String getActive() {
 		return active;
 	}
 
-	public void setActive(int active) {
+	public void setActive(String active) {
 		this.active = active;
 	}
 
 	public static StationDTO convertFromEntity(Station station) {
 		StationDTO dto = new StationDTO();
-		
+
 		dto.setId(station.getId());
 		dto.setName(station.getName());
 		dto.setLocation(station.getLocation());
 		dto.setZone(station.getZone());
-		dto.setActive(station.getActive());
-		
+		dto.setActive((station.getActive() == 1) ? ACTIVE : INACTIVE);
+
 		return dto;
 	}
 }

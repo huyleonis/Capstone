@@ -43,9 +43,7 @@
                                           	<div class="form-group">
                                                 <label class="control-label">Station:</label>
                                                 <select id="add-form-stationId" class="form-control">
-                                                	<option value="1">Cai Lậy</option>
-                                                	<option value="2">Tây Ninh</option>
-                                                	<option value="3">Bảo Lộc</option>
+                                                	
                                                 </select>  
                                                 <label id="nameError" class="error"></label>
                                           	</div>
@@ -53,13 +51,7 @@
                                             <div class="form-group">
                                                 <label class="control-label">Type of Vehicle:</label>
                                                 <select id="add-form-vehicletypeId" class="form-control">
-                                                	<option value="1">Xe 4-5 chỗ</option>
-                                                	<option value="2">Xe 7-8 chỗ</option>
-                                                	<option value="3">Xe 13-16 chỗ</option>
-                                                	<option value="4">Xe 18-21 chỗ</option>
-                                                	<option value="5">Xe tải nhẹ</option>
-                                                	<option value="6">Xe tải nặng</option>
-                                                	<option value="7">Xe container</option>
+                                                	
                                                 </select>  
                                                 <label id="nameError" class="error"></label>
                                           	</div>
@@ -73,8 +65,8 @@
                                           	<div class="form-group">
                                                 <label class="control-label">Active:</label>
                                                 <select id="add-form-active" class="form-control">
-                                                	<option value="0">Inactive</option>
-                                                	<option value="1">Active</option>
+                                                	<option value="Inactive">Inactive</option>
+                                                	<option value="Active">Active</option>
                                                 </select>  
                                                 <label id="nameError" class="error"></label>
                                           	</div>
@@ -117,9 +109,7 @@
                                           	<div class="form-group">
                                                 <label class="control-label">Station:</label>
                                                 <select id="update-form-stationId" class="form-control">
-                                                	<option value="1">Cai Lậy</option>
-                                                	<option value="2">Tây Ninh</option>
-                                                	<option value="3">Bảo Lộc</option>
+                                                	
                                                 </select>  
                                                 <label id="nameErrorUpdate" class="error"></label>
                                           	</div>
@@ -127,13 +117,7 @@
                                             <div class="form-group">
                                                 <label class="control-label">Type of Vehicle:</label>
                                                 <select id="update-form-vehicletypeId" class="form-control">
-                                                	<option value="1">Xe 4-5 chỗ</option>
-                                                	<option value="2">Xe 7-8 chỗ</option>
-                                                	<option value="3">Xe 13-16 chỗ</option>
-                                                	<option value="4">Xe 18-21 chỗ</option>
-                                                	<option value="5">Xe tải nhẹ</option>
-                                                	<option value="6">Xe tải nặng</option>
-                                                	<option value="7">Xe container</option>
+                                                	
                                                 </select>  
                                                 <label id="nameErrorUpdate" class="error"></label>
                                           	</div>
@@ -147,8 +131,8 @@
                                           	<div class="form-group">
                                                 <label class="control-label">Active:</label>
                                                 <select id="update-form-active" class="form-control">
-                                                	<option value="0">Inactive</option>
-                                                	<option value="1">Active</option>
+                                                	<option value="Inactive">Inactive</option>
+                                                	<option value="Active">Active</option>
                                                 </select>  
                                                 <label id="nameErrorUpdate" class="error"></label>
                                           	</div>

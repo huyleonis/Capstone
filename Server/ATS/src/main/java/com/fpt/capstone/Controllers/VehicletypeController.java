@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fpt.capstone.Dtos.StationDTO;
 import com.fpt.capstone.Dtos.VehicletypeDTO;
-import com.fpt.capstone.Entities.Station;
 import com.fpt.capstone.Entities.Vehicletype;
 import com.fpt.capstone.Services.VehicletypeService;
 import com.google.gson.Gson;

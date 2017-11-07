@@ -5,15 +5,14 @@
  */
 package com.fpt.capstone.PaymentModule;
 
-import com.fpt.capstone.Utils.RequestServer;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.tomcat.util.security.MD5Encoder;
+
+import com.fpt.capstone.Utils.RequestServer;
 
 /**
  *

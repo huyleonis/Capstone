@@ -64,9 +64,6 @@ public class AccountController {
 
 		boolean isSuccessful = false;
 		
-		// system will generate password automatically
-		account.setPassword("123");
-
 		AccountDTO dto = accountService.insert(account);
 
 		if (dto != null) {

@@ -43,6 +43,20 @@ public class LaneServiceImpl implements LaneService {
 	}
 
 	@Override
+	public List<LaneDTO> getLanesByStation(int stationId) {
+		
+		List<Lane> lanes = laneRepos.findByStationId(stationId);
+		List<LaneDTO> dtos = new ArrayList<>();
+		
+		for (Lane lane : lanes) {
+			LaneDTO dto = LaneDTO.convertFromEntity(lane);
+			dtos.add(dto);
+		}
+		
+		return dtos;
+	}
+
+	@Override
 	public LaneDTO insert(Lane lane) {
 
 		LaneDTO dto = null;

@@ -110,7 +110,8 @@ $(document)
                                                 "data": "price"
                                             },
                                             {
-                                                "data": "failReason"
+                                                "data": "failReason",
+                                                "visible": false
                                             },
                                             {
                                                 "data": "laneId",
@@ -121,7 +122,8 @@ $(document)
                                                 "visible": false
                                             },
                                             {
-                                                "data": "zone"
+                                                "data": "zone",
+                                                "visible": false
                                             },
                                             {
                                                 "data": "stationName"

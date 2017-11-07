@@ -49,9 +49,9 @@
                                                 <div class="form-group">
                                                 <label class="control-label">Role:</label>
                                                 <select id="add-form-role" class="form-control">
-                                                	<option value="1">Admin</option>
-                                                	<option value="2">Staff</option>
-                                                	<option value="3">Driver</option>
+                                                	<option value="Admin">Admin</option>
+                                                	<option value="Staff">Staff</option>
+                                                	<option value="Driver">Driver</option>
                                                 </select>  
                                                 <label id="nameError" class="error"></label>
                                                 </div>
@@ -103,8 +103,8 @@
                                                 <div class="form-group">
                                                 <label class="control-label">Active:</label>
                                                 <select id="add-form-active" class="form-control">
-                                                	<option value="0">Inactive</option>
-                                                	<option value="1">Active</option>
+                                                	<option value="Inactive">Inactive</option>
+                                                	<option value="Active">Active</option>
                                                 </select>  
                                                 <label id="nameError" class="error"></label>
                                                 </div>
@@ -112,8 +112,8 @@
                                                 <div class="form-group">
                                                 <label class="control-label">Enable:</label>
                                                 <select id="add-form-enable" class="form-control">
-                                                	<option value="0">Disable</option>
-                                                	<option value="1">Enable</option>
+                                                	<option value="Disable">Disable</option>
+                                                	<option value="Enable">Enable</option>
                                                 </select>  
                                                 <label id="nameError" class="error"></label>
                                                 
@@ -168,9 +168,9 @@
                                             <div class="form-group">
                                             <label class="control-label">Role:</label>
                                                 <select id="update-form-role" class="form-control">
-                                                	<option value="1">Admin</option>
-                                                	<option value="2">Staff</option>
-                                                	<option value="3">Driver</option>
+                                                	<option value="Admin">Admin</option>
+                                                	<option value="Staff">Staff</option>
+                                                	<option value="Driver">Driver</option>
                                                 </select>  
 											<label id="nameErrorUpdate" class="error"></label>
 											</div>
@@ -226,8 +226,8 @@
                                             <div class="form-group">
                                                 <label class="control-label">Active:</label>
                                                 <select id="update-form-active" class="form-control">
-                                                	<option value="0">Inactive</option>
-                                                	<option value="1">Active</option>
+                                                	<option value="Inactive">Inactive</option>
+                                                	<option value="Active">Active</option>
                                                 </select>  
                                                 <label id="nameErrorUpdate" class="error"></label>
                                             </div>
@@ -235,8 +235,8 @@
                                             <div class="form-group">
                                                 <label class="control-label">Enable:</label>
                                                 <select id="update-form-enable" class="form-control">
-                                                	<option value="0">Disable</option>
-                                                	<option value="1">Enable</option>
+                                                	<option value="Disable">Disable</option>
+                                                	<option value="Enable">Enable</option>
                                                 </select>  
                                                 <label id="nameErrorUpdate" class="error"></label>
                                             </div>

@@ -8,10 +8,6 @@ package com.fpt.capstone.Dtos;
 import com.fpt.capstone.Entities.Transaction;
 import java.util.Date;
 
-/**
- *
- * @author hp
- */
 public class TransactionDetailDTO {
 	private String id;
 
