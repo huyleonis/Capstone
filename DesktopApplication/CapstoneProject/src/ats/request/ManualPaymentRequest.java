@@ -48,7 +48,7 @@ public class ManualPaymentRequest {
                 if (payment != null) {
                     String typeName = (String) payment.get("typeVehicle");
                     Double price = (Double) payment.get("price");
-                    vehicleDTO = new VehicleDTO(licensePlate, typeName, price, 1);
+                    vehicleDTO = new VehicleDTO(licensePlate, typeName, price);
                 } else {
                     vehicleDTO = null;
                 }

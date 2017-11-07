@@ -82,14 +82,12 @@ public class MainForm extends javax.swing.JFrame {
         lbPirce = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         lbTypeName = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        lbStatus = new javax.swing.JLabel();
         lbId = new javax.swing.JLabel();
         panelCamera = new javax.swing.JPanel();
         txtHello = new javax.swing.JLabel();
         btnManualPayment = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        txtOpenCamera = new javax.swing.JButton();
+        txtCloseCamera = new javax.swing.JButton();
         tabHistory = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblHistory = new javax.swing.JTable();
@@ -101,6 +99,7 @@ public class MainForm extends javax.swing.JFrame {
         paneTechnical = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         txtLocalhost = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         panePayment = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         txtLane = new javax.swing.JTextField();
@@ -178,13 +177,6 @@ public class MainForm extends javax.swing.JFrame {
         lbTypeName.setForeground(new java.awt.Color(255, 0, 51));
         lbTypeName.setText("-");
 
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel6.setText("Tình trạng:");
-
-        lbStatus.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        lbStatus.setForeground(new java.awt.Color(255, 0, 51));
-        lbStatus.setText("-");
-
         lbId.setText("id");
 
         javax.swing.GroupLayout InfoPaneLayout = new javax.swing.GroupLayout(InfoPane);
@@ -192,47 +184,44 @@ public class MainForm extends javax.swing.JFrame {
         InfoPaneLayout.setHorizontalGroup(
             InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, InfoPaneLayout.createSequentialGroup()
-                .addContainerGap(81, Short.MAX_VALUE)
+                .addContainerGap(86, Short.MAX_VALUE)
                 .addComponent(txtLicensePlate, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(80, 80, 80))
+                .addGap(75, 75, 75))
             .addGroup(InfoPaneLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(InfoPaneLayout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbId, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbTypeName, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbPirce, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                            .addComponent(lbPirce, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(InfoPaneLayout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(lbId, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(InfoPaneLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lbTypeName, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         InfoPaneLayout.setVerticalGroup(
             InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(InfoPaneLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(16, 16, 16)
                 .addComponent(jLabel2)
-                .addGap(11, 11, 11)
+                .addGap(18, 18, 18)
                 .addComponent(txtLicensePlate, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lbTypeName)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(lbPirce)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel6)
-                .addGap(11, 11, 11)
-                .addComponent(lbStatus)
-                .addGap(18, 18, 18)
+                .addGap(28, 28, 28)
                 .addComponent(lbId)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         panelCamera.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -254,7 +243,7 @@ public class MainForm extends javax.swing.JFrame {
         btnManualPayment.setBackground(new java.awt.Color(153, 204, 255));
         btnManualPayment.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         btnManualPayment.setForeground(new java.awt.Color(51, 51, 51));
-        btnManualPayment.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/Cash-Payment-128.png"))); // NOI18N
+        btnManualPayment.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/750765_hand_512x512.png"))); // NOI18N
         btnManualPayment.setText("Đã Thu");
         btnManualPayment.setToolTipText("Ấn để tiến hành thu phí");
         btnManualPayment.setName(""); // NOI18N
@@ -270,17 +259,17 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        txtOpenCamera.setText("Mở Camera");
+        txtOpenCamera.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                txtOpenCameraActionPerformed(evt);
             }
         });
 
-        jButton2.setText("jButton2");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        txtCloseCamera.setText("Tắt Camera");
+        txtCloseCamera.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                txtCloseCameraActionPerformed(evt);
             }
         });
 
@@ -294,19 +283,19 @@ public class MainForm extends javax.swing.JFrame {
                         .addGap(20, 20, 20)
                         .addComponent(txtHello))
                     .addGroup(tabHomeLayout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addComponent(btnManualPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(tabHomeLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(InfoPane, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(InfoPane, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(tabHomeLayout.createSequentialGroup()
+                        .addGap(63, 63, 63)
+                        .addComponent(btnManualPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(panelCamera, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(txtOpenCamera)
                 .addGap(141, 141, 141)
-                .addComponent(jButton2)
+                .addComponent(txtCloseCamera)
                 .addGap(297, 297, 297))
         );
         tabHomeLayout.setVerticalGroup(
@@ -318,14 +307,13 @@ public class MainForm extends javax.swing.JFrame {
                     .addGroup(tabHomeLayout.createSequentialGroup()
                         .addComponent(txtHello)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(InfoPane, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnManualPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)))
+                        .addComponent(InfoPane, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(54, 54, 54)
+                        .addComponent(btnManualPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(txtOpenCamera)
+                    .addComponent(txtCloseCamera))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
@@ -422,6 +410,8 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Kiểm tra kết nối");
+
         javax.swing.GroupLayout paneTechnicalLayout = new javax.swing.GroupLayout(paneTechnical);
         paneTechnical.setLayout(paneTechnicalLayout);
         paneTechnicalLayout.setHorizontalGroup(
@@ -430,7 +420,9 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(29, 29, 29)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtLocalhost, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(paneTechnicalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtLocalhost, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
                 .addContainerGap(141, Short.MAX_VALUE))
         );
         paneTechnicalLayout.setVerticalGroup(
@@ -440,7 +432,9 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(paneTechnicalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtLocalhost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(245, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(204, Short.MAX_VALUE))
         );
 
         panePayment.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin thu phí", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 24), new java.awt.Color(0, 51, 255))); // NOI18N
@@ -654,8 +648,6 @@ public class MainForm extends javax.swing.JFrame {
                             if (check) {
                                 //lbStatus.setText("Hoàn thành giao dịch");
                                 clearForm();
-                            } else {
-                                lbStatus.setText("Giao dich thất bại");
                             }
                         }
 
@@ -672,6 +664,50 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSearchActionPerformed
 
 
+    /**
+     * Event ấn nút Enter của button "Đã thu"
+     *
+     * @return
+     */
+    private void btnManualPaymentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnManualPaymentKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            btnManualPayment.doClick();
+        }
+    }//GEN-LAST:event_btnManualPaymentKeyPressed
+
+
+    private void txtLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLogOutActionPerformed
+        this.setVisible(false);
+        GlobalVar.login.setVisible(true);
+    }//GEN-LAST:event_txtLogOutActionPerformed
+
+    private void txtLocalhostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLocalhostActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLocalhostActionPerformed
+
+    private void txtOpenCameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtOpenCameraActionPerformed
+//        webSource = new VideoCapture(0);
+//        myThread = new DaemonThread();
+//        Thread t = new Thread(myThread);
+//        t.setDaemon(true);
+//        myThread.runnable = true;
+//        t.start();
+//        jButton1.setEnabled(false);  //start button
+//        jButton2.setEnabled(true);
+    }//GEN-LAST:event_txtOpenCameraActionPerformed
+
+    private void txtCloseCameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCloseCameraActionPerformed
+//        myThread.runnable = false;
+//        jButton2.setEnabled(false);
+//        jButton1.setEnabled(true);
+//
+//        webSource.release();
+    }//GEN-LAST:event_txtCloseCameraActionPerformed
+
+    private void txtLicensePlateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLicensePlateKeyPressed
+
+    }//GEN-LAST:event_txtLicensePlateKeyPressed
+
     private void txtLicensePlateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLicensePlateActionPerformed
 
     }//GEN-LAST:event_txtLicensePlateActionPerformed
@@ -686,9 +722,9 @@ public class MainForm extends javax.swing.JFrame {
     private void txtLicensePlateCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtLicensePlateCaretUpdate
         //timer.stop();
         localhost = txtLocalhost.getText().trim();
-//        if (txtLicensePlate.getText().isEmpty()) {
-//            timer.start();
-//        }
+        //        if (txtLicensePlate.getText().isEmpty()) {
+            //            timer.start();
+            //        }
         String licensePlate = txtLicensePlate.getText();
         ManualPaymentRequest mpr = new ManualPaymentRequest();
         // VehicleDTO dto = new VehicleDTO();
@@ -707,64 +743,17 @@ public class MainForm extends javax.swing.JFrame {
                 } else {
                     lbTypeName.setText("-");
                 }
-                lbStatus.setText("-");
             } else {
                 lbPirce.setText("-");
                 lbTypeName.setText("-");
-                lbStatus.setText("-");
-
             }
         } catch (Exception ex) {
             Logger.getLogger(MainForm.class
-                    .getName()).log(Level.SEVERE, null, ex);
+                .getName()).log(Level.SEVERE, null, ex);
         }
 
         //dto = null;
     }//GEN-LAST:event_txtLicensePlateCaretUpdate
-
-    /**
-     * Event ấn nút Enter của button "Đã thu"
-     *
-     * @return
-     */
-    private void btnManualPaymentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnManualPaymentKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            btnManualPayment.doClick();
-        }
-    }//GEN-LAST:event_btnManualPaymentKeyPressed
-
-    private void txtLicensePlateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLicensePlateKeyPressed
-
-    }//GEN-LAST:event_txtLicensePlateKeyPressed
-
-
-    private void txtLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLogOutActionPerformed
-        this.setVisible(false);
-        GlobalVar.login.setVisible(true);
-    }//GEN-LAST:event_txtLogOutActionPerformed
-
-    private void txtLocalhostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLocalhostActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtLocalhostActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-//        webSource = new VideoCapture(0);
-//        myThread = new DaemonThread();
-//        Thread t = new Thread(myThread);
-//        t.setDaemon(true);
-//        myThread.runnable = true;
-//        t.start();
-//        jButton1.setEnabled(false);  //start button
-//        jButton2.setEnabled(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-//        myThread.runnable = false;
-//        jButton2.setEnabled(false);
-//        jButton1.setEnabled(true);
-//
-//        webSource.release();
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -797,13 +786,11 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
@@ -811,7 +798,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lbId;
     private javax.swing.JLabel lbPirce;
-    private javax.swing.JLabel lbStatus;
     private javax.swing.JLabel lbTypeName;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
@@ -827,11 +813,13 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel tabReport;
     private javax.swing.JPanel tabSetting;
     private javax.swing.JTable tblHistory;
+    private javax.swing.JButton txtCloseCamera;
     private javax.swing.JLabel txtHello;
     private javax.swing.JTextField txtLane;
     private javax.swing.JTextField txtLicensePlate;
     private javax.swing.JTextField txtLocalhost;
     private javax.swing.JButton txtLogOut;
+    private javax.swing.JButton txtOpenCamera;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 

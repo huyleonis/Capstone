@@ -38,10 +38,10 @@ public class TransactionDAO {
 
     public boolean insertTransaction(String licensePlate, int idLane, String photo) throws Exception {
         boolean check = false;
-        AccountDAO accountDAO = new AccountDAO();
         PriceDAO priceDAO = new PriceDAO();
         StationDAO stationDAO = new StationDAO();
-        int idAccount = accountDAO.findAccountByLicensePlate(licensePlate);
+        VehicleDAO vehicleDAO = new VehicleDAO();
+        int idVehicle = vehicleDAO.findVehicleByLicensePlate(licensePlate);
         int idStation = stationDAO.findStationByLane(idLane);
         int idPrice = priceDAO.findPriceByLicensePlate(licensePlate, idStation);
         String idTransaction = new Date().getTime() + "";
@@ -54,12 +54,12 @@ public class TransactionDAO {
         boolean type = false;
         String status = "Hoàn thành giao dịch";
         try {
-            String sql = "INSERT INTO transaction (id, username_id, station_id, date_time, status, price_id, lane_id, type, photo) "
+            String sql = "INSERT INTO transaction (id, vehicle_id, station_id, date_time, status, price_id, lane_id, type, photo) "
                     + "VALUES (?,?,?,?,?,?,?,?,?)";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
             preStm.setString(1, idTransaction);
-            preStm.setInt(2, idAccount);
+            preStm.setInt(2, idVehicle);
             preStm.setInt(3, idStation);
             preStm.setString(4, currentTime);
             preStm.setString(5, status);
