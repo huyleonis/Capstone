@@ -6,6 +6,10 @@
 package com.fpt.capstone.Services;
 
 import com.fpt.capstone.Dtos.AccountDTO;
+import com.fpt.capstone.Entities.Account;
+import com.fpt.capstone.Entities.Vehicle;
+
+import java.util.List;
 
 /**
  *
@@ -13,12 +17,21 @@ import com.fpt.capstone.Dtos.AccountDTO;
  */
 public interface AccountService {
 
-    public String makePayment(String username, int priceId);        
- 
-    public AccountDTO getAccount(String username);        
+	String makePayment(String username, int priceId);
 
-    AccountDTO getAccountById(int id);
-    
-    AccountDTO checkLoginFromDesktopApp(String username, String password);
+	AccountDTO getAccountByUsername(String username);
 
+	AccountDTO getAccountById(int id);
+
+	AccountDTO checkLoginFromDesktopApp(String username, String password);
+
+	List<AccountDTO> getListAccount();
+
+	AccountDTO insert(Account account);
+
+	AccountDTO update(Account account);
+
+	Vehicle checkAccountOwnVehicle(Account account);
+	
+	boolean isAvailable(Account account);
 }

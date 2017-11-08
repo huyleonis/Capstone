@@ -42,7 +42,7 @@ public class LoginRequest {
             while ((inputLine = in.readLine()) != null) {
                 JSONObject account = (JSONObject) parser.parse(inputLine);
                 if (account != null) {
-                    Long role = (Long) account.get("role");
+                    String role = (String) account.get("role");
                     String fullname = (String) account.get("fullname");
                     loginDTO = new LoginDTO(username, role, fullname, localhost);
 
@@ -60,7 +60,18 @@ public class LoginRequest {
     public boolean checkConnection(String localhost){
         boolean check = false;
         String urlName = localhost + "/ats/checkConnection/";
-        
+         try {
+            URL oracle = new URL(urlName); // URL to Parse
+            URLConnection yc = oracle.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+            String inputLine = in.readLine();
+            if(inputLine.equals("true")){
+                check = true;
+            }
+            in.close();
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        }
         return check;
     }
 }

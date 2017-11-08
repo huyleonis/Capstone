@@ -37,8 +37,7 @@ public class AutoPaymentRequest extends TimerTask {
     /**
      * Lấy các transaction theo từng làn xe khi thanh toán tự động với status là "Chờ xử lý" và lưu vào queue
      *
-     * @param idLane làn xe ứng với mỗi list
-     * @param localhost tên
+     * @param localhost
      * @return trả về thông tin list transaction "Chờ xử lý"
      */
     public List<VehiclePayment> getListVehicleUnpaid(String localhost) {

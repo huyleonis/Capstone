@@ -1,11 +1,10 @@
 package com.fpt.capstone.Services;
 
-import com.fpt.capstone.Dtos.TransactionDTO;
-import com.fpt.capstone.Dtos.TransactionDetailDTO;
-
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+
+import com.fpt.capstone.Dtos.TransactionDTO;
+import com.fpt.capstone.Dtos.TransactionDetailDTO;
 
 public interface TransactionService {
 
@@ -20,7 +19,7 @@ public interface TransactionService {
     
     TransactionDetailDTO getDetailById(String id);
 
-    List<TransactionDTO> getTransactionsForStaff(String status);
+    List<TransactionDTO> getTransactionsForStaff(String status, int min);
 
     TransactionDTO updateTransactionLane(String id, int laneId);
 
@@ -30,4 +29,7 @@ public interface TransactionService {
 
     List<TransactionDetailDTO> getDetailsByAccountId(String username);
 
+    List<TransactionDTO> getTransactionByDate(String date, String status);
+    
+    void deleteTransaction(String id);
 }

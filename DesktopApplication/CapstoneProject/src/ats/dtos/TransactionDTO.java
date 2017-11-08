@@ -12,26 +12,48 @@ import java.sql.Date;
  * @author Chi Hieu
  */
 public class TransactionDTO {
+
     private String id;
+    private int vehicleId;
     private String licensePlate;
+    private int stationId;
     private String stationName;
-    private Date dateTime;
+    private java.util.Date dateTime;
     private String status;
+    private int priceId;
     private Double price;
+    private int laneId;
     private String laneName;
-    private Boolean type;
+    private String type;
     private String photo;
 
     public TransactionDTO() {
     }
-    
-    public TransactionDTO(String id, String licensePlate, String stationName, Date dateTime, String status, Double price, String laneName, Boolean type, String photo) {
+
+    public TransactionDTO(String id, int vehicleId, String licensePlate, int stationId, java.util.Date dateTime, String status, int priceId, int laneId, String type, String photo) {
         this.id = id;
+        this.vehicleId = vehicleId;
+        this.stationId = stationId;
+        this.dateTime = dateTime;
+        this.status = status;
+        this.priceId = priceId;
+        this.laneId = laneId;
+        this.type = type;
+        this.photo = photo;
         this.licensePlate = licensePlate;
+    }
+
+    public TransactionDTO(String id, int vehicleId, String licensePlate, int stationId, String stationName, java.util.Date dateTime, String status, int priceId, Double price, int laneId, String laneName, String type, String photo) {
+        this.id = id;
+        this.vehicleId = vehicleId;
+        this.licensePlate = licensePlate;
+        this.stationId = stationId;
         this.stationName = stationName;
         this.dateTime = dateTime;
         this.status = status;
+        this.priceId = priceId;
         this.price = price;
+        this.laneId = laneId;
         this.laneName = laneName;
         this.type = type;
         this.photo = photo;
@@ -45,12 +67,28 @@ public class TransactionDTO {
         this.id = id;
     }
 
+    public int getVehicleId() {
+        return vehicleId;
+    }
+
+    public void setVehicleId(int vehicleId) {
+        this.vehicleId = vehicleId;
+    }
+
     public String getLicensePlate() {
         return licensePlate;
     }
 
     public void setLicensePlate(String licensePlate) {
         this.licensePlate = licensePlate;
+    }
+
+    public int getStationId() {
+        return stationId;
+    }
+
+    public void setStationId(int stationId) {
+        this.stationId = stationId;
     }
 
     public String getStationName() {
@@ -61,11 +99,11 @@ public class TransactionDTO {
         this.stationName = stationName;
     }
 
-    public Date getDateTime() {
+    public java.util.Date getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(java.util.Date dateTime) {
         this.dateTime = dateTime;
     }
 
@@ -77,12 +115,28 @@ public class TransactionDTO {
         this.status = status;
     }
 
+    public int getPriceId() {
+        return priceId;
+    }
+
+    public void setPriceId(int priceId) {
+        this.priceId = priceId;
+    }
+
     public Double getPrice() {
         return price;
     }
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public int getLaneId() {
+        return laneId;
+    }
+
+    public void setLaneId(int laneId) {
+        this.laneId = laneId;
     }
 
     public String getLaneName() {
@@ -93,11 +147,11 @@ public class TransactionDTO {
         this.laneName = laneName;
     }
 
-    public Boolean getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Boolean type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -108,7 +162,5 @@ public class TransactionDTO {
     public void setPhoto(String photo) {
         this.photo = photo;
     }
-    
-    
-    
+
 }

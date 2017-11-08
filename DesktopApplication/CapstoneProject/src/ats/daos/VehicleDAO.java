@@ -51,4 +51,21 @@ public class VehicleDAO {
         }
         return idVehicle;
     }
+
+    public String findLicensePlateByVehicle(int id) throws Exception {
+        String licensePlate = "";
+        try {
+            String sql = "SELECT license_plate FROM vehicle WHERE id = ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setInt(1, id);
+            rs = preStm.executeQuery();
+            if (rs.next()) {
+                licensePlate = rs.getString("license_plate");
+            }
+        } finally {
+            closeConnection();
+        }
+        return licensePlate;
+    }
 }

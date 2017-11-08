@@ -1,15 +1,14 @@
 package com.fpt.capstone.Repositories;
 
-import com.fpt.capstone.Entities.Price;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import org.springframework.data.repository.query.Param;
+import com.fpt.capstone.Entities.Price;
 
 @Repository
-public interface PriceRepos extends JpaRepository<Price, String> {
+public interface PriceRepos extends JpaRepository<Price, Integer> {
 
     /**
      * Tìm giá tiền dựa trên username và id của station cho thu phi tự động
@@ -46,10 +45,11 @@ public interface PriceRepos extends JpaRepository<Price, String> {
      * @param idLane
      * @return price, typeName, account_id
      */
-    @Query(value = "select * from price where station_id = "
-            + "(select s.id from station s, lane l where l.station_id = s.id and l.id = :idLane) "
-            + "and type_id = "
-            + "(select vt.id from vehicletype vt, vehicle v where vt.id = v.type_id and v.license_plate = :license)", nativeQuery = true)
-    Price findByLicensePlate(@Param("license") String licensePlate, @Param("idLane") int idLane);
+    @Query(value = "SELECT * FROM price"
+            + "WHERE station_id = "
+            + "(SELECT st.id FROM station st, lane la WHERE la.station_id = st.id AND la.id = :idLane) "
+            + "AND type_id = "
+            + "(SELECT vt.id FROM vehicletype vt, vehicle v WHERE vt.id = v.type_id AND v.license_plate = :license)", nativeQuery = true)
+    Price findByLicensePlate(@Param("license") String licensePlate,@Param("idLane") int idLane);
 
 }

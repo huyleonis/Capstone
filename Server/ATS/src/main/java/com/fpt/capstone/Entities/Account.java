@@ -5,240 +5,155 @@
  */
 package com.fpt.capstone.Entities;
 
-import java.io.Serializable;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.persistence.*;
 
-/**
- *
- * @author Chi Hieu
- */
-@Entity
-@Table(name = "account")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Account.findAll", query = "SELECT a FROM Account a")
-    , @NamedQuery(name = "Account.findById", query = "SELECT a FROM Account a WHERE a.id = :id")
-    , @NamedQuery(name = "Account.findByUsername", query = "SELECT a FROM Account a WHERE a.username = :username")
-    , @NamedQuery(name = "Account.findByPassword", query = "SELECT a FROM Account a WHERE a.password = :password")
-    , @NamedQuery(name = "Account.findByRole", query = "SELECT a FROM Account a WHERE a.role = :role")
-    , @NamedQuery(name = "Account.findByFullname", query = "SELECT a FROM Account a WHERE a.fullname = :fullname")
-    , @NamedQuery(name = "Account.findByEmail", query = "SELECT a FROM Account a WHERE a.email = :email")
-    , @NamedQuery(name = "Account.findByPhone", query = "SELECT a FROM Account a WHERE a.phone = :phone")
-    , @NamedQuery(name = "Account.findByNumberId", query = "SELECT a FROM Account a WHERE a.numberId = :numberId")
-    , @NamedQuery(name = "Account.findByEWallet", query = "SELECT a FROM Account a WHERE a.eWallet = :eWallet")
-    , @NamedQuery(name = "Account.findByBalance", query = "SELECT a FROM Account a WHERE a.balance = :balance")
-    , @NamedQuery(name = "Account.findByIsActive", query = "SELECT a FROM Account a WHERE a.isActive = :isActive")
-    , @NamedQuery(name = "Account.findByIsEnable", query = "SELECT a FROM Account a WHERE a.isEnable = :isEnable")})
-public class Account implements Serializable {
+@Entity(name = "account")
+public class Account {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
-    private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "username")
-    private String username;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "password")
-    private String password;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "role")
-    private int role;
-    @Size(max = 45)
-    @Column(name = "fullname")
-    private String fullname;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 45)
-    @Column(name = "email")
-    private String email;
-    // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
-    @Size(max = 45)
-    @Column(name = "phone")
-    private String phone;
-    @Size(max = 45)
-    @Column(name = "number_id")
-    private String numberId;
-    @Size(max = 45)
-    @Column(name = "e_wallet")
-    private String eWallet;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "balance")
-    private Double balance;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "isActive")
-    private boolean isActive;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "isEnable")
-    private boolean isEnable;
-    @JoinColumn(name = "vehicle_id", referencedColumnName = "id")
-    @OneToOne
-    private Vehicle vehicleId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
+	private int id;
 
-    public Account() {
-    }
+	@Column(name = "username")
+	private String username;
 
-    public Account(Integer id) {
-        this.id = id;
-    }
+	@Column(name = "password")
+	private String password;
 
-    public Account(Integer id, String username, String password, int role, boolean isActive, boolean isEnable) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.role = role;
-        this.isActive = isActive;
-        this.isEnable = isEnable;
-    }
+	@Column(name = "role")
+	private int role;
 
-    public Integer getId() {
-        return id;
-    }
+	@Column(name = "fullname")
+	private String fullname;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	@Column(name = "email")
+	private String email;
 
-    public String getUsername() {
-        return username;
-    }
+	@Column(name = "phone")
+	private String phone;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	@Column(name = "number_id")
+	private String numberId;
 
-    public String getPassword() {
-        return password;
-    }
+	@Column(name = "e_wallet")
+	private String eWallet;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	@OneToOne(cascade = {CascadeType.ALL})
+	@JoinColumn(name = "vehicle_id")
+	private Vehicle vehicle;
 
-    public int getRole() {
-        return role;
-    }
+	@Column(name = "balance")
+	private Double balance;
 
-    public void setRole(int role) {
-        this.role = role;
-    }
+	@Column(name = "is_active")
+	private int active;
 
-    public String getFullname() {
-        return fullname;
-    }
+	@Column(name = "is_enable")
+	private int enable;
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public String getPhone() {
-        return phone;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public String getNumberId() {
-        return numberId;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public void setNumberId(String numberId) {
-        this.numberId = numberId;
-    }
+	public int getRole() {
+		return role;
+	}
 
-    public String getEWallet() {
-        return eWallet;
-    }
+	public void setRole(int role) {
+		this.role = role;
+	}
 
-    public void setEWallet(String eWallet) {
-        this.eWallet = eWallet;
-    }
+	public String getFullname() {
+		return fullname;
+	}
 
-    public Double getBalance() {
-        return balance;
-    }
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
+	}
 
-    public void setBalance(Double balance) {
-        this.balance = balance;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public boolean getIsActive() {
-        return isActive;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
-    }
+	public String getPhone() {
+		return phone;
+	}
 
-    public boolean getIsEnable() {
-        return isEnable;
-    }
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
-    public void setIsEnable(boolean isEnable) {
-        this.isEnable = isEnable;
-    }
+	public String getNumberId() {
+		return numberId;
+	}
 
-    public Vehicle getVehicleId() {
-        return vehicleId;
-    }
+	public void setNumberId(String numberId) {
+		this.numberId = numberId;
+	}
 
-    public void setVehicleId(Vehicle vehicleId) {
-        this.vehicleId = vehicleId;
-    }
+	public String geteWallet() {
+		return eWallet;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
+	public void seteWallet(String eWallet) {
+		this.eWallet = eWallet;
+	}
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Account)) {
-            return false;
-        }
-        Account other = (Account) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
+	public Vehicle getVehicle() {
+		return vehicle;
+	}
 
-    @Override
-    public String toString() {
-        return "com.fpt.capstone.Entities.Account[ id=" + id + " ]";
-    }
-    
+	public void setVehicle(Vehicle vehicle) {
+		this.vehicle = vehicle;
+	}
+
+	public Double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(Double balance) {
+		this.balance = balance;
+	}
+
+	public int getActive() {
+		return active;
+	}
+
+	public void setActive(int active) {
+		this.active = active;
+	}
+
+	public int getEnable() {
+		return enable;
+	}
+
+	public void setEnable(int enable) {
+		this.enable = enable;
+	}
+
 }

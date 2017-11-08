@@ -6,10 +6,13 @@
 package ats.daos;
 
 import ats.connection.MyConnection;
+import ats.dtos.TransactionDTO;
+import ats.dtos.VehicleDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -72,6 +75,36 @@ public class TransactionDAO {
             closeConnection();
         }
         return check;
+    }
+
+    public List<TransactionDTO> getTransactionByDateFromClient(String date) throws Exception {
+        List<TransactionDTO> list = null;
+        VehicleDAO dao = new VehicleDAO();
+        try {
+            String sql = "SELECT * FROM transaction WHERE date_format(date_time, '%Y-%m-%d') = ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, date);
+            rs = preStm.executeQuery();
+            while (rs.next()) {
+                String id = rs.getString("id");
+                int vehicleId = rs.getInt("vehicle_id");
+                String licensePlate = dao.findLicensePlateByVehicle(vehicleId);
+                int stationId = rs.getInt("station_id");
+                java.sql.Date dateTime = (java.sql.Date) rs.getDate("date_time");
+                String status = rs.getString("status");
+                int priceId = rs.getInt("price_id");
+                int laneId = rs.getInt("lane_id");
+                String type = rs.getString("type");
+                String photo = rs.getString("photo");
+                TransactionDTO dto = new TransactionDTO(id, vehicleId, licensePlate, stationId, dateTime, status, priceId, laneId, type, photo);
+                list.add(dto);
+            }
+        } finally {
+            closeConnection();
+        }
+
+        return list;
     }
 
 }

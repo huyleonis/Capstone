@@ -292,10 +292,10 @@ public class Login extends javax.swing.JFrame {
             try {
                 dto = lp.checkLogin(localhost, username, result);
                 if (dto.getRole() != null) {
-                    if (dto.getRole() == 1) {
+                    if (dto.getRole().equals("Admin")) {
                         this.setVisible(false);
                         new MainForm(dto).setVisible(true);
-                    } else if (dto.getRole() == 2) {
+                    } else if (dto.getRole().equals("Staff")) {
                         this.setVisible(false);
                         new MainForm(dto).setVisible(true);
                     } else {

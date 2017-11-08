@@ -5,8 +5,8 @@
  */
 package com.fpt.capstone.Entities;
 
-import java.io.Serializable;
-import javax.persistence.Basic;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,111 +14,67 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author Chi Hieu
- */
-@Entity
-@Table(name = "vehicle")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Vehicle_1.findAll", query = "SELECT v FROM Vehicle_1 v")
-    , @NamedQuery(name = "Vehicle_1.findById", query = "SELECT v FROM Vehicle_1 v WHERE v.id = :id")
-    , @NamedQuery(name = "Vehicle_1.findByLicensePlate", query = "SELECT v FROM Vehicle_1 v WHERE v.licensePlate = :licensePlate")})
-public class Vehicle implements Serializable {
+@Entity(name = "vehicle")
+public class Vehicle {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
-    private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "license_plate")
-    private String licensePlate;
-    @OneToOne(mappedBy = "vehicleId")
-    private Account account;
-    @JoinColumn(name = "type_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Vehicletype typeId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int id;
 
-    public Vehicle() {
-    }
+	@Column(name = "license_plate")
+	private String licensePlate;
 
-    public Vehicle(Integer id) {
-        this.id = id;
-    }
+	@ManyToOne
+	@JoinColumn(name = "type_id")
+	private Vehicletype vehicletype;
 
-    public Vehicle(Integer id, String licensePlate) {
-        this.id = id;
-        this.licensePlate = licensePlate;
-    }
+	@OneToOne(mappedBy = "vehicle")
+	private Account account;
 
-    public Integer getId() {
-        return id;
-    }
+	@OneToMany(mappedBy = "vehicle")
+	private List<Transaction> transactions;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public String getLicensePlate() {
-        return licensePlate;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setLicensePlate(String licensePlate) {
-        this.licensePlate = licensePlate;
-    }
+	public String getLicensePlate() {
+		return licensePlate;
+	}
 
-    public Account getAccount() {
-        return account;
-    }
+	public void setLicensePlate(String licensePlate) {
+		this.licensePlate = licensePlate;
+	}
 
-    public void setAccount(Account account) {
-        this.account = account;
-    }
+	public Vehicletype getVehicletype() {
+		return vehicletype;
+	}
 
-    public Vehicletype getTypeId() {
-        return typeId;
-    }
+	public void setVehicletype(Vehicletype vehicletype) {
+		this.vehicletype = vehicletype;
+	}
 
-    public void setTypeId(Vehicletype typeId) {
-        this.typeId = typeId;
-    }
+	public Account getAccount() {
+		return account;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
+	public void setAccount(Account account) {
+		this.account = account;
+	}
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Vehicle)) {
-            return false;
-        }
-        Vehicle other = (Vehicle) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
 
-    @Override
-    public String toString() {
-        return "com.fpt.capstone.Entities.Vehicle[ id=" + id + " ]";
-    }
-    
+	public void setTransactions(List<Transaction> transactions) {
+		this.transactions = transactions;
+	}
+
 }

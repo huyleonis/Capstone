@@ -1,6 +1,10 @@
 package com.fpt.capstone.Repositories;
 
-import com.fpt.capstone.Entities.Transaction;
+import java.util.Date;
+import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -8,11 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import org.springframework.data.repository.query.Param;
+import com.fpt.capstone.Entities.Transaction;
 
 @Repository
 public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
@@ -83,14 +83,17 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
     int updateTransaction(String idTransaction, String status);
 
     /**
-     * Lấy transaction cho staff theo status cho trước trong vòng 5 phút trước đó 
+     * Lấy transaction cho staff theo status cho trước trong vòng 10 phút trước đó 
      *
      * @param laneId
      * @param status
      * @return
      */
-    @Query(value = "select * from transaction where status like CONCAT('%',?1,'%') AND date_time between date_sub(now(), interval 5 minute) AND now() order by date_time asc", nativeQuery = true)
-    List<Transaction> getTransactionForStaff(String status);
+    @Query(value = "SELECT * from transaction "
+            + "WHERE status like CONCAT('%',?1,'%')"
+            + " AND date_time between date_sub(now(), interval ?2 minute)"
+            + " AND now() order by date_time asc", nativeQuery = true)
+    List<Transaction> getTransactionForStaff(String status, int min);
 
     /**
      * Cập nhật làn đường mà xe chạy vào khi xe qua beacon 2
@@ -119,4 +122,25 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
 
     @Query(value = "SELECT * FROM transaction WHERE username_id = ?1", nativeQuery = true)
     List<Transaction> findByUsernameId(Integer usernameId);
+    
+    
+    /**
+     * Get transaction theo ngày đã chọn
+     * @param date : ngày được chọn
+     * @param status : trạng thái của giao dịch
+     * @return
+     */
+    @Query(value = "SELECT * FROM transaction "
+            + "WHERE date_format(date_time, '%Y-%m-%d') = :date"
+            + " AND status = :status", nativeQuery = true)
+    List<Transaction> getTransactionByDate(@Param("date") String date, @Param("status") String status);
+    
+    /**
+     * Get transaction theo ngày đã chọn
+     * @param id 
+     * @return
+     */
+    @Query(value = "DELETE FROM transaction "
+            + "WHERE id = :idTran", nativeQuery = true)
+    void deleteTransaction(@Param("idTran") String id);
 }

@@ -1,36 +1,43 @@
 package com.fpt.capstone.Dtos;
 
-import com.fpt.capstone.Entities.Vehicle;
-import com.fpt.capstone.Entities.Vehicletype;
-
 public class VehicleDTO {
-    private String licensePlate;
-    private int vehicletype;
 
-    public String getLicensePlate() {
-        return licensePlate;
-    }
+	private int id;
+	private String licensePlate;
+	private int typeId;
 
-    public void setLicensePlate(String licensePlate) {
-        this.licensePlate = licensePlate;
-    }
+	public VehicleDTO() {
+	}
 
-    public Integer getVehicletype() {
-        return vehicletype;
-    }
+	public VehicleDTO(int id, String licensePlate, int typeId) {
+		super();
+		this.id = id;
+		this.licensePlate = licensePlate;
+		this.typeId = typeId;
+	}
 
-    public void setVehicletype(Integer vehicletype) {
-        this.vehicletype = vehicletype;
-    }
+	public int getId() {
+		return id;
+	}
 
-//    public static VehicleDTO convertFromEntity(Vehicle vehicle){
-//        VehicleDTO dto = new VehicleDTO();
-//
-//        String licensePlate = vehicle.getLicensePlate();
-//        Vehicletype vehicletype = vehicle.getVehicletype();
-//
-//        return dto;
-//    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
+	public String getLicensePlate() {
+		return licensePlate;
+	}
+
+	public void setLicensePlate(String licensePlate) {
+		this.licensePlate = licensePlate;
+	}
+
+	public int getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(int typeId) {
+		this.typeId = typeId;
+	}
 
 }

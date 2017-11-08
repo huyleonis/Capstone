@@ -5,6 +5,7 @@
  */
 package ats.request;
 
+import ats.dtos.TransactionDTO;
 import ats.dtos.VehicleDTO;
 import ats.dtos.VehiclePayment;
 import java.io.BufferedReader;
@@ -13,9 +14,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.simple.JSONArray;
 
 /**
  *
@@ -24,7 +30,6 @@ import java.util.TimerTask;
 public class ManualPaymentRequest {
 
 //    public static final String LOCALHOST = "http://localhost:8080";
-
     /**
      * Tìm thông tin xe khi nhập biển số xe thủ công
      *
@@ -79,7 +84,7 @@ public class ManualPaymentRequest {
             while ((inputLine = in.readLine()) != null) {
                 JSONObject payment = (JSONObject) parser.parse(inputLine);
                 // Get id of transaction
-                String id = (String) payment.get("transactionId");
+                String id = (String) payment.get("id");
                 String typeName = (String) payment.get("vehicleType");
                 Double price = (Double) payment.get("price");
                 String status = (String) payment.get("status");
@@ -158,6 +163,66 @@ public class ManualPaymentRequest {
         } catch (IOException e) {
         }
         return vehiclePayment;
+    }
+
+    /**
+     * Lấy các transaction theo từng làn xe khi thanh toán tự động với status là
+     * "Chờ xử lý" và lưu vào queue
+     *
+     * @param localhost
+     * @return trả về thông tin list transaction "Chờ xử lý"
+     */
+    public List<TransactionDTO> getListTransactionByDate(String localhost, String date) {
+        JSONParser parser = new JSONParser();
+        List<TransactionDTO> list = new ArrayList<>();
+        try {
+            URL oracle = new URL(localhost
+                    + "/transaction/getTransactionByDate/" + date); // URL to Parse
+            URLConnection yc = oracle.openConnection();  // Open Connection
+            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                JSONArray array = (JSONArray) parser.parse(inputLine);
+                // Loop through each item
+                for (Object transaction : array) {
+                    JSONObject trans = (JSONObject) transaction;
+                    if (!trans.isEmpty()) {
+                        String id = (String) trans.get("id");
+                        int vehicleId = (Integer) trans.get("vehicleId");
+                        int stationId = (Integer) trans.get("stationId");
+                        String licensePlate = (String) trans.get("licensePlate");
+                        Date dateTime = (Date) trans.get("dateTime");
+                        String status = (String) trans.get("status");
+                        int priceId = (Integer) trans.get("priceId");
+                        int laneId = (Integer) trans.get("laneId");
+                        boolean type = (boolean) trans.get("type");
+                        String photo = (String) trans.get("photo");
+                        TransactionDTO transactionDTO = new TransactionDTO(id, vehicleId, licensePlate, stationId, dateTime, status, priceId, laneId, date, photo);
+                        list.add(transactionDTO);
+                    }
+                }
+            }
+            in.close();
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        } catch (org.json.simple.parser.ParseException ex) {
+            Logger.getLogger(AutoPaymentRequest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+
+    }
+
+    public void deleleTransaction(String id, String localhost) {
+        String urlName = localhost + "/transaction/deleteTransaction/" + id;
+        try {
+            URL oracle = new URL(urlName); // URL to Parse
+            URLConnection yc = oracle.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+            in.close();
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        }
+
     }
 
 }

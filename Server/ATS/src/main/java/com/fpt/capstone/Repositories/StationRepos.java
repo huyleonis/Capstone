@@ -1,11 +1,10 @@
 package com.fpt.capstone.Repositories;
 
-import com.fpt.capstone.Entities.Station;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.fpt.capstone.Entities.Station;
 
 @Repository
 public interface StationRepos extends JpaRepository<Station, Integer>{

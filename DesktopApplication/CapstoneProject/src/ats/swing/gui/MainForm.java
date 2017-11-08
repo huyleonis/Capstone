@@ -1,12 +1,27 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * and open the template in the    @Override
+    public int getRowCount() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int getColumnCount() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+ editor.
  */
 package ats.swing.gui;
 
 import ats.daos.TransactionDAO;
 import ats.dtos.LoginDTO;
+import ats.dtos.TransactionDTO;
 import ats.dtos.VehicleDTO;
 import ats.dtos.VehiclePayment;
 import ats.request.AutoPaymentRequest;
@@ -14,8 +29,10 @@ import ats.request.ManualPaymentRequest;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,8 +57,8 @@ public class MainForm extends javax.swing.JFrame {
         //timer.start();
         txtHello.setText("Xin chào, " + loginDTO.getFullname());
         txtLocalhost.setText(loginDTO.getLocalhost());
-        Long role = loginDTO.getRole();
-        if (role == 2) {
+        String role = loginDTO.getRole();
+        if (role.equals("Staff")) {
             paneTechnical.setVisible(false);
             panePayment.setVisible(false);
         }
@@ -90,8 +107,6 @@ public class MainForm extends javax.swing.JFrame {
         txtOpenCamera = new javax.swing.JButton();
         txtCloseCamera = new javax.swing.JButton();
         tabHistory = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblHistory = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
@@ -109,6 +124,7 @@ public class MainForm extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         paneBasic = new javax.swing.JPanel();
         txtLogOut = new javax.swing.JButton();
+        btnUpdateDB = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -322,21 +338,6 @@ public class MainForm extends javax.swing.JFrame {
         jTabbedPane1.addTab("Thu Phí", tabHome);
         tabHome.getAccessibleContext().setAccessibleName("");
 
-        tblHistory.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        tblHistory.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        tblHistory.setSelectionBackground(new java.awt.Color(255, 255, 153));
-        jScrollPane1.setViewportView(tblHistory);
-
         jLabel1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel1.setText("Tìm kiếm theo số xe");
 
@@ -355,18 +356,13 @@ public class MainForm extends javax.swing.JFrame {
         tabHistoryLayout.setHorizontalGroup(
             tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabHistoryLayout.createSequentialGroup()
-                .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(tabHistoryLayout.createSequentialGroup()
-                        .addGap(224, 224, 224)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnSearch))
-                    .addGroup(tabHistoryLayout.createSequentialGroup()
-                        .addGap(85, 85, 85)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addGap(224, 224, 224)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnSearch)
+                .addContainerGap(475, Short.MAX_VALUE))
         );
         tabHistoryLayout.setVerticalGroup(
             tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -376,9 +372,7 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSearch))
-                .addGap(44, 44, 44)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(116, Short.MAX_VALUE))
+                .addContainerGap(587, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Lịch Sử Giao Dịch", tabHistory);
@@ -510,6 +504,14 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        btnUpdateDB.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnUpdateDB.setText("Đồng bộ dữ liệu");
+        btnUpdateDB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateDBActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout paneBasicLayout = new javax.swing.GroupLayout(paneBasic);
         paneBasic.setLayout(paneBasicLayout);
         paneBasicLayout.setHorizontalGroup(
@@ -518,11 +520,17 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap(295, Short.MAX_VALUE)
                 .addComponent(txtLogOut)
                 .addContainerGap())
+            .addGroup(paneBasicLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnUpdateDB, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         paneBasicLayout.setVerticalGroup(
             paneBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, paneBasicLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(19, 19, 19)
+                .addComponent(btnUpdateDB, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(txtLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -679,7 +687,6 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSearchActionPerformed
 
-
     /**
      * Event ấn nút Enter của button "Đã thu"
      *
@@ -738,9 +745,6 @@ public class MainForm extends javax.swing.JFrame {
     private void txtLicensePlateCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtLicensePlateCaretUpdate
         //timer.stop();
         localhost = txtLocalhost.getText().trim();
-        //        if (txtLicensePlate.getText().isEmpty()) {
-            //            timer.start();
-            //        }
         String licensePlate = txtLicensePlate.getText();
         ManualPaymentRequest mpr = new ManualPaymentRequest();
         // VehicleDTO dto = new VehicleDTO();
@@ -765,12 +769,12 @@ public class MainForm extends javax.swing.JFrame {
             }
         } catch (Exception ex) {
             Logger.getLogger(MainForm.class
-                .getName()).log(Level.SEVERE, null, ex);
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
         //dto = null;
     }//GEN-LAST:event_txtLicensePlateCaretUpdate
-    
+
     boolean flagSaveLocalhost = false;
     private void btnSaveLocalhostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveLocalhostActionPerformed
         if (flagSaveLocalhost == false) {
@@ -783,6 +787,42 @@ public class MainForm extends javax.swing.JFrame {
             flagSaveLocalhost = false;
         }
     }//GEN-LAST:event_btnSaveLocalhostActionPerformed
+
+    private void btnUpdateDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateDBActionPerformed
+
+        ManualPaymentRequest mpr = new ManualPaymentRequest();
+        TransactionDAO dao = new TransactionDAO();
+        java.util.Date dt = new java.util.Date();
+
+        java.text.SimpleDateFormat sdf
+                = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        String currentTime = sdf.format(dt);
+        try {
+            List<TransactionDTO> listA = mpr.getListTransactionByDate(localhost, currentTime);
+            List<TransactionDTO> listB = dao.getTransactionByDateFromClient(currentTime);
+            List<String> listC = new ArrayList<>();
+            List<TransactionDTO> listD = new ArrayList<>();
+            for (int i = 0; i < listA.size(); i++) {
+                for (int j = 0; j < listB.size(); j++) {
+                    if (listA.get(i).getVehicleId() == listB.get(j).getVehicleId()) {
+                        listC.add(listA.get(i).getId());
+                        listD.add(listB.get(j));
+                    }
+                }
+            }
+            for (int k = 0; k < listC.size(); k++) {
+                mpr.deleleTransaction(listC.get(k), localhost);
+            }
+            for (int m = 0; m < listD.size(); m++) {
+                mpr.insertManualPayment(listD.get(m).getLicensePlate(), listD.get(m).getLaneId(), localhost);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+    }//GEN-LAST:event_btnUpdateDBActionPerformed
 
     /**
      * @param args the command line arguments
@@ -808,6 +848,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton btnManualPayment;
     private javax.swing.JButton btnSaveLocalhost;
     private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnUpdateDB;
     private javax.swing.JMenuItem contentsMenuItem;
     private javax.swing.JMenuItem copyMenuItem;
     private javax.swing.JMenuItem cutMenuItem;
@@ -823,7 +864,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lbId;
@@ -842,7 +882,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel tabHome;
     private javax.swing.JPanel tabReport;
     private javax.swing.JPanel tabSetting;
-    private javax.swing.JTable tblHistory;
     private javax.swing.JButton txtCloseCamera;
     private javax.swing.JLabel txtHello;
     private javax.swing.JTextField txtLane;

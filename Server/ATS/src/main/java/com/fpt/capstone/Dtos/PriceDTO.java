@@ -1,123 +1,152 @@
 package com.fpt.capstone.Dtos;
 
-import com.fpt.capstone.Entities.Price;
+import java.text.SimpleDateFormat;
 
-import java.util.Date;
+import com.fpt.capstone.Entities.Price;
 
 public class PriceDTO {
 
-    private int id;
-    private String nameStation;
-    private String locationStation;
-    private String zoneStation;
-    private double price;    
-    private Date fromDate;
-    private int stationId;    
-    private String typeVehicle;
+	private static final String ACTIVE = "Active";
+	private static final String INACTIVE = "Inactive";
 
-    public PriceDTO() {
-    }        
+	private int id;
+	private String stationName;
+	private String stationLocation;
+	private String stationZone;
+	private double price;
+	private String fromDate;
+	private int stationId;
+	private String vehicleType;
+	private int vehicleTypeId;
+	private String active;
 
-    public PriceDTO(int id, String nameStation, String locationStation, String zoneStation, double price, String nameVehicleType, Date fromDate, int stationId, String typeVehicle) {
-        this.id = id;
-        this.nameStation = nameStation;
-        this.locationStation = locationStation;
-        this.zoneStation = zoneStation;
-        this.price = price;        
-        this.fromDate = fromDate;
-        this.stationId = stationId;
-        this.typeVehicle = typeVehicle;
-    }
-    
-    public int getId() {
-        return id;
-    }
+	public PriceDTO() {
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
-   
-    public String getTypeVehicle() {
-        return typeVehicle;
-    }
+	public PriceDTO(int id, String stationName, String stationLocation, String stationZone, double price,
+			String fromDate, int stationId, String vehicleType, int vehicleTypeId, String active) {
+		this.id = id;
+		this.stationName = stationName;
+		this.stationLocation = stationLocation;
+		this.stationZone = stationZone;
+		this.price = price;
+		this.fromDate = fromDate;
+		this.stationId = stationId;
+		this.vehicleType = vehicleType;
+		this.vehicleTypeId = vehicleTypeId;
+		this.active = active;
+	}
 
-    public void setTypeVehicle(String typeVehicle) {
-        this.typeVehicle = typeVehicle;
-    }    
+	public int getId() {
+		return id;
+	}
 
-    public void setNameStation(String nameStation) {
-        this.nameStation = nameStation;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public String getNameStation() {
-        return nameStation;
-    }    
+	public String getStationName() {
+		return stationName;
+	}
 
-    public String getLocationStation() {
-        return locationStation;
-    }
+	public void setStationName(String stationName) {
+		this.stationName = stationName;
+	}
 
-    public void setLocationStation(String locationStation) {
-        this.locationStation = locationStation;
-    }
+	public String getStationLocation() {
+		return stationLocation;
+	}
 
-    public String getZoneStation() {
-        return zoneStation;
-    }
+	public void setStationLocation(String stationLocation) {
+		this.stationLocation = stationLocation;
+	}
 
-    public void setZoneStation(String zoneStation) {
-        this.zoneStation = zoneStation;
-    }
+	public String getStationZone() {
+		return stationZone;
+	}
 
-    public double getPrice() {
-        return price;
-    }
+	public void setStationZone(String stationZone) {
+		this.stationZone = stationZone;
+	}
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+	public double getPrice() {
+		return price;
+	}
 
-    public Date getFromDate() {
-        return fromDate;
-    }
+	public void setPrice(double price) {
+		this.price = price;
+	}
 
-    public void setFromDate(Date fromDate) {
-        this.fromDate = fromDate;
-    }
+	public String getFromDate() {
+		return fromDate;
+	}
 
-    public int getStationId() {
-        return stationId;
-    }
+	public void setFromDate(String fromDate) {
+		this.fromDate = fromDate;
+	}
 
-    public void setStationId(int stationId) {
-        this.stationId = stationId;
-    }
+	public int getStationId() {
+		return stationId;
+	}
 
-    
-    public static PriceDTO convertFromEntity(Price price) {
-        PriceDTO dto = new PriceDTO();
-        if (price == null) {
-            dto = null;
-        } else {
-            dto.setId(price.getId());
-            dto.setFromDate(price.getFromDate());
-            if (price.getPrice() <= 0) {
-                dto.setPrice(0);
-            } else {
-                dto.setPrice(price.getPrice());
-            }
-            
-            if (price.getStationId()!= null) {
-                dto.setStationId(price.getStationId().getId());
-                dto.setNameStation(price.getStationId().getName());
-                dto.setZoneStation(price.getStationId().getZone());
-            }
-            
-         
-            if (price.getTypeId()!= null) {
-                dto.setTypeVehicle(price.getTypeId().getName());
-            }            
-        }
-        return dto;
-    }
+	public void setStationId(int stationId) {
+		this.stationId = stationId;
+	}
+
+	public String getVehicleType() {
+		return vehicleType;
+	}
+
+	public void setVehicleType(String vehicleType) {
+		this.vehicleType = vehicleType;
+	}
+
+	public String getActive() {
+		return active;
+	}
+
+	public void setActive(String active) {
+		this.active = active;
+	}
+
+	public int getVehicleTypeId() {
+		return vehicleTypeId;
+	}
+
+	public void setVehicleTypeId(int vehicleTypeId) {
+		this.vehicleTypeId = vehicleTypeId;
+	}
+
+	public static PriceDTO convertFromEntity(Price price) {
+		PriceDTO dto = new PriceDTO();
+
+		if (price == null) {
+			dto = null;
+		} else {
+			dto.setId(price.getId());
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			dto.setFromDate(sdf.format(price.getFromDate()));
+
+			if (price.getPrice() <= 0) {
+				dto.setPrice(0);
+			} else {
+				dto.setPrice(price.getPrice());
+			}
+
+			if (price.getStation() != null) {
+				dto.setStationId(price.getStation().getId());
+				dto.setStationName(price.getStation().getName());
+				dto.setStationZone(price.getStation().getZone());
+			}
+
+			if (price.getVehicletype() != null) {
+				dto.setVehicleTypeId(price.getVehicletype().getId());
+				dto.setVehicleType(price.getVehicletype().getName());
+			}
+
+			dto.setActive((price.getActive() == 1) ? ACTIVE : INACTIVE);
+		}
+		return dto;
+	}
 }

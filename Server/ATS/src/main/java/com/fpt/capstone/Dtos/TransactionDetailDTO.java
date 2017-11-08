@@ -8,180 +8,171 @@ package com.fpt.capstone.Dtos;
 import com.fpt.capstone.Entities.Transaction;
 import java.util.Date;
 
-/**
- *
- * @author hp
- */
 public class TransactionDetailDTO {
-    private String id;
-    
-    private Date dateTime;
-    private String status;    
-    private double price;
-    private String failReason;
-    
-    private Integer laneId;
-    private int stationId; 
-    private String zone;
-    
-    private String stationName;
-    private String username;
-    private String licensePlate;
-    private String vehicleType;
-    private String type;
-    public TransactionDetailDTO() {
-    }
+	private String id;
 
-    public TransactionDetailDTO(String id, Date dateTime, String status, double price, String failReason, Integer laneId, int stationId, String zone, String stationName, String username, String licensePlate, String vehicleType, String type) {
-        this.id = id;
-        this.dateTime = dateTime;
-        this.status = status;
-        this.price = price;
-        this.failReason = failReason;
-        this.laneId = laneId;
-        this.stationId = stationId;
-        this.zone = zone;
-        this.stationName = stationName;
-        this.username = username;
-        this.licensePlate = licensePlate;
-        this.vehicleType = vehicleType;
-        this.type = type;
-    }
+	private Date dateTime;
+	private String status;
+	private double price;
+	private String failReason;
 
-    public String getId() {
-        return id;
-    }
+	private Integer laneId;
+	private int stationId;
+	private String zone;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	private String stationName;
+	private String username;
+	private String licensePlate;
+	private String vehicleType;
+	private String type;
 
-    public Date getDateTime() {
-        return dateTime;
-    }
+	public TransactionDetailDTO() {
+	}
 
-    public void setDateTime(Date dateTime) {
-        this.dateTime = dateTime;
-    }
+	public TransactionDetailDTO(String id, Date dateTime, String status, double price, String failReason,
+			Integer laneId, int stationId, String zone, String stationName, String username, String licensePlate,
+			String vehicleType, String type) {
+		this.id = id;
+		this.dateTime = dateTime;
+		this.status = status;
+		this.price = price;
+		this.failReason = failReason;
+		this.laneId = laneId;
+		this.stationId = stationId;
+		this.zone = zone;
+		this.stationName = stationName;
+		this.username = username;
+		this.licensePlate = licensePlate;
+		this.vehicleType = vehicleType;
+		this.type = type;
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public double getPrice() {
-        return price;
-    }
+	public Date getDateTime() {
+		return dateTime;
+	}
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+	public void setDateTime(Date dateTime) {
+		this.dateTime = dateTime;
+	}
 
-    public String getFailReason() {
-        return failReason;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public void setFailReason(String failReason) {
-        this.failReason = failReason;
-    }
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
-    public Integer getLaneId() {
-        return laneId;
-    }
+	public double getPrice() {
+		return price;
+	}
 
-    public void setLaneId(Integer laneId) {
-        this.laneId = laneId;
-    }
+	public void setPrice(double price) {
+		this.price = price;
+	}
 
-    public int getStationId() {
-        return stationId;
-    }
+	public String getFailReason() {
+		return failReason;
+	}
 
-    public void setStationId(int stationId) {
-        this.stationId = stationId;
-    }
+	public void setFailReason(String failReason) {
+		this.failReason = failReason;
+	}
 
-    public String getZone() {
-        return zone;
-    }
+	public Integer getLaneId() {
+		return laneId;
+	}
 
-    public void setZone(String zone) {
-        this.zone = zone;
-    }
+	public void setLaneId(Integer laneId) {
+		this.laneId = laneId;
+	}
 
-    public String getStationName() {
-        return stationName;
-    }
+	public int getStationId() {
+		return stationId;
+	}
 
-    public void setStationName(String stationName) {
-        this.stationName = stationName;
-    }
+	public void setStationId(int stationId) {
+		this.stationId = stationId;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public String getZone() {
+		return zone;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setZone(String zone) {
+		this.zone = zone;
+	}
 
-    public String getLicensePlate() {
-        return licensePlate;
-    }
+	public String getStationName() {
+		return stationName;
+	}
 
-    public void setLicensePlate(String licensePlate) {
-        this.licensePlate = licensePlate;
-    }
+	public void setStationName(String stationName) {
+		this.stationName = stationName;
+	}
 
-    public String getVehicleType() {
-        return vehicleType;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public void setVehicleType(String vehicleType) {
-        this.vehicleType = vehicleType;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public String getLicensePlate() {
+		return licensePlate;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
-    
-    public static TransactionDetailDTO covertFromEntity(Transaction tran) {
-        TransactionDetailDTO dto = new TransactionDetailDTO();
-        
-        dto.setId(tran.getId());
-        dto.setDateTime(tran.getDateTime());
-        if (tran.getLaneId()!= null) {
-            dto.setLaneId(tran.getLaneId().getId());
-        }
-        if (tran.getStationId()!= null) {
-            dto.setStationId(tran.getStationId().getId());
-            dto.setStationName(tran.getStationId().getName());
-            dto.setZone(tran.getStationId().getZone());
-        }
-        if (tran.getPriceId()!= null) {
-            dto.setPrice(tran.getPriceId().getPrice());
-        }
-        
-        dto.setStatus(tran.getStatus()); 
-        
-        if (tran.getVehicleId()!= null) {
-            dto.setUsername(tran.getVehicleId().getAccount().getUsername());
-            if (tran.getVehicleId() != null) {
-                dto.setLicensePlate(tran.getVehicleId().getLicensePlate());
-                dto.setVehicleType(tran.getVehicleId().getTypeId().getName());                
-            }                        
-        }
-        
-        dto.setType(tran.getType() == true? "tự động" : "thủ công");
-                
-        return dto;
-    }
-    
+	public void setLicensePlate(String licensePlate) {
+		this.licensePlate = licensePlate;
+	}
+
+	public String getVehicleType() {
+		return vehicleType;
+	}
+
+	public void setVehicleType(String vehicleType) {
+		this.vehicleType = vehicleType;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public static TransactionDetailDTO covertFromEntity(Transaction tran) {
+		TransactionDetailDTO dto = new TransactionDetailDTO();
+
+		dto.setId(tran.getId());
+		dto.setDateTime(tran.getDateTime());
+		dto.setStatus(tran.getStatus());
+		dto.setPrice(tran.getPrice().getPrice());
+		dto.setFailReason("Unknown");
+		if (tran.getLane() != null) {
+			dto.setLaneId(tran.getLane().getId());
+		}
+		dto.setStationId(tran.getStation().getId());
+		dto.setZone(tran.getStation().getZone());
+		dto.setStationName(tran.getStation().getName());
+		if (tran.getVehicle().getAccount() != null) {
+			dto.setUsername(tran.getVehicle().getAccount().getUsername());
+		}
+		dto.setLicensePlate(tran.getVehicle().getLicensePlate());
+		dto.setVehicleType(tran.getVehicle().getVehicletype().getName());
+		dto.setType((tran.getType() == 1) ? "Tự động" : "Thủ công");
+
+		return dto;
+	}
+
 }
