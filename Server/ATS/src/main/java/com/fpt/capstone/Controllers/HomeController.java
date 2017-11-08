@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/")
 public class HomeController {
 
-    @RequestMapping(value = "home", method = RequestMethod.GET)
+    @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
     public ModelAndView welcome() {
         ModelAndView m = new ModelAndView("welcome");
         return m;

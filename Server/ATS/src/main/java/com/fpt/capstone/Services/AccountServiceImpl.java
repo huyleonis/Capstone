@@ -113,22 +113,35 @@ public class AccountServiceImpl implements AccountService {
 	public AccountDTO insert(Account account) {
 
 		AccountDTO dto = null;
+		boolean isAvailable = false;
 
 		// system will generate password automatically
 		account.setPassword("123");
 
 		try {
-			// neu user dang ki xe ma xe da co trong he thong
-			if (account.getVehicle() != null) {
-				Vehicle vehicle = vehicleRepos.findByLicensePlate(account.getVehicle().getLicensePlate());
-				if (vehicle != null) {
-					account.setVehicle(vehicle);
-				}
-			}
+			isAvailable = isAvailable(account);
+			if (isAvailable) {
+				if (account.getVehicle() != null) {
+					// check xe co thuoc he thong chua
+					Vehicle vehicle = vehicleRepos.findByLicensePlate(account.getVehicle().getLicensePlate());
+					if (vehicle != null) {
+						// check xe co thuoc user khac khong
 
-			Account processedAccount = accountRepos.save(account);
-			if (processedAccount != null) {
-				dto = AccountDTO.convertFromEntity(processedAccount);
+						Account existingAccountHaveVehicle = checkAccountOwnVehicle(vehicle);
+						if (existingAccountHaveVehicle == null
+								|| existingAccountHaveVehicle.getId() == account.getId()) {
+							account.setVehicle(vehicle);
+						} else {
+							return null;
+						}
+					} 
+				}
+				Account processedAccount = accountRepos.save(account);
+				if (processedAccount != null) {
+					dto = AccountDTO.convertFromEntity(processedAccount);
+				}
+			} else {
+				return null;
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage());
@@ -145,15 +158,22 @@ public class AccountServiceImpl implements AccountService {
 			Account existingAccount = accountRepos.findOne(account.getId());
 
 			if (existingAccount != null) {
-				account.setPassword(existingAccount.getPassword());
-
-				// neu user dang ki xe ma xe da co trong he thong
 				if (account.getVehicle() != null) {
+					// check xe co thuoc he thong chua
 					Vehicle vehicle = vehicleRepos.findByLicensePlate(account.getVehicle().getLicensePlate());
 					if (vehicle != null) {
-						account.setVehicle(vehicle);
+						// check xe co thuoc user khac khong
+
+						Account existingAccountHaveVehicle = checkAccountOwnVehicle(vehicle);
+						if (existingAccountHaveVehicle == null
+								|| existingAccountHaveVehicle.getId() == account.getId()) {
+							account.setVehicle(vehicle);
+						} else {
+							return null;
+						}
 					}
 				}
+				account.setPassword(existingAccount.getPassword());
 
 				Account processedAccount = accountRepos.save(account);
 				dto = AccountDTO.convertFromEntity(processedAccount);
@@ -163,6 +183,26 @@ public class AccountServiceImpl implements AccountService {
 		}
 
 		return dto;
+	}
+
+	@Override
+	public Account checkAccountOwnVehicle(Vehicle vehicle) {
+
+		Account existingAccountHaveVehicle = accountRepos.findByVehicleId(vehicle.getId());
+
+		return existingAccountHaveVehicle;
+	}
+
+	@Override
+	public boolean isAvailable(Account account) {
+		boolean isAvailable = true;
+
+		Account existingAccount = accountRepos.findByUsername(account.getUsername());
+		if (existingAccount != null) {
+			isAvailable = false;
+		}
+
+		return isAvailable;
 	}
 
 }

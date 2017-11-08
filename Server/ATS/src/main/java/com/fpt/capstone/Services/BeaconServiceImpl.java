@@ -24,7 +24,7 @@ public class BeaconServiceImpl implements BeaconService {
 
 		List<Beacon> beacons = beaconRepos.findAll();
 		List<BeaconDTO> dtos = new ArrayList<>();
-		
+
 		for (Beacon beacon : beacons) {
 			BeaconDTO dto = BeaconDTO.convertFromEntity(beacon);
 			dtos.add(dto);
@@ -39,6 +39,9 @@ public class BeaconServiceImpl implements BeaconService {
 		BeaconDTO dto = null;
 
 		try {
+			if (beacon.getLane() != null) {
+				
+			}
 			Beacon processedBeacon = beaconRepos.save(beacon);
 			if (processedBeacon != null) {
 				dto = BeaconDTO.convertFromEntity(processedBeacon);

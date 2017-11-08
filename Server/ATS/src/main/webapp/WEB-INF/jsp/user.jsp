@@ -94,9 +94,9 @@
                                                 <label id="nameError" class="error"></label>
                                                 </div>
                                                 
-                                                <div class="form-group">
+                                                <div class="form-group hidden">
                                                 <label class="control-label">Balance:</label> 
-                                                <input type="text" class="form-control" id="add-form-balance" value="0" required /> 
+                                                <input type="number" class="form-control" id="add-form-balance" value="0" required /> 
                                                 <label id="nameError" class="error"></label>
                                                 </div>
                                                 
@@ -153,7 +153,7 @@
                                                     onblur="checkValidateNameUpdate()" required /> <label
                                                     id="nameErrorUpdate" class="error"></label>
                                             </div> --%>
-                                            <div class="form-group">
+                                            <div class="form-group hidden">
                                                 <label class="control-label">Username:</label> 
                                                 <input type="text" class="form-control" id="update-form-username" required /> 
                                                 <label id="nameErrorUpdate" class="error"></label>
@@ -217,9 +217,9 @@
                                                 <label id="nameErrorUpdate" class="error"></label>
                                             </div>
                                             
-                                            <div class="form-group">
+                                            <div class="form-group hidden">
                                                 <label class="control-label">Balance:</label> 
-                                                <input type="text" class="form-control" id="update-form-balance" required /> 
+                                                <input type="number" class="form-control" id="update-form-balance" required /> 
                                                 <label id="nameErrorUpdate" class="error"></label>
                                             </div>
                                             
@@ -297,7 +297,7 @@
                                     <th class="text-center">Vehicle Type ID</th>
                                     <th class="text-center">Active</th>
                                     <th class="text-center">Enable</th>
-                                    <th class="text-center">Update/Delete</th>
+                                    <th class="text-center"></th>
                                         <%--<th class="pull-left">Delete/Update</th>--%>
                                 </tr>
                             </thead>

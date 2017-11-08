@@ -133,8 +133,8 @@ $(document)
                                             {// column for view
                                                 // detail-update-delete
                                                 "data": null,
-                                                "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>"
-                                                        + "<button class='btn btn-danger glyphicon glyphicon-trash' onclick='openDeleteModal(this)'></button>",
+                                                "defaultContent": "<button class='btn btn-success' onclick='openUpdateModal(this)'>Update</button>"
+//                                                        + "<button class='btn btn-danger' onclick='openDeleteModal(this)'>Delete</button>",
                                             }]
                                     });
                     // handle delete form submit
@@ -151,7 +151,7 @@ $(document)
                     $("#add-form").submit(function (event) {
                         event.preventDefault();
                         submitAddForm();
-//                        clearAddForm();
+                        clearAddForm();
                     });
                 });
 /*
@@ -355,12 +355,34 @@ function reloadTable() {
 // open updateModal
 function openUpdateModal(element) {
     var data = $("#table").DataTable().row($(element).parents('tr')).data();
+    $.ajax({
+	    type: "GET",
+	    contentType: "application/json",
+	    url: "../lane/getByStation",
+	    data: {
+	    	"stationId": data.stationId
+	    },
+	    success: function (result) {
+	    	$('#update-form-laneId').html("");
+	    	$('#update-form-laneId').append($('<option>', { 
+    			value: 0,
+    			text : "-- Select an option --"
+    		}));
+	    	$.each(result, function (i, item) {
+	    		$('#update-form-laneId').append($('<option>', { 
+	    			value: item.id,
+	    			text : item.name
+	    		}));
+	    	});
+	    	$("#update-form-laneId").val(data.laneId);
+	    }
+	});
+    
     $("#update-form-id").val(data.id);
     $("#update-form-uuid").val(data.uuid);
     $("#update-form-major").val(data.major);
     $("#update-form-minor").val(data.minor);
     $("#update-form-type").val(data.type);
-    $("#update-form-laneId").val(data.laneId);
     $("#update-form-stationId").val(data.stationId);
     $("#update-form-active").val(data.active);
     curr = {
@@ -385,6 +407,13 @@ function openDeleteModal(element) {
     var data = $("#table").DataTable().row($(element).parents('tr')).data();
     $("#delete-form-skillId").val(data.skillId);
     $("#delete-modal").modal('toggle');
+}
+
+//clear input of add modal
+function clearAddForm() {
+    $("#update-form-uuid").val("");
+    $("#update-form-major").val("");
+    $("#update-form-minor").val("");
 }
 
 // clear input of update modal
@@ -490,13 +519,34 @@ $(document).ready(function(){
 	    contentType: "application/json",
 	    url: "../station/get",
 	    success: function (result) {
+	    	var defaultVal = JSON.parse(result);
+	    	$.ajax({
+	    	    type: "GET",
+	    	    contentType: "application/json",
+	    	    url: "../lane/getByStation",
+	    	    data: {
+	    	    	"stationId": defaultVal[0].id
+	    	    },
+	    	    success: function (result) {
+	    	    	$('#add-form-laneId').html("");
+	    	    	$('#add-form-laneId').append($('<option>', { 
+	        			value: 0,
+	        			text : "-- Select an option --"
+	        		}));
+	    	    	$.each(result, function (i, item) {
+	    	    		$('#add-form-laneId').append($('<option>', { 
+	    	    			value: item.id,
+	    	    			text : item.name
+	    	    		}));
+	    	    	});
+	    	    }
+	    	});
+	    	
 	    	$.each(JSON.parse(result), function (i, item) {
 	    		$('#add-form-stationId').append($('<option>', { 
 	    			value: item.id,
 	    			text : item.name 
 	    		}));
-	    	});
-	    	$.each(JSON.parse(result), function (i, item) {
 	    		$('#update-form-stationId').append($('<option>', { 
 	    			value: item.id,
 	    			text : item.name 
@@ -504,40 +554,6 @@ $(document).ready(function(){
 	    	});
 	    }
 	});
-});
-
-//set data to select tag lane from database
-$(document).ready(function(){
-		  $.ajax({
-			    type: "GET",
-			    contentType: "application/json",
-			    url: "../lane/getByStation",
-			    data: {
-			    	"stationId": 1
-			    },
-			    success: function (result) {
-			    	$('#add-form-laneId').append($('<option>', { 
-		    			value: 0,
-		    			text : "-- Select an option --"
-		    		}));
-			    	$.each(result, function (i, item) {
-			    		$('#add-form-laneId').append($('<option>', { 
-			    			value: item.id,
-			    			text : item.name
-			    		}));
-			    	});
-			    	$('#update-form-laneId').append($('<option>', { 
-		    			value: 0,
-		    			text : "-- Select an option --"
-		    		}));
-			    	$.each(result, function (i, item) {
-			    		$('#update-form-laneId').append($('<option>', { 
-			    			value: item.id,
-			    			text : item.name 
-			    		}));
-			    	});
-			    }
-		  });
 });
 
 // set data to select tag lane from database depend on station

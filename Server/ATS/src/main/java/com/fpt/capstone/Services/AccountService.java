@@ -7,6 +7,7 @@ package com.fpt.capstone.Services;
 
 import com.fpt.capstone.Dtos.AccountDTO;
 import com.fpt.capstone.Entities.Account;
+import com.fpt.capstone.Entities.Vehicle;
 
 import java.util.List;
 
@@ -30,4 +31,7 @@ public interface AccountService {
 
 	AccountDTO update(Account account);
 
+	Account checkAccountOwnVehicle(Vehicle vehicle);
+	
+	boolean isAvailable(Account account);
 }

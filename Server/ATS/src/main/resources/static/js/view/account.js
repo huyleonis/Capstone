@@ -152,8 +152,8 @@ $(document)
                                             {// column for view
                                                 // detail-update-delete
                                                 "data": null,
-                                                "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>"
-                                                        + "<button class='btn btn-danger glyphicon glyphicon-trash' onclick='openDeleteModal(this)'></button>",
+                                                "defaultContent": "<button class='btn btn-success' onclick='openUpdateModal(this)'>Update</button>"
+//                                                        + "<button class='btn btn-danger' onclick='openDeleteModal(this)'>Delete</button>",
                                             }]
                                     });
                     // handle delete form submit
@@ -170,7 +170,7 @@ $(document)
                     $("#add-form").submit(function (event) {
                         event.preventDefault();
                         submitAddForm();
-//                        clearAddForm();
+                        clearAddForm();
                     });
                 });
 /*
@@ -203,7 +203,9 @@ function submitAddForm() {
 		enable = "0";
 	}
     
-    if (role != "3") {
+    var licensePlate = $("#add-form-licensePlate").val();
+    
+    if (role != "3" || licensePlate == "") {
     	account = {
                 "username": $("#add-form-username").val(),
                 "password": $("#add-form-password").val(),
@@ -284,7 +286,10 @@ function submitUpdateForm() {
 	} else {
 		enable = "0";
 	}
-	if (role != "3") {
+    
+    var licensePlate = $("#update-form-licensePlate").val();
+    
+	if (role != "3" || licensePlate == "") {
 		account = {
 				"id": $("#update-form-id").val(),
 		        "username": $("#update-form-username").val(),
@@ -310,7 +315,6 @@ function submitUpdateForm() {
 		        "phone": $("#update-form-phone").val(),
 		        "numberId": $("#update-form-numberId").val(),
 		        "vehicle": {
-		        		"id": $("#update-form-vehicleId").val(),
 		        		"licensePlate": $("#update-form-licensePlate").val(),
 		        		"vehicletype": {
 		        			"id": $("#update-form-typeId").val()
@@ -445,6 +449,18 @@ function openDeleteModal(element) {
     var data = $("#table").DataTable().row($(element).parents('tr')).data();
     $("#delete-form-skillId").val(data.skillId);
     $("#delete-modal").modal('toggle');
+}
+
+// clear input of add modal
+function clearAddForm() {
+	$("#add-form-username").val("");
+    $("#add-form-password").val("");
+    $("#add-form-fullname").val("");
+    $("#add-form-email").val("");
+    $("#add-form-phone").val("");
+    $("#add-form-numberId").val("");
+    $("#add-form-licensePlate").val("");
+    $("#add-form-balance").val(0);
 }
 
 // clear input of update modal

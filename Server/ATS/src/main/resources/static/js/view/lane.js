@@ -120,8 +120,8 @@ $(document)
                                             {// column for view
                                                 // detail-update-delete
                                                 "data": null,
-                                                "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>"
-                                                        + "<button class='btn btn-danger glyphicon glyphicon-trash' onclick='openDeleteModal(this)'></button>",
+                                                "defaultContent": "<button class='btn btn-success' onclick='openUpdateModal(this)'>Update</button>"
+//                                                        + "<button class='btn btn-danger' onclick='openDeleteModal(this)'>Delete</button>",
                                             }]
                                     });
                     // handle delete form submit
