@@ -39,6 +39,7 @@ public class MainForm extends javax.swing.JFrame {
         //lbId.setVisible(false);
         //timer.start();
         txtHello.setText("Xin chào, " + loginDTO.getFullname());
+        txtLocalhost.setText(loginDTO.getLocalhost());
         Long role = loginDTO.getRole();
         if (role == 2) {
             paneTechnical.setVisible(false);
@@ -99,7 +100,8 @@ public class MainForm extends javax.swing.JFrame {
         paneTechnical = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         txtLocalhost = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnCheckConnection = new javax.swing.JButton();
+        btnSaveLocalhost = new javax.swing.JButton();
         panePayment = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         txtLane = new javax.swing.JTextField();
@@ -400,7 +402,7 @@ public class MainForm extends javax.swing.JFrame {
         paneTechnical.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông số kĩ thuật", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 24), new java.awt.Color(0, 51, 255))); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel3.setText("LOCALHOST: ");
+        jLabel3.setText("Địa chỉ máy chủ:");
 
         txtLocalhost.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         txtLocalhost.setText("http://localhost:8080");
@@ -410,7 +412,16 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Kiểm tra kết nối");
+        btnCheckConnection.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnCheckConnection.setText("Kiểm tra kết nối");
+
+        btnSaveLocalhost.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnSaveLocalhost.setText("Sửa");
+        btnSaveLocalhost.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveLocalhostActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout paneTechnicalLayout = new javax.swing.GroupLayout(paneTechnical);
         paneTechnical.setLayout(paneTechnicalLayout);
@@ -420,9 +431,12 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(29, 29, 29)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(paneTechnicalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(paneTechnicalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtLocalhost, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addGroup(paneTechnicalLayout.createSequentialGroup()
+                        .addComponent(btnCheckConnection, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSaveLocalhost, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(141, Short.MAX_VALUE))
         );
         paneTechnicalLayout.setVerticalGroup(
@@ -433,8 +447,10 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(txtLocalhost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap(204, Short.MAX_VALUE))
+                .addGroup(paneTechnicalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnCheckConnection, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                    .addComponent(btnSaveLocalhost, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(196, Short.MAX_VALUE))
         );
 
         panePayment.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin thu phí", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 24), new java.awt.Color(0, 51, 255))); // NOI18N
@@ -754,6 +770,19 @@ public class MainForm extends javax.swing.JFrame {
 
         //dto = null;
     }//GEN-LAST:event_txtLicensePlateCaretUpdate
+    
+    boolean flagSaveLocalhost = false;
+    private void btnSaveLocalhostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveLocalhostActionPerformed
+        if (flagSaveLocalhost == false) {
+            btnSaveLocalhost.setText("Lưu");
+            txtLocalhost.setEnabled(true);
+            flagSaveLocalhost = true;
+        } else {
+            btnSaveLocalhost.setText("Sửa");
+            txtLocalhost.setEnabled(false);
+            flagSaveLocalhost = false;
+        }
+    }//GEN-LAST:event_btnSaveLocalhostActionPerformed
 
     /**
      * @param args the command line arguments
@@ -775,7 +804,9 @@ public class MainForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel InfoPane;
     private javax.swing.JMenuItem aboutMenuItem;
+    private javax.swing.JButton btnCheckConnection;
     private javax.swing.JButton btnManualPayment;
+    private javax.swing.JButton btnSaveLocalhost;
     private javax.swing.JButton btnSearch;
     private javax.swing.JMenuItem contentsMenuItem;
     private javax.swing.JMenuItem copyMenuItem;
@@ -785,7 +816,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
