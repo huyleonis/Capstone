@@ -1,7 +1,5 @@
 package com.fpt.capstone.Entities;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -9,7 +7,6 @@ import java.util.Date;
 public class Transaction {
 
     @Id
-    @Column(name = "id")
     private String id;
 
     @ManyToOne
@@ -39,22 +36,6 @@ public class Transaction {
 
     @Column(name = "photo")
     private String photo;
-
-    public Transaction() {
-    }
-
-    public Transaction(String id, Vehicle vehicle, Station station, Date dateTime,
-                       String status, Price price, Lane lane, int type, String photo) {
-        this.id = id;
-        this.vehicle = vehicle;
-        this.station = station;
-        this.dateTime = dateTime;
-        this.status = status;
-        this.price = price;
-        this.lane = lane;
-        this.type = type;
-        this.photo = photo;
-    }
 
     public String getId() {
         return id;
@@ -127,4 +108,5 @@ public class Transaction {
     public void setPhoto(String photo) {
         this.photo = photo;
     }
+
 }

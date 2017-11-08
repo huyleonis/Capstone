@@ -5,30 +5,20 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity(name = "vehicletype")
-public class VehicleType {
+public class Vehicletype {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
     private int id;
 
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "vehicleType")
+    @OneToMany(mappedBy = "vehicletype")
     private List<Price> prices;
 
-    @OneToMany(mappedBy = "vehicleType")
+    @OneToMany(mappedBy = "vehicletype")
     private List<Vehicle> vehicles;
-
-    public VehicleType() {
-    }
-
-    public VehicleType(String name, List<Price> prices, List<Vehicle> vehicles) {
-        this.name = name;
-        this.prices = prices;
-        this.vehicles = vehicles;
-    }
 
     public int getId() {
         return id;
@@ -61,4 +51,5 @@ public class VehicleType {
     public void setVehicles(List<Vehicle> vehicles) {
         this.vehicles = vehicles;
     }
+
 }

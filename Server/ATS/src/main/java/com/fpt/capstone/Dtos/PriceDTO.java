@@ -114,10 +114,10 @@ public class PriceDTO {
             }
             dto.setStationId(price.getStation().getId());
          
-            if ("".equals(price.getVehicleType().getName())) {
+            if ("".equals(price.getVehicletype().getName())) {
                 dto.setTypeVehicle(null);
             } else {
-                dto.setTypeVehicle(price.getVehicleType().getName());
+                dto.setTypeVehicle(price.getVehicletype().getName());
             }
         }
         return dto;

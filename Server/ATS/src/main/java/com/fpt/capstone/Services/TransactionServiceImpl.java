@@ -73,15 +73,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionDTO updateTransactionStatus(String id, String status) {
-        int transaction = transactionRepos.updateTransaction(id, status);
 
-        if (transaction > 0) {
-            Transaction transaction1 = transactionRepos.findById(id);
-            if (transaction1 != null) {
-                TransactionDTO dto = TransactionDTO.convertFromEntity(transaction1);
-                //dto.setStatus(status);
-                return dto;
-            }
+        Transaction transaction = transactionRepos.findOne(id);
+        transaction.setStatus(status);
+        transaction = transactionRepos.save(transaction);
+
+        if (transaction != null) {
+            transaction = transactionRepos.findOne(id);
+            return TransactionDTO.convertFromEntity(transaction);
         }
         return null;
     }
@@ -111,10 +110,10 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionDTO> getHistoryTransaction(String username, Date fromDate, Date toDate) {
+    public List<TransactionDTO> getHistoryTransaction(String vehicleId, Date fromDate, Date toDate) {
 //        fromDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 //        toDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        List<Transaction> list = transactionRepos.getHistoryTransaction(username, fromDate, toDate);
+        List<Transaction> list = transactionRepos.getHistoryTransaction(Integer.parseInt(vehicleId), fromDate, toDate);
         List<TransactionDTO> result = new ArrayList<>();
         for(Transaction tran : list){
             TransactionDTO dto = TransactionDTO.convertFromEntity(tran);

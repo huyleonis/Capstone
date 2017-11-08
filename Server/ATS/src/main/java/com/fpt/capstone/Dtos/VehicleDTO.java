@@ -24,7 +24,7 @@ public class VehicleDTO {
 //        VehicleDTO dto = new VehicleDTO();
 //
 //        String licensePlate = vehicle.getLicensePlate();
-//        VehicleType vehicletype = vehicle.getVehicleType();
+//        Vehicletype vehicletype = vehicle.getVehicletype();
 //
 //        return dto;
 //    }

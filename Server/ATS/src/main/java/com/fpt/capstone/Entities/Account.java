@@ -13,7 +13,6 @@ public class Account {
     @Column(name = "username")
     private String username;
 
-    @Transient
     @Column(name = "password")
     private String password;
 
@@ -35,7 +34,7 @@ public class Account {
     @Column(name = "e_wallet")
     private String eWallet;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 
@@ -47,25 +46,6 @@ public class Account {
 
     @Column(name = "is_enable")
     private int enable;
-
-    public Account() {
-    }
-
-    public Account(String username, String password, int role, String fullname, String email, String phone,
-                   String numberId, String eWallet, Vehicle vehicle, Double balance, int active, int enable) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
-        this.fullname = fullname;
-        this.email = email;
-        this.phone = phone;
-        this.numberId = numberId;
-        this.eWallet = eWallet;
-        this.vehicle = vehicle;
-        this.balance = balance;
-        this.active = active;
-        this.enable = enable;
-    }
 
     public int getId() {
         return id;
@@ -170,4 +150,5 @@ public class Account {
     public void setEnable(int enable) {
         this.enable = enable;
     }
+
 }

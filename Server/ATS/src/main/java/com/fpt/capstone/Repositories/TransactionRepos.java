@@ -15,7 +15,7 @@ import java.util.List;
 import org.springframework.data.repository.query.Param;
 
 @Repository
-public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
+public interface TransactionRepos extends JpaRepository<Transaction, String> {
 
     /**
      * Tao transaction thu phí thủ công khi staff gửi biển số xe và mã trạm
@@ -107,15 +107,14 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
 
     /**
      * lịch sử giao dịch cho tài xế, khi chọn ngày bắt đầu và kết thúc giao dịch
-     * @param username : tên tài xế
+     * @param vehicleId : xe
      * @param fromDate : bắt đầu từ ngày giao dịch
      * @param toDate : kết thúc ngày giao dịch
      * @return
      */
-    @Query(value = "select * from transaction where username_id = " +
-            "(select id from account where username = :user) and " +
-            "date_time > :fromDate and date_time < :toDate", nativeQuery = true)
-    List<Transaction> getHistoryTransaction(@Param("user") String username, @Param("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date fromDate, @Param("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date toDate);
+    @Query(value = "select * from transaction where vehicle_id = :vehicleId and " +
+            "date_time > :fromDate and date_time < :toDate AND status NOT IN (SELECT status FROM transaction WHERE status = 'Lỗi')", nativeQuery = true)
+    List<Transaction> getHistoryTransaction(@Param("vehicleId") int vehicleId, @Param("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date fromDate, @Param("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date toDate);
 
     /**
      * Tìm transaction detail theo vehicle id trong vòng 24 giờ

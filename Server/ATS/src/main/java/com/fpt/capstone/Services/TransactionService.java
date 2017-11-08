@@ -24,7 +24,7 @@ public interface TransactionService {
 
     TransactionDTO updateTransactionLane(String id, int laneId);
 
-    List<TransactionDTO> getHistoryTransaction(String username, Date fromDate, Date toDate);
+    List<TransactionDTO> getHistoryTransaction(String vehicleId, Date fromDate, Date toDate);
 
     List<TransactionDetailDTO> getAllDetail();
 

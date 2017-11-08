@@ -1,13 +1,13 @@
 package com.fpt.capstone.Entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity(name = "vehicle")
 public class Vehicle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
     private int id;
 
     @Column(name = "license_plate")
@@ -15,19 +15,13 @@ public class Vehicle {
 
     @ManyToOne
     @JoinColumn(name = "type_id")
-    private VehicleType vehicleType;
+    private Vehicletype vehicletype;
 
     @OneToOne(mappedBy = "vehicle")
     private Account account;
 
-    public Vehicle() {
-    }
-
-    public Vehicle(String licensePlate, VehicleType vehicleType, Account account) {
-        this.licensePlate = licensePlate;
-        this.vehicleType = vehicleType;
-        this.account = account;
-    }
+    @OneToMany(mappedBy = "vehicle")
+    private List<Transaction> transactions;
 
     public int getId() {
         return id;
@@ -45,12 +39,12 @@ public class Vehicle {
         this.licensePlate = licensePlate;
     }
 
-    public VehicleType getVehicleType() {
-        return vehicleType;
+    public Vehicletype getVehicletype() {
+        return vehicletype;
     }
 
-    public void setVehicleType(VehicleType vehicleType) {
-        this.vehicleType = vehicleType;
+    public void setVehicletype(Vehicletype vehicletype) {
+        this.vehicletype = vehicletype;
     }
 
     public Account getAccount() {
@@ -60,4 +54,13 @@ public class Vehicle {
     public void setAccount(Account account) {
         this.account = account;
     }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
 }

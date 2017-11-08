@@ -19,18 +19,18 @@ public class HistoryController {
     @Autowired
     private TransactionServiceImpl transactionServiceImpl;
 
-    @RequestMapping(value = "getByDate/{username}/{fromDate}/{toDate}")
+    @RequestMapping(value = "getByDate/{vehicleId}/{fromDate}/{toDate}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<TransactionDTO> getHistoryTransaction(@PathVariable String username, 
+    public List<TransactionDTO> getHistoryTransaction(@PathVariable String vehicleId,
             @PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") Date fromDate, 
             @PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") Date toDate){
 
         List<TransactionDTO> result = 
-                transactionServiceImpl.getHistoryTransaction(username, fromDate, toDate);
+                transactionServiceImpl.getHistoryTransaction(vehicleId, fromDate, toDate);
 
         System.out.println("Get history from date " + fromDate + " to date: " 
-                + toDate + " result : " + result.size() + "username: " + username);
+                + toDate + " result : " + result.size() + "VehicleId: " + vehicleId);
         return result;
     }
 }

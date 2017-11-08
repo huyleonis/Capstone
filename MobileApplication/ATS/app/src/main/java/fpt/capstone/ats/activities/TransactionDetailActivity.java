@@ -243,8 +243,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
     public void viewFromLocal(Cursor resultSet) {
         try {
-//            Log.d("Receive TransDetail", "Transaction Detail Json: " + resultSet);
-
             if (pdial != null) {
                 pdial.dismiss();
             }
@@ -302,8 +300,82 @@ public class TransactionDetailActivity extends AppCompatActivity {
         }
     }
 
+    public void reportMismatchTransaction() {
+        Log.d("REPORT TRANSACTION", "REPORT MISMATCH TRANSACTION");
+        RequestServer rs = new RequestServer();
+        rs.delegate = new RequestServer.RequestResult() {
+            @Override
+            public void processFinish(String result) {
+                try {
+                    Log.d("Receive TransStatus", "Transaction Status Json: " + result);
+
+                    if (result.equalsIgnoreCase("success")){
+                        String newStatus = "Lỗi";
+
+                        database = new DBAdapter(TransactionDetailActivity.this);
+                        database.open();
+
+                        Cursor resultSet = database.getInfo(transactionId);
+                        if (resultSet.moveToFirst()) {
+                            String stationName = resultSet.getString(1);
+                            int stationId = resultSet.getInt(2);
+                            String zone = resultSet.getString(3);
+                            String dateTime = resultSet.getString(4);
+                            double price = resultSet.getDouble(5);
+//                        String status = resultSet.getString(6);
+                            String vehicleType = resultSet.getString(7);
+                            String type = resultSet.getString(8);
+
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                            Date lastModifiedDate = new Date();
+                            String lastModified = sdf.format(lastModifiedDate);
+
+                            boolean isSuccessful = database.updateInfo(transactionId, stationName, stationId,
+                                    zone, dateTime, price, newStatus, vehicleType, type, lastModified);
+
+                            Log.d("DATABASE UPDATE", String.valueOf(isSuccessful));
+
+                            resultSet = database.getInfo(transactionId);
+                            if (resultSet.moveToFirst()) {
+                                Log.d("GET DETAIL TRANSACTION", "VIEW FROM LOCAL");
+                                viewFromLocal(resultSet);
+                            } else {
+                                Log.d("GET DETAIL TRANSACTION", "VIEW FROM SERVER");
+                                getTransactionDetail();
+                            }
+                        }
+                        database.close();
+                        Log.d(TAG, "processFinish() returned: " + newStatus);
+                    }
+                } catch (Exception e) {
+                    Log.e("Transaction Detail", e.getMessage());
+                    new AlertDialog.Builder(TransactionDetailActivity.this)
+                            .setTitle("Exception")
+                            .setMessage("Cannot parse json with result: " + result)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .create().show();
+                }
+            }
+        };
+        List<String> params = new ArrayList<>();
+        params.add(transactionId);
+        rs.execute(params, "transaction", "reportMismatchTransaction", "GET");
+    }
+
     public void clickToUpdateTransStatus(View view) {
         updateTransactionStatus();
     }
 
+    public void clickToReportTransaction(View view){
+        reportMismatchTransaction();
+    }
 }

@@ -171,7 +171,7 @@ public class TransactionDetailDTO {
             dto.setUsername(tran.getVehicle().getAccount().getUsername());
         }
         dto.setLicensePlate(tran.getVehicle().getLicensePlate());
-        dto.setVehicleType(tran.getVehicle().getVehicleType().getName());
+        dto.setVehicleType(tran.getVehicle().getVehicletype().getName());
         dto.setType((tran.getType() == 1) ? "Tự động" : "Thủ công");
 
         return dto;
