@@ -95,6 +95,9 @@ $(document)
                                             // data for the cell from the
                                             // returned list
                                             {
+                                                "data": null
+                                            },
+                                            {
                                                 "data": "id",
                                                 "visible": false
                                                         // hide the column
@@ -145,8 +148,20 @@ $(document)
                                                 "data": null,
                                                 "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>"
                                                         + "<button class='btn btn-danger glyphicon glyphicon-trash' onclick='openDeleteModal(this)'></button>",
-                                            }]
+                                            }],
+                                        "columnDefs": [ {
+                                            "searchable": false,
+                                            "orderable": false,
+                                            "targets": 0
+                                        } ],
+                                        "order": [[ 1, 'asc' ]]
                                     });
+                    table.on( 'order.dt search.dt', function () {
+                        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                            cell.innerHTML = i+1;
+                        } );
+                    } ).draw();
+
                     // handle delete form submit
                     $("#delete-form").submit(function (event) {
                         event.preventDefault();

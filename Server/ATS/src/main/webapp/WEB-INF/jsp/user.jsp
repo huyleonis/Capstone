@@ -279,21 +279,22 @@
                         </div>
                         <%-- End div modal delete --%>
 
-                        <table class="table cell-border table-responsive hover"
-                               style="text-align: center" id="table">
-                            <thead>
+                        <%--<table class="table cell-border table-responsive display"--%>
+                        <table class="table cell-border table-responsive display" id="table">
+                            <thead style="background-color: #DBDBDF">
                                 <tr>
+                                    <th class="text-center" style="font-weight: bolder">#</th>
                                     <th>id</th>
-                                    <th class="text-center">Username</th>
+                                    <th style="font-weight: bolder; font-size: 15px;">Username</th>
                                     <th class="text-center">Password</th>
-                                    <th class="text-center">Full Name</th>
-                                    <th class="text-center">Role</th>
-                                    <th class="text-center">Email</th>
-                                    <th class="text-center">Phone</th>
+                                    <th style="font-weight: bolder; font-size: 15px;">Full Name</th>
+                                    <th style="font-weight: bolder; font-size: 15px;">Role</th>
+                                    <th style="font-weight: bolder; font-size: 15px;">Email</th>
+                                    <th style="font-weight: bolder; font-size: 15px;">Phone</th>
                                     <th class="text-center">Number ID</th>
                                     <th class="text-center">Vehicle ID</th>
                                     <th class="text-center">Balance</th>
-                                    <th class="text-center">License Plate</th>
+                                    <th style="font-weight: bolder; font-size: 15px;">License Plate</th>
                                     <th class="text-center">Vehicle Type ID</th>
                                     <th class="text-center">Active</th>
                                     <th class="text-center">Enable</th>

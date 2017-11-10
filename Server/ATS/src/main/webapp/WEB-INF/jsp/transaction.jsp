@@ -297,6 +297,7 @@
                                style="text-align: center" id="table">
                             <thead>
                                 <tr>
+                                    <th class="text-center">#</th>
                                     <th>id</th>
                                     <th class="text-center">Date Time</th>
                                     <th class="text-center">Status</th>
@@ -310,7 +311,7 @@
                                     <th class="text-center">License Plate</th>
                                     <th class="text-center">Type of Vehicle</th>
                                     <th class="text-center">Type</th>
-                                    <th class="text-center">Update/Delete</th>
+                                    <th class="text-center"></th>
                                         <%--<th class="pull-left">Delete/Update</th>--%>
                                 </tr>
                             </thead>

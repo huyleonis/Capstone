@@ -1,3 +1,7 @@
+.dt-body-left {text-align: left;}
+
+.dt-body-right {text-align: right;}
+
 div.dataTables_length label {
 	font-weight: normal;
 	float: left;

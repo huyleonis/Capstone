@@ -179,6 +179,7 @@
                                style="text-align: center" id="table">
                             <thead>
                                 <tr>
+                                    <th class="text-center">#</th>
                                     <th>id</th>
                                     <th class="text-center">Station Name</th>
                                     <th class="text-center">Station Zone</th>
@@ -188,7 +189,7 @@
                                     <th class="text-center">VehicleType ID</th>
                                     <th class="text-center">Type of Vehicle</th>
                                     <th class="text-center">Active</th>
-                                    <th class="text-center">Update/Delete</th>
+                                    <th class="text-center"></th>
                                         <%--<th class="pull-left">Delete/Update</th>--%>
                                 </tr>
                             </thead>

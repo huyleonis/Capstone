@@ -95,13 +95,17 @@ $(document)
                                             // data for the cell from the
                                             // returned list
                                             {
+                                                "data": null
+                                            },
+                                            {
                                                 "data": "id",
                                                 "visible": false
                                                         // hide the column
 														// processID
                                             },
                                             {
-                                                "data": "username"
+                                                "data": "username",
+                                                className: "dt-body-left"
                                             },
                                             {
                                                 "data": "password",
@@ -114,16 +118,17 @@ $(document)
                                             	"data": "role"
                                             },
                                             {
-                                                "data": "email",
+                                                "data": "email"
 //                                                "visible": false
                                             },
                                             {
                                                 "data": "phone",
+                                                className: "dt-body-left"
 //                                                "visible": false
                                             },
                                             {
                                                 "data": "numberId",
-//                                                "visible": false
+                                                "visible": false
                                             },
                                             {
                                                 "data": "vehicleId",
@@ -134,7 +139,7 @@ $(document)
                                                 "visible": false
                                             },
                                             {
-                                                "data": "licensePlate",
+                                                "data": "licensePlate"
 //                                                "visible": false
                                             },
                                             {
@@ -154,8 +159,23 @@ $(document)
                                                 "data": null,
                                                 "defaultContent": "<button class='btn btn-success' onclick='openUpdateModal(this)'>Update</button>"
 //                                                        + "<button class='btn btn-danger' onclick='openDeleteModal(this)'>Delete</button>",
-                                            }]
+                                            }],
+                                        "columnDefs": [ {
+                                            "searchable": false,
+                                            "orderable": false,
+                                            "targets": 0
+                                        },{
+                                            className: "dt-body-left",
+                                            "targets": [2, 4, 5, 6, 10, 11]
+                                        } ],
+                                        "order": [[ 1, 'asc' ]]
                                     });
+                    table.on( 'order.dt search.dt', function () {
+                        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                            cell.innerHTML = i+1;
+                        } );
+                    } ).draw();
+
                     // handle delete form submit
                     $("#delete-form").submit(function (event) {
                         event.preventDefault();
@@ -567,15 +587,15 @@ $(document).ready(function(){
 	    url: "../vehicletype/get",
 	    success: function (result) {
 	    	$.each(JSON.parse(result), function (i, item) {
-	    		$('#add-form-typeId').append($('<option>', { 
+	    		$('#add-form-typeId').append($('<option>', {
 	    			value: item.id,
-	    			text : item.name 
+	    			text : item.name
 	    		}));
 	    	});
 	    	$.each(JSON.parse(result), function (i, item) {
-	    		$('#update-form-typeId').append($('<option>', { 
+	    		$('#update-form-typeId').append($('<option>', {
 	    			value: item.id,
-	    			text : item.name 
+	    			text : item.name
 	    		}));
 	    	});
 	    }

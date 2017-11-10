@@ -159,12 +159,13 @@
                                style="text-align: center" id="table">
                             <thead>
                                 <tr>
+                                    <th class="text-center">#</th>
                                     <th>id</th>
                                     <th class="text-center">Name</th>
                                     <th class="text-center">Location</th>
                                     <th class="text-center">Zone</th>
                                     <th class="text-center">Active</th>
-                                    <th class="text-center">Update/Delete</th>
+                                    <th class="text-center"></th>
                                         <%--<th class="pull-left">Delete/Update</th>--%>
                                 </tr>
                             </thead>
