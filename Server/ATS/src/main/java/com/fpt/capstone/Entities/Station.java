@@ -5,6 +5,7 @@
  */
 package com.fpt.capstone.Entities;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -15,7 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity(name = "station")
-public class Station {
+public class Station implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,8 +31,8 @@ public class Station {
 	@Column(name = "zone")
 	private String zone;
 
-	@Column(name = "is_active")
-	private int active;
+	@Column(name = "isactive")
+	private Boolean isActive;
 
 	@OneToMany(mappedBy = "station")
 	private List<Beacon> beacons;
@@ -77,12 +78,12 @@ public class Station {
 		this.zone = zone;
 	}
 
-	public int getActive() {
-		return active;
+	public Boolean getActive() {
+		return isActive;
 	}
 
-	public void setActive(int active) {
-		this.active = active;
+	public void setActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	public List<Beacon> getBeacons() {

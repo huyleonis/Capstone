@@ -10,6 +10,6 @@ import com.fpt.capstone.Entities.Vehicle;
 @Repository
 public interface VehicleRepos extends JpaRepository<Vehicle, Integer> {
 
-    @Query(value = "select * from vehicle where license_plate = :licensePlate", nativeQuery = true)
+    @Query(value = "select * from vehicle where licensePlate = :licensePlate", nativeQuery = true)
     Vehicle findByLicensePlate(@Param("licensePlate") String licensePlate);
 }

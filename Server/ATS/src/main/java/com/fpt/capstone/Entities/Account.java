@@ -1,9 +1,10 @@
 package com.fpt.capstone.Entities;
 
+import java.io.Serializable;
 import javax.persistence.*;
 
 @Entity(name = "account")
-public class Account {
+public class Account implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,30 +30,30 @@ public class Account {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "number_id")
+    @Column(name = "numberid")
     private String numberId;
 
-    @Column(name = "e_wallet")
+    @Column(name = "ewallet")
     private String eWallet;
 
     @OneToOne
-    @JoinColumn(name = "vehicle_id")
+    @JoinColumn(name = "vehicleid")
     private Vehicle vehicle;
 
     @Column(name = "balance")
     private Double balance;
 
-    @Column(name = "is_active")
-    private int active;
+    @Column(name = "isactive")
+    private Boolean isActive;
 
-    @Column(name = "is_enable")
-    private int enable;
+    @Column(name = "isenable")
+    private Boolean isEnabled;
 
     public Account() {
     }
 
     public Account(String username, String password, int role, String fullname, String email, String phone,
-                   String numberId, String eWallet, Vehicle vehicle, Double balance, int active, int enable) {
+                   String numberId, String eWallet, Vehicle vehicle, Double balance, Boolean isActive, Boolean isEnabled) {
         this.username = username;
         this.password = password;
         this.role = role;
@@ -63,8 +64,8 @@ public class Account {
         this.eWallet = eWallet;
         this.vehicle = vehicle;
         this.balance = balance;
-        this.active = active;
-        this.enable = enable;
+        this.isActive = isActive;
+        this.isEnabled = isEnabled;
     }
 
     public int getId() {
@@ -155,19 +156,19 @@ public class Account {
         this.balance = balance;
     }
 
-    public int getActive() {
-        return active;
+    public Boolean getActive() {
+        return isActive;
     }
 
-    public void setActive(int active) {
-        this.active = active;
+    public void setActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
-    public int getEnable() {
-        return enable;
+    public Boolean getEnable() {
+        return isEnabled;
     }
 
-    public void setEnable(int enable) {
-        this.enable = enable;
+    public void setEnable(Boolean isEnabled) {
+        this.isEnabled = isEnabled;
     }
 }

@@ -33,8 +33,9 @@ CREATE TABLE `account` (
   `number_id` varchar(45) DEFAULT NULL,
   `e_wallet` varchar(45) DEFAULT NULL,
   `vehicle_id` int(11) DEFAULT NULL,
-  `isActive` tinyint(1) NOT NULL DEFAULT '1',
-  `isEnable` tinyint(1) NOT NULL DEFAULT '1',
+  `balance` float(11) NULL DEFAULT NULL,
+  `isActive` bit NOT NULL DEFAULT true,
+  `isEnable` bit NOT NULL DEFAULT true,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`),
   KEY `fk_account_vehicle_idx` (`vehicle_id`),
@@ -48,7 +49,13 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'admin','admin',1,'Admin',NULL,NULL,NULL,NULL,NULL,NULL,1,1),(2,'hieunc','123',2,'Nguy?n Ch� Hi?u',NULL,NULL,NULL,NULL,NULL,NULL,1,1),(3,'huylvq','123',2,'L� Vuong Qu?c Huy',NULL,NULL,NULL,NULL,NULL,NULL,1,1),(4,'tinpb','123',3,'Ph?m B?o T�n','tin@gmail.com','0903380457','012345678',NULL,1,50000,1,1),(5,'sonnv','123',3,'Nguy?n Vi?t Son','son@gmail.com','0909354974','025308080',NULL,2,70000,1,1),(6,'thanhth','123',3,'Truong H?u Th�nh','thanh@gmail.com','0939354974','025251414',NULL,3,5000,1,1);
+INSERT INTO `account` VALUES 
+(1,'admin','admin',1,'Admin',NULL,NULL,NULL,NULL,NULL,NULL,1,1),
+(2,'hieunc','123',2,'Nguyễn Chí Hiếu',NULL,NULL,NULL,NULL,NULL,NULL,1,1),
+(3,'huylvq','123',2,'Lê Vuong Quốc Huy',NULL,NULL,NULL,NULL,NULL,NULL,1,1),
+(4,'tinpb','123',3,'Phạm Bảo Tín','tin@gmail.com','0903380457','012345678',NULL,1,50000,1,1),
+(5,'sonnv','123',3,'Nguyễn Việt Son','son@gmail.com','0909354974','025308080',NULL,2,70000,1,1),
+(6,'thanhth','123',3,'Trương Hữu Thành','thanh@gmail.com','0939354974','025251414',NULL,3,5000,1,1);
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

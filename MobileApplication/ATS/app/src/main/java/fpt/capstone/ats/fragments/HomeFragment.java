@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import fpt.capstone.ats.R;
@@ -28,10 +29,9 @@ public class HomeFragment extends Fragment {
     private static final String TAG = "HOME_FRAGMENT";
     private View rootView;
     private TextView textMessage;
-    private TextView textNameStation;
-    private TextView textIdStation;
-    private TextView textZone;
+    private TextView textStation;
     private TextView textPrice;
+    private ImageView imgTrans;
 
     private FragmentManager fm;
     private PaymentResultFragment resultFragment;
@@ -63,10 +63,9 @@ public class HomeFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         textMessage = (TextView) rootView.findViewById(R.id.textMessage);
-        textNameStation = (TextView) rootView.findViewById(R.id.textNameStation);
-        textIdStation = (TextView) rootView.findViewById(R.id.textIdStation);
-        textZone = (TextView) rootView.findViewById(R.id.textZone);
+        textStation = (TextView) rootView.findViewById(R.id.textStation);
         textPrice = (TextView) rootView.findViewById(R.id.textPrice);
+        imgTrans = (ImageView) rootView.findViewById(R.id.imgTrans);
 
         setUpDefaultInfo(null);
         return rootView;
@@ -113,8 +112,10 @@ public class HomeFragment extends Fragment {
                 String idStation = bundle.getString(ConstantValues.ID_STATION_PARAM);
                 String zone = bundle.getString(ConstantValues.ZONE_PARAM);
                 double price = bundle.getDouble(ConstantValues.PRICE_PARAM);
+                boolean isCreated = bundle.getBoolean(ConstantValues.IS_CREATED_PARAM);
+                String transactionId = bundle.getString(ConstantValues.TRANSACTION_ID_PARAM);
 
-                this.setUpStationInfo(nameStation, idStation, zone, price);
+                this.setUpStationInfo(nameStation, idStation, zone, price, isCreated, transactionId);
             }
 
             boolean isDisplayConfirm = bundle.getBoolean(ConstantValues.DISPLAY_CONFIRM_PARAM, false);
@@ -137,20 +138,20 @@ public class HomeFragment extends Fragment {
         Log.w(TAG, "Done resolving bundle in Home Fragment");
     }
 
-    public void setUpStationInfo(String city, String idStation, String zone, double price ) {
-        textNameStation.setText(city);
-        textIdStation.setText(idStation);
-        textZone.setText(zone);
+    public void setUpStationInfo(String city, String idStation, String zone, double price, boolean isCreated, String transactionId) {
+        textStation.setText("["+ idStation +"] " + city + " - " + zone);
         textPrice.setText(Commons.formatDouble(price) + " đồng");
 
         SharedPreferences setting = this.getActivity().getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
-        setting.edit().putString("IdStation", idStation).commit();
+        setting.edit()
+                .putString(ConstantValues.ID_STATION_PARAM, idStation)
+                .putBoolean(ConstantValues.IS_CREATED_PARAM, isCreated)
+                .putString(ConstantValues.TRANSACTION_ID_PARAM, transactionId)
+                .commit();
     }
 
     public void setUpDefaultInfo(View view) {
-        textNameStation.setText("-");
-        textIdStation.setText("-");
-        textZone.setText("-");
+        textStation.setText("<Chưa vào trạm>");
         textPrice.setText("0  đồng");
     }
 

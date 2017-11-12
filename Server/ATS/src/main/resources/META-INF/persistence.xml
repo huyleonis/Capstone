@@ -5,11 +5,17 @@
     <class>com.fpt.capstone.Entities.Account</class>
     <class>com.fpt.capstone.Entities.Vehicle</class>
     <class>com.fpt.capstone.Entities.Vehicletype</class>
+    <class>com.fpt.capstone.Entities.Beacon</class>
+    <class>com.fpt.capstone.Entities.Lane</class>
+    <class>com.fpt.capstone.Entities.Price</class>
+    <class>com.fpt.capstone.Entities.Station</class>
+    <class>com.fpt.capstone.Entities.Transaction</class>
+    <class>com.fpt.capstone.Entities.VehicleType</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ats?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.password" value="1234"/>
+      <property name="javax.persistence.jdbc.password" value="1234"/>      
     </properties>
   </persistence-unit>
 </persistence>

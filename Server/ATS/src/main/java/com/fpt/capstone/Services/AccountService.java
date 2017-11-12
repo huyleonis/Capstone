@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface AccountService {
 
-	String makePayment(String username, int priceId);
+	String makePayment(String username, int stationId);
 
 	AccountDTO getAccountByUsername(String username);
 

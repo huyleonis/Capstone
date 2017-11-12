@@ -6,6 +6,7 @@
 package com.fpt.capstone.Dtos;
 
 import com.fpt.capstone.Entities.Beacon;
+import com.fpt.capstone.Utils.BeaconType;
 
 /**
  *
@@ -20,15 +21,16 @@ public class BeaconDTO {
 	private String uuid;
 	private int major;
 	private int minor;
-	private int type;
+	private BeaconType type;
 	private int laneId;
 	private int stationId;
-	private int active;
+	private boolean active;
 
 	public BeaconDTO() {
 	}
 
-	public BeaconDTO(int id, String uuid, int major, int minor, int type, int laneId, int stationId, int active) {
+	public BeaconDTO(int id, String uuid, int major, int minor, BeaconType type,
+                int laneId, int stationId, boolean active) {
 		super();
 		this.id = id;
 		this.uuid = uuid;
@@ -72,11 +74,11 @@ public class BeaconDTO {
 		this.minor = minor;
 	}
 
-	public int getType() {
+	public BeaconType getType() {
 		return type;
 	}
 
-	public void setType(int type) {
+	public void setType(BeaconType type) {
 		this.type = type;
 	}
 
@@ -96,11 +98,11 @@ public class BeaconDTO {
 		this.stationId = stationId;
 	}
 
-	public int getActive() {
+	public boolean getActive() {
 		return active;
 	}
 
-	public void setActive(int active) {
+	public void setActive(boolean active) {
 		this.active = active;
 	}
 
@@ -111,7 +113,18 @@ public class BeaconDTO {
 		dto.setUuid(beacon.getUuid());
 		dto.setMajor(beacon.getMajor());
 		dto.setMinor(beacon.getMinor());
-		dto.setType(beacon.getType());
+                switch(beacon.getType()) {
+                    case 1:
+                        dto.setType(BeaconType.BEACON_PAYMENT);
+                        break;
+                    case 2:
+                        dto.setType(BeaconType.BEACON_RESULT);
+                        break;
+                    default:
+                        dto.setType(BeaconType.BEACON_OTHER);
+                        break;
+                }
+		
 		if (beacon.getLane() != null) {
 			dto.setLaneId(beacon.getLane().getId());
 		}

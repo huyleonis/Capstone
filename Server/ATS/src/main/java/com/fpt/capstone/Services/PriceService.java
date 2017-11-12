@@ -5,9 +5,7 @@ import java.util.List;
 import com.fpt.capstone.Dtos.PriceDTO;
 import com.fpt.capstone.Entities.Price;
 
-public interface PriceService {
-
-    PriceDTO findPriceByStationAndUsername(int stationId, String username);
+public interface PriceService {    
     
     PriceDTO findByLicensePlate(String licensePlate, int id);    
 

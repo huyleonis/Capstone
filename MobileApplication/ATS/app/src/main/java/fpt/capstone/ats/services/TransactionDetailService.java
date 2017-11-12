@@ -3,8 +3,11 @@ package fpt.capstone.ats.services;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -15,6 +18,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import fpt.capstone.ats.sqlite.DBAdapter;
 import fpt.capstone.ats.utils.Commons;
@@ -28,32 +33,12 @@ public class TransactionDetailService extends Service {
 
     private DBAdapter database;
     private RequestServer rs;
+    private Timer timer = new Timer();
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-        Log.d("\nTRANSACTION DETAIL", "SYNCHRONIZING...");
-
-        saveRecentDetail(Commons.getVehicleId(this));
-//        boolean isSuccessful = deleteRecord30DaysOld();
-//        if (isSuccessful) {
-//            Log.d("\nDELETE OLD RECORDS", "SUCCESS");
-//        }
-        stopSelf();
-
-        return START_NOT_STICKY;
-    }
-
-    @Override
-    public void onDestroy() {
-        // restart this service again in 24 hours
-        AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarm.set(
-                alarm.RTC_WAKEUP,
-                System.currentTimeMillis() + (1000 * 60),
-//                System.currentTimeMillis() + (1000 * 60 * 60 * 24),
-                PendingIntent.getService(this, 0, new Intent(this, TransactionDetailService.class), 0)
-        );
+        getDetailPeriodly();
+        return START_STICKY;
     }
 
     @Override
@@ -61,7 +46,18 @@ public class TransactionDetailService extends Service {
         return null;
     }
 
-    public void saveRecentDetail(String vehicleId) {
+    private void getDetailPeriodly() {
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                if (isOnline()) {
+                    Log.d("\nTRANSACTION DETAIL", "SYNCHRONIZING...");
+                    saveRecentDetail(Commons.getVehicleId(TransactionDetailService.this));
+                }
+            }
+        }, 0, 60*60*24);
+    }
+
+    private void saveRecentDetail(String vehicleId) {
         Log.d("Request TransDetail", "Send Request TransDetail");
         rs = new RequestServer();
         rs.delegate = new RequestServer.RequestResult() {
@@ -113,20 +109,14 @@ public class TransactionDetailService extends Service {
         rs.execute(params, "transaction", "getDetailByVehicleIdIn24Hours", "GET");
     }
 
-    public boolean deleteRecord30DaysOld() {
-        boolean isSuccessful = false;
-        try {
-            database = new DBAdapter(TransactionDetailService.this);
-            database.open();
-
-            isSuccessful = database.deleteInfoAfter30Days();
-
-            database.close();
-        } catch (Exception e) {
-            Log.e("TRANS DETAIL ERROR", "DELETE RECORDS 30 DAYS ERROR");
-            Log.e("TRANS DETAIL ERROR", e.getMessage());
+    // check internet connection
+    private boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm.getActiveNetworkInfo() != null) {
+            NetworkInfo netInfo = cm.getActiveNetworkInfo();
+            return netInfo != null && netInfo.isConnectedOrConnecting();
         }
-
-        return isSuccessful;
+        return false;
     }
 }

@@ -7,12 +7,12 @@ public class LaneDTO {
 	private int id;
 	private String name;
 	private int stationId;
-	private int active;
+	private boolean active;
 
 	public LaneDTO() {
 	}
 
-	public LaneDTO(int id, String name, int stationId, int active) {
+	public LaneDTO(int id, String name, int stationId, boolean active) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -44,11 +44,11 @@ public class LaneDTO {
 		this.stationId = stationId;
 	}
 
-	public int getActive() {
+	public boolean getActive() {
 		return active;
 	}
 
-	public void setActive(int active) {
+	public void setActive(boolean active) {
 		this.active = active;
 	}
 

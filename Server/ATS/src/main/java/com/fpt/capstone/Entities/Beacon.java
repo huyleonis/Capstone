@@ -5,6 +5,7 @@
  */
 package com.fpt.capstone.Entities;
 
+import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity(name = "beacon")
-public class Beacon {
+public class Beacon implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,18 +33,18 @@ public class Beacon {
 	private int minor;
 
 	@ManyToOne
-	@JoinColumn(name = "station_id")
+	@JoinColumn(name = "stationid")
 	private Station station;
 
 	@OneToOne
-	@JoinColumn(name = "lane_id")
+	@JoinColumn(name = "laneid")
 	private Lane lane;
 
 	@Column(name = "type")
 	private int type;
 
-	@Column(name = "is_active")
-	private int active;
+	@Column(name = "isactive")
+	private Boolean isActive;
 
 	public int getId() {
 		return id;
@@ -101,12 +102,12 @@ public class Beacon {
 		this.type = type;
 	}
 
-	public int getActive() {
-		return active;
+	public Boolean getActive() {
+		return isActive;
 	}
 
-	public void setActive(int active) {
-		this.active = active;
+	public void setActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }

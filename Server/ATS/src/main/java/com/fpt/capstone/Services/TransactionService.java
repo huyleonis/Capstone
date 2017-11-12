@@ -2,6 +2,7 @@ package com.fpt.capstone.Services;
 
 import com.fpt.capstone.Dtos.TransactionDTO;
 import com.fpt.capstone.Dtos.TransactionDetailDTO;
+import com.fpt.capstone.Utils.TransactionStatus;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -13,8 +14,10 @@ public interface TransactionService {
     TransactionDTO insertManualTransaction(String licensePlate, int laneId);
 
     TransactionDTO insertAutoTransaction(String username, int stationId);
+    
+    TransactionDTO createCapturedTransaction(String plate, String photo, Date createdTime, int stationId) throws Exception;
 
-    TransactionDTO updateTransactionStatus(String id, String status);
+    TransactionDTO updateTransactionStatus(String id, TransactionStatus status);
 
     TransactionDTO getById(String id);
     
@@ -29,5 +32,7 @@ public interface TransactionService {
     List<TransactionDetailDTO> getAllDetail();
 
     List<TransactionDetailDTO> getDetailByVehicleIdIn24Hours(int vehicleId);
+    
+    TransactionDetailDTO getCapturedTransaction(int vehicleId, int stationId);
 
 }

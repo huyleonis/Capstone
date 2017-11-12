@@ -1,37 +1,38 @@
 package com.fpt.capstone.Entities;
 
+import java.io.Serializable;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity(name = "transaction")
-public class Transaction {
+public class Transaction implements Serializable {
 
     @Id
     @Column(name = "id")
     private String id;
 
     @ManyToOne
-    @JoinColumn(name = "vehicle_id")
+    @JoinColumn(name = "vehicleid")
     private Vehicle vehicle;
 
     @ManyToOne
-    @JoinColumn(name = "station_id")
+    @JoinColumn(name = "stationid")
     private Station station;
 
-    @Column(name = "date_time")
+    @Column(name = "createdtime")
     private Date dateTime;
 
     @Column(name = "status")
     private String status;
 
-    @ManyToOne
-    @JoinColumn(name = "price_id")
-    private Price price;
+    
+    @Column(name = "price")
+    private Double price;
 
     @ManyToOne
-    @JoinColumn(name = "lane_id")
+    @JoinColumn(name = "laneid")
     private Lane lane;
 
     @Column(name = "type")
@@ -40,11 +41,11 @@ public class Transaction {
     @Column(name = "photo")
     private String photo;
 
-    public Transaction() {
+    public Transaction() {        
     }
 
     public Transaction(String id, Vehicle vehicle, Station station, Date dateTime,
-                       String status, Price price, Lane lane, int type, String photo) {
+                       String status, double price, Lane lane, int type, String photo) {
         this.id = id;
         this.vehicle = vehicle;
         this.station = station;
@@ -96,11 +97,11 @@ public class Transaction {
         this.status = status;
     }
 
-    public Price getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Price price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

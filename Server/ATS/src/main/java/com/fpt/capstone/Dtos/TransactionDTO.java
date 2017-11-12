@@ -1,6 +1,8 @@
 package com.fpt.capstone.Dtos;
 
 import com.fpt.capstone.Entities.Transaction;
+import com.fpt.capstone.Utils.TransactionStatus;
+import com.fpt.capstone.Utils.TransactionType;
 
 import java.util.Date;
 
@@ -10,30 +12,30 @@ public class TransactionDTO {
     private int vehicleId;
     private int stationId;
     private Date dateTime;
-    private String status;
-    private int priceId;
+    private TransactionStatus status;
+    private double price;
     private int laneId;
-    private String type;
+    private TransactionType type;
     private String photo;
     private String failReason;
 
     public TransactionDTO() {
     }
 
-    public TransactionDTO(String id, int vehicleId, int stationId, Date dateTime, String status,
-                          int priceId, int laneId, String type, String photo, String failReason) {
+    public TransactionDTO(String id, int vehicleId, int stationId, Date dateTime, TransactionStatus status,
+                          double price, int laneId, TransactionType type, String photo, String failReason) {
         this.id = id;
         this.vehicleId = vehicleId;
         this.stationId = stationId;
         this.dateTime = dateTime;
         this.status = status;
-        this.priceId = priceId;
+        this.price = price;
         this.laneId = laneId;
         this.type = type;
         this.photo = photo;
         this.failReason = failReason;
     }
-
+        
     public String getId() {
         return id;
     }
@@ -66,20 +68,20 @@ public class TransactionDTO {
         this.dateTime = dateTime;
     }
 
-    public String getStatus() {
+    public TransactionStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(TransactionStatus status) {
         this.status = status;
     }
 
-    public int getPriceId() {
-        return priceId;
+    public double getPrice() {
+        return price;
     }
 
-    public void setPriceId(int priceId) {
-        this.priceId = priceId;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public int getLaneId() {
@@ -90,11 +92,11 @@ public class TransactionDTO {
         this.laneId = laneId;
     }
 
-    public String getType() {
+    public TransactionType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TransactionType type) {
         this.type = type;
     }
 
@@ -116,21 +118,38 @@ public class TransactionDTO {
 
     public static TransactionDTO convertFromEntity(Transaction transaction) {
         TransactionDTO dto = new TransactionDTO();
-
+        convertFromEntity(transaction, dto);
+        return dto;
+    }
+    
+    public static void convertFromEntity(Transaction transaction, TransactionDTO dto) {        
+        if (dto == null) {
+            dto = new TransactionDTO();
+        }
+        
         dto.setId(transaction.getId());
         dto.setVehicleId(transaction.getVehicle().getId());
         dto.setStationId(transaction.getStation().getId());
-        dto.setDateTime(transaction.getDateTime());
-        dto.setStatus(transaction.getStatus());
-        dto.setPriceId(transaction.getPrice().getId());
+        dto.setDateTime(transaction.getDateTime());                
+        dto.setPrice(transaction.getPrice());
         if (transaction.getLane() != null) {
             dto.setLaneId(transaction.getLane().getId());
         }
-        dto.setType((transaction.getType() == 1) ? "Tự động" : "Thủ công");
+        if (transaction.getType() == 1) {
+            dto.setType(TransactionType.AUTOMATION);
+        } else {
+            dto.setType(TransactionType.MANUAL);
+        }
         if (transaction.getPhoto() != null) {
             dto.setPhoto(transaction.getPhoto());
         }
-
-        return dto;
+        
+        for (TransactionStatus value : TransactionStatus.values()) {
+            if (value.getName().equals(transaction.getStatus())) {
+                dto.setStatus(value);
+                break;
+            }
+        }
+        
     }
 }

@@ -1,32 +1,33 @@
 package com.fpt.capstone.Entities;
 
+import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
 @Entity(name = "price")
-public class Price {
+public class Price implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(name="from_date")
+    @Column(name="fromdate")
     private Date fromDate;
 
     @Column(name = "price")
     private double price;
 
     @ManyToOne
-    @JoinColumn(name = "station_id")
+    @JoinColumn(name = "stationid")
     private Station station;
 
     @ManyToOne
-    @JoinColumn(name="type_id")
+    @JoinColumn(name="typeid")
     private VehicleType vehicleType;
 
-    @Column(name = "is_active")
-    private int active;
+    @Column(name = "isactive")
+    private Boolean isActive;
 
     @OneToMany(mappedBy="price")
     private List<Transaction> transactions;
@@ -34,12 +35,12 @@ public class Price {
     public Price() {
     }
 
-    public Price(Date fromDate, double price, Station station, VehicleType vehicleType, int active, List<Transaction> transactions) {
+    public Price(Date fromDate, double price, Station station, VehicleType vehicleType, Boolean isActive, List<Transaction> transactions) {
         this.fromDate = fromDate;
         this.price = price;
         this.station = station;
         this.vehicleType = vehicleType;
-        this.active = active;
+        this.isActive = isActive;
         this.transactions = transactions;
     }
 
@@ -83,12 +84,12 @@ public class Price {
         this.vehicleType = vehicleType;
     }
 
-    public int getActive() {
-        return active;
+    public Boolean getActive() {
+        return isActive;
     }
 
-    public void setActive(int active) {
-        this.active = active;
+    public void setActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public List<Transaction> getTransactions() {

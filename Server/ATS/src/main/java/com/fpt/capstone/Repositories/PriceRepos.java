@@ -11,30 +11,16 @@ import com.fpt.capstone.Entities.Price;
 public interface PriceRepos extends JpaRepository<Price, Integer> {
 
     /**
-     * Tìm giá tiền dựa trên username và id của station cho thu phi tự động
-     * @param username
-     * @param station Id
-     * @return
-     */
-    @Query(value = "select * from price price" +
-            " where price.station_id = :stationId" +
-            " and price.type_id = "
-            + "(select type_id from vehicle where id = "
-            + "(select vehicle_id from account where username = :username))", nativeQuery = true)
-    Price findPriceByStationAndUsername(@Param("username") String username, @Param("stationId") int stationId);
-
-
-    /**
-     * Tìm giá tiền dựa trên station id và license plate cho thu phí thủ công
+     * Tìm giá tiền dựa trên station id và license plate
      *
      * @param stationId
      * @param licensePlate
      * @return
      */
-    @Query(value = "select * from price price where price.station_id = ?1 and price.type_id = "
-            + "(select vehicle_type.id from vehicletype vehicle_type where vehicle_type.id = "
-            + "(select vehicle.type_id from vehicle vehicle where vehicle.license_plate = ?2))", nativeQuery = true)
-    Price findPriceByStationIdAndLicensePlate(int stationId, String licensePlate);
+    @Query(value = "select * from price price where price.stationId = :stationId and price.typeId = " +
+                    "(select vehicle.typeId from vehicle vehicle where vehicle.licensePlate = :plate)", nativeQuery = true)
+    Price findPriceByStationIdAndLicensePlate(@Param("stationId") int stationId,
+            @Param("plate") String licensePlate);
 
     @Query(value = "SELECT * FROM price WHERE id = ?1", nativeQuery = true)
     Price findById(Integer id);
@@ -43,12 +29,12 @@ public interface PriceRepos extends JpaRepository<Price, Integer> {
      * Tìm giá tiền dựa trên biển số xe và trạm cho thu phí thủ công gửi về staff
      * @param licensePlate
      * @param idLane
-     * @return price, typeName, account_id
+     * @return price, typeName, accountId
      */
-    @Query(value = "select * from price where station_id = "
-            + "(select s.id from station s, lane l where l.station_id = s.id and l.id = :idLane) "
-            + "and type_id = "
-            + "(select vt.id from vehicletype vt, vehicle v where vt.id = v.type_id and v.license_plate = :license)", nativeQuery = true)
+    @Query(value = "select * from price where stationId = "
+            + "(select s.id from station s, lane l where l.stationId = s.id and l.id = :idLane) "
+            + "and typeId = "
+            + "(select vt.id from vehicletype vt, vehicle v where vt.id = v.typeId and v.license_plate = :license)", nativeQuery = true)
     Price findByLicensePlate(@Param("license") String licensePlate, @Param("idLane") int idLane);
 
 }

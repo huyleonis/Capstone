@@ -141,7 +141,7 @@ public class BeaconService extends Service {
                         params.add(major + "");
                         params.add(minor + "");
 
-                        rs.execute(params, "beacon", "get", "GET");
+                        rs.execute(params, "beacon", "getBeacon", "GET");
                     }
                 }
             }
@@ -206,19 +206,40 @@ public class BeaconService extends Service {
                 try {
                     JSONObject infos = new JSONObject(result);
 
-                    String nameStation = infos.getString("nameStation");
-                    String idStation = infos.getString("stationId");
-                    String zone = infos.getString("zoneStation");
-                    double price = infos.getDouble("price");
+                    String nameStation;
+                    String idStation;
+                    String zone;
+                    String photo = "";
+                    String transactionId = "";
+                    double price;
+                    boolean isCreated;
 
-                    processPaymentBeaconInfo(nameStation, idStation, zone, price);
+
+                    if (infos.has("photo")) { //transaction dc tạo bởi camera
+                        nameStation = infos.getString("stationName");
+                        idStation = infos.getString("stationId");
+                        zone = infos.getString("zone");
+                        price = infos.getDouble("price");
+                        photo = infos.getString("photo");
+                        transactionId = infos.getString("id");
+                        isCreated = true;
+                    } else { //chỉ lấy giá bình thường
+                        nameStation = infos.getString("nameStation");
+                        idStation = infos.getString("stationId");
+                        zone = infos.getString("zoneStation");
+                        price = infos.getDouble("price");
+                        isCreated = false;
+                    }
+
+
+                    processPaymentBeaconInfo(nameStation, idStation, zone, price, isCreated, photo, transactionId);
                 } catch (JSONException e) {
                     Log.e(TAG, "JSON Exception: " + e.getMessage() + " - result: " + result);
                 }
             }
         };
 
-        rs.execute(params, "price", "findPriceDriver", "GET");
+        rs.execute(params, "beacon", "payment", "GET");
 
     }
 
@@ -229,7 +250,7 @@ public class BeaconService extends Service {
      * @param zone khu vực hiện tại
      * @param price giá tương ứng với xe
      */
-    private void processPaymentBeaconInfo(String nameStation, String idStation, String zone, double price) {
+    private void processPaymentBeaconInfo(String nameStation, String idStation, String zone, double price, boolean isCreated, String photo, String transactionID) {
         Bundle bundle = new Bundle();
         bundle.putString(ConstantValues.NAME_STATION_PARAM, nameStation);
         bundle.putString(ConstantValues.ID_STATION_PARAM, idStation);
@@ -240,6 +261,8 @@ public class BeaconService extends Service {
         bundle.putBoolean(ConstantValues.DISPLAY_RESULT_PARAM, false);
         bundle.putBoolean(ConstantValues.INSIDE_PARAM, true);
         bundle.putInt(ConstantValues.STAGE_PARAM, 1);
+        bundle.putBoolean(ConstantValues.IS_CREATED_PARAM, isCreated);
+        bundle.putString(ConstantValues.TRANSACTION_ID_PARAM, transactionID);
 
         if (isForeground()) { //Nếu ứng dụng đang chạy trên cùng
             Intent broadcastIntent = new Intent();
@@ -282,7 +305,7 @@ public class BeaconService extends Service {
             }
         };
 
-        rs.execute(params, "transaction", "checkResult", "GET");
+        rs.execute(params, "beacon", "result", "GET");
     }
 
     /**

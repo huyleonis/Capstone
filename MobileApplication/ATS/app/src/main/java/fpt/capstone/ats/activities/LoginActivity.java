@@ -1,9 +1,12 @@
 package fpt.capstone.ats.activities;
 
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +21,7 @@ import com.estimote.coresdk.common.requirements.SystemRequirementsChecker;
 import fpt.capstone.ats.R;
 import fpt.capstone.ats.app.AtsApplication;
 import fpt.capstone.ats.services.BeaconService;
+import fpt.capstone.ats.services.TransactionDetailService;
 import fpt.capstone.ats.utils.Commons;
 import fpt.capstone.ats.utils.ConstantValues;
 
@@ -81,6 +85,12 @@ public class LoginActivity extends AppCompatActivity {
         serviceIntent.putExtras(bundle);
 
         startService(serviceIntent);
+
+        //Start service to get transaction detail periodly
+        // luu local cua transaction detail
+        Log.d("\nTRANSACTION DETAIL", "INTERNET CONNECTED - SYNCHRONIZATION BEGIN");
+        startService(new Intent(this, TransactionDetailService.class));
+
 
         //Here is the code for disappear LoginActivity
         Intent intent = new Intent(this, MainActivity.class);

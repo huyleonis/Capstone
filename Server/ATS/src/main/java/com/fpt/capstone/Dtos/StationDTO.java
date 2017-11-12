@@ -8,12 +8,12 @@ public class StationDTO {
 	private String name;
 	private String location;
 	private String zone;
-	private int active;
+	private boolean active;
 
 	public StationDTO() {
 	}
 
-	public StationDTO(int id, String name, String location, String zone, int active) {
+	public StationDTO(int id, String name, String location, String zone, boolean active) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -54,11 +54,11 @@ public class StationDTO {
 		this.zone = zone;
 	}
 
-	public int getActive() {
+	public boolean getActive() {
 		return active;
 	}
 
-	public void setActive(int active) {
+	public void setActive(boolean active) {
 		this.active = active;
 	}
 

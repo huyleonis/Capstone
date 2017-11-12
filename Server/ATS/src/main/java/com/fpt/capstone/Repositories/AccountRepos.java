@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AccountRepos extends JpaRepository<Account, Integer> {
 
-	@Query(value = "select license_plate from vehicle where id = "
-			+ "(select vehicle_id from account where username = ?1)", nativeQuery = true)
+	@Query(value = "select licensePlate from vehicle where id = "
+			+ "(select vehicleId from account where username = ?1)", nativeQuery = true)
 	String getLicensePlateOfAccount(String username);
 
 	@Query(value = "SELECT * FROM account a WHERE a.username = :username", nativeQuery = true)

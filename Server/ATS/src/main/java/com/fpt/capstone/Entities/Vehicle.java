@@ -10,11 +10,11 @@ public class Vehicle {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "license_plate")
+    @Column(name = "licenseplate")
     private String licensePlate;
 
     @ManyToOne
-    @JoinColumn(name = "type_id")
+    @JoinColumn(name = "typeid")
     private VehicleType vehicleType;
 
     @OneToOne(mappedBy = "vehicle")

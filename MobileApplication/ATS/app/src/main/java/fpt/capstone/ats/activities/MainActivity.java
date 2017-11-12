@@ -145,15 +145,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         fm.beginTransaction().replace(R.id.content, homeFragment).commit();
-
-
-        // luu local cua transaction detail
-        if (isOnline()) {
-            Log.d("\nTRANSACTION DETAIL", "INTERNET CONNECTED - SYNCHRONIZATION BEGIN");
-            startService(new Intent(this, TransactionDetailService.class));
-        } else {
-            Log.d("\nTRANSACTION DETAIL", "INTERNET CONNECTING...");
-        }
     }
 
     @Override
@@ -288,14 +279,26 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        List<String> params = new ArrayList<>();
-        params.add(Commons.getUsername(this));
-        params.add(setting.getString("IdStation", ""));
+        boolean isCreated = setting.getBoolean("isCreated", false);
 
-        rs.execute(params, "transaction", "makePayment", "GET");
-        homeFragment.updateStatusOfTransaction("đang thanh toán phí...");
+        if (isCreated) {
+            List<String> params = new ArrayList<>();
+            params.add(setting.getString(ConstantValues.TRANSACTION_ID_PARAM, ""));
 
-        setting.edit().putString("IdStation", "");
+            rs.execute(params, "transaction", "makePayment", "GET");
+            homeFragment.updateStatusOfTransaction("đang thanh toán phí...");
+        } else {
+            List<String> params = new ArrayList<>();
+            params.add(Commons.getUsername(this));
+            params.add(setting.getString("IdStation", ""));
+
+
+            rs.execute(params, "transaction", "makePayment", "GET");
+            homeFragment.updateStatusOfTransaction("đang thanh toán phí...");
+
+            setting.edit().putString("IdStation", "").putBoolean("isCreated", false).commit();
+        }
+
     }
 
     public void clickToCancelPayment(View view) {
@@ -386,17 +389,5 @@ public class MainActivity extends AppCompatActivity {
 
     public void clickToShowHistory(View view) {
         historyFragment.showHistory();
-    }
-
-
-    // check internet connection
-    public boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm.getActiveNetworkInfo() != null) {
-            NetworkInfo netInfo = cm.getActiveNetworkInfo();
-            return netInfo != null && netInfo.isConnectedOrConnecting();
-        }
-        return false;
     }
 }

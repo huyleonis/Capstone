@@ -189,6 +189,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
             @Override
             public void processFinish(String result) {
                 try {
+                    pdial.dismiss();
                     Log.w("Receive TransStatus", "Transaction Status Json: " + result);
                     JSONObject infos = new JSONObject(result);
                     String newStatus = infos.getString("status");
@@ -196,7 +197,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     database = new DBAdapter(TransactionDetailActivity.this);
                     database.open();
 
-                    Log.w(TAG, "processFinish() returned: " + status);
+                    Log.w(TAG, "processFinish() returned: " + newStatus);
                     Cursor resultSet = database.getInfo(transactionId);
                     if (resultSet.moveToFirst()) {
                         String stationName = resultSet.getString(1);

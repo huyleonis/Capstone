@@ -5,6 +5,7 @@
  */
 package com.fpt.capstone.Entities;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -18,7 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity(name = "lane")
-public class Lane {
+public class Lane implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,7 +29,7 @@ public class Lane {
 	private String name;
 
 	@ManyToOne
-	@JoinColumn(name = "station_id")
+	@JoinColumn(name = "stationid")
 	private Station station;
 
 	@OneToOne(mappedBy = "lane")
@@ -37,8 +38,8 @@ public class Lane {
 	@OneToMany(mappedBy = "lane")
 	private List<Transaction> transactions;
 
-	@Column(name = "is_active")
-	private int active;
+	@Column(name = "isactive")
+	private Boolean isActive;
 
 	public int getId() {
 		return id;
@@ -80,12 +81,12 @@ public class Lane {
 		this.transactions = transactions;
 	}
 
-	public int getActive() {
-		return active;
+	public Boolean getActive() {
+		return isActive;
 	}
 
-	public void setActive(int active) {
-		this.active = active;
+	public void setActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }

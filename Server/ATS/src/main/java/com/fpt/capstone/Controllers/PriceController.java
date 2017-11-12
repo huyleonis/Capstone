@@ -22,72 +22,61 @@ import com.google.gson.Gson;
 @RequestMapping("/price")
 public class PriceController {
 
-	@Autowired
-	private PriceService priceService;
+    @Autowired
+    private PriceService priceService;
 
-	@RequestMapping(method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	public ModelAndView viewAccount() {
-		ModelAndView m = new ModelAndView("price");
-		return m;
-	}
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public ModelAndView viewAccount() {
+        ModelAndView m = new ModelAndView("price");
+        return m;
+    }
 
-	@RequestMapping(value = "findPriceDriver/{idStation}/{username}", method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	public PriceDTO findPriceForDriver(@PathVariable String idStation, @PathVariable String username) {
-		System.out.println("Get Price from Driver");
-		System.out.println("    + Station ID: " + idStation);
-		System.out.println("    + username: " + username);
-		int iIdStaion = Integer.parseInt(idStation);
+    @RequestMapping(value = "findPriceStaff/{stationId}/{licensePlate}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public PriceDTO findPriceByStationIdAndLicensePlate(@PathVariable int stationId,
+            @PathVariable String licensePlate) {
+        return priceService.findPriceByStationIdAndLicensePlate(stationId, licensePlate);
+    }
 
-		return priceService.findPriceByStationAndUsername(iIdStaion, username);
-	}
+    @RequestMapping(value = "findByLicensePlate/{license_plate}/{id}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public PriceDTO findByLicensePlate(@PathVariable String license_plate, @PathVariable int id) {
+        return priceService.findByLicensePlate(license_plate, id);
+    }
 
-	@RequestMapping(value = "findPriceStaff/{stationId}/{licensePlate}", method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	public PriceDTO findPriceByStationIdAndLicensePlate(@PathVariable int stationId,
-			@PathVariable String licensePlate) {
-		return priceService.findPriceByStationIdAndLicensePlate(stationId, licensePlate);
-	}
+    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    public String getAllPrice() throws JsonProcessingException {
 
-	@RequestMapping(value = "findByLicensePlate/{license_plate}/{id}", method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	public PriceDTO findByLicensePlate(@PathVariable String license_plate, @PathVariable int id) {
-		return priceService.findByLicensePlate(license_plate, id);
-	}
+        List<PriceDTO> dtos = priceService.getAllPrice();
 
-	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public String getAllPrice() throws JsonProcessingException {
+        return new Gson().toJson(dtos);
+    }
 
-		List<PriceDTO> dtos = priceService.getAllPrice();
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public String create(@RequestBody Price price) {
 
-		return new Gson().toJson(dtos);
-	}
-	
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@RequestBody Price price) {
+        boolean isSuccessful = false;
 
-		boolean isSuccessful = false;
-		
-		PriceDTO dto = priceService.insert(price);
+        PriceDTO dto = priceService.insert(price);
 
-		if (dto != null) {
-			isSuccessful = true;
-		}
+        if (dto != null) {
+            isSuccessful = true;
+        }
 
-		return (isSuccessful) ? "success" : "fail";
-	}
+        return (isSuccessful) ? "success" : "fail";
+    }
 
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@RequestBody Price price) {
-		boolean isSuccessful = false;
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String update(@RequestBody Price price) {
+        boolean isSuccessful = false;
 
-		PriceDTO dto = priceService.update(price);
+        PriceDTO dto = priceService.update(price);
 
-		if (dto != null) {
-			isSuccessful = true;
-		}
+        if (dto != null) {
+            isSuccessful = true;
+        }
 
-		return (isSuccessful) ? "success" : "fail";
-	}
+        return (isSuccessful) ? "success" : "fail";
+    }
 }

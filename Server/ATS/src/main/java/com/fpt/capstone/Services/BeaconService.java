@@ -5,11 +5,11 @@ import java.util.List;
 import com.fpt.capstone.Dtos.BeaconDTO;
 import com.fpt.capstone.Entities.Beacon;
 
-public interface BeaconService {
+public interface BeaconService {        
 
-	List<BeaconDTO> getAllBeacon();
-	
-	BeaconDTO insert(Beacon beacon);
-	
-	BeaconDTO update(Beacon beacon);
+    List<BeaconDTO> getAllBeacon();
+
+    BeaconDTO insert(Beacon beacon);
+
+    BeaconDTO update(Beacon beacon);
 }

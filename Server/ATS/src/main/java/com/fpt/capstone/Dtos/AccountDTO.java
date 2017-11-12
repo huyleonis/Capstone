@@ -4,6 +4,10 @@ import com.fpt.capstone.Entities.Account;
 
 public class AccountDTO {
 
+    private static final String ROLE_ADMIN = "Admin";
+    private static final String ROLE_STAFF = "Staff";
+    private static final String ROLE_DRIVER = "Driver";
+
     private int id;
     private String username;
     private String password;
@@ -20,12 +24,9 @@ public class AccountDTO {
 
     public AccountDTO() {
     }
-	private static final String ROLE_ADMIN = "Admin";
-	private static final String ROLE_STAFF = "Staff";
-	private static final String ROLE_DRIVER = "Driver";
 
     public AccountDTO(int id, String username, String password, int role, String fullname, String email, String phone,
-                      String numberId, String eWallet, int vehicleId, double balance, boolean isActive, boolean isEnable) {
+            String numberId, String eWallet, int vehicleId, double balance, boolean isActive, boolean isEnable) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -163,8 +164,8 @@ public class AccountDTO {
         if (account.getBalance() != null) {
             dto.setBalance(account.getBalance());
         }
-        dto.setActive((account.getActive() == 1) ? true : false);
-        dto.setEnable((account.getEnable() == 1) ? true : false);
+        dto.setActive(account.getActive());
+        dto.setEnable(account.getEnable());
 
         return dto;
     }
