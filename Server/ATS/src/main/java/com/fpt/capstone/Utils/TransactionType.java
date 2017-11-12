@@ -11,8 +11,8 @@ package com.fpt.capstone.Utils;
  */
 public enum TransactionType {
     UNKNOWN(0, "Chưa biết"),
-    MANUAL(1, "Thủ công"),
-    AUTOMATION(2, "Tự động");
+    AUTOMATION(1, "Tự động"),
+    MANUAL(2, "Thủ công");
     
     private int type;
     private String display;

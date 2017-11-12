@@ -68,7 +68,11 @@ public class TransactionDTO {
         this.dateTime = dateTime;
     }
 
-    public TransactionStatus getStatus() {
+    public String getStatus() {
+        return status.getName();
+    }
+    
+    public TransactionStatus getTransactionStatus() {
         return status;
     }
 

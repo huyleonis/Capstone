@@ -17,6 +17,7 @@ public enum TransactionStatus {
     TRANS_FAILED("Failed", "Thanh toán thất bại"),
     TRANS_FAILED_PASSED("Failed Passed", "Thanh toán thất bại - Đã qua trạm"),
     TRANS_FINISH("Finish" , "Hoàn thành giao dịch"),
+    TRANS_PENDING("Pending", "Đang xử lý"),
     TRANS_ERROR("Error" , "Giao dịch sai");
     
     private final String name;

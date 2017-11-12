@@ -12,6 +12,7 @@ import com.fpt.capstone.Repositories.StationRepos;
 import com.fpt.capstone.Repositories.TransactionRepos;
 import com.fpt.capstone.Repositories.VehicleRepos;
 import com.fpt.capstone.Utils.TransactionStatus;
+import com.fpt.capstone.Utils.TransactionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,10 +67,15 @@ public class TransactionServiceImpl implements TransactionService {
 
         String id = new Date().getTime() + "";
         Date now = new Date();
-        String licensePlate = accountRepos.getLicensePlateOfAccount(username);
-        Price price = priceRepos.findPriceByStationIdAndLicensePlate(stationId, licensePlate);
+        Account account = accountRepos.findByUsername(username);
+        int vehicleId = account.getVehicle().getId();        
+        Price price = priceRepos.findPriceByStationIdAndLicensePlate(stationId, account.getVehicle().getLicensePlate());
 
-        int transaction = transactionRepos.insertAutoTransaction(username, stationId, id, now, price.getId());
+        
+        int transaction = transactionRepos.insertAutoTransaction(id, stationId, now, 
+                TransactionStatus.TRANS_PENDING.getName(), price.getPrice(), 
+                TransactionType.AUTOMATION.getType(), vehicleId);
+        
         if (transaction > 0) {
             Transaction transaction2 = transactionRepos.findById(id);
             if (transaction2 != null) {
@@ -134,7 +140,8 @@ public class TransactionServiceImpl implements TransactionService {
     public List<TransactionDTO> getHistoryTransaction(String username, Date fromDate, Date toDate) {
         // fromDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         // toDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        List<Transaction> list = transactionRepos.getHistoryTransaction(username, fromDate, toDate);
+        Account account = accountRepos.findByUsername(username);
+        List<Transaction> list = transactionRepos.getHistoryTransaction(account.getVehicle().getId(), fromDate, toDate);
         List<TransactionDTO> result = new ArrayList<>();
         for (Transaction tran : list) {
             TransactionDTO dto = TransactionDTO.convertFromEntity(tran);

@@ -124,18 +124,16 @@ public class BeaconController {
      * Khi xe nhận tín hiệu beacon 1, kiểm tra xem camera có chụp dc hình tương
      * ứng thì trả về transaction ứng với hình, không thì trả về giá và hỏi
      * người dùng có tạo transaction hay không.
-     *
-     * @param laneId
-     * @param idTransaction
-     * @return
+     * @param stationId
+     * @param licensePlate
+     * @return 
      */
     @RequestMapping(value = "/payment/{stationId}/{licensePlate}", method = RequestMethod.GET)
     public Object triggerBeaconPayment(@PathVariable int stationId, @PathVariable String licensePlate) {
 
-        TransactionDetailDTO transaction;
-        transaction = transactionService.getCapturedTransaction(stationId, stationId);
-
         System.out.println("Triggered Beacon Payment");
+        TransactionDetailDTO transaction;
+        transaction = transactionService.getCapturedTransaction(stationId, stationId);        
 
         if (transaction == null) {
             System.out.println("Not found captured payment created by camera");
@@ -164,7 +162,7 @@ public class BeaconController {
             return "false";
         }
         
-        TransactionStatus status = transDTO.getStatus();
+        TransactionStatus status = transDTO.getTransactionStatus();
         if (status == TransactionStatus.TRANS_SUCCESS
                 || status == TransactionStatus.TRANS_FAILED) {
 

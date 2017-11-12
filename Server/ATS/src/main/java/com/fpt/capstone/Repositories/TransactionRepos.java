@@ -50,25 +50,28 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
 
     /**
      * Tạo transaction thanh toán tự động, khi driver đi vào beacon 1, gửi lên
-     * username và idStaion
-     *
-     * @param username
+     * yêu cầu thanh toán khi chưa chụp dc hình
+     * @param id
      * @param stationId
      * @param idTransaction
-     * @return
+     * @param now
+     * @param status
+     * @param price
+     * @param type
+     * @param vehicleId
+     * @return 
      */
     @Modifying
     @Transactional
-    @Query(value = "insert into transaction (id, usernameId, stationId, createdTime, status, priceId, type)" +
-                    " values(" +
-            "?3, " +
-            "(select id from account where username = ?1), " +
-            "?2, " +
-            "?4, " +
-            "'Chưa thanh toán', " +
-            "?5, " +
-            "true)", nativeQuery = true)
-    int insertAutoTransaction(String username, int stationId, String idTransaction, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date now, int priceId);
+    @Query(value = "insert into transaction (id, stationId, createdTime, status, price, type, vehicleId)" +
+                                    " values(:id, :stationId, :time, :status, :price, :type, :vehicleId)", nativeQuery = true)
+    int insertAutoTransaction(@Param("id") String id, 
+            @Param("stationId") int stationId, 
+            @Param("time") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date now, 
+            @Param("status") String status,
+            @Param("price") double price,
+            @Param("type") int type,
+            @Param("vehicleId") int vehicleId);
 
     /**
      * Method to create transaction when camera capture photo of plate
@@ -131,15 +134,16 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
 
     /**
      * lịch sử giao dịch cho tài xế, khi chọn ngày bắt đầu và kết thúc giao dịch
-     * @param username : tên tài xế
+     * @param vehicleId : id của vehicle
      * @param fromDate : bắt đầu từ ngày giao dịch
      * @param toDate : kết thúc ngày giao dịch
      * @return
      */
-    @Query(value = "select * from transaction where usernameId = " +
-            "(select id from account where username = :user) and " +
-            "createdTime > :fromDate and createdTime < :toDate", nativeQuery = true)
-    List<Transaction> getHistoryTransaction(@Param("user") String username, @Param("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date fromDate, @Param("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date toDate);
+    @Query(value = "select * from transaction where vehicleId = :vehicleId " +
+            "and createdTime > :fromDate and createdTime < :toDate", nativeQuery = true)
+    List<Transaction> getHistoryTransaction(@Param("vehicleId") int vehicleId, 
+            @Param("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date fromDate, 
+            @Param("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date toDate);
 
     /**
      * Tìm transaction detail theo vehicle id trong vòng 24 giờ

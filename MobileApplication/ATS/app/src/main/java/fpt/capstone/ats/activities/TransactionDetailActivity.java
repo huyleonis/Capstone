@@ -119,7 +119,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     textStationId.setText(String.valueOf(stationId));
                     textZone.setText(zone);
                     textPrice.setText(formatter.format(price) + " đồng");
-                    textStatus.setText(status);
                     textDateTime.setText(sdf.format(datetime));
                     textType.setText("Thu phí " + type);
                     textVehicleType.setText(vehicleType);
@@ -137,17 +136,25 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
                     database.close();
 
-
-                    Log.d("status: ", status);
-                    if (status.equals("Thành công")) {
+                    String statusText = "-";
+                    Log.w("status: " , status);
+                    if(status.equals("Success")){
                         textStatus.setTextColor(Color.parseColor("#7bc043"));
-                    } else if (status.equals("Kết thúc")) {
+                        statusText = "Thanh toán Thành công";
+                    } else if (status.equals("Finish")) {
                         textStatus.setTextColor(Color.parseColor("#0392cf"));
-                    } else {
+                        statusText = "Hoàn thành";
+                    } else if (status.equals("Failed")) {
                         textStatus.setTextColor(Color.parseColor("#ee4035"));
+                        statusText = "Thanh toán Thất bại";
+                    } else if (status.equals("Initial") || status.equals("Not pay")) {
+                        textStatus.setTextColor(Color.parseColor("#ee4035"));
+                        statusText = "Chưa thanh toán";
                     }
 
-                    if (!(status.equalsIgnoreCase("Thành công") || status.equalsIgnoreCase("Kết thúc"))) {
+                    textStatus.setText(statusText);
+
+                    if (status.equals("Failed") || status.equals("Initial") || status.equals("Not pay")) {
                         btnPayment.setVisibility(View.VISIBLE);
                         btnPayment.setEnabled(true);
                     } else {
@@ -283,15 +290,25 @@ public class TransactionDetailActivity extends AppCompatActivity {
             textType.setText("Thu phí " + type);
             textVehicleType.setText(vehicleType);
 
-            if (status.equals("Thành công")) {
+            String statusText = "-";
+            Log.w("status: " , status);
+            if(status.equals("Success")){
                 textStatus.setTextColor(Color.parseColor("#7bc043"));
-            } else if (status.equals("Kết thúc")) {
+                statusText = "Thanh toán Thành công";
+            } else if (status.equals("Finish")) {
                 textStatus.setTextColor(Color.parseColor("#0392cf"));
-            } else {
+                statusText = "Hoàn thành";
+            } else if (status.equals("Failed")) {
                 textStatus.setTextColor(Color.parseColor("#ee4035"));
+                statusText = "Thanh toán Thất bại";
+            } else if (status.equals("Initial") || status.equals("Not pay")) {
+                textStatus.setTextColor(Color.parseColor("#ee4035"));
+                statusText = "Chưa thanh toán";
             }
 
-            if (!(status.equalsIgnoreCase("Thành công") || status.equalsIgnoreCase("Kết thúc"))) {
+            textStatus.setText(statusText);
+
+            if (status.equals("Failed") || status.equals("Initial") || status.equals("Not pay")) {
                 btnPayment.setVisibility(View.VISIBLE);
                 btnPayment.setEnabled(true);
             } else {

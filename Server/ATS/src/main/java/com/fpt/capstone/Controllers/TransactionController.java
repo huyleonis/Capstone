@@ -162,7 +162,7 @@ public class TransactionController {
      * @param stationId mã trạm do android app gửi lên
      * @return trả về thông tin transaction vừa dc tạo
      */
-    @RequestMapping(value = "makePayment/{username}/{stationId}/{isCreated}")
+    @RequestMapping(value = "makePayment/{username}/{stationId}")
     @ResponseStatus(HttpStatus.OK)
     public TransactionDTO insertTransactionPayment(@PathVariable String username, @PathVariable int stationId) {
 
@@ -199,21 +199,28 @@ public class TransactionController {
     @ResponseStatus(HttpStatus.OK)
     public TransactionDTO insertTransactionPayment(@PathVariable String transactionId) {
 
-        System.out.println("Request payment from Driver for transaction " + transactionId);
+        System.out.println("Request payment from Driver for captured transaction " + transactionId);
 
-        // Khởi tạo transaction, status: Chưa thanh toán
-        TransactionDetailDTO transDTO = transactionService.getDetailById(transactionId);
+        // Lấy transaction đã dc khởi tạo bởi camera 
+        TransactionDetailDTO detailDTO = transactionService.getDetailById(transactionId);
+        String username = detailDTO.getUsername();
+        
+        // update sang trạng thái pending, chờ xử lý giao dịch
+        TransactionDTO transDTO = transactionService.updateTransactionStatus(transactionId, TransactionStatus.TRANS_PENDING);
 
         System.out.println("   + get transaction [" + transDTO.getId() + "] with status ["
                 + transDTO.getStatus() + "]");
 
-        // Gọi module paypal
-        String result = accountService.makePayment(transDTO.getUsername(), transDTO.getStationId());
+        
+        // Xử lý thanh toán
+        String result = accountService.makePayment(username, transDTO.getStationId());
         TransactionDTO transResultDTO;
         if (result.equals("")) {
-            transResultDTO = transactionService.updateTransactionStatus(transDTO.getId(), TransactionStatus.TRANS_SUCCESS);
+            transResultDTO = transactionService
+                    .updateTransactionStatus(transDTO.getId(), TransactionStatus.TRANS_SUCCESS);
         } else {
-            transResultDTO = transactionService.updateTransactionStatus(transDTO.getId(), TransactionStatus.TRANS_FAILED);
+            transResultDTO = transactionService
+                    .updateTransactionStatus(transDTO.getId(), TransactionStatus.TRANS_FAILED);
             transResultDTO.setFailReason(result);
         }
 
@@ -243,26 +250,6 @@ public class TransactionController {
         return map;
     }
 
-//    /**
-//     * Staff gửi yêu cầu lấy danh sách các xe đang vào lane mình trực Server gửi
-//     * danh sách các xe này và cập nhật trạng thái thành Đang xử lý
-//     *
-//     * @param laneId
-//     * @return
-//     */
-//    @RequestMapping(value = "getResult")
-//    @ResponseStatus(HttpStatus.OK)
-//    public List<TransactionDTO> getListResultTransactionByLane() {
-//        List<TransactionDTO> result = transactionService.getTransactionsForStaff("Chưa thanh toán");
-//
-//        for (TransactionDTO tran : result) {
-//            if (!tran.getStatus().display().endsWith("Đang xử lý")) {
-//                String status = tran.getStatus().display().replace("Chờ xử lý", "Đang xử lý");
-//                transactionService.updateTransactionStatus(tran.getId(), status);
-//            }
-//        }
-//        return result;
-//    }
 
     /**
      * Lấy transaction detail theo id
@@ -328,5 +315,5 @@ public class TransactionController {
 
         return map;
     }
-
+    
 }
