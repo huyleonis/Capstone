@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Timer;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -64,12 +65,23 @@ public class MainForm extends javax.swing.JFrame {
         }
     }
 
-    public void clearForm() {
+    private void clearForm() {
         txtLicensePlate.setText("");
         //lbId.setText("");
         lbPirce.setText("-");
         lbTypeName.setText("-");
         lbTypeName.setText("-");
+    }
+    
+    
+    private void showTable(List<TransactionDTO> list){
+        DefaultTableModel model = (DefaultTableModel) tblHistory.getModel();
+        for(int i = 0; i<list.size(); i++){
+            model.addRow(new Object[]{i, list.get(i).getId(), list.get(i).getLicensePlate(),
+                list.get(i).getPrice(), list.get(i).getDateTime(),
+                list.get(i).getType(), list.get(i).getStatus()});
+        }
+        
     }
 
     //AutoPaymentRequest apr = new AutoPaymentRequest();
@@ -110,6 +122,8 @@ public class MainForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblHistory = new javax.swing.JTable();
         tabReport = new javax.swing.JPanel();
         tabSetting = new javax.swing.JPanel();
         paneTechnical = new javax.swing.JPanel();
@@ -351,28 +365,53 @@ public class MainForm extends javax.swing.JFrame {
         btnSearch.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnSearch.setText("Tìm kiếm");
 
+        tblHistory.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Số thứ tự", "ID", "Biển số xe", "Giá tiền", "Ngày giờ", "Hình thức", "Trạng thái"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblHistory);
+
         javax.swing.GroupLayout tabHistoryLayout = new javax.swing.GroupLayout(tabHistory);
         tabHistory.setLayout(tabHistoryLayout);
         tabHistoryLayout.setHorizontalGroup(
             tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabHistoryLayout.createSequentialGroup()
-                .addGap(224, 224, 224)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnSearch)
-                .addContainerGap(475, Short.MAX_VALUE))
+                .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabHistoryLayout.createSequentialGroup()
+                        .addGap(224, 224, 224)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(75, 75, 75)
+                        .addComponent(btnSearch))
+                    .addGroup(tabHistoryLayout.createSequentialGroup()
+                        .addGap(58, 58, 58)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1155, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
         tabHistoryLayout.setVerticalGroup(
             tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHistoryLayout.createSequentialGroup()
+            .addGroup(tabHistoryLayout.createSequentialGroup()
                 .addGap(59, 59, 59)
                 .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSearch))
-                .addContainerGap(587, Short.MAX_VALUE))
+                .addGap(35, 35, 35)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(110, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Lịch Sử Giao Dịch", tabHistory);
@@ -530,7 +569,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, paneBasicLayout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(btnUpdateDB, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 144, Short.MAX_VALUE)
                 .addComponent(txtLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -864,6 +903,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lbId;
@@ -882,6 +922,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel tabHome;
     private javax.swing.JPanel tabReport;
     private javax.swing.JPanel tabSetting;
+    private javax.swing.JTable tblHistory;
     private javax.swing.JButton txtCloseCamera;
     private javax.swing.JLabel txtHello;
     private javax.swing.JTextField txtLane;
