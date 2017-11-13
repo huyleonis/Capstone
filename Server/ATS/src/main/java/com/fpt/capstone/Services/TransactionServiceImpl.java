@@ -50,8 +50,11 @@ public class TransactionServiceImpl implements TransactionService {
         Date now = new Date();
         int stationId = stationRepos.getStationIdOfLane(laneId);
         Price price = priceRepos.findPriceByStationIdAndLicensePlate(stationId, licensePlate);
+        String status = TransactionStatus.TRANS_NOTPAY.toString();
+        int vehicleId = vehicleRepos.findByLicensePlate(licensePlate).getId();
 
-        int transaction = transactionRepos.insertManualTransaction(licensePlate, laneId, id, now, price.getId());
+        int transaction = transactionRepos.insertManualTransaction(id, stationId,
+                now, status, price.getPrice(), TransactionType.MANUAL.getType(),vehicleId);
         if (transaction > 0) {
             Transaction transaction1 = transactionRepos.findById(id);
             if (transaction1 != null) {

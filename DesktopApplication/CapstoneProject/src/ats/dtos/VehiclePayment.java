@@ -10,7 +10,7 @@ package ats.dtos;
  * @author Chi Hieu
  */
 public class VehiclePayment implements Comparable<VehiclePayment>{
-    private String id, licensePlate, typeName, status;
+    private String id, licensePlate, typeName, status, photo;
     private double fee;
 
     public String getId() {
@@ -34,20 +34,16 @@ public class VehiclePayment implements Comparable<VehiclePayment>{
     public VehiclePayment() {
     }
 
-    public VehiclePayment(String id, String typeName, String status, double fee) {
-        this.id = id;
-        this.typeName = typeName;
-        this.status = status;
-        this.fee = fee;
-    }
-
-    public VehiclePayment(String id, String licensePlate, String typeName, String status, double fee) {
+    public VehiclePayment(String id, String licensePlate, String typeName, String status, String photo, double fee) {
         this.id = id;
         this.licensePlate = licensePlate;
         this.typeName = typeName;
         this.status = status;
+        this.photo = photo;
         this.fee = fee;
     }
+
+   
 
 
     public String getLicensePlate() {
@@ -72,6 +68,14 @@ public class VehiclePayment implements Comparable<VehiclePayment>{
 
     public void setFee(double fee) {
         this.fee = fee;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     @Override

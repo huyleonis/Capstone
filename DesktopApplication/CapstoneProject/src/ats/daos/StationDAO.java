@@ -38,7 +38,7 @@ public class StationDAO {
     public int findStationByLane(int idLane) throws Exception {
         int idStation = 0;
         try {
-            String sql = "SELECT st.id FROM station st, lane la WHERE la.station_id = st.id AND la.id = ?";
+            String sql = "SELECT st.id FROM station st, lane la WHERE la.stationId = st.id AND la.id = ?";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
             preStm.setInt(1, idLane);

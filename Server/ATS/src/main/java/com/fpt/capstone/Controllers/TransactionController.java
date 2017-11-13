@@ -45,8 +45,8 @@ public class TransactionController {
 
     @Autowired
     private AccountService accountService;
-    
-    @Autowired 
+
+    @Autowired
     private ServletContext context;
 
     @RequestMapping(method = RequestMethod.GET)
@@ -109,28 +109,26 @@ public class TransactionController {
     public String createTransactionByCamera(@PathVariable int stationId, @PathVariable String plate,
             @RequestParam(name = "img") MultipartFile img) {
 
-        
-        String result = "false";      
+        String result = "false";
         System.out.println("Plate: " + plate);
-        
-        Date now = new Date();                                
+
+        Date now = new Date();
         String fileName = plate + "_" + now.getTime() + ".jpg";
         String filePath = context.getRealPath(".") + "/WEB-INF/images/plates/" + fileName;
-                      
-        try {            
+
+        try {
             byte[] imgBytes = img.getBytes();
-                                    
-            
+
             File fileImg = new File(filePath);
             if (!fileImg.exists()) {
                 fileImg.createNewFile();
-            }                                    
-            
+            }
+
             FileOutputStream fos = new FileOutputStream(fileImg);
             fos.write(imgBytes);
             fos.flush();
             fos.close();
-            
+
             try {
                 transactionService.createCapturedTransaction(plate, fileName, now, stationId);
                 System.out.println("Created transction for plate: " + plate);
@@ -190,9 +188,10 @@ public class TransactionController {
     }
 
     /**
-     * Khi tài xế yêu cầu payment, và transaction đã dc tạo bởi camera, chỉ cần update lại status
+     * Khi tài xế yêu cầu payment, và transaction đã dc tạo bởi camera, chỉ cần
+     * update lại status
      *
-     * @param transactionId id transaction đã được tạo    
+     * @param transactionId id transaction đã được tạo
      * @return trả về thông tin transaction vừa dc cập nhật
      */
     @RequestMapping(value = "makePayment/{transactionId}")
@@ -204,14 +203,13 @@ public class TransactionController {
         // Lấy transaction đã dc khởi tạo bởi camera 
         TransactionDetailDTO detailDTO = transactionService.getDetailById(transactionId);
         String username = detailDTO.getUsername();
-        
+
         // update sang trạng thái pending, chờ xử lý giao dịch
         TransactionDTO transDTO = transactionService.updateTransactionStatus(transactionId, TransactionStatus.TRANS_PENDING);
 
         System.out.println("   + get transaction [" + transDTO.getId() + "] with status ["
                 + transDTO.getStatus() + "]");
 
-        
         // Xử lý thanh toán
         String result = accountService.makePayment(username, transDTO.getStationId());
         TransactionDTO transResultDTO;
@@ -230,7 +228,6 @@ public class TransactionController {
 
     }
 
-    
     /**
      * Lấy transaction detail theo vehicle id trong vòng 24h
      *
@@ -249,7 +246,6 @@ public class TransactionController {
 
         return map;
     }
-
 
     /**
      * Lấy transaction detail theo id
@@ -315,5 +311,38 @@ public class TransactionController {
 
         return map;
     }
-    
+
+    /**
+     * Staff gửi yêu cầu lấy danh sách các xe Chưa thanh toán
+     *
+     * @return
+     */
+    @RequestMapping(value = "getTransactionUnpaid")
+    @ResponseStatus(HttpStatus.OK)
+    public List<TransactionDTO> getListResultTransactionUnpaid() {
+        List<TransactionDTO> result = transactionService.getTransactionsForStaff(TransactionStatus.TRANS_NOTPAY.toString());
+
+        for (TransactionDTO tran : result) {
+            if (!tran.getStatus().endsWith(TransactionStatus.TRANS_PENDING.toString())) {
+                transactionService.updateTransactionStatus(tran.getId(), TransactionStatus.TRANS_PENDING);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Lấy transaction detail theo id
+     *
+     * @param vehicleId
+     * @param stationId
+     * @return
+     */
+    @RequestMapping(value = "getCapturedTransaction/{vehicleId}/{stationId}")
+    @ResponseStatus(HttpStatus.OK)
+    public TransactionDetailDTO getCapturedTransaction(@PathVariable int vehicleId, @PathVariable int stationId) {
+        TransactionDetailDTO dto = transactionService.getCapturedTransaction(vehicleId, stationId);
+
+        return dto;
+    }
+
 }

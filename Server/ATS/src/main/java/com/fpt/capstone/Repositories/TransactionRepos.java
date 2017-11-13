@@ -19,25 +19,28 @@ import org.springframework.data.repository.query.Param;
 public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
 
     /**
-     * Tao transaction thu phí thủ công khi staff gửi biển số xe và mã trạm
-     *
-     * @param licensePlate
-     * @param laneId
-     * @param transactionId
-     * @return
+     * Tạo transaction thanh toán thủ công
+     * @param id
+     * @param stationId
+     * @param idTransaction
+     * @param now
+     * @param status
+     * @param price
+     * @param type
+     * @param vehicleId
+     * @return 
      */
     @Modifying
     @Transactional
-    @Query(value = "insert into transaction (id, usernameId, stationId, createdTime, status, priceId, laneId, type)"
-            + " values (?3, "
-            + "(select a.id from vehicle v, account a where v.id = a.vehicleId and v.license_plate = ?1), "
-            + "(select l.stationId from lane l where l.id = ?2), "
-            + "?4, "
-            + "'Chưa thanh toán', "
-            + "?5, "
-            + "?2,"
-            + "false)", nativeQuery = true)
-    int insertManualTransaction(String licensePlate, int laneId, String transactionId, Date dateNow, int priceId);
+    @Query(value = "insert into transaction (id, stationId, createdTime, status, price, type, vehicleId)" +
+                                    " values(:id, :stationId, :time, :status, :price, :type, :vehicleId)", nativeQuery = true)
+    int insertManualTransaction(@Param("id") String id, 
+            @Param("stationId") int stationId, 
+            @Param("time") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date now, 
+            @Param("status") String status,
+            @Param("price") double price,
+            @Param("type") int type,
+            @Param("vehicleId") int vehicleId);
 
     /**
      * Lấy transasaction theo id
@@ -110,13 +113,15 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
     int updateTransaction(String idTransaction, String status);
 
     /**
-     * Lấy transaction cho staff theo status cho trước trong vòng 5 phút trước đó 
+     * Lấy transaction cho staff theo status cho trước trong vòng 10 phút trước đó 
      *
      * @param laneId
      * @param status
      * @return
      */
-    @Query(value = "select * from transaction where status like CONCAT('%',?1,'%') AND createdTime between date_sub(now(), interval 5 minute) AND now() order by createdTime asc", nativeQuery = true)
+    @Query(value = "select * from transaction where status like CONCAT('%',?1,'%')"
+            + " AND createdTime between date_sub(now(), interval 10 minute)"
+            + " AND now() order by createdTime asc", nativeQuery = true)
     List<Transaction> getTransactionForStaff(String status);
 
     /**

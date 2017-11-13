@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
 -- Host: localhost    Database: ats
 -- ------------------------------------------------------
--- Server version	5.7.12-log
+-- Server version	5.7.17-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -26,7 +26,7 @@ CREATE TABLE `vehicletype` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,7 +35,7 @@ CREATE TABLE `vehicletype` (
 
 LOCK TABLES `vehicletype` WRITE;
 /*!40000 ALTER TABLE `vehicletype` DISABLE KEYS */;
-INSERT INTO `vehicletype` VALUES (1,'O to con'),(2,'du lich'),(3,'tai');
+INSERT INTO `vehicletype` VALUES (1,'Ô tô 4 chỗ'),(2,'Xe du lịch 7 chỗ'),(3,'Xe du lịch 16 chỗ'),(4,'Xe du lịch 32 chỗ'),(5,'Xe du lịch 45 chỗ'),(6,'Xe tải 10 tấn'),(7,'Xe tải 25 tấn'),(8,'Xe tải 40 tấn'),(9,'Xe container');
 /*!40000 ALTER TABLE `vehicletype` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -48,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-04 23:36:56
+-- Dump completed on 2017-11-13  0:04:48

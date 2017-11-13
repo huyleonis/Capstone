@@ -14,13 +14,13 @@ import java.sql.ResultSet;
  *
  * @author Chi Hieu
  */
-public class AccountDAO {
+public class VehicleDAO {
 
     private ResultSet rs;
     private PreparedStatement preStm;
     private Connection conn;
 
-    public AccountDAO() {
+    public VehicleDAO() {
     }
 
     private void closeConnection() throws Exception {
@@ -34,21 +34,38 @@ public class AccountDAO {
             conn.close();
         }
     }
-    
-        public int findAccountByLicensePlate(String licensePlate) throws Exception {
-        int idAccount = 0;
+
+    public int findVehicleByLicensePlate(String licensePlate) throws Exception {
+        int idVehicle = 0;
         try {
-            String sql = "SELECT ac.id FROM vehicle ve, account ac WHERE ve.id = ac.vehicleId AND ve.licensePlate = ?";
+            String sql = "SELECT id FROM vehicle WHERE licensePlate = ?";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
             preStm.setString(1, licensePlate);
             rs = preStm.executeQuery();
             if (rs.next()) {
-                idAccount = rs.getInt("id");
+                idVehicle = rs.getInt("id");
             }
         } finally {
             closeConnection();
         }
-        return idAccount;
+        return idVehicle;
+    }
+
+    public String findLicensePlateByVehicle(int id) throws Exception {
+        String licensePlate = "";
+        try {
+            String sql = "SELECT licensePlate FROM vehicle WHERE id = ?";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setInt(1, id);
+            rs = preStm.executeQuery();
+            if (rs.next()) {
+                licensePlate = rs.getString("licensePlate");
+            }
+        } finally {
+            closeConnection();
+        }
+        return licensePlate;
     }
 }

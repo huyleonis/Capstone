@@ -10,18 +10,21 @@ package ats.dtos;
  * @author Chi Hieu
  */
 public class LoginDTO {
+
     private String username;
     private String password;
     private Long role;
     private String fullname;
+    private String localhost;
 
     public LoginDTO() {
     }
 
-    public LoginDTO(String username, Long role, String fullname) {
+    public LoginDTO(String username, Long role, String fullname, String localhost) {
         this.username = username;
         this.role = role;
         this.fullname = fullname;
+        this.localhost = localhost;
     }
 
     public String getUsername() {
@@ -55,6 +58,13 @@ public class LoginDTO {
     public void setFullname(String fullname) {
         this.fullname = fullname;
     }
-    
-    
+
+    public String getLocalhost() {
+        return localhost;
+    }
+
+    public void setLocalhost(String localhost) {
+        this.localhost = localhost;
+    }
+
 }

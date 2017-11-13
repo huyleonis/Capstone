@@ -21,8 +21,7 @@ import org.json.simple.parser.JSONParser;
  * @author Chi Hieu
  */
 public class LoginRequest {
-
-    public static final String LOCALHOST = "http://localhost:8080";
+   
 
     /**
      * Gửi request lên server để lấy thông tin đăng nhập từ desktop application
@@ -31,8 +30,8 @@ public class LoginRequest {
      * @param password Mật khẩu đăng nhập
      * @return LoginDTO(username, role, fullname)
      */
-    public LoginDTO checkLogin(String username, String password) throws Exception {
-        String urlName = LOCALHOST + "/login/checkLogin/" + username + "/" + password;
+    public LoginDTO checkLogin(String username, String password, String localhost) throws Exception {
+        String urlName = localhost + "/login/checkLogin/" + username + "/" + password;
         JSONParser parser = new JSONParser();
         LoginDTO loginDTO = new LoginDTO();
         try {
@@ -46,7 +45,7 @@ public class LoginRequest {
                 if (account != null) {
                     Long role = (Long) account.get("role");
                     String fullname = (String) account.get("fullname");
-                    loginDTO = new LoginDTO(username, role, fullname);
+                    loginDTO = new LoginDTO(username, role, fullname, localhost);
 
                 } else {
                     loginDTO = null;

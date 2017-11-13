@@ -33,8 +33,8 @@ public class ManualPaymentRequest {
      * @param localhost
      * @return trả về thông tin loại xe, giá xe tương ứng với biển số xe
      */
-    public VehicleDTO getInfoVehicle(String licensePlate, int idLane, String localhost) throws Exception {
-        String urlName = localhost + "/price/findByLicensePlate/" + licensePlate + "/" + idLane;
+    public VehicleDTO getInfoVehicle(String licensePlate, int idStation, String localhost) throws Exception {
+        String urlName = localhost + "/price/findPriceStaff/" + idStation + "/" + licensePlate;
         JSONParser parser = new JSONParser();
         VehicleDTO vehicleDTO = new VehicleDTO();
         try {
@@ -48,7 +48,7 @@ public class ManualPaymentRequest {
                 if (payment != null) {
                     String typeName = (String) payment.get("typeVehicle");
                     Double price = (Double) payment.get("price");
-                    vehicleDTO = new VehicleDTO(licensePlate, typeName, price, 1);
+                    vehicleDTO = new VehicleDTO(licensePlate, typeName, price);
                 } else {
                     vehicleDTO = null;
                 }
@@ -79,11 +79,12 @@ public class ManualPaymentRequest {
             while ((inputLine = in.readLine()) != null) {
                 JSONObject payment = (JSONObject) parser.parse(inputLine);
                 // Get id of transaction
-                String id = (String) payment.get("transactionId");
-                String typeName = (String) payment.get("vehicleType");
+                String id = (String) payment.get("vehicleId");
+                String typeName = (String) payment.get("typeVehicle");
                 Double price = (Double) payment.get("price");
                 String status = (String) payment.get("status");
-                vehiclePayment = new VehiclePayment(id, licensePlate, typeName, status, price);
+                String photo = (String) payment.get("photo");
+                vehiclePayment = new VehiclePayment(id, licensePlate, typeName, status, photo, price);
             }
             in.close();
         } catch (FileNotFoundException e) {
@@ -92,6 +93,32 @@ public class ManualPaymentRequest {
         return vehiclePayment;
     }
 
+    public VehiclePayment getCapturedTransaction(int vehicleId, int stationId, String localhost) throws Exception {
+        String urlName = localhost + "/transaction/getCapturedTransaction/" + vehicleId + "/" + stationId;
+        JSONParser parser = new JSONParser();
+        VehiclePayment vehiclePayment = new VehiclePayment();
+        try {
+            URL oracle = new URL(urlName); // URL to Parse
+            URLConnection yc = oracle.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                JSONObject payment = (JSONObject) parser.parse(inputLine);
+                // Get id of transaction
+                String id = (String) payment.get("id");
+                String licensePlate = (String) payment.get("licensePlate");
+                String typeName = (String) payment.get("typeVehicle");
+                Double price = (Double) payment.get("price");
+                String status = (String) payment.get("status");
+                String photo = (String) payment.get("photo");
+                vehiclePayment = new VehiclePayment(id, licensePlate, typeName, status, photo, price);
+            }
+            in.close();
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        }
+        return vehiclePayment;
+    }
     /**
      * Cập nhật trạng thái của transaction thành "Đã thu"
      *
@@ -148,10 +175,11 @@ public class ManualPaymentRequest {
                 JSONObject payment = (JSONObject) parser.parse(inputLine);
 
                 String licensePlate = (String) payment.get("licensePlate");
-                String typeName = (String) payment.get("vehicleType");
+                String typeName = (String) payment.get("typeVehicle");
                 Double price = (Double) payment.get("price");
                 String status = (String) payment.get("status");
-                vehiclePayment = new VehiclePayment(id, licensePlate, typeName, status, price);
+                String photo = (String) payment.get("photo");
+                vehiclePayment = new VehiclePayment(id, licensePlate, typeName, status, photo, price);
             }
             in.close();
         } catch (FileNotFoundException e) {

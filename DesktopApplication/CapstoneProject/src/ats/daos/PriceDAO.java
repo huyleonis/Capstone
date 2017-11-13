@@ -35,25 +35,25 @@ public class PriceDAO {
         }
     }
 
-    public int findPriceByLicensePlate(String licensePlate, int idStation) throws Exception {
-        int idPrice = 0;
+    public double findPriceByLicensePlate(String licensePlate, int idStation) throws Exception {
+        double price = 0;
         try {
-            String sql = "SELECT pr.id "
+            String sql = "SELECT pr.price "
                     + "FROM vehicle ve, price pr, vehicletype vt, station st "
-                    + "WHERE ve.type_id = vt.id AND pr.type_id = vt.id"
-                    + " AND pr.station_id = st.id  AND st.id = ?"
-                    + " AND ve.license_plate = ?";
+                    + "WHERE ve.typeId = vt.id AND pr.typeId = vt.id"
+                    + " AND pr.stationId = st.id  AND st.id = ?"
+                    + " AND ve.licensePlate = ?";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
             preStm.setInt(1, idStation);
             preStm.setString(2, licensePlate);
             rs = preStm.executeQuery();
             if (rs.next()) {
-                idPrice = rs.getInt("id");
+                price = rs.getDouble("price");
             }
         } finally {
             closeConnection();
         }
-        return idPrice;
+        return price;
     }
 }

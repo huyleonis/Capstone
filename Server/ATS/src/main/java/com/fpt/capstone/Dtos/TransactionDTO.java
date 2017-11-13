@@ -18,12 +18,13 @@ public class TransactionDTO {
     private TransactionType type;
     private String photo;
     private String failReason;
+    private String licensePlate;
+    private String typeVehicle;
 
     public TransactionDTO() {
     }
 
-    public TransactionDTO(String id, int vehicleId, int stationId, Date dateTime, TransactionStatus status,
-                          double price, int laneId, TransactionType type, String photo, String failReason) {
+    public TransactionDTO(String id, int vehicleId, int stationId, Date dateTime, TransactionStatus status, double price, int laneId, TransactionType type, String photo, String failReason, String licensePlate, String typeVehicle) {
         this.id = id;
         this.vehicleId = vehicleId;
         this.stationId = stationId;
@@ -34,7 +35,10 @@ public class TransactionDTO {
         this.type = type;
         this.photo = photo;
         this.failReason = failReason;
+        this.licensePlate = licensePlate;
+        this.typeVehicle = typeVehicle;
     }
+
         
     public String getId() {
         return id;
@@ -120,6 +124,22 @@ public class TransactionDTO {
         this.failReason = failReason;
     }
 
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
+
+    public String getTypeVehicle() {
+        return typeVehicle;
+    }
+
+    public void setTypeVehicle(String typeVehicle) {
+        this.typeVehicle = typeVehicle;
+    }
+
     public static TransactionDTO convertFromEntity(Transaction transaction) {
         TransactionDTO dto = new TransactionDTO();
         convertFromEntity(transaction, dto);
@@ -147,13 +167,15 @@ public class TransactionDTO {
         if (transaction.getPhoto() != null) {
             dto.setPhoto(transaction.getPhoto());
         }
-        
+        dto.setLicensePlate(transaction.getVehicle().getLicensePlate());
+        dto.setTypeVehicle(transaction.getVehicle().getVehicleType().getName());
         for (TransactionStatus value : TransactionStatus.values()) {
             if (value.getName().equals(transaction.getStatus())) {
                 dto.setStatus(value);
                 break;
             }
         }
+        dto.setPhoto(transaction.getPhoto());
         
     }
 }

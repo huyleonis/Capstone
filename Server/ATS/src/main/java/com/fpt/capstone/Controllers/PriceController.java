@@ -39,10 +39,10 @@ public class PriceController {
         return priceService.findPriceByStationIdAndLicensePlate(stationId, licensePlate);
     }
 
-    @RequestMapping(value = "findByLicensePlate/{license_plate}/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "findByLicensePlate/{licensePlate}/{id}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public PriceDTO findByLicensePlate(@PathVariable String license_plate, @PathVariable int id) {
-        return priceService.findByLicensePlate(license_plate, id);
+    public PriceDTO findByLicensePlate(@PathVariable String licensePlate, @PathVariable int id) {
+        return priceService.findByLicensePlate(licensePlate, id);
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)

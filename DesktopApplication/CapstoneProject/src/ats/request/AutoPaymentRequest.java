@@ -46,7 +46,7 @@ public class AutoPaymentRequest extends TimerTask {
         List<VehiclePayment> list = new ArrayList<>();
         try {
             URL oracle = new URL(localhost
-                    + "/transaction/getResult"); // URL to Parse
+                    + "/transaction/getTransactionUnpaid"); // URL to Parse
             URLConnection yc = oracle.openConnection();  // Open Connection
             BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
             String inputLine;
@@ -57,12 +57,12 @@ public class AutoPaymentRequest extends TimerTask {
                     JSONObject trans = (JSONObject) transaction;
                     if (!trans.isEmpty()) {
                         String licensePlate = (String) trans.get("licensePlate");
-                        String id = (String) trans.get("transactionId");
-                        String typeName = (String) trans.get("vehicleType");
+                        String id = (String) trans.get("id");
+                        String typeName = (String) trans.get("typeVehicle");
                         Double price = (Double) trans.get("price");
                         String status = (String) trans.get("status");
-
-                        VehiclePayment vp = new VehiclePayment(id, licensePlate, typeName, status, price);
+                        String photo = (String) trans.get("photo");
+                        VehiclePayment vp = new VehiclePayment(id, licensePlate, typeName, status, photo, price);
                         list.add(vp);
                     }
                 }

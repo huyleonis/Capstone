@@ -31,7 +31,7 @@ public interface PriceRepos extends JpaRepository<Price, Integer> {
      * @param idLane
      * @return price, typeName, accountId
      */
-    @Query(value = "select * from price where stationId = "
+    @Query(value = "select * from price  where stationId = "
             + "(select s.id from station s, lane l where l.stationId = s.id and l.id = :idLane) "
             + "and typeId = "
             + "(select vt.id from vehicletype vt, vehicle v where vt.id = v.typeId and v.license_plate = :license)", nativeQuery = true)

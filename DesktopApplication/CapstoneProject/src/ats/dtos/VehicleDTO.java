@@ -13,16 +13,14 @@ public class VehicleDTO {
     private String licensePlate;
     private String typeVehicle;
     private Double price;
-    private int accountId;
 
     public VehicleDTO() {
     }
 
-    public VehicleDTO(String licensePlate, String typeVehicle, Double price, int accountId) {
+    public VehicleDTO(String licensePlate, String typeVehicle, Double price) {
         this.licensePlate = licensePlate;
         this.typeVehicle = typeVehicle;
         this.price = price;
-        this.accountId = accountId;
     }
 
     public String getLicensePlate() {
@@ -49,13 +47,6 @@ public class VehicleDTO {
         this.price = price;
     }
 
-    public int getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
-    }
     
     
 }

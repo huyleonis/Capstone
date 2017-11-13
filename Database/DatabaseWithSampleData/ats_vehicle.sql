@@ -24,13 +24,12 @@ DROP TABLE IF EXISTS `vehicle`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vehicle` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `license_plate` varchar(45) NOT NULL,
-  `type_id` int(50) NOT NULL,
+  `licensePlate` varchar(45) NOT NULL,
+  `typeId` int(50) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `license_plate_UNIQUE` (`license_plate`),
-  KEY `IdType_idx` (`type_id`),
-  CONSTRAINT `Vehicle_REF_VehicleType` FOREIGN KEY (`type_id`) REFERENCES `vehicletype` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `license_plate_UNIQUE` (`licensePlate`),
+  KEY `IdType_idx` (`typeId`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +38,7 @@ CREATE TABLE `vehicle` (
 
 LOCK TABLES `vehicle` WRITE;
 /*!40000 ALTER TABLE `vehicle` DISABLE KEYS */;
-INSERT INTO `vehicle` VALUES (1,'92K-1111',1),(2,'92K-2222',2),(3,'92K-3333',3),(4,'92K-4444',4),(5,'92K-5555',5),(6,'92K-6666',6),(7,'92K-7777',7);
+INSERT INTO `vehicle` VALUES (1,'99K9999',1),(2,'65K6868',2),(3,'75A06666',3),(4,'22L8288',4),(5,'30S4593',5),(6,'52S3333',6),(7,'62S3333',7),(8,'30A12893',1),(9,'30A72893',2),(10,'30A7289',3),(11,'30A1289',4);
 /*!40000 ALTER TABLE `vehicle` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-28  3:25:13
+-- Dump completed on 2017-11-13  0:04:48

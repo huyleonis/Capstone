@@ -24,16 +24,14 @@ DROP TABLE IF EXISTS `price`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `price` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `station_id` int(11) NOT NULL,
+  `stationId` int(11) NOT NULL,
   `price` double NOT NULL,
-  `type_id` int(50) NOT NULL,
-  `from_date` datetime DEFAULT NULL,
-  `isActive` tinyint(1) NOT NULL DEFAULT '1',
+  `typeId` int(50) NOT NULL,
+  `fromDate` datetime DEFAULT NULL,
+  `isActive` bit(1) NOT NULL DEFAULT b'1',
   PRIMARY KEY (`id`),
-  KEY `fk_price_vehicletype_idx` (`type_id`),
-  KEY `fk_price_station_idx` (`station_id`),
-  CONSTRAINT `fk_price_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_price_vehicletype` FOREIGN KEY (`type_id`) REFERENCES `vehicletype` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_price_vehicletype_idx` (`typeId`),
+  KEY `fk_price_station_idx` (`stationId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -43,7 +41,7 @@ CREATE TABLE `price` (
 
 LOCK TABLES `price` WRITE;
 /*!40000 ALTER TABLE `price` DISABLE KEYS */;
-INSERT INTO `price` VALUES (1,1,10000,1,'2010-01-01 00:00:00',1),(2,1,15000,2,'2010-01-01 00:00:00',1),(3,1,20000,3,'2010-01-01 00:00:00',1),(4,1,25000,4,'2010-01-01 00:00:00',1),(5,1,40000,5,'2010-01-01 00:00:00',1),(6,1,45000,6,'2010-01-01 00:00:00',1),(7,1,50000,7,'2010-01-01 00:00:00',1);
+INSERT INTO `price` VALUES (1,1,10000,1,'2010-01-01 00:00:00',''),(2,1,15000,2,'2010-01-01 00:00:00',''),(3,1,20000,3,'2010-01-01 00:00:00',''),(4,1,25000,4,'2010-01-01 00:00:00',''),(5,1,40000,5,'2010-01-01 00:00:00',''),(6,1,45000,6,'2010-01-01 00:00:00',''),(7,1,50000,7,'2010-01-01 00:00:00','');
 /*!40000 ALTER TABLE `price` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-28  3:25:10
+-- Dump completed on 2017-11-13  0:04:46

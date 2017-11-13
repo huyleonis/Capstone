@@ -24,6 +24,8 @@ public class TransactionDetailDTO extends TransactionDTO {
 
     public TransactionDetailDTO() {
     }
+    
+    
 
     public String getZone() {
         return zone;
