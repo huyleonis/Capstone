@@ -18,6 +18,9 @@ public class AccountDTO {
     private String numberId;
     private String eWallet;
     private int vehicleId;
+    private String licensePlate;
+    private String vehicleType;
+    private String licenseId;
     private double balance;
     private boolean isActive;
     private boolean isEnable;
@@ -41,6 +44,24 @@ public class AccountDTO {
         this.isActive = isActive;
         this.isEnable = isEnable;
     }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+    
+    
 
     public int getId() {
         return id;
@@ -146,6 +167,16 @@ public class AccountDTO {
         isEnable = enable;
     }
 
+    public String getLicenseId() {
+        return licenseId;
+    }
+
+    public void setLicenseId(String licenseId) {
+        this.licenseId = licenseId;
+    }
+    
+    
+
     public static AccountDTO convertFromEntity(Account account) {
         AccountDTO dto = new AccountDTO();
 
@@ -158,8 +189,11 @@ public class AccountDTO {
         dto.setPhone(account.getPhone());
         dto.setNumberId(account.getNumberId());
         dto.seteWallet(account.geteWallet());
+        dto.setLicenseId("ABC-XYZ-11");
         if (account.getVehicle() != null) {
             dto.setVehicleId(account.getVehicle().getId());
+            dto.setLicensePlate(account.getVehicle().getLicensePlate());
+            dto.setVehicleType(account.getVehicle().getVehicleType().getName());
         }
         if (account.getBalance() != null) {
             dto.setBalance(account.getBalance());

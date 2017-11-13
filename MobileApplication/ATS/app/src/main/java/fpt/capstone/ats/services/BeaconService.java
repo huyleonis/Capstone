@@ -108,7 +108,7 @@ public class BeaconService extends Service {
 
                     // Kiểm tra xem có phải beacon mới hay ko?
                     if (!identifier.equals(currentBeacon)) {
-                        Log.w(TAG, "Detec one new beacon");
+                        Log.w(TAG, "Detect one new beacon");
 
                         currentBeacon = identifier; // Ghi nhận beacon hiện tại
 
@@ -263,6 +263,7 @@ public class BeaconService extends Service {
         bundle.putInt(ConstantValues.STAGE_PARAM, 1);
         bundle.putBoolean(ConstantValues.IS_CREATED_PARAM, isCreated);
         bundle.putString(ConstantValues.TRANSACTION_ID_PARAM, transactionID);
+        bundle.putString(ConstantValues.PHOTO_PARAM, photo);
 
         if (isForeground()) { //Nếu ứng dụng đang chạy trên cùng
             Intent broadcastIntent = new Intent();

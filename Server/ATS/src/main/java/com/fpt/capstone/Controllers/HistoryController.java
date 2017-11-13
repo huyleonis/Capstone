@@ -1,6 +1,7 @@
 package com.fpt.capstone.Controllers;
 
 import com.fpt.capstone.Dtos.TransactionDTO;
+import com.fpt.capstone.Dtos.TransactionDetailDTO;
 import com.fpt.capstone.Entities.Transaction;
 import com.fpt.capstone.Services.TransactionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,11 @@ public class HistoryController {
     @RequestMapping(value = "getByDate/{username}/{fromDate}/{toDate}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<TransactionDTO> getHistoryTransaction(@PathVariable String username, 
+    public List<TransactionDetailDTO> getHistoryTransaction(@PathVariable String username, 
             @PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") Date fromDate, 
             @PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") Date toDate){
 
-        List<TransactionDTO> result = 
+        List<TransactionDetailDTO> result = 
                 transactionServiceImpl.getHistoryTransaction(username, fromDate, toDate);
 
         System.out.println("Get history from date " + fromDate + " to date: " 

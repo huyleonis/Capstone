@@ -13,9 +13,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import fpt.capstone.ats.R;
+import fpt.capstone.ats.activities.MainActivity;
 import fpt.capstone.ats.utils.Commons;
 import fpt.capstone.ats.utils.ConstantValues;
+import fpt.capstone.ats.utils.RequestServer;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -122,6 +126,13 @@ public class HomeFragment extends Fragment {
             boolean isDisplayResult = bundle.getBoolean(ConstantValues.DISPLAY_RESULT_PARAM, false);
             String result = bundle.getString(ConstantValues.RESULT_PARAM);
             String resultColor = bundle.getString(ConstantValues.RESULT_COLOR_PARAM);
+            String photo = bundle.getString(ConstantValues.PHOTO_PARAM);
+
+            Picasso.with(this.getActivity())
+                    .load(RequestServer.DEFAULT_URL + "imgs/plates/" + photo)
+                    .placeholder(R.drawable.default_img)
+                    .error(R.drawable.default_img)
+                    .into(imgTrans);
 
             if (isDisplayConfirm) {
                 Log.w(TAG, "Display Confirm Dialog");
