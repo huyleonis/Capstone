@@ -72,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
 
         editor.commit();
 
+        SystemRequirementsChecker.checkWithDefaultDialogs(this);
         checkBluetooth(username);
     }
 
@@ -88,8 +89,8 @@ public class LoginActivity extends AppCompatActivity {
 
         //Start service to get transaction detail periodly
         // luu local cua transaction detail
-        Log.d("\nTRANSACTION DETAIL", "INTERNET CONNECTED - SYNCHRONIZATION BEGIN");
-        startService(new Intent(this, TransactionDetailService.class));
+//        Log.d("\nTRANSACTION DETAIL", "INTERNET CONNECTED - SYNCHRONIZATION BEGIN");
+//        startService(new Intent(this, TransactionDetailService.class));
 
 
         //Here is the code for disappear LoginActivity

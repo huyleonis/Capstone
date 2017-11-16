@@ -21,8 +21,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fpt.capstone.Dtos.BeaconDTO;
 import com.fpt.capstone.Dtos.TransactionDTO;
 import com.fpt.capstone.Dtos.TransactionDetailDTO;
+import com.fpt.capstone.Entities.Account;
 import com.fpt.capstone.Entities.Beacon;
+import com.fpt.capstone.Repositories.AccountRepos;
 import com.fpt.capstone.Repositories.BeaconRepos;
+import com.fpt.capstone.Services.AccountService;
 import com.fpt.capstone.Services.BeaconService;
 import com.fpt.capstone.Services.PriceService;
 import com.fpt.capstone.Services.TransactionService;
@@ -45,6 +48,9 @@ public class BeaconController {
 
     @Autowired
     private PriceService priceService;
+    
+    @Autowired
+    private AccountRepos accountRepos;
 
     @RequestMapping(value = "getBeacon/{uuid}/{major}/{minor}")
     @ResponseStatus(HttpStatus.OK)
@@ -128,16 +134,18 @@ public class BeaconController {
      * @param licensePlate
      * @return 
      */
-    @RequestMapping(value = "/payment/{stationId}/{licensePlate}", method = RequestMethod.GET)
-    public Object triggerBeaconPayment(@PathVariable int stationId, @PathVariable String licensePlate) {
+    @RequestMapping(value = "/payment/{stationId}/{username}", method = RequestMethod.GET)
+    public Object triggerBeaconPayment(@PathVariable int stationId, @PathVariable String username) {
 
         System.out.println("Triggered Beacon Payment");
         TransactionDetailDTO transaction;
-        transaction = transactionService.getCapturedTransaction(stationId, stationId);        
+        transaction = transactionService.getCapturedTransaction(stationId, stationId);  
+        
+        Account account = accountRepos.findByUsername(username);
 
         if (transaction == null) {
             System.out.println("Not found captured payment created by camera");
-            return priceService.findPriceByStationIdAndLicensePlate(stationId, licensePlate);
+            return priceService.findPriceByStationIdAndLicensePlate(stationId, account.getVehicle().getLicensePlate());
         }
 
         System.out.println("Found captured payment created by camera");

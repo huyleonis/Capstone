@@ -55,10 +55,6 @@ public class MainActivity extends AppCompatActivity {
 
     //Constant Values
     private static final String TAG = "MAIN ACTIVITY";
-    private static final String DEFAULT_BEACON_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
-    private static final String DEFAULT_BEACON_IDENTIFIER = "rid";
-    private static final BeaconRegion ALL_BEACON_REGION = new BeaconRegion(DEFAULT_BEACON_IDENTIFIER,
-            UUID.fromString(DEFAULT_BEACON_UUID), null, null);
 
     //Fields of some managers
     private Vibrator vibrator;
@@ -119,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Log.w(TAG, "Navigation Item selected, title = " + item.getTitle());
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
                         notificationManager.cancel(idNotification);
@@ -136,7 +131,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
 
-                Log.w(TAG, "Navigate to fragment " + selectedFragment);
+                Log.w(TAG, "Navigation Item selected, title = " + item.getTitle() +
+                        "Navigate to fragment " + selectedFragment);
                 FragmentTransaction transaction = fm.beginTransaction();
                 transaction.replace(R.id.content, selectedFragment);
                 transaction.commit();
@@ -160,39 +156,24 @@ public class MainActivity extends AppCompatActivity {
 
         registerReceiver(intentReceiver, intentFilter);
 
-        Log.w(TAG, "Done resume Activity");
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        Log.w(TAG, "Post resume Activity");
-    }
-
-    @Override
-    protected void onResumeFragments() {
-        Log.w(TAG, "Resume those fragments inside Activity");
-        super.onResumeFragments();
-
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
 
             int idNotification = bundle.getInt(ConstantValues.ID_NOTIFICATION_PARAM, -1);
             if (idNotification != -1) {
-                Log.w(TAG, "Cancel Notification");
                 notificationManager.cancel(idNotification);
-                if (homeFragment.getView() != null && homeFragment.isVisible()) {
-                    Log.w(TAG, "Home Fragment is displaying");
-                } else {
-                    Log.w(TAG, "Home Fragment is not displayed");
-                    Log.w(TAG, "Home Fragment view is null: " + homeFragment.getView());
-                    Log.w(TAG, "Home Fragment view is invisible: " + homeFragment.isVisible());
+                if (homeFragment.getView() == null || homeFragment.isVisible()) {
                     setBadgeNoti(0);
                 }
             }
         }
+    }
 
-        Log.w(TAG, "Done resuming those fragments inside Activity");
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+
     }
 
     @Override
@@ -242,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if (homeFragment.getView() != null && homeFragment.isVisible()) {
                         homeFragment.hideConfirmFragment();
-                        if (status.equals("Thành công")) {
+                        if (status.equals("Success")) {
                             homeFragment.showsResultFragment("Thanh toán thành công", "#46cc2b");
                         } else {
                             String reason =  infos.getString("failReason");
@@ -260,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                         bundle.putBoolean("isDisplayResult", true);
                         bundle.putString("status", "Đã xử lý thanh toán.");
 
-                        if (status.equals("Thành công")) {
+                        if (status.equals("Success")) {
                             bundle.putString(ConstantValues.RESULT_PARAM,"Thanh toán thành công");
                             bundle.putString(ConstantValues.RESULT_COLOR_PARAM, ConstantValues.COLOR_GREEN);
                         } else {
@@ -291,7 +272,6 @@ public class MainActivity extends AppCompatActivity {
             List<String> params = new ArrayList<>();
             params.add(Commons.getUsername(this));
             params.add(setting.getString("IdStation", ""));
-
 
             rs.execute(params, "transaction", "makePayment", "GET");
             homeFragment.updateStatusOfTransaction("đang thanh toán phí...");
@@ -389,5 +369,41 @@ public class MainActivity extends AppCompatActivity {
 
     public void clickToShowHistory(View view) {
         historyFragment.showHistory();
+    }
+
+    public void clickToStimulateBeacon1(View view) {
+        Bundle bundle = new Bundle();
+        bundle.putString("uuid", "B9407F30-F5F8-466E-AFF9-25556B57FE6D");
+        bundle.putInt("major", 36857);
+        bundle.putInt("minor", 31381);
+
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(ConstantValues.STIMULATE_BEACON);
+        broadcastIntent.putExtras(bundle);
+        sendBroadcast(broadcastIntent);
+    }
+
+    public void clickToStimulateBeacon2(View view) {
+        Bundle bundle = new Bundle();
+        bundle.putString("uuid", "B9407F30-F5F8-466E-AFF9-25556B57FE6D");
+        bundle.putInt("major", 39748);
+        bundle.putInt("minor", 38452);
+
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(ConstantValues.STIMULATE_BEACON);
+        broadcastIntent.putExtras(bundle);
+        sendBroadcast(broadcastIntent);
+    }
+
+    public void clickToStimulateBeacon3(View view) {
+        Bundle bundle = new Bundle();
+        bundle.putString("uuid", "B9407F30-F5F8-466E-AFF9-25556B57FE6D");
+        bundle.putInt("major", 24100);
+        bundle.putInt("minor", 4804);
+
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(ConstantValues.STIMULATE_BEACON);
+        broadcastIntent.putExtras(bundle);
+        sendBroadcast(broadcastIntent);
     }
 }

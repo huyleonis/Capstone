@@ -268,6 +268,46 @@
                 app:layout_constraintTop_toTopOf="@+id/textBalance"
                 app:srcCompat="@drawable/warning" />
 
+            <Button
+                android:id="@+id/button5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="0dp"
+                android:text="Beacon 1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView15"
+                android:onClick="clickToStimulateBeacon1"/>
+
+            <Button
+                android:id="@+id/button8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:layout_editor_absoluteX="144dp"
+                tools:layout_editor_absoluteY="427dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="0dp"
+                android:text="Beacon 2"
+                app:layout_constraintLeft_toRightOf="@+id/button5"
+                app:layout_constraintTop_toBottomOf="@+id/textView15"
+                android:onClick="clickToStimulateBeacon2"/>
+
+            <Button
+                android:id="@+id/button9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:layout_editor_absoluteX="144dp"
+                tools:layout_editor_absoluteY="427dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="0dp"
+                android:text="Beacon 3"
+                app:layout_constraintLeft_toRightOf="@+id/button8"
+                app:layout_constraintTop_toBottomOf="@+id/textView15"
+                android:onClick="clickToStimulateBeacon3"/>
+
         </android.support.constraint.ConstraintLayout>
+
     </RelativeLayout>
 </ScrollView>

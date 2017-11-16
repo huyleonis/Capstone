@@ -28,6 +28,7 @@ public class ConstantValues {
     public static final String BEACON_PAYMENT_ACTION = "BEACON_PAYMENT";
     public static final String BEACON_RESULT_ACTION = "BEACON_RESULT";
     public static final String BEACON_EXIT_ACTION = "BEACON_EXIT";
+    public static final String STIMULATE_BEACON = "STIMUALTE_BEACON";
 
     public static final int BEACON_PAYMENT_NOTI_ID = 2896;
     public static final int BEACON_RESULT_NOTI_ID = 9682;

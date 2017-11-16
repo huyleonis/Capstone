@@ -52,7 +52,6 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.w(TAG, "Create home fragment");
         super.onCreate(savedInstanceState);
 
         fm = getChildFragmentManager();
@@ -62,7 +61,6 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.w(TAG, "Create view home fragment");
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -83,7 +81,6 @@ public class HomeFragment extends Fragment {
         Bundle bundle = this.getActivity().getIntent().getExtras();
 
         if (bundle != null) {
-            Log.w(TAG, "Resolve bundle of Main Activity");
             resolveBundle(bundle);
         }
 
@@ -92,13 +89,11 @@ public class HomeFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        Log.w(TAG, "Pause Home fragment");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.w(TAG, "Destroy Home Fragment");
     }
 
     public void resolveBundle(Bundle bundle) {
@@ -146,7 +141,6 @@ public class HomeFragment extends Fragment {
                 hideResultFragment();
             }
         }
-        Log.w(TAG, "Done resolving bundle in Home Fragment");
     }
 
     public void setUpStationInfo(String city, String idStation, String zone, double price, boolean isCreated, String transactionId) {

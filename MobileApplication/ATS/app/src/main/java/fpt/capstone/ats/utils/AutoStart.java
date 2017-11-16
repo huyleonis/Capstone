@@ -14,6 +14,6 @@ import fpt.capstone.ats.services.TransactionDetailService;
 public class AutoStart extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        context.startService(new Intent(context, TransactionDetailService.class));
+        //context.startService(new Intent(context, TransactionDetailService.class));
     }
 }

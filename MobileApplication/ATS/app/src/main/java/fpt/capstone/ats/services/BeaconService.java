@@ -5,7 +5,10 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.RingtoneManager;
@@ -18,6 +21,8 @@ import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.estimote.coresdk.cloud.google.ProximityBeaconCloud;
+import com.estimote.coresdk.common.requirements.SystemRequirementsChecker;
 import com.estimote.coresdk.observation.region.beacon.BeaconRegion;
 import com.estimote.coresdk.recognition.packets.Beacon;
 import com.estimote.coresdk.service.BeaconManager;
@@ -42,7 +47,9 @@ public class BeaconService extends Service {
 
     private static final String TAG = "BEACON_SERVICE";
     private static final String DEFAULT_BEACON_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
-    private static final String DEFAULT_BEACON_IDENTIFIER = "rid";
+    private static final String DEFAULT_BEACON_IDENTIFIER = "ranged beacon";
+    BeaconRegion defaultRegion = new BeaconRegion(DEFAULT_BEACON_IDENTIFIER,
+            UUID.fromString(DEFAULT_BEACON_UUID), null, null);
 
 
     NotificationManager notificationManager;
@@ -73,28 +80,70 @@ public class BeaconService extends Service {
         }
 
 
-        bm = new BeaconManager(this);
-        setUpBeaconEvent();
+        bm = new BeaconManager(getApplicationContext());
+
+        bm.setBackgroundScanPeriod(500, 0);
+
+
+        setUpRangingBeacon();
+        setUpMonitorBeacon();
 
         bm.connect(new BeaconManager.ServiceReadyCallback() {
             @Override
             public void onServiceReady() {
-                BeaconRegion defaultRegion = new BeaconRegion(DEFAULT_BEACON_IDENTIFIER,
-                        UUID.fromString(DEFAULT_BEACON_UUID), null, null);
+                Log.w(TAG, "Start ranging and monitoring beacon");
                 bm.startRanging(defaultRegion);
+                bm.startMonitoring(defaultRegion);
             }
         });
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConstantValues.STIMULATE_BEACON);
+        registerReceiver(intentReceiver, intentFilter);
 
         return START_STICKY;
     }
 
-    private void setUpBeaconEvent() {
+    private BroadcastReceiver intentReceiver =  new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String uuid = bundle.getString("uuid");
+            int major = bundle.getInt("major");
+            int minor = bundle.getInt("minor");
+            String identifier = uuid + ";" + major + ";" + minor;
+            processBeacon(uuid, major, minor, identifier);
+        }
+    };
+
+    private void setUpRangingBeacon() {
 
         bm.setRangingListener(new BeaconManager.BeaconRangingListener() {
             @Override
             public void onBeaconsDiscovered(BeaconRegion beaconRegion, List<Beacon> beacons) {
 
                 Log.w(TAG, "Detect " + beacons.size() + " beacon(s)");
+                if (beacons.size() == 0) {
+                    currentBeacon = null;
+                }
+
+                // Lấy ra hết những beacon mà detect được
+                for (Beacon beacon: beacons) {
+                    String uuid = beacon.getProximityUUID().toString();
+                    int major = beacon.getMajor();
+                    int minor = beacon.getMinor();
+                    String identifier = uuid + ";" + major + ";" + minor;
+                    processBeacon(uuid, major, minor, identifier);
+                }
+            }
+        });
+    }
+
+    private void setUpMonitorBeacon() {
+        bm.setMonitoringListener(new BeaconManager.BeaconMonitoringListener() {
+            @Override
+            public void onEnteredRegion(BeaconRegion beaconRegion, List<Beacon> beacons) {
+                Log.w(TAG, "Enter Region of " + beacons.size() + " beacon(s)");
                 if (beacons.size() == 0) {
                     currentBeacon = null;
                 }
@@ -145,7 +194,51 @@ public class BeaconService extends Service {
                     }
                 }
             }
+
+            @Override
+            public void onExitedRegion(BeaconRegion beaconRegion) {
+
+            }
         });
+    }
+
+    private void processBeacon(String uuid, int major, int minor, String identifier) {
+        // Kiểm tra xem có phải beacon mới hay ko?
+        if (!identifier.equals(currentBeacon)) {
+            Log.w(TAG, "Detect one new beacon");
+
+            currentBeacon = identifier; // Ghi nhận beacon hiện tại
+
+            RequestServer rs = new RequestServer();
+            rs.delegate = new RequestServer.RequestResult() {
+                @Override
+                public void processFinish(String result) {
+                    try {
+                        JSONObject infos = new JSONObject(result);
+
+                        String type = infos.getString("type");
+                        int stationId = infos.getInt("stationId");
+                        int laneId = infos.getInt("laneId");
+                        switch (type) {
+                            case "BEACON_PAYMENT":
+                                getPaymentBeacon(stationId);
+                                break;
+                            case "BEACON_RESULT":
+                                getResultBeacon(laneId);
+                                break;
+                        }
+                    } catch (JSONException e) {
+                        Log.e(TAG, "JSON Exception: " + e.getMessage() + " - result: " + result);
+                    }
+                }
+            };
+            List<String> params = new ArrayList<String>();
+            params.add(uuid);
+            params.add(major + "");
+            params.add(minor + "");
+
+            rs.execute(params, "beacon", "getBeacon", "GET");
+        }
     }
 
     @Override
@@ -155,8 +248,11 @@ public class BeaconService extends Service {
         super.onDestroy();
 
         if (bm != null) {
-            bm.disconnect();
+            bm.stopRanging(defaultRegion);
         }
+
+        unregisterReceiver(intentReceiver);
+
     }
 
     @Nullable
@@ -281,6 +377,9 @@ public class BeaconService extends Service {
                     resultIntent, ConstantValues.BEACON_PAYMENT_NOTI_ID);
 
         }
+
+        SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, Context.MODE_PRIVATE);
+        setting.edit().putString("IdStation", idStation).commit();
     }
 
     /**
@@ -356,7 +455,7 @@ public class BeaconService extends Service {
                 .setContentIntent(intent)
                 .setVibrate(new long[] {500, 500, 500, 500})
                 .setLights(Color.BLUE, 1000, 1000)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                //.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .build();
 
 

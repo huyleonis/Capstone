@@ -91,6 +91,7 @@ public class TransactionController {
     @RequestMapping(value = "finish/{id}")
     @ResponseStatus(HttpStatus.OK)
     public TransactionDTO finishTransaction(@PathVariable String id) {
+        System.out.println("Finish transaction");
         return transactionService.updateTransactionStatus(id, TransactionStatus.TRANS_FINISH);
     }
 
