@@ -12,16 +12,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import fpt.capstone.ats.R;
+import fpt.capstone.ats.firebase.model.TransactionError;
 import fpt.capstone.ats.sqlite.DBAdapter;
+import fpt.capstone.ats.utils.Commons;
 import fpt.capstone.ats.utils.ConstantValues;
 import fpt.capstone.ats.utils.RequestServer;
 
@@ -44,6 +52,12 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
     private DBAdapter database;
 
+    private DatabaseReference mDatabase;
+    private DatabaseReference mTransErrorReference;
+    private ChildEventListener MTransErrorListener;
+
+    private ArrayList<TransactionError> transErrorList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +76,13 @@ public class TransactionDetailActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         transactionId = bundle.getString(ConstantValues.TRANSACTION_ID_PARAM);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mTransErrorReference = FirebaseDatabase.getInstance().getReference("TransactionErrors");
+        transErrorList = new ArrayList<>();
+
         database = new DBAdapter(TransactionDetailActivity.this);
         database.open();
+
         Cursor resultSet = database.getInfo(transactionId);
         if (resultSet.moveToFirst()) {
             Log.d("GET DETAIL TRANSACTION", "VIEW FROM LOCAL");
@@ -72,10 +91,14 @@ public class TransactionDetailActivity extends AppCompatActivity {
             Log.d("GET DETAIL TRANSACTION", "VIEW FROM SERVER");
             getTransactionDetail();
         }
-        database.close();
-
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        database.close();
+    }
 
     public void getTransactionDetail() {
         Log.d("Request TransDetail", "Send Request TransDetail");
@@ -112,9 +135,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     textType.setText("Thu phí " + type);
                     textVehicleType.setText(vehicleType);
 
-                    database = new DBAdapter(TransactionDetailActivity.this);
-                    database.open();
-
                     Date lastModifiedDate = new Date();
                     sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                     String lastModified = sdf.format(lastModifiedDate);
@@ -122,8 +142,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     long re = database.insertInfo(transactionId, stationName, stationId, zone,
                             sdf.format(datetime), price, status, vehicleType, type, lastModified);
                     Log.d("DATABASE INSERT", String.valueOf(re));
-
-                    database.close();
 
 
                     Log.d("status: ", status);
@@ -181,9 +199,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     JSONObject infos = new JSONObject(result);
                     String newStatus = infos.getString("status");
 
-                    database = new DBAdapter(TransactionDetailActivity.this);
-                    database.open();
-
                     Cursor resultSet = database.getInfo(transactionId);
                     if (resultSet.moveToFirst()) {
                         String stationName = resultSet.getString(1);
@@ -213,7 +228,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
                             getTransactionDetail();
                         }
                     }
-                    database.close();
                     Log.d(TAG, "processFinish() returned: " + newStatus);
 
                 } catch (Exception e) {
@@ -309,11 +323,8 @@ public class TransactionDetailActivity extends AppCompatActivity {
                 try {
                     Log.d("Receive TransStatus", "Transaction Status Json: " + result);
 
-                    if (result.equalsIgnoreCase("success")){
+                    if (result.equalsIgnoreCase("success")) {
                         String newStatus = "Lỗi";
-
-                        database = new DBAdapter(TransactionDetailActivity.this);
-                        database.open();
 
                         Cursor resultSet = database.getInfo(transactionId);
                         if (resultSet.moveToFirst()) {
@@ -344,7 +355,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
                                 getTransactionDetail();
                             }
                         }
-                        database.close();
                         Log.d(TAG, "processFinish() returned: " + newStatus);
                     }
                 } catch (Exception e) {
@@ -371,11 +381,24 @@ public class TransactionDetailActivity extends AppCompatActivity {
         rs.execute(params, "transaction", "reportMismatchTransaction", "GET");
     }
 
+    public void writeNewError() {
+        TransactionError transactionError = new TransactionError(transactionId, Commons.getUsername(this));
+
+        Map<String, Object> transErrorValues = transactionError.toMap();
+        Map<String, Object> childUpdates = new HashMap<>();
+
+        String key = mDatabase.child("TransactionErrors").push().getKey();
+
+        childUpdates.put("/TransactionErrors/" + key, transErrorValues);
+        mDatabase.updateChildren(childUpdates);
+    }
+
     public void clickToUpdateTransStatus(View view) {
         updateTransactionStatus();
     }
 
-    public void clickToReportTransaction(View view){
-        reportMismatchTransaction();
+    public void clickToReportTransaction(View view) {
+//        reportMismatchTransaction();
+        writeNewError();
     }
 }

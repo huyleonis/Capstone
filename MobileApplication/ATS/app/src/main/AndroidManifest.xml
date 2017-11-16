@@ -35,7 +35,7 @@
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity android:name=".activities.MainActivity" />
-        <activity android:name=".activities.TransactionDetailActivity"></activity>
+        <activity android:name=".activities.TransactionDetailActivity" />
 
         <!-- Register service -->
         <service android:name=".service.TransactionDetailService" />
@@ -46,6 +46,15 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".firebase.AuthActivity" >
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity android:name=".firebase.MessageActivity"></activity>
     </application>
 
 </manifest>
