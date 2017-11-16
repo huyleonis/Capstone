@@ -5,18 +5,6 @@
  */
 package com.fpt.capstone.Controllers;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fpt.capstone.Dtos.BeaconDTO;
 import com.fpt.capstone.Dtos.TransactionDTO;
@@ -29,6 +17,12 @@ import com.fpt.capstone.Services.TransactionService;
 import com.fpt.capstone.Utils.BeaconType;
 import com.fpt.capstone.Utils.TransactionStatus;
 import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/beacon")
@@ -49,7 +43,7 @@ public class BeaconController {
     @RequestMapping(value = "getBeacon/{uuid}/{major}/{minor}")
     @ResponseStatus(HttpStatus.OK)
     public BeaconDTO getBeacon(@PathVariable String uuid,
-            @PathVariable String major, @PathVariable String minor) {
+                               @PathVariable String major, @PathVariable String minor) {
 
         System.out.println("Get Beacon information: " + uuid + " - " + major + " - "
                 + minor);
@@ -124,16 +118,17 @@ public class BeaconController {
      * Khi xe nhận tín hiệu beacon 1, kiểm tra xem camera có chụp dc hình tương
      * ứng thì trả về transaction ứng với hình, không thì trả về giá và hỏi
      * người dùng có tạo transaction hay không.
+     *
      * @param stationId
      * @param licensePlate
-     * @return 
+     * @return
      */
     @RequestMapping(value = "/payment/{stationId}/{licensePlate}", method = RequestMethod.GET)
     public Object triggerBeaconPayment(@PathVariable int stationId, @PathVariable String licensePlate) {
 
         System.out.println("Triggered Beacon Payment");
         TransactionDetailDTO transaction;
-        transaction = transactionService.getCapturedTransaction(stationId, stationId);        
+        transaction = transactionService.getCapturedTransaction(stationId, stationId);
 
         if (transaction == null) {
             System.out.println("Not found captured payment created by camera");
@@ -157,11 +152,11 @@ public class BeaconController {
         System.out.println("Request Check result from Driver in lane with ID " + laneId);
 
         TransactionDTO transDTO = transactionService.getById(transactionId);
-        
+
         if (transDTO == null) {
             return "false";
         }
-        
+
         TransactionStatus status = transDTO.getTransactionStatus();
         if (status == TransactionStatus.TRANS_SUCCESS
                 || status == TransactionStatus.TRANS_FAILED) {

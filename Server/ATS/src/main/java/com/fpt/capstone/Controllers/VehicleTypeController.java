@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fpt.capstone.Dtos.StationDTO;
 import com.fpt.capstone.Dtos.VehicleTypesDTO;
-import com.fpt.capstone.Entities.Station;
 import com.fpt.capstone.Entities.VehicleType;
 import com.fpt.capstone.Services.VehicleTypeService;
 import com.google.gson.Gson;
@@ -42,11 +40,11 @@ public class VehicleTypeController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@RequestBody VehicleType vehicletype) {
+    public String create(@RequestBody VehicleType vehicleType) {
 
         boolean isSuccessful = false;
 
-        VehicleTypesDTO dto = vehicletypeService.insert(vehicletype);
+        VehicleTypesDTO dto = vehicletypeService.insert(vehicleType);
 
         if (dto != null) {
             isSuccessful = true;
@@ -56,10 +54,10 @@ public class VehicleTypeController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String update(@RequestBody VehicleType vehicletype) {
+    public String update(@RequestBody VehicleType vehicleType) {
         boolean isSuccessful = false;
 
-        VehicleTypesDTO dto = vehicletypeService.update(vehicletype);
+        VehicleTypesDTO dto = vehicletypeService.update(vehicleType);
 
         if (dto != null) {
             isSuccessful = true;
@@ -69,10 +67,10 @@ public class VehicleTypeController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public String delete(@RequestBody VehicleType vehicletype) {
+    public String delete(@RequestBody VehicleType vehicleType) {
         boolean isSuccessful = false;
 
-        isSuccessful = vehicletypeService.delete(vehicletype.getId());
+        isSuccessful = vehicletypeService.delete(vehicleType.getId());
 
         return (isSuccessful) ? "success" : "fail";
     }

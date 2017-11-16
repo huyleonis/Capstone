@@ -141,8 +141,8 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
      */
     @Query(value = "select * from transaction where vehicleId = :vehicleId " +
             "and createdTime > :fromDate and createdTime < :toDate", nativeQuery = true)
-    List<Transaction> getHistoryTransaction(@Param("vehicleId") int vehicleId, 
-            @Param("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date fromDate, 
+    List<Transaction> getHistoryTransaction(@Param("vehicleId") String vehicleId,
+            @Param("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date fromDate,
             @Param("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date toDate);
 
     /**

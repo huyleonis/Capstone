@@ -301,7 +301,7 @@
                                     <th class="text-center">Date Time</th>
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Price</th>
-                                    <th class="text-center">Fail Reason</th>
+                                    <%--<th class="text-center">Fail Reason</th>--%>
                                     <th class="text-center">Lane ID</th>
                                     <th class="text-center">Station ID</th>
                                     <th class="text-center">Zone</th>

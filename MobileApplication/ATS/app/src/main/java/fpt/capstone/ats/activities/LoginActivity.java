@@ -72,7 +72,9 @@ public class LoginActivity extends AppCompatActivity {
 
         editor.commit();
 
-        checkBluetooth(username);
+//        checkBluetooth(username);
+
+        startServiceAndMainActivity(username);
     }
 
     private void startServiceAndMainActivity(String username) {

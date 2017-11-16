@@ -11,6 +11,7 @@ public class TransactionDTO {
     private String id;
     private int vehicleId;
     private int stationId;
+    private String stationName;
     private Date dateTime;
     private TransactionStatus status;
     private double price;
@@ -22,11 +23,11 @@ public class TransactionDTO {
     public TransactionDTO() {
     }
 
-    public TransactionDTO(String id, int vehicleId, int stationId, Date dateTime, TransactionStatus status,
-                          double price, int laneId, TransactionType type, String photo, String failReason) {
+    public TransactionDTO(String id, int vehicleId, int stationId, String stationName, Date dateTime, TransactionStatus status, double price, int laneId, TransactionType type, String photo, String failReason) {
         this.id = id;
         this.vehicleId = vehicleId;
         this.stationId = stationId;
+        this.stationName = stationName;
         this.dateTime = dateTime;
         this.status = status;
         this.price = price;
@@ -35,7 +36,7 @@ public class TransactionDTO {
         this.photo = photo;
         this.failReason = failReason;
     }
-        
+
     public String getId() {
         return id;
     }
@@ -120,6 +121,14 @@ public class TransactionDTO {
         this.failReason = failReason;
     }
 
+    public String getStationName() {
+        return stationName;
+    }
+
+    public void setStationName(String stationName) {
+        this.stationName = stationName;
+    }
+
     public static TransactionDTO convertFromEntity(Transaction transaction) {
         TransactionDTO dto = new TransactionDTO();
         convertFromEntity(transaction, dto);
@@ -134,6 +143,7 @@ public class TransactionDTO {
         dto.setId(transaction.getId());
         dto.setVehicleId(transaction.getVehicle().getId());
         dto.setStationId(transaction.getStation().getId());
+        dto.setStationName(transaction.getStation().getName());
         dto.setDateTime(transaction.getDateTime());                
         dto.setPrice(transaction.getPrice());
         if (transaction.getLane() != null) {

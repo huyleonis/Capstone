@@ -137,5 +137,5 @@
 
     </body>
     <script
-    src="js/view/vehicletype.js"></script>
+    src="js/view/vehicleType.js"></script>
 </html>

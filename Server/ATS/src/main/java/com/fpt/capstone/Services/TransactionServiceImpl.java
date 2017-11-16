@@ -68,14 +68,14 @@ public class TransactionServiceImpl implements TransactionService {
         String id = new Date().getTime() + "";
         Date now = new Date();
         Account account = accountRepos.findByUsername(username);
-        int vehicleId = account.getVehicle().getId();        
+        int vehicleId = account.getVehicle().getId();
         Price price = priceRepos.findPriceByStationIdAndLicensePlate(stationId, account.getVehicle().getLicensePlate());
 
-        
-        int transaction = transactionRepos.insertAutoTransaction(id, stationId, now, 
-                TransactionStatus.TRANS_PENDING.getName(), price.getPrice(), 
+
+        int transaction = transactionRepos.insertAutoTransaction(id, stationId, now,
+                TransactionStatus.TRANS_PENDING.getName(), price.getPrice(),
                 TransactionType.AUTOMATION.getType(), vehicleId);
-        
+
         if (transaction > 0) {
             Transaction transaction2 = transactionRepos.findById(id);
             if (transaction2 != null) {
@@ -137,11 +137,11 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionDTO> getHistoryTransaction(String username, Date fromDate, Date toDate) {
+    public List<TransactionDTO> getHistoryTransaction(String vehicleId, Date fromDate, Date toDate) {
         // fromDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         // toDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        Account account = accountRepos.findByUsername(username);
-        List<Transaction> list = transactionRepos.getHistoryTransaction(account.getVehicle().getId(), fromDate, toDate);
+//        Account account = accountRepos.findByUsername(username);
+        List<Transaction> list = transactionRepos.getHistoryTransaction(vehicleId, fromDate, toDate);
         List<TransactionDTO> result = new ArrayList<>();
         for (Transaction tran : list) {
             TransactionDTO dto = TransactionDTO.convertFromEntity(tran);
@@ -209,7 +209,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         if (vehicle != null) { //Nếu số xe có trong db
             Price price = priceRepos.findPriceByStationIdAndLicensePlate(stationId, plate);
-            int result = transactionRepos.createCaptureTransaction(id, stationId, 
+            int result = transactionRepos.createCaptureTransaction(id, stationId,
                     createdTime, TransactionStatus.TRANS_INITIAL.getName(),
                     price.getPrice(), photo, vehicle.getId());
 
@@ -222,7 +222,7 @@ public class TransactionServiceImpl implements TransactionService {
             }
         } else { //nếu số xe ko có trong db
             throw new Exception("This license plate does not exist");
-        }        
+        }
         return null;
     }
 

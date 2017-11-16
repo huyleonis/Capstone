@@ -23,13 +23,13 @@ public class HistoryController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<TransactionDTO> getHistoryTransaction(@PathVariable String vehicleId,
-            @PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") Date fromDate, 
+            @PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") Date fromDate,
             @PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") Date toDate){
 
-        List<TransactionDTO> result = 
+        List<TransactionDTO> result =
                 transactionServiceImpl.getHistoryTransaction(vehicleId, fromDate, toDate);
 
-        System.out.println("Get history from date " + fromDate + " to date: " 
+        System.out.println("Get history from date " + fromDate + " to date: "
                 + toDate + " result : " + result.size() + "VehicleId: " + vehicleId);
         return result;
     }

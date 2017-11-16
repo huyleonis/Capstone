@@ -12,17 +12,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import fpt.capstone.ats.R;
+import fpt.capstone.ats.firebase.model.TransactionError;
 import fpt.capstone.ats.sqlite.DBAdapter;
 import fpt.capstone.ats.app.AtsApplication;
+import fpt.capstone.ats.utils.Commons;
 import fpt.capstone.ats.utils.ConstantValues;
 import fpt.capstone.ats.utils.RequestServer;
 
@@ -45,6 +53,8 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
     private DBAdapter database;
 
+    private DatabaseReference mDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +72,8 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         transactionId = bundle.getString(ConstantValues.TRANSACTION_ID_PARAM);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         database = new DBAdapter(TransactionDetailActivity.this);
         database.open();
@@ -337,4 +349,19 @@ public class TransactionDetailActivity extends AppCompatActivity {
         updateTransactionStatus();
     }
 
+    public void writeNewError() {
+        TransactionError transactionError = new TransactionError(transactionId, Commons.getUsername(this));
+
+        Map<String, Object> transErrorValues = transactionError.toMap();
+        Map<String, Object> childUpdates = new HashMap<>();
+
+        String key = mDatabase.child("TransactionErrors").push().getKey();
+
+        childUpdates.put("/TransactionErrors/" + key, transErrorValues);
+        mDatabase.updateChildren(childUpdates);
+    }
+
+    public void clickToReportTransaction(View view){
+        writeNewError();
+    }
 }
