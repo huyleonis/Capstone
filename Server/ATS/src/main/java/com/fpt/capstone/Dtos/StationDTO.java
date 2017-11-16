@@ -2,85 +2,75 @@ package com.fpt.capstone.Dtos;
 
 import com.fpt.capstone.Entities.Station;
 
-public class StationDTO{
-    private int id;
-    private String location;
-    private String name;
-    private String zone;
-//    private String account;
-//    private String uuid;
+public class StationDTO {
 
-//    public String getAccount() {
-//        return account;
-//    }
+	private int id;
+	private String name;
+	private String location;
+	private String zone;
+	private boolean active;
 
-//    public void setAccount(String account) {
-//        this.account = account;
-//    }
+	public StationDTO() {
+	}
 
-    public int getId() {
-        return id;
-    }
+	public StationDTO(int id, String name, String location, String zone, boolean active) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.location = location;
+		this.zone = zone;
+		this.active = active;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public String getLocation() {
-        return location;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getLocation() {
+		return location;
+	}
 
-    public String getZone() {
-        return zone;
-    }
+	public void setLocation(String location) {
+		this.location = location;
+	}
 
-    public void setZone(String zone) {
-        this.zone = zone;
-    }
+	public String getZone() {
+		return zone;
+	}
 
-//    public String getUuid() {
-//        return uuid;
-//    }
-//
-//    public void setUuid(String uuid) {
-//        this.uuid = uuid;
-//    }
+	public void setZone(String zone) {
+		this.zone = zone;
+	}
 
-    public static StationDTO convertFromEntity(Station station){
-        StationDTO dto = new StationDTO();
+	public boolean getActive() {
+		return active;
+	}
 
-//        String accountID = station.getAccount().getUsername();
-        if(station.getId() != -1){
-            dto.setId((station.getId()));
-        }
-        if(station.getName() != null){
-            dto.setName(station.getName());
-        }
-        if(station.getLocation() != null){
-            dto.setLocation(station.getLocation());
-        }
-//        if(station.getUuid() != null){
-//            dto.setUuid(station.getUuid());
-//        }
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
-        if (station.getZone() != null){
-            dto.setZone(station.getZone());
-        }
-
-//        dto.setAccount(accountID);
-
-        return dto;
-    }
+	public static StationDTO convertFromEntity(Station station) {
+		StationDTO dto = new StationDTO();
+		
+		dto.setId(station.getId());
+		dto.setName(station.getName());
+		dto.setLocation(station.getLocation());
+		dto.setZone(station.getZone());
+		dto.setActive(station.getActive());
+		
+		return dto;
+	}
 }

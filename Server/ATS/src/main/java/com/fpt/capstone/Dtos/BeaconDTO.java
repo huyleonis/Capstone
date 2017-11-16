@@ -6,93 +6,134 @@
 package com.fpt.capstone.Dtos;
 
 import com.fpt.capstone.Entities.Beacon;
+import com.fpt.capstone.Utils.BeaconType;
 
 /**
  *
  * @author hp
  */
 public class BeaconDTO {
-    private static final String BEACON_PAYMENT = "BEACON_PAYMENT";
-    private static final String BEACON_RESULT = "BEACON_RESULT";
-    private int id;
-    private String uuid;
-    private int major;
-    private int minor;
-    private String type;
-    private int laneId;
-    private int stationId;
 
-    public int getId() {
-        return id;
-    }
+	private static final String BEACON_PAYMENT = "BEACON_PAYMENT";
+	private static final String BEACON_RESULT = "BEACON_RESULT";
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	private int id;
+	private String uuid;
+	private int major;
+	private int minor;
+	private BeaconType type;
+	private int laneId;
+	private int stationId;
+	private boolean active;
 
-    public String getUuid() {
-        return uuid;
-    }
+	public BeaconDTO() {
+	}
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
+	public BeaconDTO(int id, String uuid, int major, int minor, BeaconType type,
+                int laneId, int stationId, boolean active) {
+		super();
+		this.id = id;
+		this.uuid = uuid;
+		this.major = major;
+		this.minor = minor;
+		this.type = type;
+		this.laneId = laneId;
+		this.stationId = stationId;
+		this.active = active;
+	}
 
-    public int getMajor() {
-        return major;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setMajor(int major) {
-        this.major = major;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public int getMinor() {
-        return minor;
-    }
+	public String getUuid() {
+		return uuid;
+	}
 
-    public void setMinor(int minor) {
-        this.minor = minor;
-    }
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public int getMajor() {
+		return major;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public void setMajor(int major) {
+		this.major = major;
+	}
 
-    public int getLaneId() {
-        return laneId;
-    }
+	public int getMinor() {
+		return minor;
+	}
 
-    public void setLaneId(int laneId) {
-        this.laneId = laneId;
-    }
+	public void setMinor(int minor) {
+		this.minor = minor;
+	}
 
-    public int getStationId() {
-        return stationId;
-    }
+	public BeaconType getType() {
+		return type;
+	}
 
-    public void setStationId(int stationId) {
-        this.stationId = stationId;
-    }
-    
-    public static BeaconDTO convertFromEntity(Beacon beacon) {
-        BeaconDTO dto = new BeaconDTO();
-        
-        dto.setId(beacon.getId());
-        dto.setUuid(beacon.getUuid());
-        dto.setMajor(beacon.getMajor());
-        dto.setMinor(beacon.getMinor());
-        dto.setType(beacon.getType() == 0? BEACON_PAYMENT : BEACON_RESULT );
-        if (beacon.getLane() != null) {
-            dto.setLaneId(beacon.getLane().getId());
-        }
-        if (beacon.getStation() != null) {
-            dto.setStationId(beacon.getStation().getId());
-        }     
-        return dto;
-    }
-    
+	public void setType(BeaconType type) {
+		this.type = type;
+	}
+
+	public int getLaneId() {
+		return laneId;
+	}
+
+	public void setLaneId(int laneId) {
+		this.laneId = laneId;
+	}
+
+	public int getStationId() {
+		return stationId;
+	}
+
+	public void setStationId(int stationId) {
+		this.stationId = stationId;
+	}
+
+	public boolean getActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public static BeaconDTO convertFromEntity(Beacon beacon) {
+		BeaconDTO dto = new BeaconDTO();
+
+		dto.setId(beacon.getId());
+		dto.setUuid(beacon.getUuid());
+		dto.setMajor(beacon.getMajor());
+		dto.setMinor(beacon.getMinor());
+                switch(beacon.getType()) {
+                    case 1:
+                        dto.setType(BeaconType.BEACON_PAYMENT);
+                        break;
+                    case 2:
+                        dto.setType(BeaconType.BEACON_RESULT);
+                        break;
+                    default:
+                        dto.setType(BeaconType.BEACON_OTHER);
+                        break;
+                }
+		
+		if (beacon.getLane() != null) {
+			dto.setLaneId(beacon.getLane().getId());
+		}
+		if (beacon.getStation() != null) {
+			dto.setStationId(beacon.getStation().getId());
+		}
+		dto.setActive(beacon.getActive());
+		
+		return dto;
+	}
+
 }

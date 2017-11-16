@@ -86,12 +86,12 @@ public class HistoryFragment extends Fragment {
             fromDateString = fromDate.getText().toString();
             date1 = format.parse(fromDateString);
 
-            Log.d(TAG, "fromDate" + fromDateString);
+            Log.w(TAG, "fromDate" + fromDateString);
 
             toDateString = toDate.getText().toString();
             date2 = format.parse(toDateString);
 
-            Log.d(TAG, "toDate" + toDateString);
+            Log.w(TAG, "toDate" + toDateString);
         } catch (ParseException e) {
             new AlertDialog.Builder(this.getActivity())
                     .setTitle("Lỗi")

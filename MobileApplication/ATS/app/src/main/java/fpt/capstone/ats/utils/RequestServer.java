@@ -28,7 +28,7 @@ public class RequestServer extends AsyncTask<Object, Void, String> {
         String method = (String) params[2];
         String requestMethod = (String) params[3];
     	
-        Log.d("Request Server: ", controller + " - " + method);
+        Log.w("Request Server: ", controller + " - " + method);
         return postData(q, controller, method, requestMethod);
     }
         
@@ -36,7 +36,7 @@ public class RequestServer extends AsyncTask<Object, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        Log.d("Request Server: ", s);
+        Log.i("Request Server: ", s);
         delegate.processFinish(s);
     }
 
@@ -116,7 +116,7 @@ public class RequestServer extends AsyncTask<Object, Void, String> {
             return content;
 
         } catch (Exception e) {
-            Log.e("Request Server: ", e.getMessage());
+            Log.e("Request Server Error: ", e.getMessage());
             return "Exception: " + e.getClass() + " - " + e.getMessage();
         }
 

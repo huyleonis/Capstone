@@ -19,6 +19,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import fpt.capstone.ats.R;
+import fpt.capstone.ats.app.AtsApplication;
 import fpt.capstone.ats.utils.ConstantValues;
 import fpt.capstone.ats.utils.RequestServer;
 
@@ -31,7 +32,7 @@ public class InitialActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_initial);
-        Log.d("Initial Activity", "Create initial activity");
+        Log.w("Initial Activity", "Create initial activity");
 
         final ImageView image = (ImageView)findViewById(R.id.imgLogo1);
         final TextView text = (TextView) findViewById(R.id.textSystemName);
@@ -66,6 +67,18 @@ public class InitialActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AtsApplication.onResumeApp();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AtsApplication.onPausedApp();
+    }
+
     private void checkLogin() {
         SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
         //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
@@ -77,7 +90,7 @@ public class InitialActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         } else {
-            //Go directly to main activity.
+            //Go to Login activity.
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
@@ -86,7 +99,12 @@ public class InitialActivity extends AppCompatActivity {
 
 
     public void clickToContinue(View view) {
-        checkLogin();
+        //checkLogin();
+
+        //Go directly to main activity.
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        InitialActivity.this.finish();
     }
 
     public void clickToCheckConnection(View view) {

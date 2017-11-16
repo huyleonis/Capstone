@@ -1,6 +1,7 @@
 package com.fpt.capstone.Dtos;
 
 import com.fpt.capstone.Entities.Price;
+import com.fpt.capstone.Entities.Station;
 
 import java.util.Date;
 
@@ -99,6 +100,9 @@ public class PriceDTO {
         this.stationId = stationId;
     }
 
+    public String getNameStation() {
+        return nameStation;
+    }
     
     public static PriceDTO convertFromEntity(Price price) {
         PriceDTO dto = new PriceDTO();
@@ -112,7 +116,14 @@ public class PriceDTO {
             } else {
                 dto.setPrice(price.getPrice());
             }
-            dto.setStationId(price.getStation().getId());
+            if (price.getStation() != null) {
+                Station s = price.getStation();
+                dto.setStationId(s.getId());
+                dto.setZoneStation(s.getZone());
+                dto.setNameStation(s.getName());
+                dto.setLocationStation(s.getLocation());
+            }
+            
          
             if ("".equals(price.getVehicletype().getName())) {
                 dto.setTypeVehicle(null);

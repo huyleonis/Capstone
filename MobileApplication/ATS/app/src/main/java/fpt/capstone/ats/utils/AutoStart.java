@@ -4,7 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import fpt.capstone.ats.service.TransactionDetailService;
+import fpt.capstone.ats.services.TransactionDetailService;
+
 
 /**
  * Created by dovie on 11/1/2017.

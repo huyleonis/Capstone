@@ -1,77 +1,92 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.fpt.capstone.Entities;
 
-import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
 @Entity(name = "lane")
-public class Lane {
+public class Lane implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int id;
 
-    @Column(name = "name")
-    private String name;
+	@Column(name = "name")
+	private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "station_id")
-    private Station station;
+	@ManyToOne
+	@JoinColumn(name = "stationid")
+	private Station station;
 
-    @OneToOne(mappedBy = "lane")
-    private Beacon beacon;
+	@OneToOne(mappedBy = "lane")
+	private Beacon beacon;
 
-    @OneToMany(mappedBy = "lane")
-    private List<Transaction> transactions;
+	@OneToMany(mappedBy = "lane")
+	private List<Transaction> transactions;
 
-    @Column(name = "is_active")
-    private int active;
+	@Column(name = "isactive")
+	private Boolean isActive;
 
-    public int getId() {
-        return id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public Station getStation() {
-        return station;
-    }
+	public Station getStation() {
+		return station;
+	}
 
-    public void setStation(Station station) {
-        this.station = station;
-    }
+	public void setStation(Station station) {
+		this.station = station;
+	}
 
-    public Beacon getBeacon() {
-        return beacon;
-    }
+	public Beacon getBeacon() {
+		return beacon;
+	}
 
-    public void setBeacon(Beacon beacon) {
-        this.beacon = beacon;
-    }
+	public void setBeacon(Beacon beacon) {
+		this.beacon = beacon;
+	}
 
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
 
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
-    }
+	public void setTransactions(List<Transaction> transactions) {
+		this.transactions = transactions;
+	}
 
-    public int getActive() {
-        return active;
-    }
+	public Boolean getActive() {
+		return isActive;
+	}
 
-    public void setActive(int active) {
-        this.active = active;
-    }
+	public void setActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
 
 }

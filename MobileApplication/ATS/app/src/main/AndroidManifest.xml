@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
-
     <!-- We need permission to listen to boot completed -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
@@ -37,8 +36,15 @@
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.TransactionDetailActivity" />
 
-        <!-- Register service -->
-        <service android:name=".service.TransactionDetailService" />
+        <service
+            android:name=".services.BeaconService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="fpt.capstone.ats.BEACON_SERVICE_PERMISSION" />
+
+        <activity android:name=".activities.TopupActivity"></activity>
+
+        <service android:name=".services.TransactionDetailService" />
 
         <!-- Send boot completed to auto start -->
         <receiver android:name=".utils.AutoStart">
@@ -46,15 +52,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <activity android:name=".firebase.AuthActivity" >
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
-        <activity android:name=".firebase.MessageActivity"></activity>
     </application>
 
 </manifest>
