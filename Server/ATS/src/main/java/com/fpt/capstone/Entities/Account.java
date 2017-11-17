@@ -35,6 +35,12 @@ public class Account implements Serializable {
 
     @Column(name = "ewallet")
     private String eWallet;
+    
+    @Column(name = "loginstatus")
+    private Boolean loginStatus;
+    
+    @Column(name = "token")
+    private String token;
 
     @OneToOne
     @JoinColumn(name = "vehicleid")
@@ -171,4 +177,21 @@ public class Account implements Serializable {
     public void setEnable(Boolean isEnabled) {
         this.isEnabled = isEnabled;
     }
+
+    public Boolean getLoginStatus() {
+        return loginStatus;
+    }
+
+    public void setLoginStatus(Boolean loginStatus) {
+        this.loginStatus = loginStatus;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+        
 }

@@ -136,4 +136,5 @@ public class InitialActivity extends AppCompatActivity {
         };
         rs.execute(new ArrayList<String>(), "ats", "checkConnection", "GET");
     }
+
 }
