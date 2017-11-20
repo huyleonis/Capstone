@@ -1,29 +1,32 @@
 package fpt.capstone.ats.activities;
 
 import android.bluetooth.BluetoothAdapter;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import com.estimote.coresdk.common.requirements.SystemRequirementsChecker;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+
 import fpt.capstone.ats.R;
 import fpt.capstone.ats.app.AtsApplication;
 import fpt.capstone.ats.services.BeaconService;
-import fpt.capstone.ats.services.TransactionDetailService;
-import fpt.capstone.ats.utils.Commons;
 import fpt.capstone.ats.utils.ConstantValues;
+import fpt.capstone.ats.utils.RequestServer;
 
 
 /**
@@ -51,16 +54,19 @@ public class LoginActivity extends AppCompatActivity {
         AtsApplication.onPausedApp();
     }
 
-    public void login(View view) {
+    public void login(View view) throws FileNotFoundException, UnsupportedEncodingException {
+        EditText edtUsername = (EditText) findViewById(R.id.edtUsername);
+        String username = edtUsername.getText().toString();
+        EditText edtPassword = (EditText) findViewById(R.id.edtPassword);
+        String password = edtPassword.getText().toString();
+
 
         //Check account for login
 
-
-
+        checkLogin(username, password);
         //After login successfully
         //Here is the code for saving user's information
-        EditText edtUsername = (EditText) findViewById(R.id.edtUsername);
-        String username = edtUsername.getText().toString();
+
         int vehicleId = 1;
 
         SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
@@ -133,9 +139,58 @@ public class LoginActivity extends AppCompatActivity {
                         .create().show();
             } else {
 
-                startServiceAndMainActivity(username);
+//                startServiceAndMainActivity(username);
             }
         }
     }
+
+    private void checkLogin(final String username, final String password){
+
+        RequestServer rs = new RequestServer();
+        rs.delegate = new RequestServer.RequestResult(){
+
+            @Override
+            public void processFinish(String result) {
+                //Trong result nếu có chứa "No message available" thì trả về vị trí của nó nếu không thì trả về -1
+                System.out.println("chuoi can tim:" + result.indexOf("No message available"));
+                if (result.indexOf("No message available") < 0  ) {
+                    // checkLogin đúng thì gửi sms chứa mã OTP
+                    sendOTP(username);
+                    Intent intent = new Intent(LoginActivity.this, OTPActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("username", username);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+
+
+                    LoginActivity.this.finish();
+                } else {
+                    Toast.makeText(LoginActivity.this, "Tên tài khoản hoặc mật khẩu sai. Xin nhập lại"
+                            , Toast.LENGTH_LONG).show();
+                }
+            }
+
+        };
+        ArrayList<String> params = new ArrayList<>();
+        params.add(username);
+        params.add(password);
+
+        rs.execute(params, "login","checkLogin", "GET");
+    }
+
+    private void sendOTP(String username){
+
+        RequestServer rs = new RequestServer();
+        rs.delegate = new RequestServer.RequestResult() {
+            @Override
+            public void processFinish(String result) {
+                System.out.println("otp:" + result);
+            }
+        };
+        ArrayList<String> params = new ArrayList<>();
+        params.add(username);
+        rs.execute(params, "otp", "sendOTP", "GET");
+    }
+
 
 }

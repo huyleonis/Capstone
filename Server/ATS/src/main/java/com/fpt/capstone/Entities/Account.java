@@ -59,7 +59,7 @@ public class Account implements Serializable {
     }
 
     public Account(String username, String password, int role, String fullname, String email, String phone,
-                   String numberId, String eWallet, Vehicle vehicle, Double balance, Boolean isActive, Boolean isEnabled) {
+                   String numberId, String eWallet, Vehicle vehicle, Double balance, Boolean isActive, Boolean isEnabled, Boolean loginStatus, String token) {
         this.username = username;
         this.password = password;
         this.role = role;
@@ -72,6 +72,8 @@ public class Account implements Serializable {
         this.balance = balance;
         this.isActive = isActive;
         this.isEnabled = isEnabled;
+        this.loginStatus = loginStatus;
+        this.token = token;
     }
 
     public int getId() {

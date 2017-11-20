@@ -24,12 +24,14 @@ public class AccountDTO {
     private double balance;
     private boolean isActive;
     private boolean isEnable;
+    private boolean loginStatus;
+    private String token;
 
     public AccountDTO() {
     }
 
     public AccountDTO(int id, String username, String password, int role, String fullname, String email, String phone,
-            String numberId, String eWallet, int vehicleId, double balance, boolean isActive, boolean isEnable) {
+            String numberId, String eWallet, int vehicleId, double balance, boolean isActive, boolean isEnable, boolean loginStatus, String token) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -43,6 +45,8 @@ public class AccountDTO {
         this.balance = balance;
         this.isActive = isActive;
         this.isEnable = isEnable;
+        this.loginStatus = loginStatus;
+        this.token = token;
     }
 
     public String getLicensePlate() {
@@ -174,8 +178,22 @@ public class AccountDTO {
     public void setLicenseId(String licenseId) {
         this.licenseId = licenseId;
     }
-    
-    
+
+    public boolean isLoginStatus() {
+        return loginStatus;
+    }
+
+    public void setLoginStatus(boolean loginStatus) {
+        this.loginStatus = loginStatus;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public static AccountDTO convertFromEntity(Account account) {
         AccountDTO dto = new AccountDTO();
@@ -200,7 +218,8 @@ public class AccountDTO {
         }
         dto.setActive(account.getActive());
         dto.setEnable(account.getEnable());
-
+        dto.setLoginStatus(account.getLoginStatus());
+        dto.setToken(account.getToken());
         return dto;
     }
 }
