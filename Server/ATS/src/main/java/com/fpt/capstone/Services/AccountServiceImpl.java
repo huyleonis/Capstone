@@ -163,4 +163,34 @@ public class AccountServiceImpl implements AccountService {
         return dto;
     }
 
+    @Override
+    public String checkLogin(String username, String password) {
+        Account account = accountRepos.findByUsername(username);
+        
+        if (account == null) {
+            return "Account does not exist";            
+        }
+        
+        if (!account.getPassword().equals(password)) {
+            return "Password is invalid";
+        }
+        
+        return "Success";
+    }
+
+    @Override
+    public boolean checkLicensePlate(String username, String licensePlate) {
+        Account account = accountRepos.findByUsername(username);
+        
+        if (account != null) {
+            if (account.getVehicle() != null) {
+                if (account.getVehicle().getLicensePlate().equals(licensePlate)) {
+                    return true;
+                }
+            }   
+        }
+        
+        return false;
+    }
+
 }

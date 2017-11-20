@@ -21,7 +21,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fpt.capstone.Dtos.AccountDTO;
 import com.fpt.capstone.Entities.Account;
 import com.fpt.capstone.Services.AccountService;
+import com.fpt.capstone.Utils.OTPUtils;
+import com.google.common.collect.HashBiMap;
 import com.google.gson.Gson;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.ServletContext;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/account")
@@ -29,6 +40,9 @@ public class AccountController {
 
 	@Autowired
 	private AccountService accountService;
+        
+        @Autowired
+        private ServletContext context;
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
@@ -90,4 +104,54 @@ public class AccountController {
 		return (isSuccessful) ? "success" : "fail";
 	}
 
+        @RequestMapping(value = "/login", method = RequestMethod.POST)
+        public Object checkLogin(@RequestParam(name = "username") String username,
+                @RequestParam(name = "password") String password) {            
+            Map<String, String> map = new HashMap<>();            
+            String result = accountService.checkLogin(username, password);            
+            map.put("result", result);
+            
+            if (result.equals("Success")) {
+                AccountDTO account = accountService.getAccountByUsername(username);
+                map.put("fullname", account.getFullname());
+                try {
+                    OTPUtils.sendOTP(account.getPhone(), username, context);
+                    
+                    Timer timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {                            
+                            OTPUtils.deleteFileOTP(username, context);
+                        }
+                    }, 1000*60*5);
+                } catch (IOException ex) {
+                    Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
+                }
+            }        
+
+            return map;
+        }
+        
+        @RequestMapping(value = "/otp", method = RequestMethod.POST)
+        public Object checkOTPForLogin(@RequestParam("username") String username,
+                @RequestParam(name = "licensePlate") String licensePlate,
+                @RequestParam(name = "OTP") String otp) { 
+            
+            boolean checkResult = accountService.checkLicensePlate(username, licensePlate);
+            
+            if (!checkResult) {
+                return "License Plate is invalid";
+            }
+            
+            String otpCreated = OTPUtils.getOtpNumber(username, context);
+            OTPUtils.deleteFileOTP(username, context);
+            if (otpCreated == null || !otpCreated.equals(otp)) {
+                return "OTP is invalid";
+            } 
+            
+            return "Success";            
+        }
+        
+        
 }

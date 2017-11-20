@@ -30,4 +30,7 @@ public interface AccountService {
 
 	AccountDTO update(Account account);
 
+        String checkLogin(String username, String password);
+        
+        boolean checkLicensePlate(String username, String licensePlate);
 }

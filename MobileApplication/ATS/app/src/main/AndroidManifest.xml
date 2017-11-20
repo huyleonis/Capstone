@@ -42,6 +42,7 @@
             android:permission="fpt.capstone.ats.BEACON_SERVICE_PERMISSION" />
 
         <activity android:name=".activities.TopupActivity"></activity>
+        <activity android:name=".activities.OTPActivity"></activity>
 
         <service android:name=".services.TransactionDetailService" />
     </application>

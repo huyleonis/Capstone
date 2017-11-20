@@ -97,7 +97,6 @@ public class RequestServer extends AsyncTask<Object, Void, String> {
                 connection.setUseCaches( false );
                 try(DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
                     wr.write(postData);
-                    Log.w("REQUEST_TOPUP", "Written data to request");
                 }
             }
 

@@ -10,7 +10,6 @@ public class AccountDTO {
 
     private int id;
     private String username;
-    private String password;
     private int role;
     private String fullname;
     private String email;
@@ -34,7 +33,6 @@ public class AccountDTO {
             String numberId, String eWallet, int vehicleId, double balance, boolean isActive, boolean isEnable, boolean loginStatus, String token) {
         this.id = id;
         this.username = username;
-        this.password = password;
         this.role = role;
         this.fullname = fullname;
         this.email = email;
@@ -81,14 +79,6 @@ public class AccountDTO {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public int getRole() {
@@ -196,11 +186,13 @@ public class AccountDTO {
     }
 
     public static AccountDTO convertFromEntity(Account account) {
+        if (account == null) {
+            return null;
+        }
         AccountDTO dto = new AccountDTO();
 
         dto.setId(account.getId());
         dto.setUsername(account.getUsername());
-        dto.setPassword(account.getPassword());
         dto.setRole(account.getRole());
         dto.setFullname(account.getFullname());
         dto.setEmail(account.getEmail());
