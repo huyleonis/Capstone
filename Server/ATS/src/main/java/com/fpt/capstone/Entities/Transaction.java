@@ -27,11 +27,10 @@ public class Transaction implements Serializable {
     @Column(name = "status")
     private String status;
 
-    
     @Column(name = "price")
     private Double price;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "laneid")
     private Lane lane;
 

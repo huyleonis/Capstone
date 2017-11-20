@@ -1,4 +1,4 @@
-package fpt.capstone.ats.firebase.model;
+package fpt.capstone.ats.dto;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -10,23 +10,30 @@ import java.util.Map;
  */
 
 @IgnoreExtraProperties
-public class TransactionError {
-    public String transactionId;
-    public String username;
+public class Report {
+
+    private String transactionId;
+    private String username;
+    private int isRead;
+    private int isShow;
 
 
-    public TransactionError() {
+    public Report() {
     }
 
-    public TransactionError(String transactionId, String username) {
+    public Report(String transactionId, String username, int isRead, int isShow) {
         this.transactionId = transactionId;
         this.username = username;
+        this.isRead = isRead;
+        this.isShow = isShow;
     }
 
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("transactionId", transactionId);
         result.put("username", username);
+        result.put("isRead", isRead);
+        result.put("isShow", isShow);
 
         return result;
     }

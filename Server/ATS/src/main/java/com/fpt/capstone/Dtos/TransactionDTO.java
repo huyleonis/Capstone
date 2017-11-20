@@ -4,6 +4,7 @@ import com.fpt.capstone.Entities.Transaction;
 import com.fpt.capstone.Utils.TransactionStatus;
 import com.fpt.capstone.Utils.TransactionType;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TransactionDTO {
@@ -12,7 +13,7 @@ public class TransactionDTO {
     private int vehicleId;
     private int stationId;
     private String stationName;
-    private Date dateTime;
+    private String dateTime;
     private TransactionStatus status;
     private double price;
     private int laneId;
@@ -23,7 +24,8 @@ public class TransactionDTO {
     public TransactionDTO() {
     }
 
-    public TransactionDTO(String id, int vehicleId, int stationId, String stationName, Date dateTime, TransactionStatus status, double price, int laneId, TransactionType type, String photo, String failReason) {
+    public TransactionDTO(String id, int vehicleId, int stationId, String stationName,
+                          String dateTime, TransactionStatus status, double price, int laneId, TransactionType type, String photo, String failReason) {
         this.id = id;
         this.vehicleId = vehicleId;
         this.stationId = stationId;
@@ -61,11 +63,11 @@ public class TransactionDTO {
         this.stationId = stationId;
     }
 
-    public Date getDateTime() {
+    public String getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
     }
 
@@ -144,7 +146,10 @@ public class TransactionDTO {
         dto.setVehicleId(transaction.getVehicle().getId());
         dto.setStationId(transaction.getStation().getId());
         dto.setStationName(transaction.getStation().getName());
-        dto.setDateTime(transaction.getDateTime());                
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        dto.setDateTime(sdf.format(transaction.getDateTime()));
+
         dto.setPrice(transaction.getPrice());
         if (transaction.getLane() != null) {
             dto.setLaneId(transaction.getLane().getId());

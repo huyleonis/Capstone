@@ -63,6 +63,12 @@
                     <p>Transaction</p>
                 </a>
             </li>
+            <li>
+                <a href="/report">
+                    <i class="pe-7s-news-paper"></i>
+                    <p>Report</p>
+                </a>
+            </li>
             
         </ul>
     </div>

@@ -158,5 +158,4 @@ public class HistoryFragment extends Fragment {
         rs.execute(params, "history", "getByDate", "GET");
     }
 
-
 }

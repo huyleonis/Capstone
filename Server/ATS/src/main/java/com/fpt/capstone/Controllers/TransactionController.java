@@ -1,40 +1,32 @@
 package com.fpt.capstone.Controllers;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fpt.capstone.Dtos.TransactionDTO;
 import com.fpt.capstone.Dtos.TransactionDetailDTO;
+import com.fpt.capstone.Dtos.VehicleDTO;
+import com.fpt.capstone.Entities.Transaction;
 import com.fpt.capstone.Services.AccountService;
 import com.fpt.capstone.Services.TransactionService;
+import com.fpt.capstone.Services.VehicleService;
 import com.fpt.capstone.Utils.TransactionStatus;
 import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.servlet.ServletContext;
-import org.springframework.boot.autoconfigure.web.WebMvcProperties;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/transaction")
@@ -45,13 +37,16 @@ public class TransactionController {
 
     @Autowired
     private AccountService accountService;
-    
-    @Autowired 
+
+    @Autowired
+    private VehicleService vehicleService;
+
+    @Autowired
     private ServletContext context;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public ModelAndView viewAccount() {
+    public ModelAndView viewTransaction() {
         ModelAndView m = new ModelAndView("transaction");
         return m;
     }
@@ -60,7 +55,7 @@ public class TransactionController {
      * Tạo transaction thu phí thủ công khi staff enter biển số xe
      *
      * @param licensePlate biển số xe do staff nhập vào
-     * @param laneId mã làn của staff thực hiện thu phí
+     * @param laneId       mã làn của staff thực hiện thu phí
      * @return trả về thông tin transaction vừa được tạo
      */
     @RequestMapping(value = "makeManualPayment/{licensePlate}/{laneId}")
@@ -107,30 +102,30 @@ public class TransactionController {
     @RequestMapping(value = "camera{stationId}/detect/{plate}", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public String createTransactionByCamera(@PathVariable int stationId, @PathVariable String plate,
-            @RequestParam(name = "img") MultipartFile img) {
+                                            @RequestParam(name = "img") MultipartFile img) {
 
-        
-        String result = "false";      
+
+        String result = "false";
         System.out.println("Plate: " + plate);
-        
-        Date now = new Date();                                
+
+        Date now = new Date();
         String fileName = plate + "_" + now.getTime() + ".jpg";
         String filePath = context.getRealPath(".") + "/WEB-INF/images/plates/" + fileName;
-                      
-        try {            
+
+        try {
             byte[] imgBytes = img.getBytes();
-                                    
-            
+
+
             File fileImg = new File(filePath);
             if (!fileImg.exists()) {
                 fileImg.createNewFile();
-            }                                    
-            
+            }
+
             FileOutputStream fos = new FileOutputStream(fileImg);
             fos.write(imgBytes);
             fos.flush();
             fos.close();
-            
+
             try {
                 transactionService.createCapturedTransaction(plate, fileName, now, stationId);
                 System.out.println("Created transction for plate: " + plate);
@@ -158,7 +153,7 @@ public class TransactionController {
      * không thì tạo transaction thu phí tự động khi tài xế xác nhận đồng ý
      * thanh toán
      *
-     * @param username tài khoản của tài xế
+     * @param username  tài khoản của tài xế
      * @param stationId mã trạm do android app gửi lên
      * @return trả về thông tin transaction vừa dc tạo
      */
@@ -192,7 +187,7 @@ public class TransactionController {
     /**
      * Khi tài xế yêu cầu payment, và transaction đã dc tạo bởi camera, chỉ cần update lại status
      *
-     * @param transactionId id transaction đã được tạo    
+     * @param transactionId id transaction đã được tạo
      * @return trả về thông tin transaction vừa dc cập nhật
      */
     @RequestMapping(value = "makePayment/{transactionId}")
@@ -204,14 +199,14 @@ public class TransactionController {
         // Lấy transaction đã dc khởi tạo bởi camera 
         TransactionDetailDTO detailDTO = transactionService.getDetailById(transactionId);
         String username = detailDTO.getUsername();
-        
+
         // update sang trạng thái pending, chờ xử lý giao dịch
         TransactionDTO transDTO = transactionService.updateTransactionStatus(transactionId, TransactionStatus.TRANS_PENDING);
 
         System.out.println("   + get transaction [" + transDTO.getId() + "] with status ["
                 + transDTO.getStatus() + "]");
 
-        
+
         // Xử lý thanh toán
         String result = accountService.makePayment(username, transDTO.getStationId());
         TransactionDTO transResultDTO;
@@ -230,7 +225,7 @@ public class TransactionController {
 
     }
 
-    
+
     /**
      * Lấy transaction detail theo vehicle id trong vòng 24h
      *
@@ -315,5 +310,63 @@ public class TransactionController {
 
         return map;
     }
-    
+
+    @RequestMapping(value = "/reportTransaction/{transactionId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, String> reportTransaction(@PathVariable String transactionId) {
+        Map<String, String> map = new HashMap<>();
+
+        String result = "";
+        TransactionStatus status = TransactionStatus.TRANS_ERROR;
+
+        TransactionDTO dto =
+                transactionService.updateTransactionStatus(transactionId, status);
+        if (dto != null) {
+            result = "success";
+        } else {
+            result = "fail";
+        }
+
+        System.out.println("Update transaction success with status: " + status);
+
+        map.put("result", result);
+        map.put("status", status.getName());
+
+        return map;
+    }
+
+    /**
+     * Lấy list report
+     *
+     * @return
+     */
+    @RequestMapping(value = "/getReportDetail", method = RequestMethod.GET)
+    public String getAllReportTransaction() throws JsonProcessingException {
+
+        List<TransactionDetailDTO> dtos = transactionService.getAllReportDetail();
+
+        return new Gson().toJson(dtos);
+    }
+
+    @RequestMapping(value = "/updateReport", method = RequestMethod.POST)
+    public String updateReport(@RequestBody Transaction transaction) {
+        boolean isSuccessful = false;
+
+        TransactionDTO transactionDTO = transactionService.updateReport(transaction);
+
+        if (transactionDTO != null) {
+            isSuccessful = true;
+        }
+
+        return (isSuccessful) ? "success" : "fail";
+    }
+
+    @RequestMapping(value = "/deleteReport", method = RequestMethod.POST)
+    public String deleteReport(@RequestBody Transaction transaction) {
+        boolean isSuccessful = false;
+
+        isSuccessful = transactionService.delete(transaction.getId());
+
+        return (isSuccessful) ? "success" : "fail";
+    }
 }

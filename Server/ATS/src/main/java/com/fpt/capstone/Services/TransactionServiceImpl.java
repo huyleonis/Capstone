@@ -6,13 +6,10 @@ import com.fpt.capstone.Entities.Account;
 import com.fpt.capstone.Entities.Price;
 import com.fpt.capstone.Entities.Transaction;
 import com.fpt.capstone.Entities.Vehicle;
-import com.fpt.capstone.Repositories.AccountRepos;
-import com.fpt.capstone.Repositories.PriceRepos;
-import com.fpt.capstone.Repositories.StationRepos;
-import com.fpt.capstone.Repositories.TransactionRepos;
-import com.fpt.capstone.Repositories.VehicleRepos;
+import com.fpt.capstone.Repositories.*;
 import com.fpt.capstone.Utils.TransactionStatus;
 import com.fpt.capstone.Utils.TransactionType;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +21,8 @@ import java.util.List;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
+
+    private final Logger log = Logger.getLogger(this.getClass());
 
     @Autowired
     private TransactionRepos transactionRepos;
@@ -42,6 +41,38 @@ public class TransactionServiceImpl implements TransactionService {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Override
+    public TransactionDTO updateReport(Transaction transaction) {
+
+        TransactionDTO dto = null;
+
+        try {
+            Vehicle vehicle = vehicleRepos.findByLicensePlate(transaction.getVehicle().getLicensePlate());
+            if (vehicle != null) {
+
+                Transaction existingTransaction = transactionRepos.findOne(transaction.getId());
+
+                existingTransaction.setVehicle(vehicle);
+                existingTransaction.setStatus(TransactionStatus.TRANS_NOTPAY.getName());
+                ;
+
+                if (existingTransaction != null) {
+                    Transaction processedTransaction = transactionRepos.save(existingTransaction);
+                    dto = TransactionDTO.convertFromEntity(processedTransaction);
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        return dto;
+    }
 
     @Override
     public TransactionDTO insertManualTransaction(String licensePlate, int laneId) {
@@ -165,6 +196,20 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    public List<TransactionDetailDTO> getAllReportDetail() {
+
+        List<TransactionDetailDTO> dtos = new ArrayList<>();
+
+        List<Transaction> transactions = transactionRepos.findByStatus(TransactionStatus.TRANS_ERROR.getName());
+
+        for (Transaction transaction : transactions) {
+            dtos.add(TransactionDetailDTO.covertFromEntity(transaction));
+        }
+
+        return dtos;
+    }
+
+    @Override
     public List<TransactionDetailDTO> getDetailByVehicleIdIn24Hours(int vehicleId) {
 
         List<Transaction> transactions = transactionRepos.findByVehicleIdIn24Hours(vehicleId);
@@ -226,4 +271,19 @@ public class TransactionServiceImpl implements TransactionService {
         return null;
     }
 
+    @Override
+    public boolean delete(String id) {
+
+        try {
+            Transaction transaction = transactionRepos.findOne(id);
+            if (transaction != null) {
+                transactionRepos.delete(id);
+                return true;
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        return false;
+    }
 }

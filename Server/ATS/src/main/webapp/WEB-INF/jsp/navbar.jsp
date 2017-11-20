@@ -20,14 +20,10 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-globe"></i>
                         <b class="caret"></b>
-                        <span class="notification">5</span>
+                        <span class="notification"></span>
                     </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Notification 1</a></li>
-                        <li><a href="#">Notification 2</a></li>
-                        <li><a href="#">Notification 3</a></li>
-                        <li><a href="#">Notification 4</a></li>
-                        <li><a href="#">Another notification</a></li>
+                    <ul class="dropdown-menu" id="list">
+
                     </ul>
                 </li>
                 <li>
@@ -67,3 +63,4 @@
         </div>
     </div>
 </nav>
+<script src="js/app.js"></script>

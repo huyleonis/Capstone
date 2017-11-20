@@ -2,6 +2,7 @@ package com.fpt.capstone.Services;
 
 import com.fpt.capstone.Dtos.TransactionDTO;
 import com.fpt.capstone.Dtos.TransactionDetailDTO;
+import com.fpt.capstone.Entities.Transaction;
 import com.fpt.capstone.Utils.TransactionStatus;
 
 import java.time.format.DateTimeFormatter;
@@ -31,8 +32,13 @@ public interface TransactionService {
 
     List<TransactionDetailDTO> getAllDetail();
 
+    List<TransactionDetailDTO> getAllReportDetail();
+
     List<TransactionDetailDTO> getDetailByVehicleIdIn24Hours(int vehicleId);
     
     TransactionDetailDTO getCapturedTransaction(int vehicleId, int stationId);
 
+    TransactionDTO updateReport(Transaction transaction);
+
+    boolean delete(String id);
 }
