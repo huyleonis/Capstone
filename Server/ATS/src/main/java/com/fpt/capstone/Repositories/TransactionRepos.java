@@ -157,12 +157,13 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
      */
     @Query(value = "SELECT * FROM transaction "
             + "WHERE vehicleId = :vehicleId "
-            + "AND createdTime >= CURRENT_DATE() - INTERVAL 24 HOUR", nativeQuery = true)
+            + "AND createdTime >= NOW() - INTERVAL 24 HOUR", nativeQuery = true)
     List<Transaction> findByVehicleIdIn24Hours(@Param("vehicleId") Integer vehicleId);
     
     @Query(value = "SELECT * FROM transaction "
             + "WHERE vehicleId = :vehicleId "
             + "AND stationId = :stationId "
-            + "AND status = 'Initial'", nativeQuery = true)
+            + "AND status = 'Initial' "
+            + "AND createdTime > NOW() - INTERVAL 30 MINUTE", nativeQuery = true)
     Transaction getCapturedTransaction(@Param("vehicleId") Integer vehicleId, @Param("stationId") Integer stationId);
 }

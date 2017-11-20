@@ -139,10 +139,12 @@ public class BeaconController {
 
         System.out.println("Triggered Beacon Payment");
         TransactionDetailDTO transaction;
-        transaction = transactionService.getCapturedTransaction(stationId, stationId);  
-        
         Account account = accountRepos.findByUsername(username);
-
+        int vehicleId = account.getVehicle().getId();
+        
+        transaction = transactionService.getCapturedTransaction(vehicleId, stationId);  
+        
+        
         if (transaction == null) {
             System.out.println("Not found captured payment created by camera");
             return priceService.findPriceByStationIdAndLicensePlate(stationId, account.getVehicle().getLicensePlate());

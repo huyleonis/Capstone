@@ -406,4 +406,9 @@ public class MainActivity extends AppCompatActivity {
         broadcastIntent.putExtras(bundle);
         sendBroadcast(broadcastIntent);
     }
+
+    public void clickToTopup(View view) {
+        Intent intent = new Intent(this, TopupActivity.class);
+        startActivity(intent);
+    }
 }

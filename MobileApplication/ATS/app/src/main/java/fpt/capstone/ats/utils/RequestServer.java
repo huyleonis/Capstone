@@ -5,12 +5,14 @@ import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -57,9 +59,9 @@ public class RequestServer extends AsyncTask<Object, Void, String> {
                             paramQuery.append("&");
                         }
 
-                        paramQuery.append(URLEncoder.encode(param.getKey(),"UTF-8"));
+                        paramQuery.append(param.getKey());
                         paramQuery.append("=");
-                        paramQuery.append(URLEncoder.encode(param.getValue(),"UTF-8"));
+                        paramQuery.append(param.getValue());
                     }
                 }
             } else if (requestMethod == "GET") {
@@ -84,12 +86,19 @@ public class RequestServer extends AsyncTask<Object, Void, String> {
             //Set params for the request
             boolean first = true;
             StringBuilder s = new StringBuilder();
-            if (method == "POST") {
+            if (requestMethod.equals("POST")) {
+                byte[] postData       = paramQuery.toString().getBytes(StandardCharsets.UTF_8);
+                int    postDataLength = postData.length;
+
                 connection.setDoOutput(true);
-                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"));
-                bw.write(paramQuery.toString());
-                bw.flush();
-                bw.close();
+                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                connection.setRequestProperty("Charset", "utf-8");
+                connection.setRequestProperty("Content-Length", Integer.toString(postDataLength));
+                connection.setUseCaches( false );
+                try(DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
+                    wr.write(postData);
+                    Log.w("REQUEST_TOPUP", "Written data to request");
+                }
             }
 
 
@@ -119,7 +128,6 @@ public class RequestServer extends AsyncTask<Object, Void, String> {
             Log.e("Request Server Error: ", e.getMessage());
             return "Exception: " + e.getClass() + " - " + e.getMessage();
         }
-
 
 
     }

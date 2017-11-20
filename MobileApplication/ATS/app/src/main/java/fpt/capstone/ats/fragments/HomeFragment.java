@@ -123,11 +123,14 @@ public class HomeFragment extends Fragment {
             String resultColor = bundle.getString(ConstantValues.RESULT_COLOR_PARAM);
             String photo = bundle.getString(ConstantValues.PHOTO_PARAM);
 
-            Picasso.with(this.getActivity())
-                    .load(RequestServer.DEFAULT_URL + "imgs/plates/" + photo)
-                    .placeholder(R.drawable.default_img)
-                    .error(R.drawable.default_img)
-                    .into(imgTrans);
+            if (photo != null && !photo.isEmpty()) {
+                Picasso.with(this.getActivity())
+                        .load(RequestServer.DEFAULT_URL + "imgs/plates/" + photo)
+                        .placeholder(R.drawable.loading_img)
+                        .error(R.drawable.notfound_img)
+                        .into(imgTrans);
+            }
+
 
             if (isDisplayConfirm) {
                 Log.w(TAG, "Display Confirm Dialog");
@@ -158,6 +161,7 @@ public class HomeFragment extends Fragment {
     public void setUpDefaultInfo(View view) {
         textStation.setText("<Chưa vào trạm>");
         textPrice.setText("0  đồng");
+        imgTrans.setImageResource(R.drawable.default_img);
     }
 
     public void showsConfirmFragment() {
