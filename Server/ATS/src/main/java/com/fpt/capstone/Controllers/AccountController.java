@@ -106,22 +106,25 @@ public class AccountController {
 
         @RequestMapping(value = "/login", method = RequestMethod.POST)
         public Object checkLogin(@RequestParam(name = "username") String username,
-                @RequestParam(name = "password") String password) {            
+                @RequestParam(name = "password") String password) {     
+                        
             Map<String, String> map = new HashMap<>();            
             String result = accountService.checkLogin(username, password);            
             map.put("result", result);
+            
+            String basePath = context.getRealPath(".");
             
             if (result.equals("Success")) {
                 AccountDTO account = accountService.getAccountByUsername(username);
                 map.put("fullname", account.getFullname());
                 try {
-                    OTPUtils.sendOTP(account.getPhone(), username, context);
+                    OTPUtils.sendOTP(account.getPhone(), username, basePath);
                     
                     Timer timer = new Timer();
                     timer.schedule(new TimerTask() {
                         @Override
                         public void run() {                            
-                            OTPUtils.deleteFileOTP(username, context);
+                            OTPUtils.deleteFileOTP(username, basePath);
                         }
                     }, 1000*60*5);
                 } catch (IOException ex) {
@@ -144,8 +147,10 @@ public class AccountController {
                 return "License Plate is invalid";
             }
             
-            String otpCreated = OTPUtils.getOtpNumber(username, context);
-            OTPUtils.deleteFileOTP(username, context);
+            String basePath = context.getRealPath(".");
+            
+            String otpCreated = OTPUtils.getOtpNumber(username, basePath);
+            OTPUtils.deleteFileOTP(username, basePath);
             if (otpCreated == null || !otpCreated.equals(otp)) {
                 return "OTP is invalid";
             } 

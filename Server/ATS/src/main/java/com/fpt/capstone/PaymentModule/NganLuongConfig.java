@@ -17,5 +17,6 @@ public class NganLuongConfig {
     public static final String VERSION  = "2.0";    
     public static final String MERCHANT_ID  = "52424";
     public static final String MERCHANT_PASSWORD  = "3928346a3f78e225f4d2aefdec93bf68";
+    public static final String MERCHANT_PASSWORD_ENCODED  = "c6ffdd1a53a567a017dcafed4ec29b5f";
     public static final String EMAIL_RECEIVE_MONEY  = "huy2896@gmail.com";
 }

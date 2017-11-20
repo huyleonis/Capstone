@@ -16,6 +16,9 @@ import com.fpt.capstone.Repositories.VehicleRepos;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,31 +169,46 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public String checkLogin(String username, String password) {
         Account account = accountRepos.findByUsername(username);
-        
+
         if (account == null) {
-            return "Account does not exist";            
+            return "Account does not exist";
         }
-        
+
         if (!account.getPassword().equals(password)) {
             return "Password is invalid";
         }
-        
+
         return "Success";
     }
 
     @Override
     public boolean checkLicensePlate(String username, String licensePlate) {
         Account account = accountRepos.findByUsername(username);
-        
+
         if (account != null) {
             if (account.getVehicle() != null) {
                 if (account.getVehicle().getLicensePlate().equals(licensePlate)) {
                     return true;
                 }
-            }   
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean topupBalance(String username, double amount) {
+
+        Account account = accountRepos.findByUsername(username);
+        
+        if (account == null) {
+            return false;
         }
         
-        return false;
+        double newBalance = account.getBalance() + amount;
+        int sqlResult = accountRepos.updateBalance(account.getId(), newBalance);
+        
+        return sqlResult > 0;
     }
 
 }

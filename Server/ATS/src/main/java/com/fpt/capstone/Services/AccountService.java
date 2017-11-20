@@ -33,4 +33,6 @@ public interface AccountService {
         String checkLogin(String username, String password);
         
         boolean checkLicensePlate(String username, String licensePlate);
+        
+        boolean topupBalance(String username, double amount);
 }

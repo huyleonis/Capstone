@@ -99,12 +99,12 @@ public class InitialActivity extends AppCompatActivity {
 
 
     public void clickToContinue(View view) {
-        //checkLogin();
+        checkLogin();
 
         //Go directly to main activity.
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        InitialActivity.this.finish();
+//        Intent intent = new Intent(this, LoginActivity.class);
+//        startActivity(intent);
+//        InitialActivity.this.finish();
     }
 
     public void clickToCheckConnection(View view) {

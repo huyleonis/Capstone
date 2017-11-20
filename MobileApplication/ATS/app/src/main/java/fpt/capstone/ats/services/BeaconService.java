@@ -85,14 +85,14 @@ public class BeaconService extends Service {
         bm.setBackgroundScanPeriod(500, 0);
 
 
-        setUpRangingBeacon();
+        //setUpRangingBeacon();
         setUpMonitorBeacon();
 
         bm.connect(new BeaconManager.ServiceReadyCallback() {
             @Override
             public void onServiceReady() {
                 Log.w(TAG, "Start ranging and monitoring beacon");
-                bm.startRanging(defaultRegion);
+                //bm.startRanging(defaultRegion);
                 bm.startMonitoring(defaultRegion);
             }
         });
@@ -249,6 +249,7 @@ public class BeaconService extends Service {
 
         if (bm != null) {
             bm.stopRanging(defaultRegion);
+            bm.stopMonitoring(defaultRegion.getIdentifier());
         }
 
         unregisterReceiver(intentReceiver);

@@ -35,11 +35,11 @@ public class OTPUtils {
      *
      * @param phone: số điện thoại nhận mã otp
      * @param username: tên người dùng
-     * @param context
+     * @param basePath
      * @throws IOException
      */
-    public static void sendOTP(String phone, String username, ServletContext context) throws IOException {
-        String numberOtp = createFileOTP(username, context);
+    public static void sendOTP(String phone, String username, String basePath) throws IOException {
+        String numberOtp = createFileOTP(username, basePath);
         String phoneStr = phone.replaceFirst("0", "+84");
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
 
@@ -55,10 +55,10 @@ public class OTPUtils {
      * @return mã OTP
      * @throws IOException
      */
-    private static String createFileOTP(String username, ServletContext context) throws IOException {
+    private static String createFileOTP(String username, String basePath) throws IOException {
 
         String numberOTP = numberOTP();
-        String path = context.getRealPath(".") + "/WEB-INF/otp/" + username + ".txt";
+        String path = basePath + "/WEB-INF/otp/" + username + ".txt";
         File file = new File(path);
 
         if (!file.exists()) {
@@ -94,11 +94,11 @@ public class OTPUtils {
     /**
      * Lấy mã OTP chứa trong file
      * @param username
-     * @param context
+     * @param basePath 
      * @return 
      */
-    public static String getOtpNumber(String username, ServletContext context) {
-        String path = context.getRealPath(".") + "/WEB-INF/otp/" + username + ".txt";
+    public static String getOtpNumber(String username, String basePath ) {
+        String path = basePath + "/WEB-INF/otp/" + username + ".txt";
         String otpNumber = "";
         BufferedReader br = null;
         FileReader fr = null;
@@ -136,11 +136,11 @@ public class OTPUtils {
      * Xóa file chứa mã OTP với tên username
      *
      * @param username
-     * @param context
+     * @param basePath 
      * @throws IOException
      */
-    public static void deleteFileOTP(String username, ServletContext context) {
-        String filePath = context.getRealPath(".") + "/WEB-INF/otp/" + username + ".txt";
+    public static void deleteFileOTP(String username, String basePath) {
+        String filePath = basePath + "/WEB-INF/otp/" + username + ".txt";
         File file = new File(filePath);
         boolean status = file.delete();
         if (status) {

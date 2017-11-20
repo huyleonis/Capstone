@@ -9,7 +9,7 @@ package com.fpt.capstone.PaymentModule;
  *
  * @author hp
  */
-public class NganLuongResult {
+public class MobileCardResult {
 
     private String errorCode;
     private String merchantId;
@@ -26,10 +26,10 @@ public class NganLuongResult {
     private String transactionId;
     private String errorMessage;
 
-    public NganLuongResult() {
+    public MobileCardResult() {
     }
 
-    public NganLuongResult(String errorCode, String merchantId, String merchantAccount, String pinCard, String cardSerial, String typeCard, String orderId, String clientFullname, String clientEmail, String clientMobile, String cardAmount, String amount, String transactionId, String errorMessage) {
+    public MobileCardResult(String errorCode, String merchantId, String merchantAccount, String pinCard, String cardSerial, String typeCard, String orderId, String clientFullname, String clientEmail, String clientMobile, String cardAmount, String amount, String transactionId, String errorMessage) {
         this.errorCode = errorCode;
         this.merchantId = merchantId;
         this.merchantAccount = merchantAccount;

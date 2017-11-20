@@ -74,7 +74,6 @@ public class RequestServer {
         HttpURLConnection con = getConnection(url, POST_METHOD);
         con.setDoOutput(true);
         con.setRequestProperty("Content-Length", Integer.toString(postDataLength));
-        con.setUseCaches(false);
         try (DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
             wr.write(postData);
             wr.flush();
