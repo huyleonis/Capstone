@@ -11,8 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.Bundle;
@@ -30,22 +28,18 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
-import com.estimote.coresdk.observation.region.beacon.BeaconRegion;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.UUID;
 
 import fpt.capstone.ats.R;
 import fpt.capstone.ats.app.AtsApplication;
 import fpt.capstone.ats.fragments.AccountFragment;
 import fpt.capstone.ats.fragments.HistoryFragment;
 import fpt.capstone.ats.fragments.HomeFragment;
-import fpt.capstone.ats.services.TransactionDetailService;
 import fpt.capstone.ats.services.BeaconService;
 import fpt.capstone.ats.utils.Commons;
 import fpt.capstone.ats.utils.ConstantValues;
