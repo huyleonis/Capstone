@@ -127,8 +127,9 @@ public class OTPActivity extends AppCompatActivity {
                                 }
                             })
                             .create().show();
-                } else if (result.equals("Success")) {
-                    startServiceAndMainActivity(username);
+                } else if (result.startsWith("Success")) {
+                    String randomToken = result.substring(8, result.length());
+                    startServiceAndMainActivity(username, randomToken);
                 } else {
                     Toast.makeText(OTPActivity.this, result, Toast.LENGTH_LONG).show();
                 }
@@ -152,7 +153,7 @@ public class OTPActivity extends AppCompatActivity {
     }
 
 
-    private void startServiceAndMainActivity(String username) {
+    private void startServiceAndMainActivity(String username, String randomToken) {
         timer.cancel();
 
         //After login successfully
@@ -161,6 +162,7 @@ public class OTPActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = setting.edit();
         editor.putString(ConstantValues.USERNAME_PARAM, username);
         editor.putBoolean("hasLoggedIn", true);
+        editor.putString("token", randomToken);
         editor.commit();
 
         //Start the service to monitor the Beacon

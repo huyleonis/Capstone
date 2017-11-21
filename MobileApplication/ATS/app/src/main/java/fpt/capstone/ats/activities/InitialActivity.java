@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import fpt.capstone.ats.R;
 import fpt.capstone.ats.app.AtsApplication;
@@ -80,21 +81,41 @@ public class InitialActivity extends AppCompatActivity {
     }
 
     private void checkLogin() {
-        SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
+        final SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
         //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
-        boolean hasLoggedIn = setting.getBoolean("hasLoggedIn", false);
-        String username = setting.getString("Username", "");
+        final boolean hasLoggedIn = setting.getBoolean("hasLoggedIn", false);
+        final String username = setting.getString("Username", "");
+        RequestServer rs = new RequestServer();
+        rs.delegate = new RequestServer.RequestResult() {
+            @Override
+            public void processFinish(String result){
+                if(result.equals("true")){
+                    if(hasLoggedIn && !username.isEmpty()) {
+                        //Go directly to main activity.
+                        Intent intent = new Intent(InitialActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    } else {
+                        //Go to Login activity.
+                        Intent intent = new Intent(InitialActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    }
+                } else{
+                    //Go to Login activity.
+                    Intent intent = new Intent(InitialActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+                InitialActivity.this.finish();
 
-        if(hasLoggedIn && !username.isEmpty()) {
-            //Go directly to main activity.
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        } else {
-            //Go to Login activity.
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-        }
-        InitialActivity.this.finish();
+            }
+
+        };
+
+
+        String token = setting.getString("token", "");
+        HashMap<String,String> params = new HashMap();
+        params.put("username", username);
+        params.put("token", token);
+        rs.execute(params, "account", "checkToken", "POST");
     }
 
 

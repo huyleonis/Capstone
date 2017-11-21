@@ -149,4 +149,26 @@ public class OTPUtils {
             System.out.println("File name " + username + ".txt does not exists");
         }
     }
+
+    /**
+     * Tạo mã token 16 kí tự
+     * @return
+     */
+    public static String randomToken(){
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        while(sb.length() < 19) {
+
+            int index = (int) (random.nextFloat() * alphabet.length());
+            if (sb.length() % 5 == 4&& sb.length() != 0) {
+                sb.append("-");
+            } else {
+                sb.append(alphabet.charAt(index));
+            }
+        }
+        System.out.println("token:" + sb.toString());
+
+        return sb.toString();
+    }
 }

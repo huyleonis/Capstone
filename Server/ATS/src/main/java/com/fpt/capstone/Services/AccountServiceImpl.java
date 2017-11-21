@@ -197,6 +197,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public boolean updateToken(String username, String token) {
+        int a = accountRepos.updateToken(username, token);
+        if (a > 0){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public boolean topupBalance(String username, double amount) {
 
         Account account = accountRepos.findByUsername(username);

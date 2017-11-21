@@ -153,10 +153,23 @@ public class AccountController {
             OTPUtils.deleteFileOTP(username, basePath);
             if (otpCreated == null || !otpCreated.equals(otp)) {
                 return "OTP is invalid";
-            } 
-            
-            return "Success";            
+            }
+			String randomToken = OTPUtils.randomToken();
+			boolean updateToken = accountService.updateToken(username, randomToken);
+			if(!updateToken){
+				return "Update token is invalid";
+			}
+			return "Success= " + randomToken;
         }
-        
-        
+
+	@RequestMapping(value = "/checkToken", method = RequestMethod.POST)
+	public boolean checkToken(@RequestParam String username, @RequestParam String token){
+		AccountDTO dto = accountService.getAccountByUsername(username);
+		String accToken = dto.getToken();
+
+		if(accToken.equals(token)){
+			return true;
+		}
+		return false;
+	}
 }
