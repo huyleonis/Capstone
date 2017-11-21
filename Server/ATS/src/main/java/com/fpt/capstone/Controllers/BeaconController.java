@@ -142,7 +142,7 @@ public class BeaconController {
         Account account = accountRepos.findByUsername(username);
         int vehicleId = account.getVehicle().getId();
         
-        transaction = transactionService.getCapturedTransaction(vehicleId, stationId);  
+        transaction = transactionService.getCapturedTransaction(vehicleId, stationId, true);  
         
         
         if (transaction == null) {
@@ -189,7 +189,7 @@ public class BeaconController {
             System.out.println(
                     "   + Update trans (1) lane [" + transDTO.getLaneId() + "] and status [" + transDTO.getStatus() + "]");
 
-            // Cập nhật trạng thái thành chờ xử lý
+            // Cập nhật trạng thái thành hoàn thành
             transDTO = transactionService.updateTransactionStatus(transactionId, newStatus);
 
             System.out.println(

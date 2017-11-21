@@ -37,4 +37,5 @@ public class ConstantValues {
     public static final String COLOR_RED = "#ff0015";
     public static final String COLOR_GREEN = "#46cc2b";
 
+    public static final String RETURN_URL = "https://www.nganluong.vn/nganluong/homeDeveloper/DeveloperBank.html";
 }

@@ -19,6 +19,7 @@ import com.fpt.capstone.Dtos.TransactionDTO;
 import com.fpt.capstone.Dtos.TransactionDetailDTO;
 import com.fpt.capstone.Services.AccountService;
 import com.fpt.capstone.Services.TransactionService;
+import com.fpt.capstone.Services.VehicleService;
 import com.fpt.capstone.Utils.TransactionStatus;
 import com.google.gson.Gson;
 import java.io.File;
@@ -45,6 +46,9 @@ public class TransactionController {
 
     @Autowired
     private AccountService accountService;
+    
+    @Autowired
+    private VehicleService vehicleService;
 
     @Autowired
     private ServletContext context;
@@ -92,7 +96,9 @@ public class TransactionController {
     @ResponseStatus(HttpStatus.OK)
     public TransactionDTO finishTransaction(@PathVariable String id) {
         System.out.println("Finish transaction");
-        return transactionService.updateTransactionStatus(id, TransactionStatus.TRANS_FINISH);
+        TransactionDTO dto = transactionService.updateTransactionStatus(id, TransactionStatus.TRANS_FINISH);
+        
+        return dto;
     }
 
     /**
@@ -329,21 +335,24 @@ public class TransactionController {
             }
         }
         return result;
-    }
+    }    
 
+    
     /**
-     * Lấy transaction detail theo id
+     * Lấy transaction detail theo id cho desktop
      *
-     * @param vehicleId
+     * @param licensePlate
      * @param stationId
      * @return
      */
-    @RequestMapping(value = "getCapturedTransaction/{vehicleId}/{stationId}")
+    @RequestMapping(value = "getCapturedTransaction/{licensePlate}/{stationId}")
     @ResponseStatus(HttpStatus.OK)
-    public TransactionDetailDTO getCapturedTransaction(@PathVariable int vehicleId, @PathVariable int stationId) {
-        TransactionDetailDTO dto = transactionService.getCapturedTransaction(vehicleId, stationId);
+    public TransactionDetailDTO getCapturedTransactionForDesktop(@PathVariable String licensePlate, @PathVariable int stationId) {
+        
+        int vehicleId = vehicleService.getVehicleId(licensePlate);
+        
+        TransactionDetailDTO dto = transactionService.getCapturedTransaction(vehicleId, stationId, false);
 
         return dto;
     }
-
 }

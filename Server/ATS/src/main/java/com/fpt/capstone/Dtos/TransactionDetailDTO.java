@@ -102,7 +102,9 @@ public class TransactionDetailDTO extends TransactionDTO {
         if (tran.getVehicle() != null) {
             dto.setLicensePlate(tran.getVehicle().getLicensePlate());
             dto.setVehicleType(tran.getVehicle().getVehicleType().getName());
-            dto.setUsername(tran.getVehicle().getAccount().getUsername());
+            if (tran.getVehicle().getAccount() != null) {
+                dto.setUsername(tran.getVehicle().getAccount().getUsername());
+           }            
         }
                 
         return dto;

@@ -26,6 +26,8 @@ public interface TransactionService {
     List<TransactionDTO> getTransactionsForStaff(String status);
 
     TransactionDTO updateTransactionLane(String id, int laneId);
+    
+    TransactionDTO updateTransactionType(String id, int type);
 
     List<TransactionDetailDTO> getHistoryTransaction(String username, Date fromDate, Date toDate);
 
@@ -33,6 +35,6 @@ public interface TransactionService {
 
     List<TransactionDetailDTO> getDetailByVehicleIdIn24Hours(int vehicleId);
     
-    TransactionDetailDTO getCapturedTransaction(int vehicleId, int stationId);
+    TransactionDetailDTO getCapturedTransaction(int vehicleId, int stationId, boolean updateStatus);
 
 }

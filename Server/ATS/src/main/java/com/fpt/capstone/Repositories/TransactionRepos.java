@@ -111,6 +111,18 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
     @Transactional
     @Query(value = "update transaction set status = ?2 where id = ?1", nativeQuery = true)
     int updateTransaction(String idTransaction, String status);
+    
+    /**
+     * Cập nhật type của transaction
+     *
+     * @param id
+     * @param type
+     * @return
+     */
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query(value = "update transaction set type = ?2 where id = ?1", nativeQuery = true)
+    int updateTransactionType(String id, int type);
 
     /**
      * Lấy transaction cho staff theo status cho trước trong vòng 10 phút trước đó 

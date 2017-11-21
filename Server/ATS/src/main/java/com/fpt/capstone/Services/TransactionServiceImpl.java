@@ -182,7 +182,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionDetailDTO getCapturedTransaction(int vehicleId, int stationId) {
+    public TransactionDetailDTO getCapturedTransaction(int vehicleId, int stationId, boolean updateStatus) {
         TransactionDetailDTO result = null;
 
         Transaction tran = transactionRepos.getCapturedTransaction(vehicleId, stationId);
@@ -197,7 +197,9 @@ public class TransactionServiceImpl implements TransactionService {
             //Nếu transaction được tạo trong thời gian dưới 30 phút
             // thì đây là transaction mới tạo, dùng để xử lý
             if (diffMins < 30) {
-                transactionRepos.updateTransaction(tran.getId(), TransactionStatus.TRANS_NOTPAY.getName());
+                if (updateStatus) {
+                    transactionRepos.updateTransaction(tran.getId(), TransactionStatus.TRANS_NOTPAY.getName());
+                }                
                 result = TransactionDetailDTO.covertFromEntity(tran);
             }
         }
@@ -226,6 +228,19 @@ public class TransactionServiceImpl implements TransactionService {
         } else { //nếu số xe ko có trong db
             throw new Exception("This license plate does not exist");
         }        
+        return null;
+    }
+
+    @Override
+    public TransactionDTO updateTransactionType(String id, int type) {
+        int transaction = transactionRepos.updateTransactionType(id, type);
+        if (transaction > 0) {
+            Transaction transaction1 = transactionRepos.findById(id);
+            if (transaction1 != null) {
+                TransactionDTO dto = TransactionDTO.convertFromEntity(transaction1);                
+                return dto;
+            }
+        }
         return null;
     }
 
