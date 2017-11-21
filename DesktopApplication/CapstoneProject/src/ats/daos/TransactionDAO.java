@@ -82,20 +82,20 @@ public class TransactionDAO {
         List<TransactionDTO> list = null;
         VehicleDAO dao = new VehicleDAO();
         try {
-            String sql = "SELECT * FROM transaction WHERE date_format(date_time, '%Y-%m-%d') = ?";
+            String sql = "SELECT * FROM transaction WHERE date_format(createdTime, '%Y-%m-%d') = ?";
             conn = MyConnection.getMyConnection();
             preStm = conn.prepareStatement(sql);
             preStm.setString(1, date);
             rs = preStm.executeQuery();
             while (rs.next()) {
                 String id = rs.getString("id");
-                int vehicleId = rs.getInt("vehicle_id");
+                int vehicleId = rs.getInt("vehicleId");
                 String licensePlate = dao.findLicensePlateByVehicle(vehicleId);
-                int stationId = rs.getInt("station_id");
-                java.sql.Date dateTime = (java.sql.Date) rs.getDate("date_time");
+                int stationId = rs.getInt("stationId");
+                java.sql.Date dateTime = (java.sql.Date) rs.getDate("createdTime");
                 String status = rs.getString("status");
-                int priceId = rs.getInt("price_id");
-                int laneId = rs.getInt("lane_id");
+                int priceId = rs.getInt("priceId");
+                int laneId = rs.getInt("laneId");
                 String type = rs.getString("type");
                 String photo = rs.getString("photo");
                 TransactionDTO dto = new TransactionDTO(id, vehicleId, licensePlate, stationId, dateTime, status, priceId, laneId, type, photo);

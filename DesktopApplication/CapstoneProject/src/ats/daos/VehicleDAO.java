@@ -6,6 +6,7 @@
 package ats.daos;
 
 import ats.connection.MyConnection;
+import ats.dtos.VehicleDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -67,5 +68,28 @@ public class VehicleDAO {
             closeConnection();
         }
         return licensePlate;
+    }
+
+    public VehicleDTO findPriceByLicensePlate(String licensePlate, int stationId) throws Exception {
+        VehicleDTO dto = new VehicleDTO();
+        try {
+            String sql = "SELECT vt.name, pr.price "
+                    + "FROM vehicle ve, vehicletype vt, price pr, station st "
+                    + "WHERE ve.typeId = vt.id AND ve.licensePlate = ? AND pr.typeId = vt.id "
+                    + "AND st.id = ? AND st.id = pr.stationId";
+            conn = MyConnection.getMyConnection();
+            preStm = conn.prepareStatement(sql);
+            preStm.setString(1, licensePlate);
+            preStm.setInt(2, stationId);
+            rs = preStm.executeQuery();
+            if (rs.next()) {      
+                dto.setLicensePlate(licensePlate);
+                dto.setTypeVehicle(rs.getString("name"));
+                dto.setPrice(rs.getDouble("price"));
+            }
+        } finally {
+            closeConnection();
+        }
+        return dto;
     }
 }

@@ -21,6 +21,8 @@ public class AccountDTO {
     private double balance;
     private boolean isActive;
     private boolean isEnable;
+    private String licensePlate;
+    private String licenseId;
 
     public AccountDTO() {
     }
@@ -145,6 +147,8 @@ public class AccountDTO {
     public void setEnable(boolean enable) {
         isEnable = enable;
     }
+    
+    
 
     public static AccountDTO convertFromEntity(Account account) {
         AccountDTO dto = new AccountDTO();

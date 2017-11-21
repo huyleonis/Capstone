@@ -5,9 +5,7 @@
  */
 package capstoneproject;
 
-import ats.dtos.LoginDTO;
 import ats.swing.gui.Login;
-import ats.swing.gui.MainForm;
 import javax.swing.UIManager;
 
 /**
@@ -23,10 +21,7 @@ public class CapstoneProject {
     public static void main(String[] args) throws Exception {
         String theme = "com.jtattoo.plaf.texture.TextureLookAndFeel";  //theme for FORM
         UIManager.setLookAndFeel(theme);
-//        LoginDTO dto = new LoginDTO("hieu", 1L, "Chi Hieu");
-//        MainForm mainform = new MainForm(dto);
-//        mainform.setVisible(true);
-        
+
         Login login = new Login();
         login.setVisible(true);
 

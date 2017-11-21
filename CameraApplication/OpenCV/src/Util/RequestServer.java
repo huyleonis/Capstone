@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  */
 public class RequestServer implements Runnable {
 
-    private static final String baseUrl = "http://localhost:8080/";
+    private static final String baseUrl = "http://172.20.10.2:8080/";
 
     public static final String METHOD_GET = "GET";
     public static final String METHOD_POST = "POST";

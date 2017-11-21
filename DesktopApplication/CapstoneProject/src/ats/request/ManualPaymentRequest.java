@@ -79,7 +79,7 @@ public class ManualPaymentRequest {
             while ((inputLine = in.readLine()) != null) {
                 JSONObject payment = (JSONObject) parser.parse(inputLine);
                 // Get id of transaction
-                String id = (String) payment.get("vehicleId");
+                String id = (String) payment.get("id");
                 String typeName = (String) payment.get("typeVehicle");
                 Double price = (Double) payment.get("price");
                 String status = (String) payment.get("status");
@@ -93,8 +93,8 @@ public class ManualPaymentRequest {
         return vehiclePayment;
     }
 
-    public VehiclePayment getCapturedTransaction(int vehicleId, int stationId, String localhost) throws Exception {
-        String urlName = localhost + "/transaction/getCapturedTransaction/" + vehicleId + "/" + stationId;
+    public VehiclePayment getCapturedTransaction(String licensePlate, int stationId, String localhost) throws Exception {
+        String urlName = localhost + "/transaction/getCapturedTransaction/" + licensePlate + "/" + stationId;
         JSONParser parser = new JSONParser();
         VehiclePayment vehiclePayment = new VehiclePayment();
         try {
@@ -106,7 +106,7 @@ public class ManualPaymentRequest {
                 JSONObject payment = (JSONObject) parser.parse(inputLine);
                 // Get id of transaction
                 String id = (String) payment.get("id");
-                String licensePlate = (String) payment.get("licensePlate");
+                //String licensePlate = (String) payment.get("licensePlate");
                 String typeName = (String) payment.get("typeVehicle");
                 Double price = (Double) payment.get("price");
                 String status = (String) payment.get("status");

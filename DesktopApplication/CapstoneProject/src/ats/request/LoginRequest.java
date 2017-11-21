@@ -57,4 +57,22 @@ public class LoginRequest {
         }
         return loginDTO;
     }
+    
+    public boolean checkConnection(String localhost){
+        boolean check = false;
+        String urlName = localhost + "/ats/checkConnection";
+        try {
+            URL oracle = new URL(urlName); // URL to Parse
+            URLConnection yc = oracle.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+            if((in.readLine()) != null) {
+              check = true;  
+            }
+            in.close();
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        }
+        
+        return check;
+    }
 }
