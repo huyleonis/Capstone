@@ -13,7 +13,7 @@ public class TransactionDTO {
     private int vehicleId;
     private int stationId;
     private String stationName;
-    private String dateTime;
+    private Date dateTime;
     private TransactionStatus status;
     private double price;
     private int laneId;
@@ -25,7 +25,7 @@ public class TransactionDTO {
     }
 
     public TransactionDTO(String id, int vehicleId, int stationId, String stationName,
-                          String dateTime, TransactionStatus status, double price, int laneId, TransactionType type, String photo, String failReason) {
+                          Date dateTime, TransactionStatus status, double price, int laneId, TransactionType type, String photo, String failReason) {
         this.id = id;
         this.vehicleId = vehicleId;
         this.stationId = stationId;
@@ -63,11 +63,11 @@ public class TransactionDTO {
         this.stationId = stationId;
     }
 
-    public String getDateTime() {
+    public Date getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(String dateTime) {
+    public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
     }
 
@@ -147,8 +147,7 @@ public class TransactionDTO {
         dto.setStationId(transaction.getStation().getId());
         dto.setStationName(transaction.getStation().getName());
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        dto.setDateTime(sdf.format(transaction.getDateTime()));
+        dto.setDateTime(transaction.getDateTime());
 
         dto.setPrice(transaction.getPrice());
         if (transaction.getLane() != null) {

@@ -349,14 +349,14 @@ public class TransactionDetailActivity extends AppCompatActivity {
     }
 
     public void writeNewReport() {
-        Report report = new Report(transactionId, Commons.getUsername(this), 0, 1);
+        Report report = new Report(transactionId, Commons.getUsername(this), "unread");
 
         Map<String, Object> reportValues = report.toMap();
         Map<String, Object> childUpdates = new HashMap<>();
 
-        String key = mDatabase.child("Reports").push().getKey();
+        String key = mDatabase.child("reports").push().getKey();
 
-        childUpdates.put("/Reports/" + key, reportValues);
+        childUpdates.put("/reports/" + key, reportValues);
         mDatabase.updateChildren(childUpdates);
     }
 

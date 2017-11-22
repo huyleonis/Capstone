@@ -1,6 +1,7 @@
 package com.fpt.capstone.Controllers;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,4 +18,12 @@ public class ReportController {
         return m;
     }
 
+    @RequestMapping(value = "/report_{transactionId}_{key}" ,method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public ModelAndView viewReport(@PathVariable String transactionId, @PathVariable String key) {
+        ModelAndView m = new ModelAndView("report");
+        m.addObject("transactionId", transactionId);
+        m.addObject("key", key);
+        return m;
+    }
 }

@@ -20,7 +20,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-globe"></i>
                         <b class="caret"></b>
-                        <span class="notification"></span>
+                        <span class="notification" id="test01"></span>
                     </a>
                     <ul class="dropdown-menu" id="list">
 

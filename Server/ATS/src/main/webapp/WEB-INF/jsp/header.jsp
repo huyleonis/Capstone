@@ -50,8 +50,6 @@
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
 
-    <%--<script src="//cdn.jsdelivr.net/jquery.scrollto/2.1.2/jquery.scrollTo.min.js"></script>--%>
-
 <!--    <script type="text/javascript">
         $(document).ready(function () {
 
@@ -74,4 +72,5 @@
 <script src="../datatables/dataTables.bootstrap.js"></script>
 <link href="../datatables/dataTables.bootstrap.css" rel="stylesheet"
       media="screen">
+    <script src="https://cdn.datatables.net/plug-ins/1.10.16/api/page.jumpToData().js"></script>
 </head>

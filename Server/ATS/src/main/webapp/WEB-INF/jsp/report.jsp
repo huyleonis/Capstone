@@ -17,8 +17,17 @@
             </div>
             <div class="container-fluid">
 
-                <a href="" data-toggle="modal" data-target="#add-modal"
-                   class="btn btn-primary btn-lg pe-7s-add-user pe-5x pe-va hidden" onclick="clearError()"></a>
+                <button data-name="1510500714164"
+                        class="btn btn-primary btn-lg pe-7s-add-user pe-5x pe-va hidden"></button>
+                        <c:set value="${transactionId}" var="transactionId"></c:set>
+                        <c:set value="${key}" scope="session" var="key"></c:set>
+                        <c:if test="${not empty transactionId}">
+                        <script>
+                        var transactionIdRedirect = '${transactionId}';
+                        var keyRedirect = '${key}';
+                        console.log(transactionIdRedirect);
+                        </script>
+                        </c:if>
 
                 <div id="add-modal" class="modal fade" role="dialog"
                      data-backdrop="false">
@@ -117,14 +126,15 @@
                        style="text-align: center" id="table">
                     <thead>
                     <tr>
-                        <th class="text-center">#</th>
+                        <th class="text-center" style="font-weight: bolder">#</th>
                         <th>id</th>
-                        <th class="text-center">Created Time</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-center">Lane ID</th>
-                        <th class="text-center">Station ID</th>
-                        <th class="text-center">License Plate</th>
-                        <th class="text-center">Update/Delete</th>
+                        <th class="text-center" style="font-weight: bolder">License Plate</th>
+                        <th class="text-center" style="font-weight: bolder">Created Time</th>
+                        <th class="text-center" style="font-weight: bolder">Status</th>
+                        <th class="text-center" style="font-weight: bolder">Username</th>
+                        <th class="text-center" style="font-weight: bolder">Lane ID</th>
+                        <th class="text-center" style="font-weight: bolder">Station ID</th>
+                        <th class="text-center" style="font-weight: bolder">Update/Delete</th>
                         <%--<th class="pull-left">Delete/Update</th>--%>
                     </tr>
                     </thead>

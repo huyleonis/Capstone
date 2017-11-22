@@ -14,26 +14,22 @@ public class Report {
 
     private String transactionId;
     private String username;
-    private int isRead;
-    private int isShow;
-
+    private String status;
 
     public Report() {
     }
 
-    public Report(String transactionId, String username, int isRead, int isShow) {
+    public Report(String transactionId, String username, String status) {
         this.transactionId = transactionId;
         this.username = username;
-        this.isRead = isRead;
-        this.isShow = isShow;
+        this.status = status;
     }
 
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("transactionId", transactionId);
         result.put("username", username);
-        result.put("isRead", isRead);
-        result.put("isShow", isShow);
+        result.put("status", status);
 
         return result;
     }

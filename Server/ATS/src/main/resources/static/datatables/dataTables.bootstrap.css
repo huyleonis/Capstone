@@ -3,8 +3,13 @@
 	/*color: #fff;*/
 /*}*/
 
-td.highlight {
-	background-color: darkgrey !important;
+.selectedRow {
+	background-color: #4685cf;
+	color: #fff;
+}
+
+td {
+	border-right: 1px solid black;
 }
 
 div.dataTables_length label {

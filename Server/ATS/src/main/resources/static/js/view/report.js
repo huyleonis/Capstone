@@ -4,7 +4,7 @@ var active_to_button = function (data, type, full, meta) {
     } else {
         return "<button class='label label-danger' style='padding: 10px;' onclick = 'changeRole(this)'>Deactive</button>";
     }
-}
+};
 function changeRole(element) {
     var data = $("#table").DataTable().row($(element).parents('tr')).data();
     var skill = {
@@ -49,14 +49,16 @@ function changeRole(element) {
     clearStatus();
     reloadTable();
 }
+var table;
 $(document)
     .ready(
         function ($) {
             /*
              * define dataTables
              */
+        	
             var index = 1;
-            var table = $('#table')
+            table = $('#table')
                 .DataTable(
                     {
                         "lengthMenu": [[5, 10, 20, -1],
@@ -98,10 +100,13 @@ $(document)
                                 "data": null
                             },
                             {
-                                "data": "id",
-                                "visible": false
+                                "data": "id"
+//                                "visible": false
                                 // hide the column
                                 // processID
+                            },
+                            {
+                                "data": "licensePlate"
                             },
                             {
                                 "data": "dateTime"
@@ -110,15 +115,15 @@ $(document)
                                 "data": "status"
                             },
                             {
+                                "data": "username"
+                            },
+                            {
                                 "data": "laneId",
                                 "visible": false
                             },
                             {
                                 "data": "stationId",
                                 "visible": false
-                            },
-                            {
-                                "data": "licensePlate"
                             },
                             {// column for view
                                 // detail-update-delete
@@ -131,25 +136,42 @@ $(document)
                             "orderable": false,
                             "targets": 0
                         } ],
-                        "order": [[ 2, 'desc']],
+                        "order": [[ 3, 'desc']],
                         "createdRow": function( row, data, dataIndex ) {
                             $(row).attr('id', data.id);
-                        }
+                        },
+                        "scroller": true,
+                        "initComplete": function() {
+                            if (typeof transactionIdRedirect !== 'undefined') {
+                            	if (transactionIdRedirect != null || 
+                            		transactionIdRedirect != "") {
+                            		var selection = $("#table #" + transactionIdRedirect);
+                                	
+                                	var jumpAndHighlight = {
+                                			jumpToRow: function(table, transactionIdRedirect) {
+                                				table.page.jumpToData(transactionIdRedirect, 1);
+                                				return jumpAndHighlight;
+                                			},
+                                			highlightRow: function(selection) {
+                                				$("tr[role='row']").removeClass("selectedRow");
+                                				selection.addClass("selectedRow");
+                                				return jumpAndHighlight;
+                                			}
+                                	};
+                                	
+                                	jumpAndHighlight.jumpToRow(table, transactionIdRedirect).highlightRow(selection);
+                                	
+                                	firebase.database().ref().child('reports').child(keyRedirect).child('status').set('read');	
+								}
+                			}
+						}
                     });
             table.on( 'order.dt search.dt', function () {
                 table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
                     cell.innerHTML = i+1;
                 } );
             } ).draw();
-
-            $('#table tbody')
-                .on( 'mouseenter', 'td', function () {
-                    var colIdx = table.cell(this).index().column;
-
-                    $( table.cells().nodes() ).removeClass( 'highlight' );
-                    $( table.column( colIdx ).nodes() ).addClass( 'highlight' );
-                } );
-
+            
             // handle delete form submit
             $("#delete-form").submit(function (event) {
                 event.preventDefault();
@@ -167,6 +189,7 @@ $(document)
             //     clearAddForm();
             // });
         });
+
 /*
  * Contain ajax call to perfom update or delete a report
  */
