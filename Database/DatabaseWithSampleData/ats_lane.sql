@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
 -- Host: localhost    Database: ats
 -- ------------------------------------------------------
--- Server version	5.7.12-log
+-- Server version	5.7.17-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -25,11 +25,12 @@ DROP TABLE IF EXISTS `lane`;
 CREATE TABLE `lane` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
-  `station_id` int(11) NOT NULL,
+  `stationId` int(11) NOT NULL,
+  `isActive` bit(1) NOT NULL DEFAULT b'1',
   PRIMARY KEY (`id`),
-  KEY `fk_lane_station_idx` (`station_id`),
-  CONSTRAINT `fk_lane_station` FOREIGN KEY (`station_id`) REFERENCES `station` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+  KEY `fk_lane_station_idx` (`stationId`),
+  CONSTRAINT `fk_lane_station` FOREIGN KEY (`stationId`) REFERENCES `station` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +39,7 @@ CREATE TABLE `lane` (
 
 LOCK TABLES `lane` WRITE;
 /*!40000 ALTER TABLE `lane` DISABLE KEYS */;
-INSERT INTO `lane` VALUES (1,'Làn 1',1),(2,'Làn 2',1),(3,'Làn 1',2),(4,'Làn 2',2);
+INSERT INTO `lane` VALUES (1,'L11',1,''),(2,'L12',1,''),(3,'L23',2,''),(4,'L24',2,'');
 /*!40000 ALTER TABLE `lane` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-28  3:25:07
+-- Dump completed on 2017-11-13  0:04:45

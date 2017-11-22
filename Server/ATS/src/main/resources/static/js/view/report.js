@@ -97,7 +97,7 @@ $(document)
                             // data for the cell from the
                             // returned list
                             {
-                                "data": null
+                                "data": "id"
                             },
                             {
                                 "data": "id"
@@ -244,7 +244,7 @@ function submitUpdateForm() {
     var transaction = {
         "id": $("#update-form-id").val(),
         "vehicle": {
-            "licensePlate": $("#update-form-licensePlate").val()
+            "licensePlate": $("#update-form-correct-licensePlate").val()
         }
     };
     $.ajax({
@@ -312,13 +312,20 @@ function reloadTable() {
 // open updateModal
 function openUpdateModal(element) {
     var data = $("#table").DataTable().row($(element).parents('tr')).data();
+    var img = document.createElement("img");
+    
     $("#update-form-id").val(data.id);
     $("#update-form-licensePlate").val(data.licensePlate);
+    $("#update-form-photo").val(data.photo);
     curr = {
         "id": data.id,
-        "vehicle": {
+        //"photo": "./imgs/plates/"+ data.photo,
+        "photo": img.src = "http://hoathuongtin.vn/upload/sanpham/hns002-6056.jpg",
+        
+        "vehicle": {           
             "licensePlate": data.licensePlate
         }
+        
     };
     clearErrorUpdate();
     $("#update-modal").modal('toggle');

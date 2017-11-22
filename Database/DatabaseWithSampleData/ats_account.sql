@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
 -- Host: localhost    Database: ats
 -- ------------------------------------------------------
--- Server version	5.7.12-log
+-- Server version	5.7.17-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -30,17 +30,17 @@ CREATE TABLE `account` (
   `fullname` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
   `phone` varchar(45) DEFAULT NULL,
-  `number_id` varchar(45) DEFAULT NULL,
-  `e_wallet` varchar(45) DEFAULT NULL,
-  `vehicle_id` int(11) DEFAULT NULL,
-  `balance` float(11) NULL DEFAULT NULL,
-  `isActive` bit NOT NULL DEFAULT true,
-  `isEnable` bit NOT NULL DEFAULT true,
+  `numberId` varchar(45) DEFAULT NULL,
+  `eWallet` int(11) DEFAULT NULL,
+  `vehicleId` int(11) DEFAULT NULL,
+  `balance` float DEFAULT NULL,
+  `isActive` bit(1) NOT NULL DEFAULT b'1',
+  `isEnable` bit(1) NOT NULL DEFAULT b'1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`),
-  KEY `fk_account_vehicle_idx` (`vehicle_id`),
-  CONSTRAINT `fk_account_vehicle` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicle` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+  KEY `fk_account_vehicle_idx` (`vehicleId`),
+  CONSTRAINT `fk_account_vehicle` FOREIGN KEY (`vehicleId`) REFERENCES `vehicle` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -49,13 +49,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES 
-(1,'admin','admin',1,'Admin',NULL,NULL,NULL,NULL,NULL,NULL,1,1),
-(2,'hieunc','123',2,'Nguyễn Chí Hiếu',NULL,NULL,NULL,NULL,NULL,NULL,1,1),
-(3,'huylvq','123',2,'Lê Vuong Quốc Huy',NULL,NULL,NULL,NULL,NULL,NULL,1,1),
-(4,'tinpb','123',3,'Phạm Bảo Tín','tin@gmail.com','0903380457','012345678',NULL,1,50000,1,1),
-(5,'sonnv','123',3,'Nguyễn Việt Son','son@gmail.com','0909354974','025308080',NULL,2,70000,1,1),
-(6,'thanhth','123',3,'Trương Hữu Thành','thanh@gmail.com','0939354974','025251414',NULL,3,5000,1,1);
+INSERT INTO `account` VALUES (1,'admin','admin',1,'Admin',NULL,NULL,NULL,NULL,NULL,NULL,'',''),(2,'hieunc','123',2,'Nguyễn Chí Hiếu',NULL,NULL,NULL,NULL,NULL,NULL,'',''),(3,'huylvq','123',2,'Lê Vương Quốc Huy',NULL,NULL,NULL,NULL,NULL,NULL,'',''),(4,'tinpb','123',3,'Phạm Bảo Tín','tin@gmail.com','0903380457','012345678',NULL,1,40000,'',''),(5,'sonnv','123',3,'Nguyễn Việt Son','son@gmail.com','0909354974','025308080',NULL,2,70000,'',''),(6,'thanhth','123',3,'Trương Hữu Thành','thanh@gmail.com','0939354974','025251414',NULL,3,5000,'','');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -68,4 +62,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-28  3:25:11
+-- Dump completed on 2017-11-13  0:04:46
