@@ -100,22 +100,19 @@ function scrollToRow(transId, key) {
 		
 		window.location.replace(url);
 	}
-	
-	var selection = $("#table #" + transId);
-	
-	var jumpAndHighlight = {
-			jumpToRow: function(table, transId) {
-				table.page.jumpToData(transId, 1);
-				return jumpAndHighlight;
-			},
-			highlightRow: function(selection) {
-				$("tr[role='row']").removeClass("selectedRow");
-				selection.addClass("selectedRow");
-				return jumpAndHighlight;
-			}
-	};
-	
-	jumpAndHighlight.jumpToRow(table, transId).highlightRow(selection);
+
+	jumpToPage(table, transId);
 	
 	reportsObj.child(key).child('status').set('read');
+}
+
+function jumpToPage(table, transId) {
+	table.page.jumpToData(transId, 1);
+	return highlightRow(transId);
+}
+
+function highlightRow(transId) {
+	var selection = $("#table #" + transId);
+	$("tr[role='row']").removeClass("selectedRow");
+	selection.addClass("selectedRow");
 }

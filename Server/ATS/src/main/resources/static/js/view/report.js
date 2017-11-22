@@ -145,21 +145,8 @@ $(document)
                             if (typeof transactionIdRedirect !== 'undefined') {
                             	if (transactionIdRedirect != null || 
                             		transactionIdRedirect != "") {
-                            		var selection = $("#table #" + transactionIdRedirect);
-                                	
-                                	var jumpAndHighlight = {
-                                			jumpToRow: function(table, transactionIdRedirect) {
-                                				table.page.jumpToData(transactionIdRedirect, 1);
-                                				return jumpAndHighlight;
-                                			},
-                                			highlightRow: function(selection) {
-                                				$("tr[role='row']").removeClass("selectedRow");
-                                				selection.addClass("selectedRow");
-                                				return jumpAndHighlight;
-                                			}
-                                	};
-                                	
-                                	jumpAndHighlight.jumpToRow(table, transactionIdRedirect).highlightRow(selection);
+                            		
+                            		jumpToPage(table, transactionIdRedirect);
                                 	
                                 	firebase.database().ref().child('reports').child(keyRedirect).child('status').set('read');	
 								}
@@ -189,6 +176,17 @@ $(document)
             //     clearAddForm();
             // });
         });
+
+function jumpToPage(table, transactionIdRedirect) {
+	table.page.jumpToData(transactionIdRedirect, 1);
+	return highlightRow(transactionIdRedirect);
+}
+
+function highlightRow(transactionIdRedirect) {
+	var selection = $("#table #" + transactionIdRedirect);
+	$("tr[role='row']").removeClass("selectedRow");
+	selection.addClass("selectedRow");
+}
 
 /*
  * Contain ajax call to perfom update or delete a report
