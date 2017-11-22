@@ -26,4 +26,13 @@ public interface AccountRepos extends JpaRepository<Account, Integer> {
 	@Query(value = "SELECT * FROM account WHERE username = ?1 AND password = ?2", nativeQuery = true)
 	Account checkLoginFromDesktopApp(String username, String password);
 
+	@Modifying(clearAutomatically = true)
+	@Transactional
+	@Query(value = "update account set token = :token where username = :username", nativeQuery = true)
+	int updateToken(@Param("username") String username, @Param("token") String token);
+
+	@Query(value = "SELECT a.token FROM account a WHERE a.username = :username", nativeQuery = true)
+	String getTokenOfAccount(String username);
+
+
 }

@@ -170,5 +170,10 @@ public class LoginActivity extends AppCompatActivity {
         rs.execute(params, "otp", "sendOTP", "GET");
     }
 
+    public void CreateRegister(View view){
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
 
+        LoginActivity.this.finish();
+    }
 }

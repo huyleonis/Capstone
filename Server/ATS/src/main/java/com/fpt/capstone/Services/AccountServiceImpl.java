@@ -19,13 +19,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.validation.constraints.Null;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
  * @author hp
  */
 @Service
@@ -113,28 +113,34 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDTO insert(Account account) {
-
-        AccountDTO dto = null;
-
+    public void insert(String username, String password, String email, String phone, String numberId, String licensePlate) {
         try {
-            // neu user dang ki xe ma xe da co trong he thong
-            if (account.getVehicle() != null) {
-                Vehicle vehicle = vehicleRepos.findByLicensePlate(account.getVehicle().getLicensePlate());
-                if (vehicle != null) {
-                    account.setVehicle(vehicle);
-                }
-            }
+            Account account = new Account();
+            account.setUsername(username);
+            account.setPassword(password);
+            account.setRole(3);
+            account.setFullname(username);
+            account.setEmail(email);
+            account.setPhone(phone);
+            account.setNumberId(numberId);
+            account.seteWallet("0");
+            Vehicle vehicle = vehicleRepos.findByLicensePlate(licensePlate);
+            int vehicleId = vehicle.getId();
+            account.setVehicle(vehicle);
+            System.out.println("vehicle:" + vehicle.getId());
+            account.setBalance(0.0);
+            account.setActive(true);
+            account.setEnable(true);
+            account.setLoginStatus(false);
+            account.setToken("");
 
-            Account processedAccount = accountRepos.save(account);
-            if (processedAccount != null) {
-                dto = AccountDTO.convertFromEntity(processedAccount);
-            }
+            accountRepos.save(account);
+
+
         } catch (Exception e) {
             log.error(e.getMessage());
         }
 
-        return dto;
     }
 
     @Override
@@ -199,7 +205,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean updateToken(String username, String token) {
         int a = accountRepos.updateToken(username, token);
-        if (a > 0){
+        if (a > 0) {
             return true;
         }
         return false;
@@ -209,15 +215,26 @@ public class AccountServiceImpl implements AccountService {
     public boolean topupBalance(String username, double amount) {
 
         Account account = accountRepos.findByUsername(username);
-        
+
         if (account == null) {
             return false;
         }
-        
+
         double newBalance = account.getBalance() + amount;
         int sqlResult = accountRepos.updateBalance(account.getId(), newBalance);
-        
+
         return sqlResult > 0;
+    }
+
+    @Override
+    public boolean checkUsername(String username) {
+        Account account = accountRepos.findByUsername(username);
+
+        if (account != null) {
+            return true;
+        }
+
+        return false;
     }
 
 }

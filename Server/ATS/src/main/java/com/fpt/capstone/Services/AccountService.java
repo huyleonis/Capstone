@@ -26,7 +26,7 @@ public interface AccountService {
 
 	List<AccountDTO> getListAccount();
 
-	AccountDTO insert(Account account);
+	void insert(String username, String password, String email, String phone, String numberId, String licensePlate);
 
 	AccountDTO update(Account account);
 
@@ -37,4 +37,6 @@ public interface AccountService {
         boolean updateToken(String username, String token);
         
         boolean topupBalance(String username, double amount);
+
+        boolean checkUsername(String username);
 }
