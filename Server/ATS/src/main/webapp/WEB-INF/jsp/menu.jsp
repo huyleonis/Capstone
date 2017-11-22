@@ -69,6 +69,12 @@
                     <p>Report</p>
                 </a>
             </li>
+            <li>
+                <a href="/dump">
+                    <i class="pe-7s-news-paper"></i>
+                    <p>Dump</p>
+                </a>
+            </li>
             
         </ul>
     </div>

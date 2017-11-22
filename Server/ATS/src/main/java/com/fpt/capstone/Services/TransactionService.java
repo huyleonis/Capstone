@@ -41,4 +41,6 @@ public interface TransactionService {
     TransactionDTO updateReport(Transaction transaction);
 
     boolean delete(String id);
+    
+    List<TransactionDTO> getTransByVehicleIdAndTime(int vehicleId, Date createdTime);
 }
