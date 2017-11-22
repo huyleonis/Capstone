@@ -100,8 +100,8 @@ $(document)
                                 "data": "id"
                             },
                             {
-                                "data": "id"
-//                                "visible": false
+                                "data": "id",
+                                "visible": false
                                 // hide the column
                                 // processID
                             },

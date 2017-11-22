@@ -11,6 +11,7 @@ import com.fpt.capstone.Services.VehicleService;
 import com.fpt.capstone.Utils.TransactionStatus;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -23,10 +24,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 @RestController
 @RequestMapping("/transaction")
@@ -368,5 +371,43 @@ public class TransactionController {
         isSuccessful = transactionService.delete(transaction.getId());
 
         return (isSuccessful) ? "success" : "fail";
+    }
+    
+    @RequestMapping(value = "/getTransByLicPlateAndTime", method = RequestMethod.GET)
+    public String getTransByVehicleIdAndTime(@RequestParam(name = "vehicleId") int vehicleId, 
+    			@RequestParam(name = "createdTime") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date createdTime) {
+		
+    	List<TransactionDTO> dtos = transactionService
+    			.getTransByVehicleIdAndTime(vehicleId, createdTime);
+    	
+    	return new Gson().toJson(dtos);
+	}
+    
+    @RequestMapping(value = "/getDumpToPhoto")
+    @ResponseStatus(HttpStatus.OK)
+    public List<String> getDumpToPhoto(){
+
+        String basePath = context.getRealPath(".");
+        File folder = new File (basePath + "/WEB-INF/images/dumps");
+        File[] listOfFile = folder.listFiles();
+        List<String> listFile = new ArrayList<>();
+        if(folder.isDirectory()){
+            for(int i = 0; i < listOfFile.length; i++){
+                if(listOfFile[i].isFile()){
+                    System.out.println("File: " + listOfFile[i].getName());
+                    
+                    String str = listOfFile[i].getName();
+                    
+                    StringTokenizer st = new StringTokenizer(str, "_.");
+                    
+                    while(st.hasMoreElements()) {
+                    	System.out.println(st.nextElement());
+                    }
+                    
+                    listFile.add(listOfFile[i].getName());
+                }
+            }
+        }
+        return listFile;
     }
 }
