@@ -32,6 +32,8 @@ import com.fpt.capstone.Services.TransactionService;
 import com.fpt.capstone.Utils.BeaconType;
 import com.fpt.capstone.Utils.TransactionStatus;
 import com.google.gson.Gson;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/beacon")
@@ -54,9 +56,11 @@ public class BeaconController {
 
     @RequestMapping(value = "getBeacon/{uuid}/{major}/{minor}")
     @ResponseStatus(HttpStatus.OK)
-    public BeaconDTO getBeacon(@PathVariable String uuid,
+    public Object getBeacon(@PathVariable String uuid,
             @PathVariable String major, @PathVariable String minor) {
 
+        Map<String, String> result = new HashMap<>();
+        
         System.out.println("Get Beacon information: " + uuid + " - " + major + " - "
                 + minor);
         int iMajor = Integer.parseInt(major);
@@ -64,18 +68,19 @@ public class BeaconController {
 
         Beacon beaconEntity = beaconRepos.getBeacon(uuid, iMajor, iMinor);
         if (beaconEntity != null) {
+            
             BeaconDTO dto = BeaconDTO.convertFromEntity(beaconEntity);
+            result.put("type", dto.getType().getName());
+            
             System.out.println("Get beacon info - type " + dto.getType());
-            return dto;
+            
         } else {
-            BeaconDTO dto = new BeaconDTO();
-            dto.setId(0);
-            dto.setUuid(uuid);
-            dto.setMajor(iMajor);
-            dto.setMinor(iMinor);
-            dto.setType(BeaconType.BEACON_OTHER);
-            return dto;
+            result.put("type", BeaconType.BEACON_OTHER.getName());
+            
+            System.out.println("Get beacon info - type OTHER");
         }
+        
+        return result;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -83,12 +88,6 @@ public class BeaconController {
     public ModelAndView viewAccount() {
         ModelAndView m = new ModelAndView("beacon");
         return m;
-    }
-
-    @RequestMapping(value = "/get/{uuid}", method = RequestMethod.GET)
-    public BeaconDTO getBeacon(@PathVariable String uuid) {
-
-        return null;
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
@@ -131,6 +130,7 @@ public class BeaconController {
      * ứng thì trả về transaction ứng với hình, không thì trả về giá và hỏi
      * người dùng có tạo transaction hay không.
      * @param stationId
+     * @param username
      * @param licensePlate
      * @return 
      */
@@ -159,6 +159,7 @@ public class BeaconController {
      * trạng
      *
      * @param laneId
+     * @param transactionId
      * @param idTransaction
      * @return
      */

@@ -167,7 +167,7 @@ public class AccountController {
 		AccountDTO dto = accountService.getAccountByUsername(username);
 		String accToken = dto.getToken();
 
-		if(accToken.equals(token)){
+		if(accToken != null && accToken.equals(token)){
 			return true;
 		}
 		return false;

@@ -216,14 +216,17 @@ public class BeaconService extends Service {
                     try {
                         JSONObject infos = new JSONObject(result);
 
+
                         String type = infos.getString("type");
-                        int stationId = infos.getInt("stationId");
-                        int laneId = infos.getInt("laneId");
+
+
                         switch (type) {
                             case "BEACON_PAYMENT":
+                                int stationId = infos.getInt("stationId");
                                 getPaymentBeacon(stationId);
                                 break;
                             case "BEACON_RESULT":
+                                int laneId = infos.getInt("laneId");
                                 getResultBeacon(laneId);
                                 break;
                         }

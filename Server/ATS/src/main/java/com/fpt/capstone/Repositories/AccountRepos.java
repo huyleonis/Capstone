@@ -11,19 +11,23 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AccountRepos extends JpaRepository<Account, Integer> {
 
-	@Query(value = "select licensePlate from vehicle where id = "
-			+ "(select vehicleId from account where username = ?1)", nativeQuery = true)
-	String getLicensePlateOfAccount(String username);
+    @Query(value = "select licensePlate from vehicle where id = "
+            + "(select vehicleId from account where username = ?1)", nativeQuery = true)
+    String getLicensePlateOfAccount(String username);
 
-	@Query(value = "SELECT * FROM account a WHERE a.username = :username", nativeQuery = true)
-	Account findByUsername(@Param("username") String username);
+    @Query(value = "SELECT * FROM account a WHERE a.username = :username", nativeQuery = true)
+    Account findByUsername(@Param("username") String username);
 
-	@Modifying(clearAutomatically = true)
-	@Transactional
-	@Query(value = "update account set balance = :newBalance where id = :id", nativeQuery = true)
-	int updateBalance(@Param("id") int id, @Param("newBalance") double newBalance);
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query(value = "update account set balance = :newBalance where id = :id", nativeQuery = true)
+    int updateBalance(@Param("id") int id, @Param("newBalance") double newBalance);
 
-	@Query(value = "SELECT * FROM account WHERE username = ?1 AND password = ?2", nativeQuery = true)
-	Account checkLoginFromDesktopApp(String username, String password);
+    @Query(value = "SELECT * FROM account WHERE username = ?1 AND password = ?2", nativeQuery = true)
+    Account checkLoginFromDesktopApp(String username, String password);
 
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query(value = "update account set token = :token where username = :username", nativeQuery = true)
+    int updateToken(@Param("username") String username, @Param("token") String token);
 }
