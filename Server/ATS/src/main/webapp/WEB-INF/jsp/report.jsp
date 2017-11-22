@@ -87,6 +87,22 @@
                                                 <label id="nameErrorUpdate" class="error"></label>
                                                 <label class="control-label">Correct License Plate: </label>                    
                                                 <input type="text" class="form-control" id="update-form-correct-licensePlate" required />
+                                                <label class="control-label">List transaction:</label>
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">#</th>
+                                                            <th>id</th>
+                                                            <th>License Plate</th>
+                                                            <th>Username</th>
+                                                            <th>Created Time</th>
+                                                            <th>Status</th>
+                                                            
+                                                            <th class="text-right"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    
+                                                </table>
                                             </div>
 
                                         </div>
@@ -132,14 +148,15 @@
                             <thead>
                                 <tr>
                                     <th class="text-center" style="font-weight: bolder">#</th>
-                                    <th>id</th>
+                                    <th class="text-center" style="font-weight: bolder">id </th>
                                     <th class="text-center" style="font-weight: bolder">License Plate</th>
                                     <th class="text-center" style="font-weight: bolder">Created Time</th>
                                     <th class="text-center" style="font-weight: bolder">Status</th>
                                     <th class="text-center" style="font-weight: bolder">Username</th>
                                     <th class="text-center" style="font-weight: bolder">Lane ID</th>
                                     <th class="text-center" style="font-weight: bolder">Station ID</th>
-                                    <th class="text-center" style="font-weight: bolder">Update/Delete</th>
+                                    <th class="text-center" style="font-weight: bolder">Photo</th>
+                                    <th class="text-center" style="font-weight: bolder"></th>
                                         <%--<th class="pull-left">Delete/Update</th>--%>
                                 </tr>
                             </thead>
