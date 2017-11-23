@@ -97,7 +97,7 @@ $(document)
                             // data for the cell from the
                             // returned list
                             {
-                                "data": "id"
+                                "data": null
                             },
                             {
                                 "data": "id",
