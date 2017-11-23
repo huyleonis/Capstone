@@ -12,9 +12,7 @@
             <div class="main-panel">
                 <c:import url="navbar.jsp"/>
                 <div class="content">
-                    <div class="alert alert-success" id="alert" style="display: none">
-                        <p id="text"></p>
-                    </div>
+                    
                     <div class="container-fluid">
 
                         <button data-name="1510500714164"
@@ -60,9 +58,9 @@
                             </div>
                         </div>
                         <%-- End div add modal --%>
-                        <div id="update-modal" class="modal fade" role="dialog"
+                        <div id="resolve-modal" class="modal fade" role="dialog"
                              data-backdrop="false">
-                            <div class="modal-dialog">
+                            <div class="modal-dialog modal-lg">
 
                                 <%--<!-- Modal content-->--%>
                                 <%--<!-- Update Form using ajax !-->--%>
@@ -75,20 +73,21 @@
                                         <div class="modal-body">
 
                                             <div class="form-group">
-                                                <input class="form-control hidden" id="update-form-id" readonly />
-                                            </div>
-
-                                            <div class="form-group">
+                                            	<input class="form-control hidden" id="update-form-id" hidden="" readonly />
                                                 <label class="control-label">Vehicle Photo:</label>
                                                 <img id="update-form-photo" class="thumbnail" height="300" width="550" />
                                                 <br/>
                                                 <label class="control-label">License Plate Recognized: </label>
-                                                <input type="text" class="form-control" id="update-form-licensePlate" required readonly/>
+                                                <input type="text" class="form-control" id="update-form-licensePlate" readonly/>
                                                 <label id="nameErrorUpdate" class="error"></label>
                                                 <br/>
                                                 <label class="control-label">Correct License Plate: </label>                    
                                                 <input type="text" class="form-control" id="update-form-correct-licensePlate" required />
-                                                <button onclick="myFunction()">View Transaction</button>
+                                                <br/>
+                                                <label class="control-label">Date tIme: </label>                    
+                                                <input type="text" class="form-control" id="update-form-dateTime" readonly/>
+                                                <br/>
+                                                <button onclick="myFunction()" type="submit" class="btn btn-success">View Transaction</button>
                                                 
                                                 
                                                 <table class="table table-striped" id="table1">
@@ -108,8 +107,8 @@
 
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" id="update" class="btn btn-success">Save</button>
-                                            <button type="button" class="btn btn-default"
+                                        	<button class='btn btn-primary' type="submit" onclick='submitConfirm()'>Confirm</button>
+                                            <button onclick = "clearUpdateForm()" type="button" class="btn btn-default"
                                                     data-dismiss="modal">Close</button>
                                         </div>
                                     </div>

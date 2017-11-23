@@ -264,3 +264,8 @@ function clearUpdateForm() {
     $("#update-form-correct-licensePlate").val("");
     $("#delete-modal").modal("hide");
 }
+
+function a() {
+	
+	
+}

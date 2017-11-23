@@ -289,26 +289,74 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public List<TransactionDTO> getTransByLicPlateAndTime(String licensePlate, Date createdTime) {
+	public List<TransactionDTO> getTransByLicPlateAndTime(String licensePlate, String createdTime) {
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		List<TransactionDTO> dtos = new ArrayList<>();
-		
+
 		Vehicle vehicle = vehicleRepos.findByLicensePlate(licensePlate);
-		if (vehicle!=null) {
-			List<Transaction> transactions = transactionRepos
-					.findByVehicleIdAndTime(vehicle.getId(), sdf.format(createdTime));
-			
+		if (vehicle != null) {
+			List<Transaction> transactions = transactionRepos.findByVehicleIdAndTime(vehicle.getId(), createdTime);
+
 			if (transactions != null) {
-				
+
 				for (Transaction transaction : transactions) {
 					TransactionDTO dto = TransactionDTO.convertFromEntity(transaction);
 					dtos.add(dto);
 				}
 			}
 		}
-		
+
 		return dtos;
+	}
+
+	@Override
+	public boolean resolveReport(String transId, String transIdError) {
+
+		Transaction transError = transactionRepos.findOne(transIdError);
+
+		Transaction resolveTrans = transactionRepos.findOne(transId);
+		resolveTrans.setPhoto(transError.getPhoto());
+
+		Transaction processedTrans = transactionRepos.save(resolveTrans);
+		if (processedTrans != null) {
+			transactionRepos.delete(transIdError);
+			return true;
+		}
+
+		return false;
+	}
+	
+	@Override
+	public boolean updatePhoto(String transId, String photo) {
+
+		Transaction resolveTrans = transactionRepos.findOne(transId);
+		resolveTrans.setPhoto(photo);
+
+		Transaction processedTrans = transactionRepos.save(resolveTrans);
+		if (processedTrans != null) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean confirmReport(String transId, String licensePlate) {
+
+		Vehicle vehicle = vehicleRepos.findByLicensePlate(licensePlate);
+		if (vehicle != null) {
+			Transaction transaction = transactionRepos.findOne(transId);
+			
+			transaction.setVehicle(vehicle);
+			transaction.setStatus(TransactionStatus.TRANS_NOTPAY.getName());
+			
+			Transaction processedTrans = transactionRepos.save(transaction);
+			if (processedTrans != null) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }
