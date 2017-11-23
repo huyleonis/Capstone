@@ -24,6 +24,7 @@ public class ConstantValues {
     public static final String RESULT_COLOR_PARAM = "resultColor";
     public static final String PHOTO_PARAM = "photo";
     public static final String IS_CREATED_PARAM = "isCreated";
+    public static final String EXIT_PARAM = "isExit";
 
     public static final String BEACON_PAYMENT_ACTION = "BEACON_PAYMENT";
     public static final String BEACON_RESULT_ACTION = "BEACON_RESULT";

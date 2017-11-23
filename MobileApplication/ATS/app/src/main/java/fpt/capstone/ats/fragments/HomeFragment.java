@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,8 @@ public class HomeFragment extends Fragment {
     private FragmentManager fm;
     private PaymentResultFragment resultFragment;
     private ConfirmPaymentFragment confirmFragment;
+    private ExitFragment exitFragment;
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -143,6 +146,25 @@ public class HomeFragment extends Fragment {
                 hideConfirmFragment();
                 hideResultFragment();
             }
+
+            boolean exit = bundle.getBoolean(ConstantValues.EXIT_PARAM, false);
+            if (exit) {
+                setUpDefaultInfo(null);
+                exitFragment = ExitFragment.newInstance();
+                fm.beginTransaction().replace(R.id.frame_dialog, exitFragment).commit();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (exitFragment != null && exitFragment.isVisible()) {
+                            fm.beginTransaction().remove(exitFragment).commit();
+                        }
+                    }
+                }, 3000);
+                bundle.putBoolean(ConstantValues.EXIT_PARAM, false);
+            }
+
+            this.getActivity().getIntent().putExtras(bundle);
         }
     }
 

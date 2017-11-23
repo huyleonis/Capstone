@@ -89,8 +89,8 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
             statusText = "Thanh toán Thành công";
         } else if (status.equals("Finish")) {
             holder.txtStatus.setTextColor(Color.parseColor("#0392cf"));
-            statusText = "Hoàn thành";
-        } else if (status.equals("Failed")) {
+            statusText = "Kết thúc giao dịch";
+        } else if (status.equals("Failed") || status.equals("Failed Paased")) {
             holder.txtStatus.setTextColor(Color.parseColor("#ee4035"));
             statusText = "Thanh toán Thất bại";
         } else if (status.equals("Initial") || status.equals("Not pay")) {

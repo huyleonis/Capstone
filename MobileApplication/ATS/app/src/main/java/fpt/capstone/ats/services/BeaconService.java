@@ -55,6 +55,7 @@ public class BeaconService extends Service {
     NotificationManager notificationManager;
     private BeaconManager bm;
     private String currentBeacon = null;
+    private String currentType = null;
     private String username;
 
 
@@ -92,7 +93,6 @@ public class BeaconService extends Service {
             @Override
             public void onServiceReady() {
                 Log.w(TAG, "Start ranging and monitoring beacon");
-                //bm.startRanging(defaultRegion);
                 bm.startMonitoring(defaultRegion);
             }
         });
@@ -116,28 +116,6 @@ public class BeaconService extends Service {
         }
     };
 
-    private void setUpRangingBeacon() {
-
-        bm.setRangingListener(new BeaconManager.BeaconRangingListener() {
-            @Override
-            public void onBeaconsDiscovered(BeaconRegion beaconRegion, List<Beacon> beacons) {
-
-                Log.w(TAG, "Detect " + beacons.size() + " beacon(s)");
-                if (beacons.size() == 0) {
-                    currentBeacon = null;
-                }
-
-                // Lấy ra hết những beacon mà detect được
-                for (Beacon beacon: beacons) {
-                    String uuid = beacon.getProximityUUID().toString();
-                    int major = beacon.getMajor();
-                    int minor = beacon.getMinor();
-                    String identifier = uuid + ";" + major + ";" + minor;
-                    processBeacon(uuid, major, minor, identifier);
-                }
-            }
-        });
-    }
 
     private void setUpMonitorBeacon() {
         bm.setMonitoringListener(new BeaconManager.BeaconMonitoringListener() {
@@ -155,49 +133,31 @@ public class BeaconService extends Service {
                     int minor = beacon.getMinor();
                     String identifier = uuid + ";" + major + ";" + minor;
 
-                    // Kiểm tra xem có phải beacon mới hay ko?
-                    if (!identifier.equals(currentBeacon)) {
-                        Log.w(TAG, "Detect one new beacon");
-
-                        currentBeacon = identifier; // Ghi nhận beacon hiện tại
-
-
-                        RequestServer rs = new RequestServer();
-                        rs.delegate = new RequestServer.RequestResult() {
-                            @Override
-                            public void processFinish(String result) {
-                                try {
-                                    JSONObject infos = new JSONObject(result);
-
-                                    String type = infos.getString("type");
-                                    int stationId = infos.getInt("stationId");
-                                    int laneId = infos.getInt("laneId");
-                                    switch (type) {
-                                        case "BEACON_PAYMENT":
-                                            getPaymentBeacon(stationId);
-                                            break;
-                                        case "BEACON_RESULT":
-                                            getResultBeacon(laneId);
-                                            break;
-                                    }
-                                } catch(JSONException e) {
-                                    Log.e(TAG, "JSON Exception: " + e.getMessage() + " - result: " + result);
-                                }
-                            }
-                        };
-                        List<String> params = new ArrayList<String>();
-                        params.add(uuid);
-                        params.add(major + "");
-                        params.add(minor + "");
-
-                        rs.execute(params, "beacon", "getBeacon", "GET");
-                    }
+                    processBeacon(uuid, major, minor, identifier);
                 }
             }
 
             @Override
             public void onExitedRegion(BeaconRegion beaconRegion) {
+                Log.w(TAG, "Exit beacon region");
+                if (currentType.equals("BEACON_RESULT")) {
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(ConstantValues.INSIDE_PARAM, false);
+                    bundle.putString(ConstantValues.STATUS_PARAM, "Ra khỏi khu vực trạm thu phí");
+                    bundle.putInt(ConstantValues.STAGE_PARAM, 4);
+                    bundle.putBoolean(ConstantValues.EXIT_PARAM, true);
 
+                    if (isForeground()) { //Nếu ứng dụng đang chạy trên cùng
+                        Intent broadcastIntent = new Intent();
+                        broadcastIntent.setAction(ConstantValues.BEACON_EXIT_ACTION);
+                        broadcastIntent.putExtras(bundle);
+                        sendBroadcast(broadcastIntent);
+
+                    } else { // Nếu ứng dụng đang không được mở
+                        Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);
+                        resultIntent.putExtras(bundle);
+                    }
+                }
             }
         });
     }
@@ -216,14 +176,13 @@ public class BeaconService extends Service {
                     try {
                         JSONObject infos = new JSONObject(result);
 
-
                         String type = infos.getString("type");
-
+                        currentType = type;
 
                         switch (type) {
                             case "BEACON_PAYMENT":
-                                int stationId = infos.getInt("stationId");
-                                getPaymentBeacon(stationId);
+                                JSONObject paymentBeaconInfo = infos.getJSONObject("info");
+                                processPaymentBeaconInfo(paymentBeaconInfo);
                                 break;
                             case "BEACON_RESULT":
                                 int laneId = infos.getInt("laneId");
@@ -239,6 +198,7 @@ public class BeaconService extends Service {
             params.add(uuid);
             params.add(major + "");
             params.add(minor + "");
+            params.add(username);
 
             rs.execute(params, "beacon", "getBeacon", "GET");
         }
@@ -289,58 +249,38 @@ public class BeaconService extends Service {
     }
 
     /**
-     * Method gọi server lấy dữ liệu của Beacon Payment (Beacon I)
-     * @param stationId mã trạm mà Beacon quy định
+     * Sau khi lấy dc beacon và là beacon payment thì tự trigger beacon payment và hàm này để xứ lý
+     * json sau khi trigger beacon payment trả về
+     * @param infos
+     * @throws JSONException
      */
-    private void getPaymentBeacon(int stationId) {
-        Log.w(TAG, "Detected beacon is Payment Beacon in station [id] = [" + stationId + "]");
-
-        List<String> params = new ArrayList<>();
-        params.add(stationId + "");
-        params.add(username);
-
-        RequestServer rs = new RequestServer();
-        rs.delegate = new RequestServer.RequestResult() {
-            @Override
-            public void processFinish(String result) {
-                try {
-                    JSONObject infos = new JSONObject(result);
-
-                    String nameStation;
-                    String idStation;
-                    String zone;
-                    String photo = "";
-                    String transactionId = "";
-                    double price;
-                    boolean isCreated;
+    private void processPaymentBeaconInfo(JSONObject infos) throws JSONException {
+        String nameStation;
+        String idStation;
+        String zone;
+        String photo = "";
+        String transactionId = "";
+        double price;
+        boolean isCreated;
 
 
-                    if (infos.has("photo")) { //transaction dc tạo bởi camera
-                        nameStation = infos.getString("stationName");
-                        idStation = infos.getString("stationId");
-                        zone = infos.getString("zone");
-                        price = infos.getDouble("price");
-                        photo = infos.getString("photo");
-                        transactionId = infos.getString("id");
-                        isCreated = true;
-                    } else { //chỉ lấy giá bình thường
-                        nameStation = infos.getString("nameStation");
-                        idStation = infos.getString("stationId");
-                        zone = infos.getString("zoneStation");
-                        price = infos.getDouble("price");
-                        isCreated = false;
-                    }
+        if (infos.has("photo")) { //transaction dc tạo bởi camera
+            nameStation = infos.getString("stationName");
+            idStation = infos.getString("stationId");
+            zone = infos.getString("zone");
+            price = infos.getDouble("price");
+            photo = infos.getString("photo");
+            transactionId = infos.getString("id");
+            isCreated = true;
+        } else { //chỉ lấy giá bình thường
+            nameStation = infos.getString("nameStation");
+            idStation = infos.getString("stationId");
+            zone = infos.getString("zoneStation");
+            price = infos.getDouble("price");
+            isCreated = false;
+        }
 
-
-                    processPaymentBeaconInfo(nameStation, idStation, zone, price, isCreated, photo, transactionId);
-                } catch (JSONException e) {
-                    Log.e(TAG, "JSON Exception: " + e.getMessage() + " - result: " + result);
-                }
-            }
-        };
-
-        rs.execute(params, "beacon", "payment", "GET");
-
+        processPaymentBeaconInfo(nameStation, idStation, zone, price, isCreated, photo, transactionId);
     }
 
     /**
@@ -395,9 +335,17 @@ public class BeaconService extends Service {
 
         final SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
 
+        String transId = setting.getString(ConstantValues.TRANSACTION_ID_PARAM, "");
+
+        Log.w(TAG, "Get Result beacon, check transaction id = <"+transId+">");
+        if (transId.isEmpty()) {
+            Log.w(TAG, "Get Result Beacon not trigger because there is no transaction id");
+            return;
+        }
+
         List<String> params = new ArrayList<>();
         params.add(laneId + "");
-        params.add(setting.getString(ConstantValues.TRANSACTION_ID_PARAM, ""));
+        params.add(transId);
 
         RequestServer rs = new RequestServer();
         rs.delegate = new RequestServer.RequestResult() {
@@ -418,7 +366,7 @@ public class BeaconService extends Service {
      */
     private void processResultBeacon() {
         Bundle bundle = new Bundle();
-        bundle.putBoolean(ConstantValues.INSIDE_PARAM, true);
+        bundle.putBoolean(ConstantValues.INSIDE_PARAM, false);
         bundle.putString(ConstantValues.STATUS_PARAM, "Đang kiểm tra kết quả giao dịch");
         bundle.putInt(ConstantValues.STAGE_PARAM, 2);
 

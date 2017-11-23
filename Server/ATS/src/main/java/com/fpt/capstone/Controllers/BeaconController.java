@@ -54,12 +54,12 @@ public class BeaconController {
     @Autowired
     private AccountRepos accountRepos;
 
-    @RequestMapping(value = "getBeacon/{uuid}/{major}/{minor}")
+    @RequestMapping(value = "getBeacon/{uuid}/{major}/{minor}/{username}")
     @ResponseStatus(HttpStatus.OK)
     public Object getBeacon(@PathVariable String uuid,
-            @PathVariable String major, @PathVariable String minor) {
+            @PathVariable String major, @PathVariable String minor, @PathVariable String username) {
 
-        Map<String, String> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
         
         System.out.println("Get Beacon information: " + uuid + " - " + major + " - "
                 + minor);
@@ -67,16 +67,18 @@ public class BeaconController {
         int iMinor = Integer.parseInt(minor);
 
         Beacon beaconEntity = beaconRepos.getBeacon(uuid, iMajor, iMinor);
-        if (beaconEntity != null) {
-            
+        if (beaconEntity != null) {            
             BeaconDTO dto = BeaconDTO.convertFromEntity(beaconEntity);
-            result.put("type", dto.getType().getName());
-            
+            result.put("type", dto.getType().getName());            
             System.out.println("Get beacon info - type " + dto.getType());
+            if (dto.getType() == BeaconType.BEACON_PAYMENT) {
+                result.put("info", this.triggerBeaconPayment(dto.getStationId(), username));                    
+            } else if (dto.getType() == BeaconType.BEACON_RESULT) {
+                result.put("laneId", dto.getLaneId());
+            }
             
         } else {
-            result.put("type", BeaconType.BEACON_OTHER.getName());
-            
+            result.put("type", BeaconType.BEACON_OTHER.getName());            
             System.out.println("Get beacon info - type OTHER");
         }
         

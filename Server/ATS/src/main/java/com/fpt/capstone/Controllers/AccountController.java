@@ -38,138 +38,141 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/account")
 public class AccountController {
 
-	@Autowired
-	private AccountService accountService;
-        
-        @Autowired
-        private ServletContext context;
+    @Autowired
+    private AccountService accountService;
 
-	@RequestMapping(method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	public ModelAndView viewAccount() {
-		ModelAndView m = new ModelAndView("user");
-		return m;
-	}
+    @Autowired
+    private ServletContext context;
 
-	@RequestMapping(value = "/getListAccount", method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	public String getListAccount() throws JsonProcessingException {
-		// ObjectMapper mapper = new ObjectMapper();
-		List<AccountDTO> list = accountService.getListAccount();
-		return new Gson().toJson(list);
-	}
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public ModelAndView viewAccount() {
+        ModelAndView m = new ModelAndView("user");
+        return m;
+    }
 
-	/**
-	 * Get account info by username
-	 * 
-	 * @param username
-	 * @return
-	 */
-	@RequestMapping(value = "/get/{username}", method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	public AccountDTO getAccountByUsername(@PathVariable String username) {
-		AccountDTO acc = accountService.getAccountByUsername(username);
+    @RequestMapping(value = "/getListAccount", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public String getListAccount() throws JsonProcessingException {
+        // ObjectMapper mapper = new ObjectMapper();
+        List<AccountDTO> list = accountService.getListAccount();
+        return new Gson().toJson(list);
+    }
 
-		return acc;
-	}
+    /**
+     * Get account info by username
+     *
+     * @param username
+     * @return
+     */
+    @RequestMapping(value = "/get/{username}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public AccountDTO getAccountByUsername(@PathVariable String username) {
+        AccountDTO acc = accountService.getAccountByUsername(username);
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@RequestBody Account account) {
+        return acc;
+    }
 
-		boolean isSuccessful = false;
-		
-		// system will generate password automatically
-		account.setPassword("123");
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public String create(@RequestBody Account account) {
 
-		AccountDTO dto = accountService.insert(account);
+        boolean isSuccessful = false;
 
-		if (dto != null) {
-			isSuccessful = true;
-		}
+        // system will generate password automatically
+        account.setPassword("123");
 
-		return (isSuccessful) ? "success" : "fail";
-	}
+        AccountDTO dto = accountService.insert(account);
 
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@RequestBody Account account) {
-
-		boolean isSuccessful = false;
-
-		AccountDTO dto = accountService.update(account);
-
-		if (dto != null) {
-			isSuccessful = true;
-		}
-
-		return (isSuccessful) ? "success" : "fail";
-	}
-
-        @RequestMapping(value = "/login", method = RequestMethod.POST)
-        public Object checkLogin(@RequestParam(name = "username") String username,
-                @RequestParam(name = "password") String password) {     
-                        
-            Map<String, String> map = new HashMap<>();            
-            String result = accountService.checkLogin(username, password);            
-            map.put("result", result);
-            
-            String basePath = context.getRealPath(".");
-            
-            if (result.equals("Success")) {
-                AccountDTO account = accountService.getAccountByUsername(username);
-                map.put("fullname", account.getFullname());
-                try {
-                    OTPUtils.sendOTP(account.getPhone(), username, basePath);
-                    
-                    Timer timer = new Timer();
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {                            
-                            OTPUtils.deleteFileOTP(username, basePath);
-                        }
-                    }, 1000*60*5);
-                } catch (IOException ex) {
-                    Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
-                    ex.printStackTrace();
-                }
-            }        
-
-            return map;
-        }
-        
-        @RequestMapping(value = "/otp", method = RequestMethod.POST)
-        public Object checkOTPForLogin(@RequestParam("username") String username,
-                @RequestParam(name = "licensePlate") String licensePlate,
-                @RequestParam(name = "OTP") String otp) { 
-            
-            boolean checkResult = accountService.checkLicensePlate(username, licensePlate);
-            
-            if (!checkResult) {
-                return "License Plate is invalid";
-            }
-            
-            String basePath = context.getRealPath(".");
-            
-            String otpCreated = OTPUtils.getOtpNumber(username, basePath);
-            OTPUtils.deleteFileOTP(username, basePath);
-            if (otpCreated == null || !otpCreated.equals(otp)) {
-                return "OTP is invalid";
-            }
-			String randomToken = OTPUtils.randomToken();
-			boolean updateToken = accountService.updateToken(username, randomToken);
-			if(!updateToken){
-				return "Update token is invalid";
-			}
-			return "Success= " + randomToken;
+        if (dto != null) {
+            isSuccessful = true;
         }
 
-	@RequestMapping(value = "/checkToken", method = RequestMethod.POST)
-	public boolean checkToken(@RequestParam String username, @RequestParam String token){
-		AccountDTO dto = accountService.getAccountByUsername(username);
-		String accToken = dto.getToken();
+        return (isSuccessful) ? "success" : "fail";
+    }
 
-		if(accToken != null && accToken.equals(token)){
-			return true;
-		}
-		return false;
-	}
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String update(@RequestBody Account account) {
+
+        boolean isSuccessful = false;
+
+        AccountDTO dto = accountService.update(account);
+
+        if (dto != null) {
+            isSuccessful = true;
+        }
+
+        return (isSuccessful) ? "success" : "fail";
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public Object checkLogin(@RequestParam(name = "username") String username,
+            @RequestParam(name = "password") String password) {
+
+        Map<String, String> map = new HashMap<>();
+        String result = accountService.checkLogin(username, password);
+        map.put("result", result);
+
+        String basePath = context.getRealPath(".");
+
+        if (result.equals("Success")) {
+            AccountDTO account = accountService.getAccountByUsername(username);
+            map.put("fullname", account.getFullname());
+            try {
+                OTPUtils.sendOTP(account.getPhone(), username, basePath);
+
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        OTPUtils.deleteFileOTP(username, basePath);
+                    }
+                }, 1000 * 60 * 5);
+            } catch (IOException ex) {
+                Logger.getLogger(AccountController.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
+            }
+        }
+
+        return map;
+    }
+
+    @RequestMapping(value = "/otp", method = RequestMethod.POST)
+    public Object checkOTPForLogin(@RequestParam("username") String username,
+            @RequestParam(name = "licensePlate") String licensePlate,
+            @RequestParam(name = "OTP") String otp) {
+
+        boolean checkResult = accountService.checkLicensePlate(username, licensePlate);
+
+        if (!checkResult) {
+            return "License Plate is invalid";
+        }
+
+        String basePath = context.getRealPath(".");
+
+        String otpCreated = OTPUtils.getOtpNumber(username, basePath);
+        OTPUtils.deleteFileOTP(username, basePath);
+        if (otpCreated == null || !otpCreated.equals(otp)) {
+            return "OTP is invalid";
+        }
+        String randomToken = OTPUtils.randomToken();
+        boolean updateToken = accountService.updateToken(username, randomToken);
+        if (!updateToken) {
+            return "Update token is invalid";
+        }
+        return "Success= " + randomToken;
+    }
+
+    @RequestMapping(value = "/checkToken", method = RequestMethod.POST)
+    public String checkToken(@RequestParam String username, @RequestParam String token) {
+        System.out.println("Check token for " + username + " token = " + token);
+        AccountDTO dto = accountService.getAccountByUsername(username);
+        String accToken = dto.getToken();
+        System.out.println("accToken = " + accToken);
+
+        if (accToken != null && accToken.equals(token)) {
+            System.out.println("Return trueeeee");
+            return "true";
+        }
+        return "false";
+    }
 }

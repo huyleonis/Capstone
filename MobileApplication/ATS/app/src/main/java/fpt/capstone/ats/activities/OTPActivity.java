@@ -128,7 +128,7 @@ public class OTPActivity extends AppCompatActivity {
                             })
                             .create().show();
                 } else if (result.startsWith("Success")) {
-                    String randomToken = result.substring(8, result.length());
+                    String randomToken = result.substring(9, result.length());
                     startServiceAndMainActivity(username, randomToken);
                 } else {
                     Toast.makeText(OTPActivity.this, result, Toast.LENGTH_LONG).show();

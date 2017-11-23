@@ -254,6 +254,9 @@ public class MainActivity extends AppCompatActivity {
 
                     String idTrans = infos.getString("id");
                     setting.edit().putString(ConstantValues.TRANSACTION_ID_PARAM, idTrans).commit();
+
+                    Log.w(TAG, "After make payment, trans id = " + setting.getString(ConstantValues.TRANSACTION_ID_PARAM, ""));
+
                 } catch (JSONException e) {
                     Log.e("Make Payment", e.getMessage());
                 }
@@ -275,9 +278,9 @@ public class MainActivity extends AppCompatActivity {
 
             rs.execute(params, "transaction", "makePayment", "GET");
             homeFragment.updateStatusOfTransaction("đang thanh toán phí...");
-
-            setting.edit().putString("IdStation", "").putBoolean("isCreated", false).commit();
         }
+
+        setting.edit().putString("IdStation", "").putBoolean("isCreated", false).commit();
 
     }
 

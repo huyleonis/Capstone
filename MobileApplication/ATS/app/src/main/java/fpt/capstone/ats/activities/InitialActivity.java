@@ -21,6 +21,7 @@ import java.util.HashMap;
 
 import fpt.capstone.ats.R;
 import fpt.capstone.ats.app.AtsApplication;
+import fpt.capstone.ats.services.BeaconService;
 import fpt.capstone.ats.utils.ConstantValues;
 import fpt.capstone.ats.utils.RequestServer;
 
@@ -85,20 +86,25 @@ public class InitialActivity extends AppCompatActivity {
         //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
         final boolean hasLoggedIn = setting.getBoolean("hasLoggedIn", false);
         final String username = setting.getString("Username", "");
+        String token = setting.getString("token", "");
+
         RequestServer rs = new RequestServer();
         rs.delegate = new RequestServer.RequestResult() {
             @Override
             public void processFinish(String result){
+                Log.w("INITIAL_ACTIVITY", "check token result = " + result );
                 if(result.equals("true")){
-                    if(hasLoggedIn && !username.isEmpty()) {
-                        //Go directly to main activity.
-                        Intent intent = new Intent(InitialActivity.this, MainActivity.class);
-                        startActivity(intent);
-                    } else {
-                        //Go to Login activity.
-                        Intent intent = new Intent(InitialActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                    }
+                    //Go directly to main activity.
+                    Intent intent = new Intent(InitialActivity.this, MainActivity.class);
+                    startActivity(intent);
+
+                    Intent serviceIntent = new Intent(InitialActivity.this, BeaconService.class);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString(ConstantValues.USERNAME_PARAM, username);
+                    serviceIntent.putExtras(bundle);
+
+                    startService(serviceIntent);
                 } else{
                     //Go to Login activity.
                     Intent intent = new Intent(InitialActivity.this, LoginActivity.class);
@@ -111,11 +117,19 @@ public class InitialActivity extends AppCompatActivity {
         };
 
 
-        String token = setting.getString("token", "");
-        HashMap<String,String> params = new HashMap();
-        params.put("username", username);
-        params.put("token", token);
-        rs.execute(params, "account", "checkToken", "POST");
+        if(hasLoggedIn && !username.isEmpty()) {
+            Log.w("INITIAL_ACTIVITY", "check token = " + token );
+            HashMap<String,String> params = new HashMap();
+            params.put("username", username);
+            params.put("token", token);
+            rs.execute(params, "account", "checkToken", "POST");
+        } else {
+            //Go to Login activity.
+            Intent intent = new Intent(InitialActivity.this, LoginActivity.class);
+            startActivity(intent);
+            InitialActivity.this.finish();
+        }
+
     }
 
 
