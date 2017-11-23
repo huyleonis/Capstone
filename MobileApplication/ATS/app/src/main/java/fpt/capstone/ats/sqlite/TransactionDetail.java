@@ -17,4 +17,5 @@ public interface TransactionDetail {
     String VEHICLE_TYPE = "vehicle_type";
     String TYPE = "type";
     String LAST_MODIFIED = "last_modified";
+    String PHOTO = "photo";
 }

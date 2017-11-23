@@ -164,13 +164,10 @@ public class AccountController {
 
     @RequestMapping(value = "/checkToken", method = RequestMethod.POST)
     public String checkToken(@RequestParam String username, @RequestParam String token) {
-        System.out.println("Check token for " + username + " token = " + token);
         AccountDTO dto = accountService.getAccountByUsername(username);
         String accToken = dto.getToken();
-        System.out.println("accToken = " + accToken);
 
         if (accToken != null && accToken.equals(token)) {
-            System.out.println("Return trueeeee");
             return "true";
         }
         return "false";

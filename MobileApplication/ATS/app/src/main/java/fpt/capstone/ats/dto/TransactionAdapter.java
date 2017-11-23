@@ -90,7 +90,7 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
         } else if (status.equals("Finish")) {
             holder.txtStatus.setTextColor(Color.parseColor("#0392cf"));
             statusText = "Kết thúc giao dịch";
-        } else if (status.equals("Failed") || status.equals("Failed Paased")) {
+        } else if (status.equals("Failed") || status.equals("Failed Passed")) {
             holder.txtStatus.setTextColor(Color.parseColor("#ee4035"));
             statusText = "Thanh toán Thất bại";
         } else if (status.equals("Initial") || status.equals("Not pay")) {

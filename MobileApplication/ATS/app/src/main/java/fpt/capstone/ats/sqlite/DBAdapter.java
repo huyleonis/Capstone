@@ -42,6 +42,7 @@ public class DBAdapter {
                     + TransactionDetail.STATUS + " TEXT NOT NULL, "
                     + TransactionDetail.VEHICLE_TYPE + " TEXT NOT NULL, "
                     + TransactionDetail.TYPE + " TEXT NOT NULL, "
+                    + TransactionDetail.PHOTO + " TEXT NOT NULL, "
                     + TransactionDetail.LAST_MODIFIED + " TEXT NOT NULL);");
         }
 

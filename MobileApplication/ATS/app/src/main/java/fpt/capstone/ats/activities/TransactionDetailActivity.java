@@ -40,7 +40,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
     private TextView textType;
     private Button btnPayment;
 
-    private ProgressDialog pdial;
     private String transactionId;
 
     private DBAdapter database;
@@ -63,17 +62,17 @@ public class TransactionDetailActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         transactionId = bundle.getString(ConstantValues.TRANSACTION_ID_PARAM);
 
-        database = new DBAdapter(TransactionDetailActivity.this);
-        database.open();
-        Cursor resultSet = database.getInfo(transactionId);
-        if (resultSet.moveToFirst()) {
-            Log.d("GET DETAIL TRANSACTION", "VIEW FROM LOCAL");
-            viewFromLocal(resultSet);
-        } else {
+//        database = new DBAdapter(TransactionDetailActivity.this);
+//        database.open();
+//        Cursor resultSet = database.getInfo(transactionId);
+//        if (resultSet.moveToFirst()) {
+//            Log.d("GET DETAIL TRANSACTION", "VIEW FROM LOCAL");
+//            viewFromLocal(resultSet);
+//        } else {
             Log.d("GET DETAIL TRANSACTION", "VIEW FROM SERVER");
             getTransactionDetail();
-        }
-        database.close();
+//        }
+//        database.close();
 
     }
 
@@ -90,6 +89,10 @@ public class TransactionDetailActivity extends AppCompatActivity {
     }
 
     public void getTransactionDetail() {
+        final ProgressDialog pdial = new ProgressDialog(this);
+        pdial.setMessage("Đang lấy dữ liệu từ hệ thống...");
+        pdial.show();
+
         Log.w("Request TransDetail", "Send Request TransDetail");
         RequestServer rs = new RequestServer();
         rs.delegate = new RequestServer.RequestResult() {
@@ -123,18 +126,18 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     textType.setText("Thu phí " + type);
                     textVehicleType.setText(vehicleType);
 
-                    database = new DBAdapter(TransactionDetailActivity.this);
-                    database.open();
+//                    database = new DBAdapter(TransactionDetailActivity.this);
+//                    database.open();
 
-                    Date lastModifiedDate = new Date();
-                    sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                    String lastModified = sdf.format(lastModifiedDate);
-
-                    long re = database.insertInfo(transactionId, stationName, stationId, zone,
-                            sdf.format(datetime), price, status, vehicleType, type, lastModified);
-                    Log.d("DATABASE INSERT", String.valueOf(re));
-
-                    database.close();
+//                    Date lastModifiedDate = new Date();
+//                    sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+//                    String lastModified = sdf.format(lastModifiedDate);
+//
+//                    long re = database.insertInfo(transactionId, stationName, stationId, zone,
+//                            sdf.format(datetime), price, status, vehicleType, type, lastModified);
+//                    Log.d("DATABASE INSERT", String.valueOf(re));
+//
+//                    database.close();
 
                     String statusText = "-";
                     Log.w("status: " , status);
@@ -144,7 +147,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     } else if (status.equals("Finish")) {
                         textStatus.setTextColor(Color.parseColor("#0392cf"));
                         statusText = "Hoàn thành";
-                    } else if (status.equals("Failed")) {
+                    } else if (status.equals("Failed") || status.equals("Failed Passed")) {
                         textStatus.setTextColor(Color.parseColor("#ee4035"));
                         statusText = "Thanh toán Thất bại";
                     } else if (status.equals("Initial") || status.equals("Not pay")) {
@@ -154,7 +157,8 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
                     textStatus.setText(statusText);
 
-                    if (status.equals("Failed") || status.equals("Initial") || status.equals("Not pay")) {
+                    if (status.equals("Failed") || status.equals("Failed Passed")
+                            || status.equals("Initial") || status.equals("Not pay")) {
                         btnPayment.setVisibility(View.VISIBLE);
                         btnPayment.setEnabled(true);
                     } else {
@@ -185,10 +189,10 @@ public class TransactionDetailActivity extends AppCompatActivity {
     }
 
     public void updateTransactionStatus() {
-        pdial = new ProgressDialog(this);
-        pdial.setMessage("Đang xử lý thanh toán phí...");
-        pdial.setTitle("Thanh toán");
-        pdial.show();
+//        pdial = new ProgressDialog(this);
+//        pdial.setMessage("Đang xử lý thanh toán phí...");
+//        pdial.setTitle("Thanh toán");
+//        pdial.show();
 
         Log.w("Request updTransStatus", "Send Request updateTransStatus");
         RequestServer rs = new RequestServer();
@@ -196,7 +200,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
             @Override
             public void processFinish(String result) {
                 try {
-                    pdial.dismiss();
+//                    pdial.dismiss();
                     Log.w("Receive TransStatus", "Transaction Status Json: " + result);
                     JSONObject infos = new JSONObject(result);
                     String newStatus = infos.getString("status");
@@ -266,9 +270,9 @@ public class TransactionDetailActivity extends AppCompatActivity {
         try {
 //            Log.d("Receive TransDetail", "Transaction Detail Json: " + resultSet);
 
-            if (pdial != null) {
-                pdial.dismiss();
-            }
+//            if (pdial != null) {
+//                pdial.dismiss();
+//            }
 
             String stationName = resultSet.getString(1);
             int stationId = resultSet.getInt(2);
@@ -298,7 +302,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
             } else if (status.equals("Finish")) {
                 textStatus.setTextColor(Color.parseColor("#0392cf"));
                 statusText = "Hoàn thành";
-            } else if (status.equals("Failed")) {
+            } else if (status.equals("Failed") || status.equals("Failed Passed")) {
                 textStatus.setTextColor(Color.parseColor("#ee4035"));
                 statusText = "Thanh toán Thất bại";
             } else if (status.equals("Initial") || status.equals("Not pay")) {
@@ -308,7 +312,8 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
             textStatus.setText(statusText);
 
-            if (status.equals("Failed") || status.equals("Initial") || status.equals("Not pay")) {
+            if (status.equals("Failed") || status.equals("Failed Passed")
+                    || status.equals("Initial") || status.equals("Not pay")) {
                 btnPayment.setVisibility(View.VISIBLE);
                 btnPayment.setEnabled(true);
             } else {
