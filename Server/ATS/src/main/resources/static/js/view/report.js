@@ -97,7 +97,7 @@ $(document)
                             // data for the cell from the
                             // returned list
                             {
-                                "data": "id"
+                                "data": null
                             },
                             {
                                 "data": "id",
@@ -123,6 +123,10 @@ $(document)
                             },
                             {
                                 "data": "stationId",
+                                "visible": false
+                            },
+                            {
+                                "data": "photo",
                                 "visible": false
                             },
                             {// column for view
@@ -310,7 +314,7 @@ function reloadTable() {
 // open updateModal
 function openUpdateModal(element) {
     var data = $("#table").DataTable().row($(element).parents('tr')).data();
-    var img = document.createElement("img");
+    var img = document.getElementById("update-form-photo");
     
     $("#update-form-id").val(data.id);
     $("#update-form-licensePlate").val(data.licensePlate);
@@ -318,7 +322,7 @@ function openUpdateModal(element) {
     curr = {
         "id": data.id,
         //"photo": "./imgs/plates/"+ data.photo,
-        "photo": img.src = "http://hoathuongtin.vn/upload/sanpham/hns002-6056.jpg",
+        "photo": img.src = "/imgs/plates/" + data.photo,
         
         "vehicle": {           
             "licensePlate": data.licensePlate

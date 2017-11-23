@@ -160,6 +160,8 @@ public class TransactionDTO {
         }
         if (transaction.getPhoto() != null) {
             dto.setPhoto(transaction.getPhoto());
+        }else{
+            dto.setPhoto("No Photo");
         }
         
         for (TransactionStatus value : TransactionStatus.values()) {

@@ -85,8 +85,25 @@
                                                 <label class="control-label">License Plate Recognized: </label>
                                                 <input type="text" class="form-control" id="update-form-licensePlate" required readonly/>
                                                 <label id="nameErrorUpdate" class="error"></label>
+                                                <br/>
                                                 <label class="control-label">Correct License Plate: </label>                    
                                                 <input type="text" class="form-control" id="update-form-correct-licensePlate" required />
+                                                <button onclick="myFunction()">View Transaction</button>
+                                                
+                                                
+                                                <table class="table table-striped" id="table1">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center" style="font-weight: bolder">id </th>
+                                                            <th class="text-center" style="font-weight: bolder">Created Time</th>
+                                                            <th class="text-center" style="font-weight: bolder">Status</th>                                                    
+                                                            <th class="text-center" style="font-weight: bolder">Photo</th>
+                                                            <th class="text-center" style="font-weight: bolder"></th>
+                                                                <%--<th class="pull-left">Delete/Update</th>--%>
+                                                        </tr>
+                                                    </thead>
+
+                                                </table>
                                             </div>
 
                                         </div>
@@ -132,14 +149,15 @@
                             <thead>
                                 <tr>
                                     <th class="text-center" style="font-weight: bolder">#</th>
-                                    <th>id</th>
+                                    <th class="text-center" style="font-weight: bolder">id </th>
                                     <th class="text-center" style="font-weight: bolder">License Plate</th>
                                     <th class="text-center" style="font-weight: bolder">Created Time</th>
                                     <th class="text-center" style="font-weight: bolder">Status</th>
                                     <th class="text-center" style="font-weight: bolder">Username</th>
                                     <th class="text-center" style="font-weight: bolder">Lane ID</th>
                                     <th class="text-center" style="font-weight: bolder">Station ID</th>
-                                    <th class="text-center" style="font-weight: bolder">Update/Delete</th>
+                                    <th class="text-center" style="font-weight: bolder">Photo</th>
+                                    <th class="text-center" style="font-weight: bolder"></th>
                                         <%--<th class="pull-left">Delete/Update</th>--%>
                                 </tr>
                             </thead>
@@ -158,4 +176,6 @@
 
     <script
     src="js/view/report.js"></script>
+    <script
+    src="js/view/transactionReport.js"></script>
 </html>

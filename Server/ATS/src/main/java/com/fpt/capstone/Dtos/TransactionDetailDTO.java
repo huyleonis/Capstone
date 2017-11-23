@@ -87,6 +87,7 @@ public class TransactionDetailDTO extends TransactionDTO {
     public static TransactionDetailDTO covertFromEntity(Transaction tran) {
         TransactionDetailDTO dto = new TransactionDetailDTO();
         
+        
         TransactionDTO.convertFromEntity(tran, dto);
         
         if (tran.getLane() != null) {
