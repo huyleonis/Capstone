@@ -289,17 +289,22 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public List<TransactionDTO> getTransByVehicleIdAndTime(int vehicleId, Date createdTime) {
+	public List<TransactionDTO> getTransByLicPlateAndTime(String licensePlate, Date createdTime) {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-		List<Transaction> transactions = transactionRepos.findByVehicleIdAndTime(vehicleId, sdf.format(createdTime));
 		List<TransactionDTO> dtos = new ArrayList<>();
-		if (transactions != null) {
+		
+		Vehicle vehicle = vehicleRepos.findByLicensePlate(licensePlate);
+		if (vehicle!=null) {
+			List<Transaction> transactions = transactionRepos
+					.findByVehicleIdAndTime(vehicle.getId(), sdf.format(createdTime));
 			
-			for (Transaction transaction : transactions) {
-				TransactionDTO dto = TransactionDTO.convertFromEntity(transaction);
-				dtos.add(dto);
+			if (transactions != null) {
+				
+				for (Transaction transaction : transactions) {
+					TransactionDTO dto = TransactionDTO.convertFromEntity(transaction);
+					dtos.add(dto);
+				}
 			}
 		}
 		

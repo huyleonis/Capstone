@@ -297,24 +297,12 @@
                                style="text-align: center" id="table">
                             <thead>
                                 <tr>
-                                    <th>id</th>
-                                    <th class="text-center">Date Time</th>
-                                    <th class="text-center">Status</th>
-                                    <th class="text-center">Price</th>
-                                    <%--<th class="text-center">Fail Reason</th>--%>
-                                    <th class="text-center">Lane ID</th>
-                                    <th class="text-center">Station ID</th>
-                                    <th class="text-center">Zone</th>
-                                    <th class="text-center">Station Name</th>
-                                    <th class="text-center">Username</th>
+                                    <th class="text-center">Photo Name</th>
                                     <th class="text-center">License Plate</th>
-                                    <th class="text-center">Type of Vehicle</th>
-                                    <th class="text-center">Type</th>
+                                    <th class="text-center">Created Time</th>
                                     <th class="text-center">Update/Delete</th>
-                                        <%--<th class="pull-left">Delete/Update</th>--%>
                                 </tr>
                             </thead>
-
                         </table>
 
                     </div>
@@ -328,5 +316,5 @@
 
     </body>
     <script
-    src="js/view/transaction.js"></script>
+    src="js/view/dump.js"></script>
 </html>

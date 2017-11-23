@@ -49,6 +49,16 @@ function changeRole(element) {
     clearStatus();
     reloadTable();
 }
+var dataSet = {
+		"data": [
+			"30S4693_1510494273298.jpg", 
+		    "30S4693_1510494273298.jpg", 
+		    "30S4693_1510494273298.jpg", 
+		    "30S4693_1510494273298.jpg", 
+		    "30S4693_1510494273298.jpg", 
+		    "30S4693_1510494273298.jpg" 
+		]
+};
 $(document)
         .ready(
                 function ($) {
@@ -80,70 +90,20 @@ $(document)
                                         // top - top of the table, bottom -
                                         // bottom of the table
                                         "ajax": {
-                                            "url":
-                                                    "../transaction/getDetail", // get
-                                            // the
-                                            // list
-                                            "dataSrc": "" // returned list
-                                                    // doesn't have a
-                                                    // header so dataSrc
-                                                    // =
-                                                    // ""
+                                        	"url" : "../transaction/getDumpToPhoto",
+                                        	"dataSrc": ""
                                         },
-                                        "columns": [// define columns for
-                                            // the table
-                                            // data for the cell from the
-                                            // returned list
-                                            {
-                                                "data": "id",
-                                                "visible": false
-                                                        // hide the column
-														// processID
-                                            },
-                                            {
-                                                "data": "dateTime"
-                                            },
-                                            {
-                                                "data": "status"
-                                            },
-                                            {
-                                                "data": "price"
-                                            },
-                                            // {
-                                            //     "data": "failReason"
-                                            // },
-                                            {
-                                                "data": "laneId",
-                                                "visible": false
-                                            },
-                                            {
-                                                "data": "stationId",
-                                                "visible": false
-                                            },
-                                            {
-                                                "data": "zone"
-                                            },
-                                            {
-                                                "data": "stationName"
-                                            },
-                                            {
-                                                "data": "username"
-                                            },
-                                            {
-                                                "data": "licensePlate"
-                                            },
-                                            {
-                                                "data": "vehicleType"
-                                            },
-                                            {
-                                                "data": "type"
-                                            },
+                                        "columns": [
+                                            { "data": "photoName" },
+                                            { "data": "licensePlate" },
+                                            { "data": "createdTime" },
                                             {// column for view
                                                 // detail-update-delete
                                                 "data": null,
                                                 "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>"
                                                         + "<button class='btn btn-danger glyphicon glyphicon-trash' onclick='openDeleteModal(this)'></button>",
-                                            }]
+                                            }
+                                        ]
                                     });
                     // handle delete form submit
                     $("#delete-form").submit(function (event) {

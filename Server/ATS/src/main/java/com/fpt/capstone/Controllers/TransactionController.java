@@ -1,6 +1,7 @@
 package com.fpt.capstone.Controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fpt.capstone.Dtos.PhotoDTO;
 import com.fpt.capstone.Dtos.TransactionDTO;
 import com.fpt.capstone.Dtos.TransactionDetailDTO;
 import com.fpt.capstone.Dtos.VehicleDTO;
@@ -24,10 +25,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -374,40 +378,44 @@ public class TransactionController {
     }
     
     @RequestMapping(value = "/getTransByLicPlateAndTime", method = RequestMethod.GET)
-    public String getTransByVehicleIdAndTime(@RequestParam(name = "vehicleId") int vehicleId, 
+    public String getTransByLicPlateAndTime(@RequestParam(name = "licensePlate") String licensePlate, 
     			@RequestParam(name = "createdTime") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date createdTime) {
 		
     	List<TransactionDTO> dtos = transactionService
-    			.getTransByVehicleIdAndTime(vehicleId, createdTime);
+    			.getTransByLicPlateAndTime(licensePlate, createdTime);
     	
     	return new Gson().toJson(dtos);
 	}
     
     @RequestMapping(value = "/getDumpToPhoto")
     @ResponseStatus(HttpStatus.OK)
-    public List<String> getDumpToPhoto(){
+    public List<PhotoDTO> getDumpToPhoto(){
 
         String basePath = context.getRealPath(".");
         File folder = new File (basePath + "/WEB-INF/images/dumps");
         File[] listOfFile = folder.listFiles();
-        List<String> listFile = new ArrayList<>();
+        List<PhotoDTO> listFile = new ArrayList<>();
         if(folder.isDirectory()){
             for(int i = 0; i < listOfFile.length; i++){
                 if(listOfFile[i].isFile()){
-                    System.out.println("File: " + listOfFile[i].getName());
                     
                     String str = listOfFile[i].getName();
                     
                     StringTokenizer st = new StringTokenizer(str, "_.");
+                    String licensePlate = st.nextToken();
+                    String createdTime = st.nextToken();
                     
-                    while(st.hasMoreElements()) {
-                    	System.out.println(st.nextElement());
-                    }
+                    Date date = new Date(Long.parseLong(createdTime));
+                    DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm");
                     
-                    listFile.add(listOfFile[i].getName());
+                    PhotoDTO dto = new PhotoDTO(str, 
+                    		licensePlate, df.format(date));
+                    
+                    listFile.add(dto);
                 }
             }
         }
+        
         return listFile;
     }
 }

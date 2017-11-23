@@ -42,5 +42,5 @@ public interface TransactionService {
 
     boolean delete(String id);
     
-    List<TransactionDTO> getTransByVehicleIdAndTime(int vehicleId, Date createdTime);
+    List<TransactionDTO> getTransByLicPlateAndTime(String licensePlate, Date createdTime);
 }
