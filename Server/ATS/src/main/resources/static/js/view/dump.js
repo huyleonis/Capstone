@@ -10,29 +10,13 @@ $(document)
                                     {
                                         "lengthMenu": [[5, 10, 20, -1],
                                             [5, 10, 20, "All"]], // change
-                                        // the
-                                        // lengthMenu to
-                                        // 5, 10 ,20,
-                                        // All record
-                                        // per page
-                                        // "language": { "search": "",
-                                        // "lengthMenu": "Show _MENU_ per page"
-                                        // }, //remove
-                                        // the Search text and modified the
-                                        // select box
-                                        // "info": false, //remove the show x to
-                                        // x result
-                                        // "dom": '<"top"lf>rt<"bottom"p>',
-                                        // f - filter input, r - processing, t -
-                                        // table, l - lengthMenu, p -
-                                        // pagination
-                                        // top - top of the table, bottom -
-                                        // bottom of the table
+
                                         "ajax": {
                                         	"url" : "../transaction/getDumpToPhoto",
                                         	"dataSrc": ""
                                         },
                                         "columns": [
+
                                             { "data": "photoName" },
                                             { "data": "licensePlate" },
                                             { "data": "createdTime" },
@@ -40,7 +24,6 @@ $(document)
                                                 // detail-update-delete
                                                 "data": null,
                                                 "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openResolveModal(this)'></button>"
-                                                        + "<button class='btn btn-danger glyphicon glyphicon-trash' onclick='openDeleteModal(this)'></button>",
                                             }
                                         ]
                                     });

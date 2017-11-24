@@ -107,7 +107,7 @@
 
                                         </div>
                                         <div class="modal-footer">
-                                        	<button class='btn btn-primary' type="submit" onclick='submitConfirm()'>Confirm</button>
+                                        	<button class='btn btn-primary' type="button" onclick='submitConfirm()'>Confirm</button>
                                             <button onclick = "clearUpdateForm()" type="button" class="btn btn-default"
                                                     data-dismiss="modal">Close</button>
                                         </div>
@@ -150,7 +150,7 @@
                                     <th class="text-center">Photo Name</th>
                                     <th class="text-center">License Plate</th>
                                     <th class="text-center">Created Time</th>
-                                    <th class="text-center">Update/Delete</th>
+                                    <th class="text-center"></th>
                                 </tr>
                             </thead>
                         </table>

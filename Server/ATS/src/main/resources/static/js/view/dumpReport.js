@@ -45,7 +45,7 @@ function myFunction() {
                             {// column for view
                                 // detail-update-delete
                                 "data": null,
-                                "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='submitResolve(this)'>Resolve</button>"
+                                "defaultContent": "<button class='btn btn-success' onclick='submitResolve(this)'>Resolve</button>"
                             }],
                         "columnDefs": [{
                                 "searchable": false,
@@ -77,74 +77,20 @@ function myFunction() {
     // });
 }
 
-function jumpToPage(table1, transactionIdRedirect) {
-    table1.page.jumpToData(transactionIdRedirect, 1);
-    return highlightRow(transactionIdRedirect);
-}
 
-function highlightRow(transactionIdRedirect) {
-    var selection = $("#table1 #" + transactionIdRedirect);
-    $("tr[role='row']").removeClass("selectedRow");
-    selection.addClass("selectedRow");
-}
-
-/*
- * Contain ajax call to perfom update or delete a report
- */
-// perform ajax call to save report
-function submitAddForm() {
-    var account = {
-        "username": $("#add-form-username").val(),
-        "password": $("#add-form-password").val(),
-        "role": $("#add-form-role").val(),
-        "fullname": $("#add-form-fullname").val(),
-        "email": $("#add-form-email").val(),
-        "phone": $("#add-form-phone").val(),
-        "numberId": $("#add-form-numberId").val(),
-        "vehicle": {
-            "licensePlate": $("#add-form-licensePlate").val(),
-            "vehicletype": {
-                "id": $("#add-form-typeId").val()
-            }
-        },
-        "balance": $("#add-form-balance").val(),
-        "isActive": $("#add-form-isActive").val(),
-        "isEnable": $("#add-form-isEnable").val()
-    };
-    $.ajax({
-        type: "POST",
-        contentType: "application/json",
-        url: "../account/create",
-        data: JSON.stringify(account),
-        success: function (result) {
-            if (result == "fail") {
-                setStatus("Something was wrong! Please check again!", "#ff0000");
-            } else {
-                setStatus("Add success!", "#00cc00");
-            }
-        },
-        error: function (result) {
-            setStatus("Something was wrong! Please check again!", "#ff0000");
-        }
-    });
-    $("#add-modal").modal("hide");
-    $("#alert").show();
-    reloadTable();
-    clearStatus();
-}
 
 var curr;
 function submitConfirm() {
-    var transId = $("#update-form-id").val();
     var licensePlate = $("#update-form-correct-licensePlate").val();
+    var laneId = 1;
     $.ajax({
         type: "GET",
         contentType: "application/json",
-        url: "../transaction/confirmReport",
-        data: {
-        	"transId": transId,
-        	"licensePlate": licensePlate
-        },
+        url: "../transaction/makeManualPayment/"+licensePlate+"/" + laneId,
+//        data: {
+//        	"transId": transId,
+//        	"licensePlate": licensePlate
+//        },
         success: function (result) {
             if (result == "fail") {
 //                setStatus("Update fail!", "#ff0000");
@@ -164,15 +110,16 @@ function submitConfirm() {
 
 function submitResolve(element) {
 	var data = $("#table1").DataTable().row($(element).parents('tr')).data();
+        var data1 = $("#table").DataTable().row($(element).parents('tr')).data();
     var transId = data.id;
-    var transIdError = $("#update-form-id").val();
+    var photo = data1.val();
     $.ajax({
         type: "GET",
         contentType: "application/json",
-        url: "../transaction/resolveReport",
+        url: "../transaction/updatePhoto",
         data: {
         	"transId": transId,
-        	"transIdError": transIdError
+        	"photo": photo
         },
         success: function (result) {
             if (result == "fail") {
@@ -186,7 +133,7 @@ function submitResolve(element) {
         }
     });
     $("#resolve-modal").modal("hide");
-    $("#alert").show();
+    //$("#alert").show();
     reloadTable();
 //    clearStatus();
 }
@@ -263,9 +210,4 @@ function reloadTable() {
 function clearUpdateForm() {
     $("#update-form-correct-licensePlate").val("");
     $("#delete-modal").modal("hide");
-}
-
-function a() {
-	
-	
 }
