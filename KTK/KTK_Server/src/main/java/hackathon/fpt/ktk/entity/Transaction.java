@@ -24,7 +24,6 @@ public class Transaction {
     @Column(name = "status")
     private String status;
 
-
     @Column(name = "price")
     private Double price;
 
@@ -39,6 +38,19 @@ public class Transaction {
     private String photo;
 
     public Transaction() {
+    }
+
+    public Transaction(String id, Vehicle vehicle, Station station, Date dateTime,
+                       String status, Double price, Lane lane, int type, String photo) {
+        this.id = id;
+        this.vehicle = vehicle;
+        this.station = station;
+        this.dateTime = dateTime;
+        this.status = status;
+        this.price = price;
+        this.lane = lane;
+        this.type = type;
+        this.photo = photo;
     }
 
     public String getId() {
