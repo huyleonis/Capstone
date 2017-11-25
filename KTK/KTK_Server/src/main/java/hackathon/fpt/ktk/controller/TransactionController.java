@@ -287,7 +287,7 @@ public class TransactionController extends AbstractController {
      * @param transactionId
      * @return
      */
-    @RequestMapping(value = "updateProcessingTransaction/{transactionId}")
+    @RequestMapping(value = "payLater/{transactionId}")
     @ResponseStatus(HttpStatus.OK)
     public Map<String, String> requestPaymentLater(@PathVariable String transactionId) {
         Map<String, String> map = new HashMap<>();
@@ -303,10 +303,10 @@ public class TransactionController extends AbstractController {
         String result = accountService.makePayment(transDTO.getUsername(), transDTO.getStationId());
         if (result.equals("")) {
             transactionService.updateTransactionStatus(transDTO.getId(), TransactionStatus.TRANS_SUCCESS);
-            status = "Kết Thúc";
+            status = TransactionStatus.TRANS_SUCCESS.display();
         } else {
             transactionService.updateTransactionStatus(transDTO.getId(), TransactionStatus.TRANS_FAILED);
-            status = "Thất bại";
+            status = TransactionStatus.TRANS_FAILED.display();
         }
 
         // status:
@@ -318,21 +318,4 @@ public class TransactionController extends AbstractController {
         return map;
     }
 
-    /**
-     * Staff gửi yêu cầu lấy danh sách các xe Chưa thanh toán
-     *
-     * @return
-     */
-    @RequestMapping(value = "getTransactionUnpaid")
-    @ResponseStatus(HttpStatus.OK)
-    public List<TransactionDTO> getListResultTransactionUnpaid() {
-        List<TransactionDTO> result = transactionService.getTransactionsForStaff(TransactionStatus.TRANS_NOTPAY.toString());
-
-        for (TransactionDTO tran : result) {
-            if (!tran.getStatus().endsWith(TransactionStatus.TRANS_PENDING.toString())) {
-                transactionService.updateTransactionStatus(tran.getId(), TransactionStatus.TRANS_PENDING);
-            }
-        }
-        return result;
-    }
 }

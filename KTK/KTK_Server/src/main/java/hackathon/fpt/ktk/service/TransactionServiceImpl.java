@@ -151,7 +151,6 @@ public class TransactionServiceImpl extends AbstractServiceImpl implements Trans
         int vehicleId = account.getVehicle().getId();
         Price price = priceRepos.findPriceByStationIdAndLicensePlate(stationId, account.getVehicle().getLicensePlate());
 
-
         int transaction = transactionRepos.insertAutoTransaction(id, stationId, now,
                 TransactionStatus.TRANS_PENDING.getName(), price.getPrice(),
                 TransactionType.AUTOMATION.getType(), vehicleId);
@@ -205,6 +204,28 @@ public class TransactionServiceImpl extends AbstractServiceImpl implements Trans
         List<TransactionDTO> result = new ArrayList<>();
         for (Transaction tran : list) {
             TransactionDTO dto = TransactionDTO.convertFromEntity(tran);
+            result.add(dto);
+        }
+        return result;
+    }
+
+    @Override
+    public List<TransactionDetailDTO> getHistoryTransaction(String username, Date fromDate, Date toDate) {
+        // fromDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        // toDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        // Account account = accountRepos.findByUsername(username);
+        Account account = accountRepos.findByUsername(username);
+
+        if (account == null) {
+            return new ArrayList<>();
+        }
+
+        int vehicleId = account.getVehicle().getId();
+
+        List<Transaction> list = transactionRepos.getHistoryTransaction(vehicleId, fromDate, toDate);
+        List<TransactionDetailDTO> result = new ArrayList<>();
+        for (Transaction tran : list) {
+            TransactionDetailDTO dto = TransactionDetailDTO.covertFromEntity(tran);
             result.add(dto);
         }
         return result;

@@ -165,4 +165,43 @@ public class AccountServiceImpl extends AbstractServiceImpl implements AccountSe
 
         return result;
     }
+    
+    @Override
+    public AccountDTO getAccountById(int id) {
+        Account account = accountRepos.findOne(id);
+        if (account != null) {
+            return AccountDTO.convertFromEntity(account);
+        }
+        return null;
+    }
+    
+    @Override
+    public boolean topupBalance(String username, double amount) {
+
+        Account account = accountRepos.findByUsername(username);
+        
+        if (account == null) {
+            return false;
+        }
+        
+        double newBalance = account.getBalance() + amount;
+        int sqlResult = accountRepos.updateBalance(account.getId(), newBalance);
+        
+        return sqlResult > 0;
+    }
+    
+    @Override
+    public boolean checkLicensePlate(String username, String licensePlate) {
+        Account account = accountRepos.findByUsername(username);
+
+        if (account != null) {
+            if (account.getVehicle() != null) {
+                if (account.getVehicle().getLicensePlate().equals(licensePlate)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }

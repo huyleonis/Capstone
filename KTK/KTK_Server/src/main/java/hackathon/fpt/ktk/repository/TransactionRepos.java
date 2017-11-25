@@ -92,4 +92,18 @@ public interface TransactionRepos extends JpaRepository<Transaction, String> {
             + " AND createdTime between date_sub(now(), interval 10 minute)"
             + " AND now() order by createdTime asc", nativeQuery = true)
     List<Transaction> getTransactionForStaff(String status);
+    
+    /**
+     * lịch sử giao dịch cho tài xế, khi chọn ngày bắt đầu và kết thúc giao dịch
+     *
+     * @param vehicleId : id của vehicle
+     * @param fromDate  : bắt đầu từ ngày giao dịch
+     * @param toDate    : kết thúc ngày giao dịch
+     * @return
+     */
+    @Query(value = "select * from transaction where vehicleId = :vehicleId " +
+            "and createdTime > :fromDate and createdTime < :toDate ", nativeQuery = true)
+    List<Transaction> getHistoryTransaction(@Param("vehicleId") int vehicleId,
+                                            @Param("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date fromDate,
+                                            @Param("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date toDate);
 }
