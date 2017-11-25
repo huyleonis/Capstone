@@ -107,7 +107,7 @@
 
                                         </div>
                                         <div class="modal-footer">
-                                        	<button class='btn btn-primary' type="button" onclick='submitConfirm()'>Confirm</button>
+                                            <button class='btn btn-primary' type="submit" onclick='submitConfirm()'>Confirm</button>
                                             <button onclick = "clearUpdateForm()" type="button" class="btn btn-default"
                                                     data-dismiss="modal">Close</button>
                                         </div>
@@ -166,7 +166,7 @@
 
     </body>
     <script
-    src="js/view/dump.js"></script>
+    src="js/view/photoDump.js"></script>
     <script
     src="js/view/dumpReport.js"></script>
 </html>

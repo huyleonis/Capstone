@@ -64,11 +64,11 @@ function myFunction() {
 //        event.preventDefault();
 //        submitDeleteForm();
 //    });
-//    // handle update form submit
-//    $("#update-form").submit(function (event) {
-//        event.preventDefault();
-//        submitUpdateForm();
-//    })
+    // handle update form submit
+    $("#resolve-modal").submit(function (event) {
+        event.preventDefault();
+        submitResolve();
+    });
 
     // $("#add-form").submit(function (event) {
     //     event.preventDefault();
@@ -109,10 +109,10 @@ function submitConfirm() {
 }
 
 function submitResolve(element) {
-	var data = $("#table1").DataTable().row($(element).parents('tr')).data();
-        var data1 = $("#table").DataTable().row($(element).parents('tr')).data();
-    var transId = data.id;
-    var photo = data1.val();
+	var data = $("#table").DataTable().row($(element).parents('tr')).data();
+        var data1 = $("#table1").DataTable().row($(element).parents('tr')).data();
+        var transId = data1.id;
+        var photo = data.photoName;
     $.ajax({
         type: "GET",
         contentType: "application/json",

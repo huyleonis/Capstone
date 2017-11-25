@@ -517,7 +517,8 @@ public class TransactionController {
 
                 System.out.println("File transfer is successfuly");
             } catch (IOException e) {
-                e.printStackTrace();
+                
+                System.out.println("Cannot transfer file dump");
             }
 //
 //            if (!folderSrc.exists()) {
