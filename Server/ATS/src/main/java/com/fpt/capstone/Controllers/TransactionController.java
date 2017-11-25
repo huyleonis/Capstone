@@ -1,11 +1,13 @@
 package com.fpt.capstone.Controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fpt.capstone.Dtos.AccountDTO;
 import com.fpt.capstone.Dtos.PhotoDTO;
 import com.fpt.capstone.Dtos.TransactionDTO;
 import com.fpt.capstone.Dtos.TransactionDetailDTO;
 import com.fpt.capstone.Dtos.VehicleDTO;
 import com.fpt.capstone.Entities.Transaction;
+import com.fpt.capstone.Firebase.ReportNotification;
 import com.fpt.capstone.Services.AccountService;
 import com.fpt.capstone.Services.TransactionService;
 import com.fpt.capstone.Services.VehicleService;
@@ -334,6 +336,11 @@ public class TransactionController {
 		} else {
 			result = "fail";
 		}
+		
+		AccountDTO accountDTO = accountService.getAccountByTransactionId(transactionId);
+		
+		// send to firebase
+		ReportNotification.writeNewReport(transactionId, accountDTO.getUsername());
 
 		System.out.println("Update transaction success with status: " + status);
 

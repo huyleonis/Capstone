@@ -9,9 +9,11 @@ import com.fpt.capstone.Dtos.AccountDTO;
 import com.fpt.capstone.Dtos.PriceDTO;
 import com.fpt.capstone.Entities.Account;
 import com.fpt.capstone.Entities.Price;
+import com.fpt.capstone.Entities.Transaction;
 import com.fpt.capstone.Entities.Vehicle;
 import com.fpt.capstone.Repositories.AccountRepos;
 import com.fpt.capstone.Repositories.PriceRepos;
+import com.fpt.capstone.Repositories.TransactionRepos;
 import com.fpt.capstone.Repositories.VehicleRepos;
 
 import java.util.ArrayList;
@@ -38,6 +40,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private VehicleRepos vehicleRepos;
+
+    @Autowired
+    private TransactionRepos transactionRepos;
 
     /**
      * Thực hiện trừ tiền vào tài khoản của account
@@ -163,4 +168,18 @@ public class AccountServiceImpl implements AccountService {
         return dto;
     }
 
+	@Override
+	public AccountDTO getAccountByTransactionId(String transactionId) {
+
+		Transaction transaction = transactionRepos.findOne(transactionId);
+		if (transaction != null) {
+			Account account = accountRepos.findByVehicleId(transaction.getVehicle().getId());
+			if (account != null) {
+				AccountDTO dto = AccountDTO.convertFromEntity(account);
+				return dto;
+			}
+		}
+
+		return null;
+	}
 }

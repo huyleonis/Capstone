@@ -26,4 +26,6 @@ public interface AccountRepos extends JpaRepository<Account, Integer> {
 	@Query(value = "SELECT * FROM account WHERE username = ?1 AND password = ?2", nativeQuery = true)
 	Account checkLoginFromDesktopApp(String username, String password);
 
+	@Query(value = "select * from account where vehicleid = :vehicleId", nativeQuery = true)
+	Account findByVehicleId(@Param("vehicleId") int vehicleId);
 }

@@ -30,4 +30,5 @@ public interface AccountService {
 
 	AccountDTO update(Account account);
 
+	AccountDTO getAccountByTransactionId(String transactionId);
 }
