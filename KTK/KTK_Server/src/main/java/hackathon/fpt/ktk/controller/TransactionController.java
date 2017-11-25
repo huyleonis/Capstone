@@ -318,4 +318,28 @@ public class TransactionController extends AbstractController {
         return map;
     }
 
+
+    @RequestMapping(value = "/reportTransaction/{transactionId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, String> reportTransaction(@PathVariable String transactionId) {
+        Map<String, String> map = new HashMap<>();
+
+        String result = "";
+        TransactionStatus status = TransactionStatus.TRANS_ERROR;
+
+        TransactionDTO dto = transactionService.updateTransactionStatus(transactionId, status);
+        if (dto != null) {
+            result = "success";
+        } else {
+            result = "fail";
+        }
+
+        System.out.println("Update transaction success with status: " + status);
+
+        map.put("result", result);
+        map.put("status", status.getName());
+
+        return map;
+    }
+
 }

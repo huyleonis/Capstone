@@ -1,11 +1,14 @@
 package hackathon.fpt.ktk.config;
 
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-@EnableAutoConfiguration
+@Configurable
+@EnableWebMvc
 public class Config extends WebMvcConfigurerAdapter {
 
     @Override
