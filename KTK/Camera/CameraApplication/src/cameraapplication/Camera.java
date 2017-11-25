@@ -2,6 +2,7 @@ package cameraapplication;
 
 import ImageProcess.Recognition;
 import Util.FileUtils;
+import Util.MultipartUploadUtility;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -51,6 +52,7 @@ public class Camera extends javax.swing.JFrame {
     private VideoCapture webSource = null;
     Mat frame = new Mat();
 
+    private String currentPlate = "";
     // class of thread
     private class DaemonThread implements Runnable {
 
@@ -68,6 +70,7 @@ public class Camera extends javax.swing.JFrame {
                             String licensePlate = recognition.process(frame);
                             txtResult.setText(licensePlate);
               
+                            validatePlate(licensePlate, frame);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -100,6 +103,35 @@ public class Camera extends javax.swing.JFrame {
         g.drawImage(buffImg, 0, 0, null);
     }        
 
+    private void validatePlate(String plate, Mat img) {
+        String input = plate.toUpperCase();
+        String pattern = "^\\d{2}[A-Z]\\d{4,5}$";
+
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(input);
+
+        if (m.matches()) {
+            if (!input.equals(currentPlate)) {
+                currentPlate = input;
+                
+                //Label label = new JLabel();
+                txtResult.setText("- " + input);
+                
+                try {
+                    MultipartUploadUtility rs = new MultipartUploadUtility("transaction/camera1/detect/" + input, "UTF-8");                    
+                    rs.addFilePart("img", input + ".jpg");
+                    byte[] imgBytes = FileUtils.convertImageToByteArray(img);
+                    rs.writeFileBytes(imgBytes, 0, imgBytes.length);
+                    
+                    Thread request = new Thread(rs);
+                    request.setDaemon(true);
+                    request.run();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
  
     /**
      * This method is called from within the constructor to initialize the form.
