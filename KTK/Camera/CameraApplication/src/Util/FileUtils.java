@@ -33,6 +33,53 @@ import org.xml.sax.SAXException;
  * @author hp
  */
 public class FileUtils {
+    
+    public static Mat parseXmlFile(File f, String nodeName) throws ParserConfigurationException, SAXException, IOException {
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document doc = dBuilder.parse(f);
+
+        doc.getDocumentElement().normalize();
+
+        Element img = (Element) doc.getElementsByTagName(nodeName).item(0);
+        int rows = Integer.parseInt(img.getElementsByTagName("rows").item(0).getTextContent().trim());
+        int cols = Integer.parseInt(img.getElementsByTagName("cols").item(0).getTextContent().trim());
+        String sData = img.getElementsByTagName("data").item(0).getTextContent().trim();
+        String dt = img.getElementsByTagName("dt").item(0).getTextContent().trim();
+
+        Mat result;
+
+        if (dt.equals("i")) {
+            result = new Mat(rows, cols, CvType.CV_32SC1);
+            Scanner sc = new Scanner(sData);
+            int[] data;
+            for (int i = 0; i < rows; i++) {
+                data = new int[cols];
+                for (int j = 0; j < cols; j++) {
+                    data[j] = sc.nextInt();
+                }
+
+                result.put(i, 0, data);
+            }
+        } else if (dt.equals("f")) {
+            result = new Mat(rows, cols, CvType.CV_32FC1);
+            Scanner sc = new Scanner(sData);
+            float[] data;
+            for (int i = 0; i < rows; i++) {
+                data = new float[cols];
+                for (int j = 0; j < cols; j++) {
+                    data[j] = sc.nextFloat();
+                }
+                result.put(i, 0, data);
+            }
+        } else {
+            result = new Mat();
+        }
+
+        //= Converters.vector_int_to_Mat(data);                        
+        return result;
+
+    }
 
     public static InputStream convertImageToInputStream(Mat img) {
         Mat tmp = img.clone();

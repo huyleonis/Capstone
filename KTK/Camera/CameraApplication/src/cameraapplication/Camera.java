@@ -1,5 +1,6 @@
 package cameraapplication;
 
+import ImageProcess.Recognition;
 import Util.FileUtils;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -46,6 +47,7 @@ public class Camera extends javax.swing.JFrame {
 
     // Definitions
     private DaemonThread myThread = null;
+    private Recognition recognition;
     private VideoCapture webSource = null;
     Mat frame = new Mat();
 
@@ -63,6 +65,8 @@ public class Camera extends javax.swing.JFrame {
                             webSource.retrieve(frame);
                             showImage(frame, pnlCamera);
 
+                            String licensePlate = recognition.process(frame);
+                            txtResult.setText(licensePlate);
               
                         } catch (Exception e) {
                             e.printStackTrace();
