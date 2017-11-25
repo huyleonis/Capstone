@@ -26,6 +26,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import fpt.capstone.ats.R;
+import fpt.capstone.ats.app.AtsApplication;
 import fpt.capstone.ats.services.BeaconService;
 import fpt.capstone.ats.utils.ConstantValues;
 import fpt.capstone.ats.utils.RequestServer;
@@ -62,6 +63,13 @@ public class OTPActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        AtsApplication.onResumeApp();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AtsApplication.onPausedApp();
     }
 
     public void startTimer(int minute){

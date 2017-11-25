@@ -65,7 +65,7 @@
                 android:layout_centerHorizontal="false"
                 android:layout_marginLeft="150dp"
                 android:layout_marginTop="10dp"
-                android:text="Surat"
+                android:text="Xe hơi con"
                 android:textColor="#fff"
                 android:textSize="16sp" />
 
@@ -77,7 +77,7 @@
                 android:layout_centerHorizontal="false"
                 android:layout_marginLeft="150dp"
                 android:layout_marginTop="10dp"
-                android:text="(Adhyaksh)"
+                android:text="00X-00000"
                 android:textColor="#fff"
                 android:textSize="18sp" />
         </RelativeLayout>

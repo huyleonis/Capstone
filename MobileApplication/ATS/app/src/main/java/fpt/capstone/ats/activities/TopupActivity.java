@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fpt.capstone.ats.R;
+import fpt.capstone.ats.app.AtsApplication;
 import fpt.capstone.ats.fragments.BankResultFragment;
 import fpt.capstone.ats.fragments.BankWebFragment;
 import fpt.capstone.ats.fragments.CardInputFragment;
@@ -57,6 +58,18 @@ public class TopupActivity extends AppCompatActivity implements BankWebFragment.
 
         fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.layoutTopup, fgmChooseMethod).commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AtsApplication.onResumeApp();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AtsApplication.onPausedApp();
     }
 
     @Override

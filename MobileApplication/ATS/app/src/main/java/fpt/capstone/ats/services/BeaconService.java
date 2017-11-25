@@ -46,7 +46,7 @@ import fpt.capstone.ats.utils.RequestServer;
 public class BeaconService extends Service {
 
     private static final String TAG = "BEACON_SERVICE";
-    private static final String DEFAULT_BEACON_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
+    private static final String DEFAULT_BEACON_UUID = "B9407F30-F5F8-466E-AFF9-25556B572896";
     private static final String DEFAULT_BEACON_IDENTIFIER = "ranged beacon";
     BeaconRegion defaultRegion = new BeaconRegion(DEFAULT_BEACON_IDENTIFIER,
             UUID.fromString(DEFAULT_BEACON_UUID), null, null);
@@ -207,7 +207,6 @@ public class BeaconService extends Service {
     @Override
     public void onDestroy() {
         Log.w(TAG, "Stop beacon monitoring service");
-        Toast.makeText(this, "Stop beacon monitoring service", Toast.LENGTH_SHORT).show();
         super.onDestroy();
 
         if (bm != null) {

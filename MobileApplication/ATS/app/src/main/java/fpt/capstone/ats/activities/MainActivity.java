@@ -169,13 +169,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    @Override
-    protected void onResumeFragments() {
-        super.onResumeFragments();
-
-    }
-
     @Override
     protected void onPause() {
         super.onPause();

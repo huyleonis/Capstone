@@ -156,19 +156,6 @@ public class LoginActivity extends AppCompatActivity {
         rs.execute(params, "account","login", "POST");
     }
 
-    private void sendOTP(String username){
-
-        RequestServer rs = new RequestServer();
-        rs.delegate = new RequestServer.RequestResult() {
-            @Override
-            public void processFinish(String result) {
-                System.out.println("otp:" + result);
-            }
-        };
-        ArrayList<String> params = new ArrayList<>();
-        params.add(username);
-        rs.execute(params, "otp", "sendOTP", "GET");
-    }
 
 
 }
