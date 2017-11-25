@@ -302,8 +302,8 @@ public class TransactionController extends AbstractController {
         // Gọi module paypal
         String result = accountService.makePayment(transDTO.getUsername(), transDTO.getStationId());
         if (result.equals("")) {
-            transactionService.updateTransactionStatus(transDTO.getId(), TransactionStatus.TRANS_SUCCESS);
-            status = TransactionStatus.TRANS_SUCCESS.display();
+            transactionService.updateTransactionStatus(transDTO.getId(), TransactionStatus.TRANS_FINISH);
+            status = TransactionStatus.TRANS_FINISH.display();
         } else {
             transactionService.updateTransactionStatus(transDTO.getId(), TransactionStatus.TRANS_FAILED);
             status = TransactionStatus.TRANS_FAILED.display();
