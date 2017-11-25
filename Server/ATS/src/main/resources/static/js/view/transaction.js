@@ -109,9 +109,9 @@ $(document)
                                             {
                                                 "data": "price"
                                             },
-                                            {
-                                                "data": "failReason"
-                                            },
+                                            // {
+                                            //     "data": "failReason"
+                                            // },
                                             {
                                                 "data": "laneId",
                                                 "visible": false

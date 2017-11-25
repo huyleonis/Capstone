@@ -1,7 +1,7 @@
 package com.fpt.capstone.Entities;
 
-import java.io.Serializable;
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity(name = "account")
 public class Account implements Serializable {

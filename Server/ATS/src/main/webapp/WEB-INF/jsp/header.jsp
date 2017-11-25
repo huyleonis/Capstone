@@ -1,9 +1,9 @@
 <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/png" href="img/favicon.ico">
+    <link rel="icon" type="image/png" href="img/car.ico">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-    <title>Light Bootstrap Dashboard by Creative Tim</title>
+    <title>ATS Management</title>
 
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
@@ -39,13 +39,15 @@
     <script src="js/bootstrap-notify.js"></script>
 
     <!--  Google Maps Plugin    -->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <%--<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>--%>
 
     <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
     <script src="js/light-bootstrap-dashboard.js"></script>
 
-    <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
-    <script src="js/demo.js"></script>
+
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
 
 <!--    <script type="text/javascript">
         $(document).ready(function () {
@@ -69,4 +71,5 @@
 <script src="../datatables/dataTables.bootstrap.js"></script>
 <link href="../datatables/dataTables.bootstrap.css" rel="stylesheet"
       media="screen">
+    <script src="https://cdn.datatables.net/plug-ins/1.10.16/api/page.jumpToData().js"></script>
 </head>

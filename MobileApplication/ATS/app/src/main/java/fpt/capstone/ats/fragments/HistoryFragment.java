@@ -151,12 +151,11 @@ public class HistoryFragment extends Fragment {
 
 
         ArrayList<String> params = new ArrayList<>();
-        params.add(Commons.getUsername(this.getContext()));
+        params.add(Commons.getVehicleId(this.getContext()));
         params.add(fromDateString.replace('/','-'));
         params.add(toDateString.replace('/','-'));
 
         rs.execute(params, "history", "getByDate", "GET");
     }
-
 
 }

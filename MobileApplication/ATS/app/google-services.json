@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1029476997978",
+    "firebase_url": "https://atsapp-bf5ae.firebaseio.com",
+    "project_id": "atsapp-bf5ae",
+    "storage_bucket": "atsapp-bf5ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1029476997978:android:39a05c9b35c01368",
+        "android_client_info": {
+          "package_name": "fpt.capstone.ats"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1029476997978-fqnampg62ud4o3oeq0t2i0bsbgcoov2g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKBpPWNLxhMcFd-rFhV5EDw1yg0THC4ok"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

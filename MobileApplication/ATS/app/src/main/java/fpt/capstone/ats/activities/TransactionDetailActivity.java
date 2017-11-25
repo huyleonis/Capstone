@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -21,8 +22,8 @@ import java.util.Date;
 import java.util.List;
 
 import fpt.capstone.ats.R;
-import fpt.capstone.ats.sqlite.DBAdapter;
 import fpt.capstone.ats.app.AtsApplication;
+import fpt.capstone.ats.sqlite.DBAdapter;
 import fpt.capstone.ats.utils.ConstantValues;
 import fpt.capstone.ats.utils.RequestServer;
 
@@ -43,6 +44,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
     private String transactionId;
 
     private DBAdapter database;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,8 +142,8 @@ public class TransactionDetailActivity extends AppCompatActivity {
 //                    database.close();
 
                     String statusText = "-";
-                    Log.w("status: " , status);
-                    if(status.equals("Success")){
+                    Log.w("status: ", status);
+                    if (status.equals("Success")) {
                         textStatus.setTextColor(Color.parseColor("#7bc043"));
                         statusText = "Thanh toán Thành công";
                     } else if (status.equals("Finish")) {
@@ -295,8 +297,8 @@ public class TransactionDetailActivity extends AppCompatActivity {
             textVehicleType.setText(vehicleType);
 
             String statusText = "-";
-            Log.w("status: " , status);
-            if(status.equals("Success")){
+            Log.w("status: ", status);
+            if (status.equals("Success")) {
                 textStatus.setTextColor(Color.parseColor("#7bc043"));
                 statusText = "Thanh toán Thành công";
             } else if (status.equals("Finish")) {
@@ -342,4 +344,106 @@ public class TransactionDetailActivity extends AppCompatActivity {
         updateTransactionStatus();
     }
 
+//    public void writeNewReport() {
+//        Report report = new Report(transactionId, Commons.getUsername(this), "unread");
+//
+//        Map<String, Object> reportValues = report.toMap();
+//        Map<String, Object> childUpdates = new HashMap<>();
+//
+//        String key = mDatabase.child("reports").push().getKey();
+//
+//        childUpdates.put("/reports/" + key, reportValues);
+//        mDatabase.updateChildren(childUpdates);
+//    }
+
+    public void reportTransaction() {
+        final ProgressDialog pdial = new ProgressDialog(this);
+        pdial.setMessage("Đang thông báo lỗi...");
+        pdial.setTitle("Báo Lỗi");
+        pdial.show();
+
+        Log.w("Request Report Trans", "Send Request Report Transaction");
+        RequestServer rs = new RequestServer();
+        rs.delegate = new RequestServer.RequestResult() {
+            @Override
+            public void processFinish(String result) {
+                try {
+                    pdial.dismiss();
+                    Log.w("Receive TransStatus", "Transaction Status Json: " + result);
+                    JSONObject infos = new JSONObject(result);
+                    String newStatus = infos.getString("status");
+                    String updateResult = infos.getString("result");
+
+                    if (updateResult.equalsIgnoreCase("success")) {
+//                        Log.d("Report Transaction", "Report Transaction Success");
+//
+//                        database = new DBAdapter(TransactionDetailActivity.this);
+//                        database.open();
+//
+//                        Log.w(TAG, "processFinish() returned: " + newStatus);
+//                        Cursor resultSet = database.getInfo(transactionId);
+//                        if (resultSet.moveToFirst()) {
+//                            String stationName = resultSet.getString(1);
+//                            int stationId = resultSet.getInt(2);
+//                            String zone = resultSet.getString(3);
+//                            String dateTime = resultSet.getString(4);
+//                            double price = resultSet.getDouble(5);
+//                            String status = resultSet.getString(6);
+//                            String vehicleType = resultSet.getString(7);
+//                            String type = resultSet.getString(8);
+//
+//                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+//                            String lastModified = sdf.format(new Date());
+//
+//                            boolean isSuccessful = database.updateInfo(transactionId, stationName, stationId,
+//                                    zone, dateTime, price, newStatus, vehicleType, type, lastModified);
+//
+//                            Log.d("DATABASE UPDATE", String.valueOf(isSuccessful));
+//
+//                            resultSet = database.getInfo(transactionId);
+//                            if (resultSet.moveToFirst()) {
+//                                Log.d("GET DETAIL TRANSACTION", "VIEW FROM LOCAL");
+//                                viewFromLocal(resultSet);
+//                            } else {
+//                                Log.d("GET DETAIL TRANSACTION", "VIEW FROM SERVER");
+//                                getTransactionDetail();
+//                            }
+//                        }
+//                        database.close();
+                        Log.d(TAG, "processFinish() returned: " + newStatus);
+                        Toast.makeText(TransactionDetailActivity.this, "Report success", Toast.LENGTH_LONG).show();
+                    } else if (updateResult.equalsIgnoreCase("fail")) {
+                        Log.e(TAG, "Report Transaction Fail");
+                        Toast.makeText(TransactionDetailActivity.this, "Report fail", Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (Exception e) {
+                    Log.e("Transaction Detail", e.getMessage());
+                    new AlertDialog.Builder(TransactionDetailActivity.this)
+                            .setTitle("Exception")
+                            .setMessage("Cannot parse json with result: " + result)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            })
+                            .create().show();
+                }
+            }
+        };
+
+        List<String> params = new ArrayList<>();
+        params.add(transactionId);
+        rs.execute(params, "transaction", "reportTransaction", "GET");
+    }
+
+    public void clickToReportTransaction(View view) {
+        reportTransaction();
+        //finish();
+    }
 }

@@ -35,25 +35,25 @@
             </li>
             <li>
                 <a href="/lane">
-                    <i class="pe-7s-plugin"></i>
+                    <i class="pe-7s-way"></i>
                     <p>Lane</p>
                 </a>
             </li>
             <li>
                 <a href="/price">
-                    <i class="pe-7s-plugin"></i>
+                    <i class="pe-7s-cash"></i>
                     <p>Price</p>
                 </a>
             </li>
             <li>
                 <a href="/station">
-                    <i class="pe-7s-plugin"></i>
+                    <i class="pe-7s-map-2"></i>
                     <p>Station</p>
                 </a>
             </li>
             <li>
                 <a href="/vehicletype">
-                    <i class="pe-7s-plugin"></i>
+                    <i class="pe-7s-ticket"></i>
                     <p>Vehicle Type</p>
                 </a>
             </li>
@@ -61,6 +61,18 @@
                 <a href="/transaction">
                     <i class="pe-7s-news-paper"></i>
                     <p>Transaction</p>
+                </a>
+            </li>
+            <li>
+                <a href="/report">
+                    <i class="pe-7s-note"></i>
+                    <p>Report</p>
+                </a>
+            </li>
+            <li>
+                <a href="/photoDump">
+                    <i class="pe-7s-news-paper"></i>
+                    <p>Dump</p>
                 </a>
             </li>
             
