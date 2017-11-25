@@ -1,4 +1,7 @@
 package hackathon.fpt.ktk.service;
 
-public class VehicleServiceImpl {
+import org.springframework.stereotype.Service;
+
+@Service
+public class VehicleServiceImpl extends AbstractServiceImpl implements VehicleService {
 }

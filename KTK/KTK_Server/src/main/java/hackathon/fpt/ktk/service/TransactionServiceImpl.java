@@ -1,4 +1,7 @@
 package hackathon.fpt.ktk.service;
 
-public class TransactionServiceImpl {
+import org.springframework.stereotype.Service;
+
+@Service
+public class TransactionServiceImpl extends AbstractServiceImpl implements TransactionService {
 }

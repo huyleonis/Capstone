@@ -1,4 +1,7 @@
 package hackathon.fpt.ktk.service;
 
-public class BeaconServiceImpl {
+import org.springframework.stereotype.Service;
+
+@Service
+public class BeaconServiceImpl extends AbstractServiceImpl implements BeaconService {
 }

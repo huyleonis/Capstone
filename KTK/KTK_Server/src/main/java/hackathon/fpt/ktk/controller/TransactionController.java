@@ -1,4 +1,20 @@
 package hackathon.fpt.ktk.controller;
 
-public class TransactionController {
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
+@RestController
+@RequestMapping(value = "/transaction")
+public class TransactionController extends AbstractController {
+
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public ModelAndView viewTransaction() {
+        ModelAndView m = new ModelAndView("transaction");
+        return m;
+    }
 }
