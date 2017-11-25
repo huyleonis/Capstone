@@ -18,4 +18,6 @@ public interface AccountService {
     String checkLogin(String username, String password);
 
     boolean updateToken(String username, String token);
+
+    String makePayment(String username, int stationId);
 }

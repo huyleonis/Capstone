@@ -1,7 +1,9 @@
 package hackathon.fpt.ktk.service;
 
 import hackathon.fpt.ktk.dto.AccountDTO;
+import hackathon.fpt.ktk.dto.PriceDTO;
 import hackathon.fpt.ktk.entity.Account;
+import hackathon.fpt.ktk.entity.Price;
 import hackathon.fpt.ktk.entity.Vehicle;
 import org.springframework.stereotype.Service;
 
@@ -127,5 +129,40 @@ public class AccountServiceImpl extends AbstractServiceImpl implements AccountSe
         }
 
         return false;
+    }
+
+    /**
+     * Thực hiện trừ tiền vào tài khoản của account
+     *
+     * @param username
+     * @param stationId
+     * @return
+     */
+    @Override
+    public String makePayment(String username, int stationId) {
+        String result = "";
+        Account accountEntity = accountRepos.findByUsername(username);
+        if (accountEntity == null) {
+            return "Tài khoản [" + username + "] không tồn tại";
+        }
+        AccountDTO accountDto = AccountDTO.convertFromEntity(accountEntity);
+
+        Price priceEntity = priceRepos.findPriceByStationIdAndLicensePlate(stationId, accountEntity.getVehicle().getLicensePlate());
+        if (priceEntity == null) {
+            return "Không tìm được giá";
+        }
+        PriceDTO priceDto = PriceDTO.convertFromEntity(priceEntity);
+
+        if (accountDto.getBalance() < priceDto.getPrice()) {
+            return "Tài khoản không đủ thực hiện trả phí";
+        } else {
+            double newBalance = accountDto.getBalance() - priceDto.getPrice();
+            int sqlResult = accountRepos.updateBalance(accountDto.getId(), newBalance);
+            if (sqlResult <= 0) {
+                return "Không thể thực hiện thahh toán phí - Lỗi hệ thống";
+            }
+        }
+
+        return result;
     }
 }
