@@ -11,48 +11,44 @@ import java.util.List;
 
 public interface TransactionService {
 
-	TransactionDTO insertManualTransaction(String licensePlate, int laneId);
+    TransactionDTO insertManualTransaction(String licensePlate, int laneId);
 
-	TransactionDTO insertAutoTransaction(String username, int stationId);
+    TransactionDTO insertAutoTransaction(String username, int stationId);
 
-	TransactionDTO createCapturedTransaction(String plate, String photo, Date createdTime, int stationId)
-			throws Exception;
+    TransactionDTO createCapturedTransaction(String plate, String photo, Date createdTime, int stationId)
+            throws Exception;
 
-	TransactionDTO updateTransactionStatus(String id, TransactionStatus status);
+    TransactionDTO updateTransactionStatus(String id, TransactionStatus status);
 
-	TransactionDTO getById(String id);
+    TransactionDTO getById(String id);
 
-	TransactionDetailDTO getDetailById(String id);
+    TransactionDetailDTO getDetailById(String id);
 
-	List<TransactionDTO> getTransactionsForStaff(String status);
-    
+    List<TransactionDTO> getTransactionsForStaff(String status);
+
     TransactionDTO updateTransactionType(String id, int type);
 
-	TransactionDTO updateTransactionLane(String id, int laneId);
+    TransactionDTO updateTransactionLane(String id, int laneId);
+
     List<TransactionDetailDTO> getHistoryTransaction(String username, Date fromDate, Date toDate);
 
-	List<TransactionDTO> getHistoryTransaction(String vehicleId, Date fromDate, Date toDate);
-
     List<TransactionDetailDTO> getDetailByVehicleIdIn24Hours(int vehicleId);
-    
+
     TransactionDetailDTO getCapturedTransaction(int vehicleId, int stationId, boolean updateStatus);
-	List<TransactionDetailDTO> getAllDetail();
 
-	List<TransactionDetailDTO> getAllReportDetail();
+    List<TransactionDetailDTO> getAllDetail();
 
-	List<TransactionDetailDTO> getDetailByVehicleIdIn24Hours(int vehicleId);
+    List<TransactionDetailDTO> getAllReportDetail();
 
-	TransactionDetailDTO getCapturedTransaction(int vehicleId, int stationId);
+    TransactionDTO updateReport(Transaction transaction);
 
-	TransactionDTO updateReport(Transaction transaction);
+    boolean delete(String id);
 
-	boolean delete(String id);
+    List<TransactionDTO> getTransByLicPlateAndTime(String licensePlate, String createdTime);
 
-	List<TransactionDTO> getTransByLicPlateAndTime(String licensePlate, String createdTime);
+    boolean resolveReport(String transId, String transIdError);
 
-	boolean resolveReport(String transId, String transIdError);
-	
-	boolean confirmReport(String transId, String licensePlate);
-	
-	boolean updatePhoto(String transId, String photo);
+    boolean confirmReport(String transId, String licensePlate);
+
+    boolean updatePhoto(String transId, String photo);
 }

@@ -15,11 +15,10 @@ import com.fpt.capstone.Entities.Transaction;
 public class TransactionDetailDTO extends TransactionDTO {
 
     private String laneName;
-//    private String stationName;
+    private String stationName;
     private String zone;
     private String location;
     private String username;
-    private String licensePlate;
     private String vehicleType;
     
 
@@ -36,13 +35,13 @@ public class TransactionDetailDTO extends TransactionDTO {
         this.zone = zone;
     }
 
-//    public String getStationName() {
-//        return stationName;
-//    }
-//
-//    public void setStationName(String stationName) {
-//        this.stationName = stationName;
-//    }
+    public String getStationName() {
+        return stationName;
+    }
+
+    public void setStationName(String stationName) {
+        this.stationName = stationName;
+    }
 
     public String getUsername() {
         return username;
@@ -50,14 +49,6 @@ public class TransactionDetailDTO extends TransactionDTO {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getLicensePlate() {
-        return licensePlate;
-    }
-
-    public void setLicensePlate(String licensePlate) {
-        this.licensePlate = licensePlate;
     }
 
     public String getVehicleType() {

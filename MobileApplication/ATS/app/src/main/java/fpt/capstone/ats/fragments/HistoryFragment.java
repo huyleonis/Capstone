@@ -151,7 +151,7 @@ public class HistoryFragment extends Fragment {
 
 
         ArrayList<String> params = new ArrayList<>();
-        params.add(Commons.getVehicleId(this.getContext()));
+        params.add(Commons.getUsername(this.getActivity()));
         params.add(fromDateString.replace('/','-'));
         params.add(toDateString.replace('/','-'));
 
