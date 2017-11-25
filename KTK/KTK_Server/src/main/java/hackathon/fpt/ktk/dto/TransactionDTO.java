@@ -24,8 +24,7 @@ public class TransactionDTO {
     public TransactionDTO() {
     }
 
-    public TransactionDTO(String id, int vehicleId, int stationId, Date dateTime, TransactionStatus status, double price,
-                          int laneId, TransactionType type, String photo, String failReason, String licensePlate, String typeVehicle) {
+    public TransactionDTO(String id, int vehicleId, int stationId, Date dateTime, TransactionStatus status, double price, int laneId, TransactionType type, String photo, String failReason, String licensePlate, String typeVehicle) {
         this.id = id;
         this.vehicleId = vehicleId;
         this.stationId = stationId;
@@ -39,6 +38,7 @@ public class TransactionDTO {
         this.licensePlate = licensePlate;
         this.typeVehicle = typeVehicle;
     }
+
 
     public String getId() {
         return id;
@@ -72,7 +72,11 @@ public class TransactionDTO {
         this.dateTime = dateTime;
     }
 
-    public TransactionStatus getStatus() {
+    public String getStatus() {
+        return status.getName();
+    }
+
+    public TransactionStatus getTransactionStatus() {
         return status;
     }
 
@@ -172,5 +176,6 @@ public class TransactionDTO {
             }
         }
         dto.setPhoto(transaction.getPhoto());
+
     }
 }

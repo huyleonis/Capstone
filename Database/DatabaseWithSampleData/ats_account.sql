@@ -36,6 +36,8 @@ CREATE TABLE `account` (
   `balance` float DEFAULT NULL,
   `isActive` bit(1) NOT NULL DEFAULT b'1',
   `isEnable` bit(1) NOT NULL DEFAULT b'1',
+  `loginStatus` bit(1) DEFAULT b'0',
+  `token` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`),
   KEY `fk_account_vehicle_idx` (`vehicleId`),
@@ -49,7 +51,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'admin','admin',1,'Admin',NULL,NULL,NULL,NULL,NULL,NULL,'',''),(2,'hieunc','123',2,'Nguyễn Chí Hiếu',NULL,NULL,NULL,NULL,NULL,NULL,'',''),(3,'huylvq','123',2,'Lê Vương Quốc Huy',NULL,NULL,NULL,NULL,NULL,NULL,'',''),(4,'tinpb','123',3,'Phạm Bảo Tín','tin@gmail.com','0903380457','012345678',NULL,1,40000,'',''),(5,'sonnv','123',3,'Nguyễn Việt Son','son@gmail.com','0909354974','025308080',NULL,2,70000,'',''),(6,'thanhth','123',3,'Trương Hữu Thành','thanh@gmail.com','0939354974','025251414',NULL,3,5000,'','');
+INSERT INTO `account` VALUES (1,'admin','admin',1,'Admin',NULL,NULL,NULL,NULL,NULL,NULL,'','','\0',NULL),(2,'hieunc','123',2,'Nguyễn Chí Hiếu',NULL,NULL,NULL,NULL,NULL,NULL,'','','\0',NULL),(3,'huylvq','123',2,'Lê Vương Quốc Huy',NULL,NULL,NULL,NULL,NULL,NULL,'','','\0',NULL),(4,'tinpb','123',3,'Phạm Bảo Tín','tin@gmail.com','0903380457','012345678',NULL,5,160000,'','','\0',NULL),(5,'sonnv','123',3,'Nguyễn Việt Son','son@gmail.com','0909354974','025308080',NULL,2,70000,'','','\0',NULL),(6,'thanhth','123',3,'Trương Hữu Thành','thanh@gmail.com','0939354974','025251414',NULL,3,5000,'','','\0',NULL);
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -62,4 +64,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-13  0:04:46
+-- Dump completed on 2017-11-17 10:09:19

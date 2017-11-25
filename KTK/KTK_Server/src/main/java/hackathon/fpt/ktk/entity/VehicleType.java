@@ -3,7 +3,7 @@ package hackathon.fpt.ktk.entity;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity(name = "VehicleType")
+@Entity(name = "vehicletype")
 public class VehicleType {
 
     @Id

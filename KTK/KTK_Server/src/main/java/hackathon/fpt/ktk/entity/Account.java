@@ -13,7 +13,6 @@ public class Account {
     @Column(name = "username")
     private String username;
 
-    @Transient
     @Column(name = "password")
     private String password;
 
