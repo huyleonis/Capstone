@@ -1,3 +1,13 @@
+/*.selectedRow {*/
+	/*background-color: #4685cf;*/
+	/*color: #fff;*/
+/*}*/
+
+.selectedRow {
+	background-color: #4685cf;
+	color: #fff;
+}
+
 div.dataTables_length label {
 	font-weight: normal;
 	float: left;

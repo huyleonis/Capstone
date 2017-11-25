@@ -9,26 +9,26 @@ public class AbstractController {
     protected final Logger logger = Logger.getLogger(this.getClass());
 
     @Autowired
-    private AccountService accountService;
+    protected AccountService accountService;
 
     @Autowired
-    private BeaconService beaconService;
+    protected BeaconService beaconService;
 
     @Autowired
-    private LaneService laneService;
+    protected LaneService laneService;
 
     @Autowired
-    private PriceService priceService;
+    protected PriceService priceService;
 
     @Autowired
-    private StationService stationService;
+    protected StationService stationService;
 
     @Autowired
-    private TransactionService transactionService;
+    protected TransactionService transactionService;
 
     @Autowired
-    private VehicleService vehicleService;
+    protected VehicleService vehicleService;
 
     @Autowired
-    private VehicleTypeService vehicleTypeService;
+    protected VehicleTypeService vehicleTypeService;
 }

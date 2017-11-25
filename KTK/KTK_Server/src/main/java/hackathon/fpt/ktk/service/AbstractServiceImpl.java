@@ -9,26 +9,26 @@ public class AbstractServiceImpl {
     protected final Logger logger = Logger.getLogger(this.getClass());
 
     @Autowired
-    private AccountRepos accountRepos;
+    protected AccountRepos accountRepos;
 
     @Autowired
-    private BeaconRepos beaconRepos;
+    protected BeaconRepos beaconRepos;
 
     @Autowired
-    private LaneRepos laneRepos;
+    protected LaneRepos laneRepos;
 
     @Autowired
-    private PriceRepos priceRepos;
+    protected PriceRepos priceRepos;
 
     @Autowired
-    private StationRepos stationRepos;
+    protected StationRepos stationRepos;
 
     @Autowired
-    private TransactionRepos transactionRepos;
+    protected TransactionRepos transactionRepos;
 
     @Autowired
-    private VehicleRepos vehicleRepos;
+    protected VehicleRepos vehicleRepos;
 
     @Autowired
-    private VehicleTypeRepos vehicleTypeRepos;
+    protected VehicleTypeRepos vehicleTypeRepos;
 }
