@@ -49,6 +49,11 @@ public class MainForm extends javax.swing.JFrame {
         txtLaneId = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("KTK");
+        setLocation(new java.awt.Point(250, 50));
+        setMaximumSize(new java.awt.Dimension(750, 600));
+        setMinimumSize(new java.awt.Dimension(750, 600));
+        setResizable(false);
 
         MainPane.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
