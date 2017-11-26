@@ -355,4 +355,17 @@ public class TransactionController {
 
         return dto;
     }
+    
+    /**
+     * Lấy list report
+     *
+     * @return
+     */
+    @RequestMapping(value = "/getReportDetail", method = RequestMethod.GET)
+    public String getAllReportTransaction() throws JsonProcessingException {
+
+        List<TransactionDetailDTO> dtos = transactionService.getAllReportDetail();
+
+        return new Gson().toJson(dtos);
+    }
 }

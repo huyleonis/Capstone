@@ -48,7 +48,7 @@ public class TransactionController extends AbstractController {
     @RequestMapping(value = "makeManualPayment/{licensePlate}/{laneId}")
     @ResponseStatus(HttpStatus.OK)
     public TransactionDTO insertTransactionPaymentManual(@PathVariable String licensePlate,
-                                                         @PathVariable int laneId) {
+            @PathVariable int laneId) {
         return transactionService.insertManualTransaction(licensePlate, laneId);
     }
 
@@ -79,7 +79,7 @@ public class TransactionController extends AbstractController {
     @RequestMapping(value = "getCapturedTransaction/{licensePlate}/{stationId}")
     @ResponseStatus(HttpStatus.OK)
     public TransactionDetailDTO getCapturedTransactionForDesktop(@PathVariable String licensePlate,
-                                                                 @PathVariable int stationId) {
+            @PathVariable int stationId) {
 
         VehicleDTO vehicleDTO = vehicleService.getVehicleByLicensePlate(licensePlate);
 
@@ -113,7 +113,7 @@ public class TransactionController extends AbstractController {
     @RequestMapping(value = "camera{stationId}/detect/{plate}", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public String createTransactionByCamera(@PathVariable int stationId, @PathVariable String plate,
-                                            @RequestParam(name = "img") MultipartFile img) {
+            @RequestParam(name = "img") MultipartFile img) {
 
         String result = "false";
         System.out.println("Plate: " + plate);
@@ -318,7 +318,6 @@ public class TransactionController extends AbstractController {
         return map;
     }
 
-
     @RequestMapping(value = "/reportTransaction/{transactionId}")
     @ResponseStatus(HttpStatus.OK)
     public Map<String, String> reportTransaction(@PathVariable String transactionId) {
@@ -342,4 +341,16 @@ public class TransactionController extends AbstractController {
         return map;
     }
 
+    /**
+     * Lấy list report
+     *
+     * @return
+     */
+    @RequestMapping(value = "/getReportDetail", method = RequestMethod.GET)
+    public String getAllReportTransaction() throws JsonProcessingException {
+
+        List<TransactionDetailDTO> dtos = transactionService.getAllReportDetail();
+
+        return new Gson().toJson(dtos);
+    }
 }

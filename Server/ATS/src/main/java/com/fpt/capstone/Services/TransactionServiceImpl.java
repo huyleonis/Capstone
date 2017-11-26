@@ -54,7 +54,7 @@ public class TransactionServiceImpl implements TransactionService {
         int vehicleId = vehicleRepos.findByLicensePlate(licensePlate).getId();
 
         int transaction = transactionRepos.insertManualTransaction(id, stationId,
-                now, status, price.getPrice(), TransactionType.MANUAL.getType(),vehicleId);
+                now, status, price.getPrice(), TransactionType.MANUAL.getType(), vehicleId);
         if (transaction > 0) {
             Transaction transaction1 = transactionRepos.findById(id);
             if (transaction1 != null) {
@@ -71,14 +71,13 @@ public class TransactionServiceImpl implements TransactionService {
         String id = new Date().getTime() + "";
         Date now = new Date();
         Account account = accountRepos.findByUsername(username);
-        int vehicleId = account.getVehicle().getId();        
+        int vehicleId = account.getVehicle().getId();
         Price price = priceRepos.findPriceByStationIdAndLicensePlate(stationId, account.getVehicle().getLicensePlate());
 
-        
-        int transaction = transactionRepos.insertAutoTransaction(id, stationId, now, 
-                TransactionStatus.TRANS_PENDING.getName(), price.getPrice(), 
+        int transaction = transactionRepos.insertAutoTransaction(id, stationId, now,
+                TransactionStatus.TRANS_PENDING.getName(), price.getPrice(),
                 TransactionType.AUTOMATION.getType(), vehicleId);
-        
+
         if (transaction > 0) {
             Transaction transaction2 = transactionRepos.findById(id);
             if (transaction2 != null) {
@@ -199,7 +198,7 @@ public class TransactionServiceImpl implements TransactionService {
             if (diffMins < 30) {
                 if (updateStatus) {
                     transactionRepos.updateTransaction(tran.getId(), TransactionStatus.TRANS_NOTPAY.getName());
-                }                
+                }
                 result = TransactionDetailDTO.covertFromEntity(tran);
             }
         }
@@ -214,7 +213,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         if (vehicle != null) { //Nếu số xe có trong db
             Price price = priceRepos.findPriceByStationIdAndLicensePlate(stationId, plate);
-            int result = transactionRepos.createCaptureTransaction(id, stationId, 
+            int result = transactionRepos.createCaptureTransaction(id, stationId,
                     createdTime, TransactionStatus.TRANS_INITIAL.getName(),
                     price.getPrice(), photo, vehicle.getId());
 
@@ -227,7 +226,7 @@ public class TransactionServiceImpl implements TransactionService {
             }
         } else { //nếu số xe ko có trong db
             throw new Exception("This license plate does not exist");
-        }        
+        }
         return null;
     }
 
@@ -237,11 +236,24 @@ public class TransactionServiceImpl implements TransactionService {
         if (transaction > 0) {
             Transaction transaction1 = transactionRepos.findById(id);
             if (transaction1 != null) {
-                TransactionDTO dto = TransactionDTO.convertFromEntity(transaction1);                
+                TransactionDTO dto = TransactionDTO.convertFromEntity(transaction1);
                 return dto;
             }
         }
         return null;
     }
 
+    @Override
+    public List<TransactionDetailDTO> getAllReportDetail() {
+
+        List<TransactionDetailDTO> dtos = new ArrayList<>();
+
+        List<Transaction> transactions = transactionRepos.findByStatus(TransactionStatus.TRANS_ERROR.getName());
+
+        for (Transaction transaction : transactions) {
+            dtos.add(TransactionDetailDTO.covertFromEntity(transaction));
+        }
+
+        return dtos;
+    }
 }

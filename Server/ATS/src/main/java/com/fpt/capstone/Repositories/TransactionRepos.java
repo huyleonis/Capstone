@@ -20,6 +20,7 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
 
     /**
      * Tạo transaction thanh toán thủ công
+     *
      * @param id
      * @param stationId
      * @param idTransaction
@@ -28,15 +29,15 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
      * @param price
      * @param type
      * @param vehicleId
-     * @return 
+     * @return
      */
     @Modifying
     @Transactional
-    @Query(value = "insert into transaction (id, stationId, createdTime, status, price, type, vehicleId)" +
-                                    " values(:id, :stationId, :time, :status, :price, :type, :vehicleId)", nativeQuery = true)
-    int insertManualTransaction(@Param("id") String id, 
-            @Param("stationId") int stationId, 
-            @Param("time") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date now, 
+    @Query(value = "insert into transaction (id, stationId, createdTime, status, price, type, vehicleId)"
+            + " values(:id, :stationId, :time, :status, :price, :type, :vehicleId)", nativeQuery = true)
+    int insertManualTransaction(@Param("id") String id,
+            @Param("stationId") int stationId,
+            @Param("time") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date now,
             @Param("status") String status,
             @Param("price") double price,
             @Param("type") int type,
@@ -48,12 +49,13 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
      * @param id
      * @return
      */
-    @Query(value = "select * from transaction where id = ?1" , nativeQuery = true)
+    @Query(value = "select * from transaction where id = ?1", nativeQuery = true)
     Transaction findById(String id);
 
     /**
      * Tạo transaction thanh toán tự động, khi driver đi vào beacon 1, gửi lên
      * yêu cầu thanh toán khi chưa chụp dc hình
+     *
      * @param id
      * @param stationId
      * @param idTransaction
@@ -62,15 +64,15 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
      * @param price
      * @param type
      * @param vehicleId
-     * @return 
+     * @return
      */
     @Modifying
     @Transactional
-    @Query(value = "insert into transaction (id, stationId, createdTime, status, price, type, vehicleId)" +
-                                    " values(:id, :stationId, :time, :status, :price, :type, :vehicleId)", nativeQuery = true)
-    int insertAutoTransaction(@Param("id") String id, 
-            @Param("stationId") int stationId, 
-            @Param("time") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date now, 
+    @Query(value = "insert into transaction (id, stationId, createdTime, status, price, type, vehicleId)"
+            + " values(:id, :stationId, :time, :status, :price, :type, :vehicleId)", nativeQuery = true)
+    int insertAutoTransaction(@Param("id") String id,
+            @Param("stationId") int stationId,
+            @Param("time") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date now,
             @Param("status") String status,
             @Param("price") double price,
             @Param("type") int type,
@@ -78,6 +80,7 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
 
     /**
      * Method to create transaction when camera capture photo of plate
+     *
      * @param id
      * @param plate
      * @param stationId
@@ -86,14 +89,14 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
      * @param price
      * @param filePath
      * @param vehicleId
-     * @return 
+     * @return
      */
     @Modifying
     @Transactional
-    @Query(value = "insert into transaction (id, stationId, createdTime, status, price, photo, vehicleId)" +
-                    "                values(:id, :stationId, :time,  :status, :price, :photo, :vehicleId)", nativeQuery = true)
-    int createCaptureTransaction(@Param("id") String id, 
-            @Param("stationId") int stationId, 
+    @Query(value = "insert into transaction (id, stationId, createdTime, status, price, photo, vehicleId)"
+            + "                values(:id, :stationId, :time,  :status, :price, :photo, :vehicleId)", nativeQuery = true)
+    int createCaptureTransaction(@Param("id") String id,
+            @Param("stationId") int stationId,
             @Param("time") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date createdTime,
             @Param("status") String status,
             @Param("price") double price,
@@ -111,7 +114,7 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
     @Transactional
     @Query(value = "update transaction set status = ?2 where id = ?1", nativeQuery = true)
     int updateTransaction(String idTransaction, String status);
-    
+
     /**
      * Cập nhật type của transaction
      *
@@ -125,7 +128,8 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
     int updateTransactionType(String id, int type);
 
     /**
-     * Lấy transaction cho staff theo status cho trước trong vòng 10 phút trước đó 
+     * Lấy transaction cho staff theo status cho trước trong vòng 10 phút trước
+     * đó
      *
      * @param laneId
      * @param status
@@ -148,22 +152,23 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
     @Query(value = "update transaction set laneId = ?2 where id = ?1", nativeQuery = true)
     int updateTransaction(String idTransaction, int laneId);
 
-
     /**
      * lịch sử giao dịch cho tài xế, khi chọn ngày bắt đầu và kết thúc giao dịch
+     *
      * @param vehicleId : id của vehicle
      * @param fromDate : bắt đầu từ ngày giao dịch
      * @param toDate : kết thúc ngày giao dịch
      * @return
      */
-    @Query(value = "select * from transaction where vehicleId = :vehicleId " +
-            "and createdTime > :fromDate and createdTime < :toDate", nativeQuery = true)
-    List<Transaction> getHistoryTransaction(@Param("vehicleId") int vehicleId, 
-            @Param("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date fromDate, 
+    @Query(value = "select * from transaction where vehicleId = :vehicleId "
+            + "and createdTime > :fromDate and createdTime < :toDate", nativeQuery = true)
+    List<Transaction> getHistoryTransaction(@Param("vehicleId") int vehicleId,
+            @Param("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date fromDate,
             @Param("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date toDate);
 
     /**
      * Tìm transaction detail theo vehicle id trong vòng 24 giờ
+     *
      * @param vehicleId khóa xác định xe của tài xế
      * @return
      */
@@ -171,11 +176,14 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
             + "WHERE vehicleId = :vehicleId "
             + "AND createdTime >= NOW() - INTERVAL 24 HOUR", nativeQuery = true)
     List<Transaction> findByVehicleIdIn24Hours(@Param("vehicleId") Integer vehicleId);
-    
+
     @Query(value = "SELECT * FROM transaction "
             + "WHERE vehicleId = :vehicleId "
             + "AND stationId = :stationId "
             + "AND status = 'Initial' "
             + "AND createdTime > NOW() - INTERVAL 30 MINUTE", nativeQuery = true)
     Transaction getCapturedTransaction(@Param("vehicleId") Integer vehicleId, @Param("stationId") Integer stationId);
+
+    @Query(value = "SELECT * FROM transaction WHERE status = :status", nativeQuery = true)
+    List<Transaction> findByStatus(@Param("status") String status);
 }

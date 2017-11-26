@@ -18,7 +18,6 @@ public class TransactionDetailDTO extends TransactionDTO {
     private String zone;
     private String location;
     private String username;
-    private String licensePlate;
     private String vehicleType;
     
 
@@ -51,13 +50,6 @@ public class TransactionDetailDTO extends TransactionDTO {
         this.username = username;
     }
 
-    public String getLicensePlate() {
-        return licensePlate;
-    }
-
-    public void setLicensePlate(String licensePlate) {
-        this.licensePlate = licensePlate;
-    }
 
     public String getVehicleType() {
         return vehicleType;
@@ -100,7 +92,6 @@ public class TransactionDetailDTO extends TransactionDTO {
         }
         
         if (tran.getVehicle() != null) {
-            dto.setLicensePlate(tran.getVehicle().getLicensePlate());
             dto.setVehicleType(tran.getVehicle().getVehicleType().getName());
             if (tran.getVehicle().getAccount() != null) {
                 dto.setUsername(tran.getVehicle().getAccount().getUsername());

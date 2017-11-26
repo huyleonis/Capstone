@@ -230,4 +230,18 @@ public class TransactionServiceImpl extends AbstractServiceImpl implements Trans
         }
         return result;
     }
+
+    @Override
+    public List<TransactionDetailDTO> getAllReportDetail() {
+
+        List<TransactionDetailDTO> dtos = new ArrayList<>();
+
+        List<Transaction> transactions = transactionRepos.findByStatus(TransactionStatus.TRANS_ERROR.getName());
+
+        for (Transaction transaction : transactions) {
+            dtos.add(TransactionDetailDTO.covertFromEntity(transaction));
+        }
+
+        return dtos;
+    }
 }

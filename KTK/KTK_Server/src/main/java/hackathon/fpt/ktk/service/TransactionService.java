@@ -32,4 +32,6 @@ public interface TransactionService {
     List<TransactionDTO> getTransactionsForStaff(String status);
 
     List<TransactionDetailDTO> getHistoryTransaction(String username, Date fromDate, Date toDate);
+    
+      List<TransactionDetailDTO> getAllReportDetail();
 }
