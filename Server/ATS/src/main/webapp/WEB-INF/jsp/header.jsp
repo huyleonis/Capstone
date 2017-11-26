@@ -1,6 +1,6 @@
 <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/png" href="img/favicon.ico">
+    <link rel="icon" type="image/png" href="img/car.ico">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
     <title>ATS Management</title>
@@ -44,8 +44,7 @@
     <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
     <script src="js/light-bootstrap-dashboard.js"></script>
 
-    <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
-    <script src="js/demo.js"></script>
+
 
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>

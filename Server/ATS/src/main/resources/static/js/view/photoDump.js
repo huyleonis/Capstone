@@ -10,29 +10,13 @@ $(document)
                                     {
                                         "lengthMenu": [[5, 10, 20, -1],
                                             [5, 10, 20, "All"]], // change
-                                        // the
-                                        // lengthMenu to
-                                        // 5, 10 ,20,
-                                        // All record
-                                        // per page
-                                        // "language": { "search": "",
-                                        // "lengthMenu": "Show _MENU_ per page"
-                                        // }, //remove
-                                        // the Search text and modified the
-                                        // select box
-                                        // "info": false, //remove the show x to
-                                        // x result
-                                        // "dom": '<"top"lf>rt<"bottom"p>',
-                                        // f - filter input, r - processing, t -
-                                        // table, l - lengthMenu, p -
-                                        // pagination
-                                        // top - top of the table, bottom -
-                                        // bottom of the table
+
                                         "ajax": {
                                         	"url" : "../transaction/getDumpToPhoto",
                                         	"dataSrc": ""
                                         },
                                         "columns": [
+
                                             { "data": "photoName" },
                                             { "data": "licensePlate" },
                                             { "data": "createdTime" },
@@ -40,7 +24,6 @@ $(document)
                                                 // detail-update-delete
                                                 "data": null,
                                                 "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openResolveModal(this)'></button>"
-                                                        + "<button class='btn btn-danger glyphicon glyphicon-trash' onclick='openDeleteModal(this)'></button>",
                                             }
                                         ]
                                     });
@@ -50,7 +33,7 @@ $(document)
 //                        submitDeleteForm();
 //                    });
 //                    // handle update form submit
-//                    $("#update-form").submit(function (event) {
+//                    $("#resolve-modal").submit(function (event) {
 //                        event.preventDefault();
 //                        submitUpdateForm();
 //                    })
@@ -65,64 +48,6 @@ $(document)
  * Contain ajax call to perfom update or delete a report
  */
 // perform ajax call to save report
-function submitAddForm() {
-	var account;
-    var role = $("#add-form-role").val();
-    if (role != "3") {
-    	account = {
-                "username": $("#add-form-username").val(),
-                "password": $("#add-form-password").val(),
-                "role": $("#add-form-role").val(),
-                "fullname": $("#add-form-fullname").val(),
-                "email": $("#add-form-email").val(),
-                "phone": $("#add-form-phone").val(),
-                "numberId": $("#add-form-numberId").val(),
-                "vehicle": null,
-                "balance": $("#add-form-balance").val(),
-                "isActive": $("#add-form-isActive").val(),
-                "isEnable": $("#add-form-isEnable").val()
-        };
-	} else {
-		account = {
-		        "username": $("#add-form-username").val(),
-		        "password": $("#add-form-password").val(),
-		        "role": $("#add-form-role").val(),
-		        "fullname": $("#add-form-fullname").val(),
-		        "email": $("#add-form-email").val(),
-		        "phone": $("#add-form-phone").val(),
-		        "numberId": $("#add-form-numberId").val(),
-		        "vehicle": {
-		        		"licensePlate": $("#add-form-licensePlate").val(),
-		        		"vehicletype": {
-		        			"id": $("#add-form-typeId").val()
-		        		}
-		        },
-		        "balance": $("#add-form-balance").val(),
-		        "isActive": $("#add-form-isActive").val(),
-		        "isEnable": $("#add-form-isEnable").val()
-		    };
-	}
-    $.ajax({
-        type: "POST",
-        contentType: "application/json",
-        url: "../account/create",
-        data: JSON.stringify(account),
-        success: function (result) {
-            if (result == "fail") {
-                setStatus("Something was wrong! Please check again!", "#ff0000");
-            } else {
-                setStatus("Add success!", "#00cc00");
-            }
-        },
-        error: function (result) {
-            setStatus("Something was wrong! Please check again!", "#ff0000");
-        }
-    });
-    $("#add-modal").modal("hide");
-    $("#alert").show();
-    reloadTable();
-    clearStatus();
-}
 
 //var curr;
 //function submitUpdateForm() {

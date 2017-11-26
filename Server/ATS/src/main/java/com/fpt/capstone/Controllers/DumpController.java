@@ -5,12 +5,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
-@RequestMapping(value = "/dump")
+@RequestMapping(value = "/photoDump")
 public class DumpController {
 	
 	@RequestMapping
 	public ModelAndView viewDump() {
-		ModelAndView m = new ModelAndView("dump");
+		ModelAndView m = new ModelAndView("photoDump");
 		return m;
 	}
 	
