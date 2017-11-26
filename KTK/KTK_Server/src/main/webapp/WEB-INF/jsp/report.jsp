@@ -60,7 +60,7 @@
                         <%-- End div add modal --%>
                         <div id="resolve-modal" class="modal fade" role="dialog"
                              data-backdrop="false">
-                            <div class="modal-dialog modal-lg">
+                            <div class="modal-dialog">
 
                                 <%--<!-- Modal content-->--%>
                                 <%--<!-- Update Form using ajax !-->--%>

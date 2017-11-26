@@ -2,6 +2,7 @@ package hackathon.fpt.ktk.service;
 
 import hackathon.fpt.ktk.dto.TransactionDTO;
 import hackathon.fpt.ktk.dto.TransactionDetailDTO;
+import hackathon.fpt.ktk.entity.Transaction;
 import hackathon.fpt.ktk.util.TransactionStatus;
 
 import java.util.Date;
@@ -32,6 +33,20 @@ public interface TransactionService {
     List<TransactionDTO> getTransactionsForStaff(String status);
 
     List<TransactionDetailDTO> getHistoryTransaction(String username, Date fromDate, Date toDate);
-    
-      List<TransactionDetailDTO> getAllReportDetail();
+
+    List<TransactionDetailDTO> getAllReportDetail();
+
+    TransactionDetailDTO getCapturedTransaction(int vehicleId, int stationId);
+
+    TransactionDTO updateReport(Transaction transaction);
+
+    boolean delete(String id);
+
+    List<TransactionDTO> getTransByLicPlateAndTime(String licensePlate, String createdTime);
+
+    boolean resolveReport(String transId, String transIdError);
+
+    boolean confirmReport(String transId, String licensePlate);
+
+    boolean updatePhoto(String transId, String photo);
 }

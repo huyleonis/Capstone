@@ -15,10 +15,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletContext;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -353,4 +358,93 @@ public class TransactionController extends AbstractController {
 
         return new Gson().toJson(dtos);
     }
+
+    @RequestMapping(value = "/resolveReport")
+    public String resolveReport(@RequestParam(name = "transId") String transId,
+            @RequestParam(name = "transIdError") String transIdError) {
+
+        boolean isSuccessful = false;
+
+        isSuccessful = transactionService.resolveReport(transId, transIdError);
+        if (isSuccessful) {
+            return "success";
+        }
+
+        return "fail";
+    }
+
+    @RequestMapping(value = "/updatePhoto")
+    public String updatePhoto(@RequestParam(name = "transId") String transId,
+            @RequestParam(name = "photo") String photo) {
+
+        boolean isSuccessful = false;
+
+        isSuccessful = transactionService.updatePhoto(transId, photo);
+        if (isSuccessful) {
+            InputStream is = null;
+            OutputStream os = null;
+            String basePath = context.getRealPath(".");
+            File folderSrc = new File(basePath + "/WEB-INF/images/dumps/" + photo + ".jpg");
+            File folderPlate = new File(basePath + "/WEB-INF/images/plates/" + photo + ".jpg");
+            try {
+                is = new FileInputStream(folderSrc);
+                os = new FileOutputStream(folderPlate);
+
+                byte[] buffer = new byte[1024];
+                int length;
+
+                while ((length = is.read(buffer)) > 0) {
+                    os.write(buffer, 0, length);
+                }
+
+                is.close();
+                os.close();
+
+                folderSrc.delete();
+
+                System.out.println("File transfer is successfuly");
+            } catch (IOException e) {
+
+                System.out.println("Cannot transfer file dump");
+            }
+//
+//            if (!folderSrc.exists()) {
+//                return "success";
+//            }
+
+            return "success";
+        }
+
+        return "fail";
+    }
+
+    @RequestMapping(value = "/confirmReport")
+    public String confirmReport(@RequestParam(name = "transId") String transId,
+            @RequestParam(name = "licensePlate") String licensePlate) {
+
+        boolean isSuccessful = false;
+
+        isSuccessful = transactionService.confirmReport(transId, licensePlate);
+
+        if (isSuccessful) {
+            return "success";
+        }
+
+        return "fail";
+    }
+    
+    @RequestMapping(value = "/getTransByLicPlateAndTime", method = RequestMethod.GET)
+    public String getTransByLicPlateAndTime(@RequestParam(name = "licensePlate") String licensePlate,
+            @RequestParam(name = "createdTime") String createdTime) {
+
+        Date date = new Date(Long.parseLong(createdTime));
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String processedDate = df.format(date);
+
+        List<TransactionDTO> dtos = transactionService
+                .getTransByLicPlateAndTime(licensePlate, processedDate);
+
+        return new Gson().toJson(dtos);
+    }
+
 }
