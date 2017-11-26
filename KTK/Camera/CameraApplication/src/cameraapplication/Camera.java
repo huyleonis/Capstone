@@ -101,6 +101,7 @@ public class Camera extends javax.swing.JFrame {
         BufferedImage buffImg = ImageIO.read(FileUtils.convertImageToInputStream(tmp));
         Graphics g = panel.getGraphics();
         g.drawImage(buffImg, 0, 0, null);
+        recognition = new Recognition();
     }        
 
     private void validatePlate(String plate, Mat img) {
