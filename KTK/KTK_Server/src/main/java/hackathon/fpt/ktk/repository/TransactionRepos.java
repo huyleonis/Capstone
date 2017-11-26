@@ -22,7 +22,8 @@ public interface TransactionRepos extends JpaRepository<Transaction, String> {
             + "AND createdTime > NOW() - INTERVAL 30 MINUTE", nativeQuery = true)
     Transaction findByVehicleIdAndStationId(@Param(value = "vehicleId") int vehicleId,
             @Param(value = "stationId") int stationId);
-
+    
+    
     /**
      * Method to create transaction when camera capture photo of plate
      *
