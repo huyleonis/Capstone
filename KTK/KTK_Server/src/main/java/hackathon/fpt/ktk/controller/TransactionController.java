@@ -22,6 +22,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -429,6 +431,20 @@ public class TransactionController extends AbstractController {
         }
 
         return "fail";
+    }
+    
+    @RequestMapping(value = "/getTransByLicPlateAndTime", method = RequestMethod.GET)
+    public String getTransByLicPlateAndTime(@RequestParam(name = "licensePlate") String licensePlate,
+            @RequestParam(name = "createdTime") String createdTime) {
+
+        Date date = new Date(Long.parseLong(createdTime));
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String processedDate = df.format(date);
+
+        List<TransactionDTO> dtos = transactionService
+                .getTransByLicPlateAndTime(licensePlate, processedDate);
+
+        return new Gson().toJson(dtos);
     }
 
 }
