@@ -40,8 +40,6 @@ public interface TransactionService {
 
     List<TransactionDetailDTO> getAllDetail();
 
-    List<TransactionDetailDTO> getAllReportDetail();
-
     TransactionDTO updateReport(Transaction transaction);
 
     boolean delete(String id);
