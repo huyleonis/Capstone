@@ -14,7 +14,6 @@ target/
 *.iws
 *.iml
 *.ipr
-src/main/resources/service-account.json
 
 ### NetBeans ###
 nbproject/private/
@@ -23,3 +22,4 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+/src/main/resources/service-account.json
