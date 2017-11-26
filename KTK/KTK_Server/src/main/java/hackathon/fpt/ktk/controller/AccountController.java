@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import hackathon.fpt.ktk.dto.AccountDTO;
 import hackathon.fpt.ktk.entity.Account;
-import hackathon.fpt.ktk.util.OTPUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +13,7 @@ import javax.servlet.ServletContext;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @RestController
 @RequestMapping(value = "/account")
@@ -46,7 +46,7 @@ public class AccountController extends AbstractController {
             return new Gson().toJson(list);
         }
 
-        return "Khong co du lieu";
+        return "No records found";
     }
 
     /**
@@ -123,7 +123,7 @@ public class AccountController extends AbstractController {
         if (result.equals("Success")) {
             AccountDTO account = accountService.getAccountByUsername(username);
 
-            String randomToken = OTPUtils.randomToken();
+            String randomToken = randomToken();
             boolean isSuccessful = accountService.updateToken(username, randomToken);
             if (isSuccessful) {
                 logger.debug("Update Token Successfully");
@@ -156,5 +156,28 @@ public class AccountController extends AbstractController {
         }
 
         return "false";
+    }
+    
+    /**
+     * Tạo mã token 16 kí tự
+     *
+     * @return
+     */
+    public static String randomToken() {
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        while (sb.length() < 19) {
+
+            int index = (int) (random.nextFloat() * alphabet.length());
+            if (sb.length() % 5 == 4 && sb.length() != 0) {
+                sb.append("-");
+            } else {
+                sb.append(alphabet.charAt(index));
+            }
+        }
+        System.out.println("token:" + sb.toString());
+
+        return sb.toString();
     }
 }

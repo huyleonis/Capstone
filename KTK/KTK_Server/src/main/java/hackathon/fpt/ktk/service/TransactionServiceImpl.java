@@ -2,15 +2,14 @@ package hackathon.fpt.ktk.service;
 
 import hackathon.fpt.ktk.dto.TransactionDTO;
 import hackathon.fpt.ktk.dto.TransactionDetailDTO;
-import hackathon.fpt.ktk.entity.Lane;
-import hackathon.fpt.ktk.entity.Price;
-import hackathon.fpt.ktk.entity.Transaction;
-import hackathon.fpt.ktk.entity.Vehicle;
+import hackathon.fpt.ktk.entity.*;
 import hackathon.fpt.ktk.util.TransactionStatus;
 import hackathon.fpt.ktk.util.TransactionType;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class TransactionServiceImpl extends AbstractServiceImpl implements TransactionService {
@@ -116,5 +115,133 @@ public class TransactionServiceImpl extends AbstractServiceImpl implements Trans
             }
         }
         return null;
+    }
+
+    @Override
+    public TransactionDTO createCapturedTransaction(String plate, String photo, Date createdTime, int stationId) throws Exception {
+        String id = createdTime.getTime() + "";
+
+        Vehicle vehicle = vehicleRepos.findByLicensePlate(plate);
+
+        if (vehicle != null) { //Nếu số xe có trong db
+            Price price = priceRepos.findByStationIdAndTypeId(stationId, vehicle.getVehicleType().getId());
+            int result = transactionRepos.createCaptureTransaction(id, stationId,
+                    createdTime, TransactionStatus.TRANS_INITIAL.getName(),
+                    price.getPrice(), photo, vehicle.getId());
+
+            if (result > 0) {
+                Transaction transaction = transactionRepos.findOne(id);
+                if (transaction != null) {
+                    TransactionDTO dto = TransactionDTO.convertFromEntity(transaction);
+                    return dto;
+                }
+            }
+        } else { //nếu số xe ko có trong db
+            throw new Exception("This license plate does not exist");
+        }
+        return null;
+    }
+
+    @Override
+    public TransactionDTO insertAutoTransaction(String username, int stationId) {
+
+        String id = new Date().getTime() + "";
+        Date now = new Date();
+        Account account = accountRepos.findByUsername(username);
+        int vehicleId = account.getVehicle().getId();
+        Price price = priceRepos.findPriceByStationIdAndLicensePlate(stationId, account.getVehicle().getLicensePlate());
+
+        int transaction = transactionRepos.insertAutoTransaction(id, stationId, now,
+                TransactionStatus.TRANS_PENDING.getName(), price.getPrice(),
+                TransactionType.AUTOMATION.getType(), vehicleId);
+
+        if (transaction > 0) {
+            Transaction transaction2 = transactionRepos.findOne(id);
+            if (transaction2 != null) {
+                TransactionDTO dto = TransactionDTO.convertFromEntity(transaction2);
+                return dto;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public TransactionDetailDTO getDetailById(String id) {
+        return TransactionDetailDTO.covertFromEntity(transactionRepos.findOne(id));
+    }
+
+    @Override
+    public List<TransactionDetailDTO> getDetailByVehicleIdIn24Hours(int vehicleId) {
+
+        List<Transaction> transactions = transactionRepos.findByVehicleIdIn24Hours(vehicleId);
+
+        List<TransactionDetailDTO> dtos = new ArrayList<>();
+
+        for (Transaction transaction : transactions) {
+            dtos.add(TransactionDetailDTO.covertFromEntity(transaction));
+        }
+
+        return dtos;
+    }
+
+    @Override
+    public List<TransactionDetailDTO> getAllDetail() {
+
+        List<TransactionDetailDTO> dtos = new ArrayList<>();
+
+        List<Transaction> transactions = transactionRepos.findAll();
+
+        for (Transaction transaction : transactions) {
+            dtos.add(TransactionDetailDTO.covertFromEntity(transaction));
+        }
+
+        return dtos;
+    }
+
+    @Override
+    public List<TransactionDTO> getTransactionsForStaff(String status) {
+        List<Transaction> list = transactionRepos.getTransactionForStaff(status);
+        List<TransactionDTO> result = new ArrayList<>();
+        for (Transaction tran : list) {
+            TransactionDTO dto = TransactionDTO.convertFromEntity(tran);
+            result.add(dto);
+        }
+        return result;
+    }
+
+    @Override
+    public List<TransactionDetailDTO> getHistoryTransaction(String username, Date fromDate, Date toDate) {
+        // fromDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        // toDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        // Account account = accountRepos.findByUsername(username);
+        Account account = accountRepos.findByUsername(username);
+
+        if (account == null) {
+            return new ArrayList<>();
+        }
+
+        int vehicleId = account.getVehicle().getId();
+
+        List<Transaction> list = transactionRepos.getHistoryTransaction(vehicleId, fromDate, toDate);
+        List<TransactionDetailDTO> result = new ArrayList<>();
+        for (Transaction tran : list) {
+            TransactionDetailDTO dto = TransactionDetailDTO.covertFromEntity(tran);
+            result.add(dto);
+        }
+        return result;
+    }
+
+    @Override
+    public List<TransactionDetailDTO> getAllReportDetail() {
+
+        List<TransactionDetailDTO> dtos = new ArrayList<>();
+
+        List<Transaction> transactions = transactionRepos.findByStatus(TransactionStatus.TRANS_ERROR.getName());
+
+        for (Transaction transaction : transactions) {
+            dtos.add(TransactionDetailDTO.covertFromEntity(transaction));
+        }
+
+        return dtos;
     }
 }

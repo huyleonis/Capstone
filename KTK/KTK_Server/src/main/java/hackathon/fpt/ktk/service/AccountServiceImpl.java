@@ -1,7 +1,9 @@
 package hackathon.fpt.ktk.service;
 
 import hackathon.fpt.ktk.dto.AccountDTO;
+import hackathon.fpt.ktk.dto.PriceDTO;
 import hackathon.fpt.ktk.entity.Account;
+import hackathon.fpt.ktk.entity.Price;
 import hackathon.fpt.ktk.entity.Vehicle;
 import org.springframework.stereotype.Service;
 
@@ -123,6 +125,80 @@ public class AccountServiceImpl extends AbstractServiceImpl implements AccountSe
             Account processedAccount = accountRepos.save(account);
             if (processedAccount != null) {
                 return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Thực hiện trừ tiền vào tài khoản của account
+     *
+     * @param username
+     * @param stationId
+     * @return
+     */
+    @Override
+    public String makePayment(String username, int stationId) {
+        String result = "";
+        Account accountEntity = accountRepos.findByUsername(username);
+        if (accountEntity == null) {
+            return "Tài khoản [" + username + "] không tồn tại";
+        }
+        AccountDTO accountDto = AccountDTO.convertFromEntity(accountEntity);
+
+        Price priceEntity = priceRepos.findPriceByStationIdAndLicensePlate(stationId, accountEntity.getVehicle().getLicensePlate());
+        if (priceEntity == null) {
+            return "Không tìm được giá";
+        }
+        PriceDTO priceDto = PriceDTO.convertFromEntity(priceEntity);
+
+        if (accountDto.getBalance() < priceDto.getPrice()) {
+            return "Tài khoản không đủ thực hiện trả phí";
+        } else {
+            double newBalance = accountDto.getBalance() - priceDto.getPrice();
+            int sqlResult = accountRepos.updateBalance(accountDto.getId(), newBalance);
+            if (sqlResult <= 0) {
+                return "Không thể thực hiện thahh toán phí - Lỗi hệ thống";
+            }
+        }
+
+        return result;
+    }
+    
+    @Override
+    public AccountDTO getAccountById(int id) {
+        Account account = accountRepos.findOne(id);
+        if (account != null) {
+            return AccountDTO.convertFromEntity(account);
+        }
+        return null;
+    }
+    
+    @Override
+    public boolean topupBalance(String username, double amount) {
+
+        Account account = accountRepos.findByUsername(username);
+        
+        if (account == null) {
+            return false;
+        }
+        
+        double newBalance = account.getBalance() + amount;
+        int sqlResult = accountRepos.updateBalance(account.getId(), newBalance);
+        
+        return sqlResult > 0;
+    }
+    
+    @Override
+    public boolean checkLicensePlate(String username, String licensePlate) {
+        Account account = accountRepos.findByUsername(username);
+
+        if (account != null) {
+            if (account.getVehicle() != null) {
+                if (account.getVehicle().getLicensePlate().equals(licensePlate)) {
+                    return true;
+                }
             }
         }
 

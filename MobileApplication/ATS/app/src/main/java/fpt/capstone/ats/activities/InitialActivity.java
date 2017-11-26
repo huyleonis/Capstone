@@ -144,7 +144,7 @@ public class InitialActivity extends AppCompatActivity {
 
     public void clickToCheckConnection(View view) {
         EditText edtIpConfig = (EditText) findViewById(R.id.edtIpConfig);
-        String ip = edtIpConfig.getText().toString();
+        String ip = edtIpConfig.getText().toString().trim();
 
         RequestServer.DEFAULT_URL = "http://" + ip + "/";
 

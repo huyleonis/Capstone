@@ -35,8 +35,6 @@
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.TransactionDetailActivity" />
 
-        <activity android:name=".firebase.AuthActivity"/>
-        <activity android:name=".firebase.MessageActivity"/>
 
         <service
             android:name=".services.BeaconService"

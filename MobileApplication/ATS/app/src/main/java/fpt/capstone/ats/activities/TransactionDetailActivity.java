@@ -24,6 +24,7 @@ import java.util.List;
 import fpt.capstone.ats.R;
 import fpt.capstone.ats.app.AtsApplication;
 import fpt.capstone.ats.sqlite.DBAdapter;
+import fpt.capstone.ats.utils.Commons;
 import fpt.capstone.ats.utils.ConstantValues;
 import fpt.capstone.ats.utils.RequestServer;
 
@@ -32,14 +33,12 @@ public class TransactionDetailActivity extends AppCompatActivity {
     private static final String TAG = "TRANS_DETAIL_ACTIVITY";
 
     private TextView textStationName;
-    private TextView textStationId;
-    private TextView textZone;
     private TextView textDateTime;
     private TextView textPrice;
     private TextView textStatus;
-    private TextView textVehicleType;
     private TextView textType;
     private Button btnPayment;
+    private Button btnReport;
 
     private String transactionId;
 
@@ -52,30 +51,19 @@ public class TransactionDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_transaction_detail);
 
         textStationName = (TextView) findViewById(R.id.textStationName);
-        textStationId = (TextView) findViewById(R.id.textStationId);
-        textZone = (TextView) findViewById(R.id.textZone);
         textDateTime = (TextView) findViewById(R.id.textDateTime);
         textPrice = (TextView) findViewById(R.id.textPrice);
         textStatus = (TextView) findViewById(R.id.textStatus);
-        textVehicleType = (TextView) findViewById(R.id.textVehicleType);
         textType = (TextView) findViewById(R.id.textType);
-        btnPayment = (Button) findViewById(R.id.btnUpdateTransStatus);
+        btnPayment = (Button) findViewById(R.id.btnPayLater);
+        btnReport = (Button) findViewById(R.id.btnReport);
 
         Bundle bundle = getIntent().getExtras();
         transactionId = bundle.getString(ConstantValues.TRANSACTION_ID_PARAM);
 
-//        database = new DBAdapter(TransactionDetailActivity.this);
-//        database.open();
-//        Cursor resultSet = database.getInfo(transactionId);
-//        if (resultSet.moveToFirst()) {
-//            Log.d("GET DETAIL TRANSACTION", "VIEW FROM LOCAL");
-//            viewFromLocal(resultSet);
-//        } else {
-            Log.d("GET DETAIL TRANSACTION", "VIEW FROM SERVER");
-            getTransactionDetail();
-//        }
-//        database.close();
 
+        Log.d("GET DETAIL TRANSACTION", "VIEW FROM SERVER");
+        getTransactionDetail();
     }
 
     @Override
@@ -120,51 +108,28 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                     DecimalFormat formatter = new DecimalFormat("###,###,###.##");
 
-                    textStationName.setText(stationName);
-                    textStationId.setText(String.valueOf(stationId));
-                    textZone.setText(zone);
+                    String station = "[" + stationId + "] " + stationName + " - " + zone;
+                    textStationName.setText(station);
                     textPrice.setText(formatter.format(price) + " đồng");
                     textDateTime.setText(sdf.format(datetime));
                     textType.setText("Thu phí " + type);
-                    textVehicleType.setText(vehicleType);
 
-//                    database = new DBAdapter(TransactionDetailActivity.this);
-//                    database.open();
-
-//                    Date lastModifiedDate = new Date();
-//                    sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-//                    String lastModified = sdf.format(lastModifiedDate);
-//
-//                    long re = database.insertInfo(transactionId, stationName, stationId, zone,
-//                            sdf.format(datetime), price, status, vehicleType, type, lastModified);
-//                    Log.d("DATABASE INSERT", String.valueOf(re));
-//
-//                    database.close();
-
-                    String statusText = "-";
-                    Log.w("status: ", status);
-                    if (status.equals("Success")) {
-                        textStatus.setTextColor(Color.parseColor("#7bc043"));
-                        statusText = "Thanh toán Thành công";
-                    } else if (status.equals("Finish")) {
-                        textStatus.setTextColor(Color.parseColor("#0392cf"));
-                        statusText = "Hoàn thành";
-                    } else if (status.equals("Failed") || status.equals("Failed Passed")) {
-                        textStatus.setTextColor(Color.parseColor("#ee4035"));
-                        statusText = "Thanh toán Thất bại";
-                    } else if (status.equals("Initial") || status.equals("Not pay")) {
-                        textStatus.setTextColor(Color.parseColor("#ee4035"));
-                        statusText = "Chưa thanh toán";
-                    }
-
-                    textStatus.setText(statusText);
+                    Commons.displayStatusTrans(status, textStatus);
 
                     if (status.equals("Failed") || status.equals("Failed Passed")
                             || status.equals("Initial") || status.equals("Not pay")) {
                         btnPayment.setVisibility(View.VISIBLE);
                         btnPayment.setEnabled(true);
+
+                        btnReport.setVisibility(View.VISIBLE);
+                        btnReport.setEnabled(true);
+
                     } else {
+                        btnPayment.setVisibility(View.INVISIBLE);
                         btnPayment.setEnabled(false);
+
+                        btnReport.setVisibility(View.VISIBLE);
+                        btnReport.setEnabled(true);
                     }
                 } catch (Exception e) {
                     Log.e("Transaction Detail", e.getMessage());
@@ -190,58 +155,47 @@ public class TransactionDetailActivity extends AppCompatActivity {
         rs.execute(params, "transaction", "getDetail", "GET");
     }
 
-    public void updateTransactionStatus() {
-//        pdial = new ProgressDialog(this);
-//        pdial.setMessage("Đang xử lý thanh toán phí...");
-//        pdial.setTitle("Thanh toán");
-//        pdial.show();
 
-        Log.w("Request updTransStatus", "Send Request updateTransStatus");
+    public void clickToPayLater(View view) {
+        final ProgressDialog pdial = new ProgressDialog(this);
+        pdial.setMessage("Đang xử lý thanh toán phí...");
+        pdial.setTitle("Thanh toán");
+        pdial.show();
+
+        Log.d(TAG, "Send Request updateTransStatus");
         RequestServer rs = new RequestServer();
         rs.delegate = new RequestServer.RequestResult() {
             @Override
             public void processFinish(String result) {
                 try {
-//                    pdial.dismiss();
-                    Log.w("Receive TransStatus", "Transaction Status Json: " + result);
+                    pdial.dismiss();
+                    Log.w(TAG, "Transaction Status Json: " + result);
                     JSONObject infos = new JSONObject(result);
-                    String newStatus = infos.getString("status");
+                    String resultPayment = infos.getString("result");
 
-                    database = new DBAdapter(TransactionDetailActivity.this);
-                    database.open();
-
-                    Log.w(TAG, "processFinish() returned: " + newStatus);
-                    Cursor resultSet = database.getInfo(transactionId);
-                    if (resultSet.moveToFirst()) {
-                        String stationName = resultSet.getString(1);
-                        int stationId = resultSet.getInt(2);
-                        String zone = resultSet.getString(3);
-                        String dateTime = resultSet.getString(4);
-                        double price = resultSet.getDouble(5);
-//                        String status = resultSet.getString(6);
-                        String vehicleType = resultSet.getString(7);
-                        String type = resultSet.getString(8);
-
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                        Date lastModifiedDate = new Date();
-                        String lastModified = sdf.format(lastModifiedDate);
-
-                        boolean isSuccessful = database.updateInfo(transactionId, stationName, stationId,
-                                zone, dateTime, price, newStatus, vehicleType, type, lastModified);
-
-                        Log.d("DATABASE UPDATE", String.valueOf(isSuccessful));
-
-                        resultSet = database.getInfo(transactionId);
-                        if (resultSet.moveToFirst()) {
-                            Log.d("GET DETAIL TRANSACTION", "VIEW FROM LOCAL");
-                            viewFromLocal(resultSet);
-                        } else {
-                            Log.d("GET DETAIL TRANSACTION", "VIEW FROM SERVER");
-                            getTransactionDetail();
-                        }
+                    if (result.equals("")) {
+                        new AlertDialog.Builder(TransactionDetailActivity.this)
+                                .setTitle("Kết quả")
+                                .setMessage("Giao dịch đã được thực hiện thành công")
+                                .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        getTransactionDetail();
+                                    }
+                                })
+                                .create().show();
+                    } else {
+                        new AlertDialog.Builder(TransactionDetailActivity.this)
+                                .setTitle("Kết quả")
+                                .setMessage("Giao dịch thất bại. " + resultPayment)
+                                .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        getTransactionDetail();
+                                    }
+                                })
+                                .create().show();
                     }
-                    database.close();
-                    Log.d(TAG, "processFinish() returned: " + newStatus);
 
                 } catch (Exception e) {
                     Log.e("Transaction Detail", e.getMessage());
@@ -287,14 +241,12 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
             DecimalFormat formatter = new DecimalFormat("###,###,###.##");
 
-            textStationName.setText(stationName);
-            textStationId.setText(String.valueOf(stationId));
-            textZone.setText(zone);
+            String station = "[" + stationId + "] " + stationName + " - " + zone;
+            textStationName.setText(station);
             textPrice.setText(formatter.format(price) + " đồng");
             textStatus.setText(status);
             textDateTime.setText(dateTime);
             textType.setText("Thu phí " + type);
-            textVehicleType.setText(vehicleType);
 
             String statusText = "-";
             Log.w("status: ", status);
@@ -340,23 +292,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
         }
     }
 
-    public void clickToUpdateTransStatus(View view) {
-        updateTransactionStatus();
-    }
-
-//    public void writeNewReport() {
-//        Report report = new Report(transactionId, Commons.getUsername(this), "unread");
-//
-//        Map<String, Object> reportValues = report.toMap();
-//        Map<String, Object> childUpdates = new HashMap<>();
-//
-//        String key = mDatabase.child("reports").push().getKey();
-//
-//        childUpdates.put("/reports/" + key, reportValues);
-//        mDatabase.updateChildren(childUpdates);
-//    }
-
-    public void reportTransaction() {
+    public void clickToReport(View view) {
         final ProgressDialog pdial = new ProgressDialog(this);
         pdial.setMessage("Đang thông báo lỗi...");
         pdial.setTitle("Báo Lỗi");
@@ -375,46 +311,19 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     String updateResult = infos.getString("result");
 
                     if (updateResult.equalsIgnoreCase("success")) {
-//                        Log.d("Report Transaction", "Report Transaction Success");
-//
-//                        database = new DBAdapter(TransactionDetailActivity.this);
-//                        database.open();
-//
-//                        Log.w(TAG, "processFinish() returned: " + newStatus);
-//                        Cursor resultSet = database.getInfo(transactionId);
-//                        if (resultSet.moveToFirst()) {
-//                            String stationName = resultSet.getString(1);
-//                            int stationId = resultSet.getInt(2);
-//                            String zone = resultSet.getString(3);
-//                            String dateTime = resultSet.getString(4);
-//                            double price = resultSet.getDouble(5);
-//                            String status = resultSet.getString(6);
-//                            String vehicleType = resultSet.getString(7);
-//                            String type = resultSet.getString(8);
-//
-//                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-//                            String lastModified = sdf.format(new Date());
-//
-//                            boolean isSuccessful = database.updateInfo(transactionId, stationName, stationId,
-//                                    zone, dateTime, price, newStatus, vehicleType, type, lastModified);
-//
-//                            Log.d("DATABASE UPDATE", String.valueOf(isSuccessful));
-//
-//                            resultSet = database.getInfo(transactionId);
-//                            if (resultSet.moveToFirst()) {
-//                                Log.d("GET DETAIL TRANSACTION", "VIEW FROM LOCAL");
-//                                viewFromLocal(resultSet);
-//                            } else {
-//                                Log.d("GET DETAIL TRANSACTION", "VIEW FROM SERVER");
-//                                getTransactionDetail();
-//                            }
-//                        }
-//                        database.close();
-                        Log.d(TAG, "processFinish() returned: " + newStatus);
-                        Toast.makeText(TransactionDetailActivity.this, "Report success", Toast.LENGTH_LONG).show();
+                        new AlertDialog.Builder(TransactionDetailActivity.this)
+                                .setTitle("Kết quả")
+                                .setMessage("Giao dịch của bạn đã được gửi về xử lý sai xót.\nCám ơn bạn đã hỗ trợ")
+                                .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        TransactionDetailActivity.this.finish();
+                                    }
+                                })
+                                .create().show();
                     } else if (updateResult.equalsIgnoreCase("fail")) {
                         Log.e(TAG, "Report Transaction Fail");
-                        Toast.makeText(TransactionDetailActivity.this, "Report fail", Toast.LENGTH_LONG).show();
+                        Toast.makeText(TransactionDetailActivity.this, "Báo cáo thất bại. Vui lòng thử lại", Toast.LENGTH_LONG).show();
                     }
 
                 } catch (Exception e) {
@@ -440,10 +349,5 @@ public class TransactionDetailActivity extends AppCompatActivity {
         List<String> params = new ArrayList<>();
         params.add(transactionId);
         rs.execute(params, "transaction", "reportTransaction", "GET");
-    }
-
-    public void clickToReportTransaction(View view) {
-        reportTransaction();
-        //finish();
     }
 }

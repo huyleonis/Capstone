@@ -60,9 +60,9 @@ public class LoginActivity extends AppCompatActivity {
 
     public void login(View view) throws FileNotFoundException, UnsupportedEncodingException {
         EditText edtUsername = (EditText) findViewById(R.id.edtUsername);
-        String username = edtUsername.getText().toString();
+        String username = edtUsername.getText().toString().trim();
         EditText edtPassword = (EditText) findViewById(R.id.edtPassword);
-        String password = edtPassword.getText().toString();
+        String password = edtPassword.getText().toString().trim();
 
 
         //Check bluetooth

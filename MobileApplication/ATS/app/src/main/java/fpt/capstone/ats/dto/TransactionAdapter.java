@@ -82,23 +82,7 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
                 + Commons.formatDouble(dataItem.getPrice()) + "đ");
 
         String status = dataItem.getStatus();
-        String statusText = "-";
-        Log.w("status: " , status);
-        if(status.equals("Success")){
-            holder.txtStatus.setTextColor(Color.parseColor("#7bc043"));
-            statusText = "Thanh toán Thành công";
-        } else if (status.equals("Finish")) {
-            holder.txtStatus.setTextColor(Color.parseColor("#0392cf"));
-            statusText = "Kết thúc giao dịch";
-        } else if (status.equals("Failed") || status.equals("Failed Passed")) {
-            holder.txtStatus.setTextColor(Color.parseColor("#ee4035"));
-            statusText = "Thanh toán Thất bại";
-        } else if (status.equals("Initial") || status.equals("Not pay")) {
-            holder.txtStatus.setTextColor(Color.parseColor("#ee4035"));
-            statusText = "Chưa thanh toán";
-        }
-
-        holder.txtStatus.setText(statusText);
+        Commons.displayStatusTrans(status, holder.txtStatus);
 
         holder.btnDetail.setOnClickListener(new View.OnClickListener() {
             @Override

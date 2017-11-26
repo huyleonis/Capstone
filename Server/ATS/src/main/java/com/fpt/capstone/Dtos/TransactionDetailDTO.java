@@ -12,8 +12,7 @@ import com.fpt.capstone.Entities.Transaction;
 /**
  * @author hp
  */
-public class TransactionDetailDTO extends TransactionDTO {
-
+public class TransactionDetailDTO extends TransactionDTO {    
     private String laneName;
     private String stationName;
     private String zone;
@@ -51,6 +50,7 @@ public class TransactionDetailDTO extends TransactionDTO {
         this.username = username;
     }
 
+
     public String getVehicleType() {
         return vehicleType;
     }
@@ -80,7 +80,6 @@ public class TransactionDetailDTO extends TransactionDTO {
     public static TransactionDetailDTO covertFromEntity(Transaction tran) {
         TransactionDetailDTO dto = new TransactionDetailDTO();
         
-        
         TransactionDTO.convertFromEntity(tran, dto);
         
         if (tran.getLane() != null) {
@@ -93,7 +92,6 @@ public class TransactionDetailDTO extends TransactionDTO {
         }
         
         if (tran.getVehicle() != null) {
-            dto.setLicensePlate(tran.getVehicle().getLicensePlate());
             dto.setVehicleType(tran.getVehicle().getVehicleType().getName());
             if (tran.getVehicle().getAccount() != null) {
                 dto.setUsername(tran.getVehicle().getAccount().getUsername());

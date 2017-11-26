@@ -106,8 +106,11 @@ public class MainForm extends javax.swing.JFrame {
         jLabel3.setText("Giá tiền:");
 
         lbPrice.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lbPrice.setForeground(new java.awt.Color(0, 51, 255));
         lbPrice.setText("-");
 
+        lbType.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lbType.setForeground(new java.awt.Color(0, 51, 255));
         lbType.setText("-");
 
         lbId.setText("id");
@@ -258,10 +261,9 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(PaneSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnCheckConnection, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-                    .addGroup(PaneSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtIp, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-                        .addComponent(txtLaneId)
-                        .addComponent(txtStationId)))
+                    .addComponent(txtIp, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                    .addComponent(txtLaneId)
+                    .addComponent(txtStationId))
                 .addContainerGap(629, Short.MAX_VALUE))
         );
         PaneSettingLayout.setVerticalGroup(

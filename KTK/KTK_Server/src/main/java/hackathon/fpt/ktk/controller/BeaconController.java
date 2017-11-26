@@ -154,7 +154,7 @@ public class BeaconController extends AbstractController {
             return new Gson().toJson(dtos);
         }
 
-        return "Khong co du lieu";
+        return "No records found";
     }
 
     /**

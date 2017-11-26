@@ -18,4 +18,14 @@ public interface AccountService {
     String checkLogin(String username, String password);
 
     boolean updateToken(String username, String token);
+
+    String makePayment(String username, int stationId);
+    
+    AccountDTO getAccountById(int id);
+    
+    boolean topupBalance(String username, double amount);
+    
+    boolean checkLicensePlate(String username, String licensePlate);
+    
+    
 }

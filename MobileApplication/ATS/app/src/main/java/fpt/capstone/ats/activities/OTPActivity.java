@@ -97,10 +97,10 @@ public class OTPActivity extends AppCompatActivity {
 
     public void clickToConfirmAccount(View view) {
         EditText edtLicensePlate = (EditText) findViewById(R.id.edtLicensePlate);
-        String licensePlate = edtLicensePlate.getText().toString();
+        String licensePlate = edtLicensePlate.getText().toString().trim();
 
         EditText edtOtpNumber = (EditText) findViewById(R.id.edtOtpNumber);
-        String otpNumber = edtOtpNumber.getText().toString();
+        String otpNumber = edtOtpNumber.getText().toString().trim();
 
         final ProgressDialog pdial = new ProgressDialog(this);
         pdial.setCancelable(false);

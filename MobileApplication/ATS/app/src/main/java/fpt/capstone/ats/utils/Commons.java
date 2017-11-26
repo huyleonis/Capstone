@@ -2,6 +2,9 @@ package fpt.capstone.ats.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.util.Log;
+import android.widget.TextView;
 
 import java.text.DecimalFormat;
 
@@ -28,6 +31,26 @@ public class Commons {
         SharedPreferences setting = context.getSharedPreferences(ConstantValues.PREF_NAME, Context.MODE_PRIVATE);
         String vehicleId = setting.getString("VehicleId", "1");
         return vehicleId;
+    }
+
+    public static void displayStatusTrans(String status, TextView textView) {
+        String statusText = "-";
+        Log.w("status: ", status);
+        if (status.equals("Success")) {
+            textView.setTextColor(Color.parseColor("#7bc043"));
+            statusText = "Thanh toán Thành công";
+        } else if (status.equals("Finish")) {
+            textView.setTextColor(Color.parseColor("#0392cf"));
+            statusText = "Hoàn thành";
+        } else if (status.equals("Failed") || status.equals("Failed Passed")) {
+            textView.setTextColor(Color.parseColor("#ee4035"));
+            statusText = "Thanh toán Thất bại";
+        } else if (status.equals("Initial") || status.equals("Not pay")) {
+            textView.setTextColor(Color.parseColor("#ee4035"));
+            statusText = "Chưa thanh toán";
+        }
+
+        textView.setText(statusText);
     }
 
     public static String getCodeError(Context context, String errorCode) {

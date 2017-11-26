@@ -35,6 +35,8 @@ public interface TransactionService {
     List<TransactionDetailDTO> getDetailByVehicleIdIn24Hours(int vehicleId);
 
     TransactionDetailDTO getCapturedTransaction(int vehicleId, int stationId, boolean updateStatus);
+    
+    List<TransactionDetailDTO> getAllReportDetail();
 
     List<TransactionDetailDTO> getAllDetail();
 
