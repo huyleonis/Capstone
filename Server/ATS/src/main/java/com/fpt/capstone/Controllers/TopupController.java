@@ -31,8 +31,16 @@ public class TopupController {
     @Autowired
     private AccountService accountService;
 
-    @RequestMapping(value = "mobicard", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
+    /**
+     * Nạp tiền vào tài khoản Driver bằng cách nạp thẻ cào điện thoại
+     *
+     * @param card loại card
+     * @param cardNumber mã số thẻ cào
+     * @param cardSeri seri thẻ cào
+     * @param username
+     * @return kết quả thực hiện
+     */
+    @RequestMapping(value = "/mobicard", method = RequestMethod.POST)
     public Object topupByMobicard(@RequestParam(name = "card") String card,
             @RequestParam(name = "cardNumber") String cardNumber,
             @RequestParam(name = "cardSeri") String cardSeri,
@@ -65,26 +73,29 @@ public class TopupController {
             }
         } catch (IOException ex) {
             Logger.getLogger(TopupController.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace();
             result.put("result", "false");
             result.put("message", ex.getMessage());
         }
         return result;
     }
 
-    @RequestMapping(value = "bank", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
+    /**
+     * Nạp tiền vào tài khoản Driver thông qua Ngân hàng
+     *
+     * @param amount số tiền nạp
+     * @param username
+     * @return kết quả thực hiện
+     */
+    @RequestMapping(value = "/bank", method = RequestMethod.POST)
     public Object topupByBank(@RequestParam(name = "username") String username,
             @RequestParam(name = "amount") int amount) {
         Map<String, String> result = new HashMap<>();
-
         AccountDTO account = accountService.getAccountByUsername(username);
 
         if (account == null) {
             return null;
         }
 
-        String fullname = account.getFullname();
         String email = account.getEmail();
         String phone = account.getPhone();
         String address = "";
@@ -100,12 +111,16 @@ public class TopupController {
             result.put("result", "false");
             result.put("message", ex.getMessage());
         }
-
         return result;
     }
     
+    /**
+     * Kiểm tra tài khoản khi driver muốn thanh toán bằng Ngân hàng
+     *
+     * @param tokenCode
+     * @return kết quả thực hiện
+     */
     @RequestMapping(value = "checkOrder", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
     public Object checkOrder(@RequestParam(name = "tokenCode") String tokenCode) {
         Map<String, String> result = new HashMap<>();
         try {

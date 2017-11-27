@@ -6,55 +6,58 @@ var active_to_button = function (data, type, full, meta) {
     }
 }
 function changeRole(element) {
-    var data = $("#table").DataTable().row($(element).parents('tr')).data();
-    var skill = {
-        "skillId": data.skillId
-    };
-    if (data.approved) {
-        $.ajax({
-            type: "POST",
-            contentType: "application/json",
-            url: contextPath + "/skills/deactive-skill",
-            data: JSON.stringify(skill),
-            success: function (result) {
-                if (result == "fail") {
-                    setStatus("This skill does not exist! Please check again!", "#ff0000");
-                } else {
-                    setStatus("Update success!", "#00cc00");
-                }
-            },
-            error: function (result) {
-                setStatus("This skill does not exist! Please check again!", "#ff0000");
-            }
-        });
-    } else {
-        $.ajax({
-            type: "POST",
-            contentType: "application/json",
-            url: contextPath + "/skills/active-skill",
-            data: JSON.stringify(skill),
-            success: function (result) {
-                if (result == "fail") {
-                    setStatus("This skill does not exist! Please check again!", "#ff0000");
-                } else {
-                    setStatus("Update success!", "#00cc00");
-                }
-            },
-            error: function (result) {
-                setStatus("This skill does not exist! Please check again!", "#ff0000");
-            }
-        });
-    }
-    $("#alert").show();
-    clearStatus();
-    reloadTable();
+	var data = $("#table").DataTable().row($(element).parents('tr')).data();
+	var skill = {
+		"skillId" : data.skillId
+	};
+	if (data.approved) {
+		$.ajax({
+			type : "POST",
+			contentType : "application/json",
+			url : contextPath + "/skills/deactive-skill",
+			data : JSON.stringify(skill),
+
+			success : function(result) {
+				if (result == "fail") {
+					setStatus("This skill does not exist! Please check again!", "#ff0000");
+				} else {
+					setStatus("Update success!", "#00cc00");
+				}
+			},
+			error : function(result) {
+				setStatus("This skill does not exist! Please check again!", "#ff0000");
+			}
+		});
+	} else {
+		$.ajax({
+			type : "POST",
+			contentType : "application/json",
+			url : contextPath + "/skills/active-skill",
+			data : JSON.stringify(skill),
+
+			success : function(result) {
+				if (result == "fail") {
+					setStatus("This skill does not exist! Please check again!", "#ff0000");
+				} else {
+					setStatus("Update success!", "#00cc00");
+				}
+			},
+			error : function(result) {
+				setStatus("This skill does not exist! Please check again!", "#ff0000");
+			}
+		});
+	}
+	$("#alert").show();
+	clearStatus();
+	reloadTable();
 }
+
 $(document)
         .ready(
                 function ($) {
                     /*
-					 * define dataTables
-					 */
+                     * define dataTables
+                     */
                     var index = 1;
                     var table = $('#table')
                             .DataTable(
@@ -98,20 +101,16 @@ $(document)
                                                 "data": "id",
                                                 "visible": false
                                                         // hide the column
-														// processID
+                                                        // processID
                                             },
                                             {
                                                 "data": "username"
                                             },
                                             {
-                                                "data": "password",
-                                                "visible": false
-                                            },
-                                            {
                                                 "data": "fullname"
                                             },
                                             {
-                                            	"data": "role"
+                                                "data": "role"
                                             },
                                             {
                                                 "data": "email",
@@ -142,7 +141,8 @@ $(document)
                                                 "visible": false
                                             },
                                             {
-                                                "data": "active"
+                                                "data": "approved",
+                                                "render": active_to_button
                                             },
                                             {
                                                 "data": "enable",
@@ -177,42 +177,42 @@ $(document)
  */
 // perform ajax call to save report
 function submitAddForm() {
-	var account;
+    var account;
     var role = $("#add-form-role").val();
     if (role != "3") {
-    	account = {
-                "username": $("#add-form-username").val(),
-                "password": $("#add-form-password").val(),
-                "role": $("#add-form-role").val(),
-                "fullname": $("#add-form-fullname").val(),
-                "email": $("#add-form-email").val(),
-                "phone": $("#add-form-phone").val(),
-                "numberId": $("#add-form-numberId").val(),
-                "vehicle": null,
-                "balance": "0",
-                "active": $("#add-form-active").val(),
-                "enable": $("#add-form-enable").val()
+        account = {
+            "username": $("#add-form-username").val(),
+            "password": $("#add-form-password").val(),
+            "role": $("#add-form-role").val(),
+            "fullname": $("#add-form-fullname").val(),
+            "email": $("#add-form-email").val(),
+            "phone": $("#add-form-phone").val(),
+            "numberId": $("#add-form-numberId").val(),
+            "vehicle": null,
+            "balance": "0",
+            "active": $("#add-form-active").val(),
+            "enable": $("#add-form-enable").val()
         };
-	} else {
-		account = {
-		        "username": $("#add-form-username").val(),
-		        "password": $("#add-form-password").val(),
-		        "role": $("#add-form-role").val(),
-		        "fullname": $("#add-form-fullname").val(),
-		        "email": $("#add-form-email").val(),
-		        "phone": $("#add-form-phone").val(),
-		        "numberId": $("#add-form-numberId").val(),
-		        "vehicle": {
-		        		"licensePlate": $("#add-form-licensePlate").val(),
-		        		"vehicletype": {
-		        			"id": $("#add-form-typeId").val()
-		        		}
-		        },
-		        "balance": $("#add-form-balance").val(),
-		        "active": $("#add-form-active").val(),
-		        "enable": $("#add-form-enable").val()
-		    };
-	}
+    } else {
+        account = {
+            "username": $("#add-form-username").val(),
+            "password": $("#add-form-password").val(),
+            "role": $("#add-form-role").val(),
+            "fullname": $("#add-form-fullname").val(),
+            "email": $("#add-form-email").val(),
+            "phone": $("#add-form-phone").val(),
+            "numberId": $("#add-form-numberId").val(),
+            "vehicle": {
+                "licensePlate": $("#add-form-licensePlate").val(),
+                "vehicletype": {
+                    "id": $("#add-form-typeId").val()
+                }
+            },
+            "balance": $("#add-form-balance").val(),
+            "active": $("#add-form-active").val(),
+            "enable": $("#add-form-enable").val()
+        };
+    }
     $.ajax({
         type: "POST",
         contentType: "application/json",
@@ -237,45 +237,45 @@ function submitAddForm() {
 
 var curr;
 function submitUpdateForm() {
-	var account;
-	var role = $("#update-form-role").val();
-	if (role != "3") {
-		account = {
-				"id": $("#update-form-id").val(),
-		        "username": $("#update-form-username").val(),
-		        "password": $("#update-form-password").val(),
-		        "role": $("#update-form-role").val(),
-		        "fullname": $("#update-form-fullname").val(),
-		        "email": $("#update-form-email").val(),
-		        "phone": $("#update-form-phone").val(),
-		        "numberId": $("#update-form-numberId").val(),
-		        "vehicle": null,
-		        "balance": "0",
-		        "active": $("#update-form-active").val(),
-		        "enable": $("#update-form-enable").val()
-		    };
-	} else {
-		account = {
-				"id": $("#update-form-id").val(),
-		        "username": $("#update-form-username").val(),
-		        "password": $("#update-form-password").val(),
-		        "role": $("#update-form-role").val(),
-		        "fullname": $("#update-form-fullname").val(),
-		        "email": $("#update-form-email").val(),
-		        "phone": $("#update-form-phone").val(),
-		        "numberId": $("#update-form-numberId").val(),
-		        "vehicle": {
-		        		"id": $("#update-form-vehicleId").val(),
-		        		"licensePlate": $("#update-form-licensePlate").val(),
-		        		"vehicletype": {
-		        			"id": $("#update-form-typeId").val()
-		        		}
-		        },
-		        "balance": $("#update-form-balance").val(),
-		        "active": $("#update-form-active").val(),
-		        "enable": $("#update-form-enable").val()
-		    };
-	}
+    var account;
+    var role = $("#update-form-role").val();
+    if (role != "3") {
+        account = {
+            "id": $("#update-form-id").val(),
+            "username": $("#update-form-username").val(),
+            "password": $("#update-form-password").val(),
+            "role": $("#update-form-role").val(),
+            "fullname": $("#update-form-fullname").val(),
+            "email": $("#update-form-email").val(),
+            "phone": $("#update-form-phone").val(),
+            "numberId": $("#update-form-numberId").val(),
+            "vehicle": null,
+            "balance": "0",
+            "active": $("#update-form-active").val(),
+            "enable": $("#update-form-enable").val()
+        };
+    } else {
+        account = {
+            "id": $("#update-form-id").val(),
+            "username": $("#update-form-username").val(),
+            "password": $("#update-form-password").val(),
+            "role": $("#update-form-role").val(),
+            "fullname": $("#update-form-fullname").val(),
+            "email": $("#update-form-email").val(),
+            "phone": $("#update-form-phone").val(),
+            "numberId": $("#update-form-numberId").val(),
+            "vehicle": {
+                "id": $("#update-form-vehicleId").val(),
+                "licensePlate": $("#update-form-licensePlate").val(),
+                "vehicletype": {
+                    "id": $("#update-form-typeId").val()
+                }
+            },
+            "balance": $("#update-form-balance").val(),
+            "active": $("#update-form-active").val(),
+            "enable": $("#update-form-enable").val()
+        };
+    }
     $.ajax({
         type: "POST",
         contentType: "application/json",
@@ -299,26 +299,26 @@ function submitUpdateForm() {
 }
 // handle delete form submit
 function submitDeleteForm() {
-	var account = {
-			"id": $("#update-form-id").val(),
-	        "username": $("#update-form-username").val(),
-	        "password": $("#update-form-password").val(),
-	        "role": $("#update-form-role").val(),
-	        "fullname": $("#update-form-fullname").val(),
-	        "email": $("#update-form-email").val(),
-	        "phone": $("#update-form-phone").val(),
-	        "numberId": $("#update-form-numberId").val(),
-	        "vehicle": {
-	        		"id": $("#update-form-vehicleId").val(),
-	        		"licensePlate": $("#update-form-licensePlate").val(),
-	        		"vehicletype": {
-	        			"id": $("#update-form-typeId").val()
-	        		}
-	        },
-	        "balance": $("#update-form-balance").val(),
-	        "active": $("#update-form-active").val(),
-	        "enable": $("#update-form-enable").val()
-	    };
+    var account = {
+        "id": $("#update-form-id").val(),
+        "username": $("#update-form-username").val(),
+        "password": $("#update-form-password").val(),
+        "role": $("#update-form-role").val(),
+        "fullname": $("#update-form-fullname").val(),
+        "email": $("#update-form-email").val(),
+        "phone": $("#update-form-phone").val(),
+        "numberId": $("#update-form-numberId").val(),
+        "vehicle": {
+            "id": $("#update-form-vehicleId").val(),
+            "licensePlate": $("#update-form-licensePlate").val(),
+            "vehicletype": {
+                "id": $("#update-form-typeId").val()
+            }
+        },
+        "balance": $("#update-form-balance").val(),
+        "active": $("#update-form-active").val(),
+        "enable": $("#update-form-enable").val()
+    };
     $.ajax({
         type: "POST",
         contentType: "application/json",
@@ -382,11 +382,11 @@ function openUpdateModal(element) {
         "phone": data.phone,
         "numberId": data.numberId,
         "vehicle": {
-        		"id": data.vehicleId,
-        		"licensePlate": data.licensePlate,
-        		"vehicletype": {
-        			"id": data.vehicletypeId
-        		}
+            "id": data.vehicleId,
+            "licensePlate": data.licensePlate,
+            "vehicletype": {
+                "id": data.vehicletypeId
+            }
         },
         "balance": data.balance,
         "active": data.active,
@@ -499,24 +499,24 @@ function clearErrorUpdate() {
 }
 
 // set data to select tag type of vehicle from database
-$(document).ready(function(){
-$.ajax({
-    type: "GET",
-    contentType: "application/json",
-    url: "../vehicletype/get",
-    success: function (result) {
-    	$.each(JSON.parse(result), function (i, item) {
-    		$('#add-form-typeId').append($('<option>', { 
-    			value: item.id,
-    			text : item.name 
-    		}));
-    	});
-    	$.each(JSON.parse(result), function (i, item) {
-    		$('#update-form-typeId').append($('<option>', { 
-    			value: item.id,
-    			text : item.name 
-    		}));
-    	});
-    }
-});
+$(document).ready(function () {
+    $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        url: "../vehicletype/get",
+        success: function (result) {
+            $.each(JSON.parse(result), function (i, item) {
+                $('#add-form-typeId').append($('<option>', {
+                    value: item.id,
+                    text: item.name
+                }));
+            });
+            $.each(JSON.parse(result), function (i, item) {
+                $('#update-form-typeId').append($('<option>', {
+                    value: item.id,
+                    text: item.name
+                }));
+            });
+        }
+    });
 });

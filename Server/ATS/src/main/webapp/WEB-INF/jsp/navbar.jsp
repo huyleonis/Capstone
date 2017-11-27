@@ -1,3 +1,6 @@
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+
 <nav class="navbar navbar-default navbar-fixed">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -7,7 +10,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Dashboard</a>
+            <a class="navbar-brand">${currTitle}</a>
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-left">

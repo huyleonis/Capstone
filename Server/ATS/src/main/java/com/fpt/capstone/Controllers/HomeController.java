@@ -18,9 +18,17 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController {
 
-    @RequestMapping(value = "/home", method = RequestMethod.GET)
+    static final int ACTIVE = 1;
+    /**
+     * Hiển thị trang welcome.jsp (HOME)
+     * 
+     * @return welcome view
+     */
+    @RequestMapping(value = {"/home", "/"}, method = RequestMethod.GET)
     public ModelAndView welcome() {
         ModelAndView m = new ModelAndView("welcome");
+        m.addObject("currSelected", ACTIVE);
+        m.addObject("currTitle", "Dashboard");
         return m;
     }
 }

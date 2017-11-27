@@ -285,7 +285,6 @@
                                 <tr>
                                     <th>id</th>
                                     <th class="text-center">Username</th>
-                                    <th class="text-center">Password</th>
                                     <th class="text-center">Full Name</th>
                                     <th class="text-center">Role</th>
                                     <th class="text-center">Email</th>

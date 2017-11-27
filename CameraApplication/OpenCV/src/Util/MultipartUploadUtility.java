@@ -20,7 +20,7 @@ import java.net.URLConnection;
  */
 public class MultipartUploadUtility implements Runnable {
 
-    private final static String BASE_URL = "http://172.20.10.2:8080/";
+    private final static String BASE_URL = "http://localhost:8080/";
     
     private final String boundary;
     private static final String LINE_FEED = "\r\n";

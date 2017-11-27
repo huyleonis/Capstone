@@ -4,26 +4,21 @@ import com.fpt.capstone.Entities.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Repository;
-
 import javax.transaction.Transactional;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
-import javax.transaction.Status;
 import org.springframework.data.repository.query.Param;
 
 @Repository
-public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
+public interface TransactionRepos extends JpaRepository<Transaction, String> {
 
     /**
      * Tạo transaction thanh toán thủ công
      *
      * @param id
      * @param stationId
-     * @param idTransaction
      * @param now
      * @param status
      * @param price
@@ -182,8 +177,20 @@ public interface TransactionRepos extends JpaRepository<Transaction, Integer> {
             + "AND stationId = :stationId "
             + "AND status = 'Initial' "
             + "AND createdTime > NOW() - INTERVAL 30 MINUTE", nativeQuery = true)
-    Transaction getCapturedTransaction(@Param("vehicleId") Integer vehicleId, @Param("stationId") Integer stationId);
+    Transaction getCapturedTransactionForMobile(@Param("vehicleId") Integer vehicleId, @Param("stationId") Integer stationId);
+    
+    @Query(value = "SELECT * FROM transaction "
+            + "WHERE vehicleId = :vehicleId "
+            + "AND stationId = :stationId "
+            + "AND status = 'Initial' AND status = 'Not pay' "
+            + "AND createdTime > NOW() - INTERVAL 30 MINUTE", nativeQuery = true)
+    Transaction getCapturedTransactionForDesktop(@Param("vehicleId") Integer vehicleId, @Param("stationId") Integer stationId);
 
     @Query(value = "SELECT * FROM transaction WHERE status = :status", nativeQuery = true)
     List<Transaction> findByStatus(@Param("status") String status);
+
+    @Query(value = "SELECT * FROM transaction WHERE vehicleId = :vehicleId AND "
+            + "(createdTime between :createdTime - INTERVAL 30 minute AND :createdTime + INTERVAL 30 minute)", nativeQuery = true)
+    List<Transaction> findByVehicleIdAndTime(@Param("vehicleId") int vehicleId,
+            @Param("createdTime") String createdTime);
 }

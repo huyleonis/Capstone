@@ -67,21 +67,4 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
         return dto;
     }
 
-    @Override
-    public boolean delete(int id) {
-
-        try {
-            VehicleType existingVehicleType = vehicletypeRepos.findOne(id);
-
-            if (existingVehicleType != null) {
-                vehicletypeRepos.delete(id);
-                return true;
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-
-        return false;
-    }
-
 }

@@ -20,18 +20,6 @@ public class StationServiceImpl implements StationService {
 	private StationRepos stationRepos;
 
 	@Override
-	public StationDTO findByUuid(String uuid) {
-		Station station = stationRepos.findByUuid(uuid);
-		if (station != null) {
-			StationDTO stationDTO = StationDTO.convertFromEntity(station);
-			return stationDTO;
-		} else {
-			return null;
-		}
-
-	}
-
-	@Override
 	public List<StationDTO> getAllStation() {
 
 		List<Station> stations = stationRepos.findAll();

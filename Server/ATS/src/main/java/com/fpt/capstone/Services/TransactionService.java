@@ -34,7 +34,9 @@ public interface TransactionService {
 
     List<TransactionDetailDTO> getDetailByVehicleIdIn24Hours(int vehicleId);
 
-    TransactionDetailDTO getCapturedTransaction(int vehicleId, int stationId, boolean updateStatus);
+    TransactionDetailDTO getCapturedTransactionForMobile(int vehicleId, int stationId);
+    
+    TransactionDetailDTO getCapturedTransactionForDesktop(int vehicleId, int stationId);
     
     List<TransactionDetailDTO> getAllReportDetail();
 
@@ -42,7 +44,7 @@ public interface TransactionService {
 
     TransactionDTO updateReport(Transaction transaction);
 
-    boolean delete(String id);
+    boolean deleteReport(String id);
 
     List<TransactionDTO> getTransByLicPlateAndTime(String licensePlate, String createdTime);
 

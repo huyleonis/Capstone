@@ -12,5 +12,4 @@ public interface VehicleTypeService {
 
 	VehicleTypesDTO update(VehicleType vehicletype);
 
-	boolean delete(int id);
 }

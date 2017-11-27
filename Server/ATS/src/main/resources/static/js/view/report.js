@@ -33,7 +33,7 @@ $(document)
                         // bottom of the table
                         "ajax": {
                             "url":
-                                "../transaction/getReportDetail", // get
+                                "../report/getReportDetail", // get
                             // the
                             // list
                             "dataSrc": "" // returned list

@@ -6,8 +6,6 @@ import com.fpt.capstone.Entities.Station;
 import java.util.List;
 
 public interface StationService {
-	
-    StationDTO findByUuid(String uuid);
     
     List<StationDTO> getAllStation();
     

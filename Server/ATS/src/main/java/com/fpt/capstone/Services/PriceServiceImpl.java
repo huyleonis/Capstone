@@ -38,17 +38,6 @@ public class PriceServiceImpl implements PriceService {
 	}
 
 	@Override
-	public PriceDTO findByLicensePlate(String license_plate, int id) {
-		Price price = priceRepos.findByLicensePlate(license_plate, id);
-		if (price != null) {
-			PriceDTO priceDTO = PriceDTO.convertFromEntity(price);
-			return priceDTO;
-		} else {
-			return null;
-		}
-	}
-
-	@Override
 	public List<PriceDTO> getAllPrice() {
 
 		List<Price> prices = priceRepos.findAll();

@@ -25,16 +25,6 @@ public interface PriceRepos extends JpaRepository<Price, Integer> {
     @Query(value = "SELECT * FROM price WHERE id = ?1", nativeQuery = true)
     Price findById(Integer id);
 
-    /**
-     * Tìm giá tiền dựa trên biển số xe và trạm cho thu phí thủ công gửi về staff
-     * @param licensePlate
-     * @param idLane
-     * @return price, typeName, accountId
-     */
-    @Query(value = "select * from price  where stationId = "
-            + "(select s.id from station s, lane l where l.stationId = s.id and l.id = :idLane) "
-            + "and typeId = "
-            + "(select vt.id from vehicletype vt, vehicle v where vt.id = v.typeId and v.license_plate = :license)", nativeQuery = true)
-    Price findByLicensePlate(@Param("license") String licensePlate, @Param("idLane") int idLane);
+
 
 }

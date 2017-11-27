@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.fpt.capstone.Controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,7 +8,6 @@ import com.fpt.capstone.Entities.Account;
 import com.fpt.capstone.Entities.Beacon;
 import com.fpt.capstone.Repositories.AccountRepos;
 import com.fpt.capstone.Repositories.BeaconRepos;
-import com.fpt.capstone.Services.AccountService;
 import com.fpt.capstone.Services.BeaconService;
 import com.fpt.capstone.Services.PriceService;
 import com.fpt.capstone.Services.TransactionService;
@@ -44,56 +38,80 @@ public class BeaconController {
 
     @Autowired
     private PriceService priceService;
-    
+
     @Autowired
     private AccountRepos accountRepos;
 
-    @RequestMapping(value = "getBeacon/{uuid}/{major}/{minor}/{username}")
+    static final int ACTIVE = 3;
+
+    /**
+     * Hiển thị trang beacon.jsp
+     *
+     * @return beacon view
+     */
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
+    public ModelAndView viewBeacon() {
+        ModelAndView m = new ModelAndView("beacon");
+        m.addObject("currSelected", ACTIVE);
+        m.addObject("currTitle", "Beacon Management");
+        return m;
+    }
+
+    /**
+     * Lấy danh sách beacon
+     *
+     * @return danh sách Beacon dưới dạng JSONARRAY
+     * @throws com.fasterxml.jackson.core.JsonProcessingException
+     */
+    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    public String getAllBeacon() throws JsonProcessingException {
+        List<BeaconDTO> dtos = beaconService.getAllBeacon();
+        return new Gson().toJson(dtos);
+    }
+
+    /**
+     * Kiểm tra TYPE của beacon
+     *
+     * @param uuid
+     * @param major
+     * @param minor
+     * @param username
+     * @return type của beacon
+     */
+    @RequestMapping(value = "getBeacon/{uuid}/{major}/{minor}/{username}")
     public Object getBeacon(@PathVariable String uuid,
             @PathVariable String major, @PathVariable String minor, @PathVariable String username) {
 
         Map<String, Object> result = new HashMap<>();
-        
         System.out.println("Get Beacon information: " + uuid + " - " + major + " - "
                 + minor);
         int iMajor = Integer.parseInt(major);
         int iMinor = Integer.parseInt(minor);
 
         Beacon beaconEntity = beaconRepos.getBeacon(uuid, iMajor, iMinor);
-        if (beaconEntity != null) {            
+        if (beaconEntity != null) {
             BeaconDTO dto = BeaconDTO.convertFromEntity(beaconEntity);
-            result.put("type", dto.getType().getName());            
+            result.put("type ", dto.getType().getName());
             System.out.println("Get beacon info - type " + dto.getType());
             if (dto.getType() == BeaconType.BEACON_PAYMENT) {
-                result.put("info", this.triggerBeaconPayment(dto.getStationId(), username));                    
+                result.put("info ", this.triggerBeaconPayment(dto.getStationId(), username));
             } else if (dto.getType() == BeaconType.BEACON_RESULT) {
-                result.put("laneId", dto.getLaneId());
+                result.put("laneId ", dto.getLaneId());
             }
-            
         } else {
-            result.put("type", BeaconType.BEACON_OTHER.getName());            
+            result.put("type ", BeaconType.BEACON_OTHER.getName());
             System.out.println("Get beacon info - type OTHER");
         }
-        
         return result;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
-    public ModelAndView viewAccount() {
-        ModelAndView m = new ModelAndView("beacon");
-        return m;
-    }
-
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public String getAllBeacon() throws JsonProcessingException {
-
-        List<BeaconDTO> dtos = beaconService.getAllBeacon();
-
-        return new Gson().toJson(dtos);
-    }
-
+    /**
+     * Tạo beacon mới
+     *
+     * @param beacon Beacon entitiy
+     * @return kết quả thực hiện
+     */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(@RequestBody Beacon beacon) {
 
@@ -108,6 +126,12 @@ public class BeaconController {
         return (isSuccessful) ? "success" : "fail";
     }
 
+    /**
+     * Enable/Disable beacon
+     *
+     * @param beacon Beacon entity
+     * @return kết quả thực hiện
+     */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String update(@RequestBody Beacon beacon) {
         boolean isSuccessful = false;
@@ -126,9 +150,8 @@ public class BeaconController {
      * ứng thì trả về transaction ứng với hình, không thì trả về giá và hỏi
      * người dùng có tạo transaction hay không.
      *
-     * @param stationId
+     * @param stationId id của trạm
      * @param username
-     * @param licensePlate
      * @return
      */
     @RequestMapping(value = "/payment/{stationId}/{username}", method = RequestMethod.GET)
@@ -138,17 +161,14 @@ public class BeaconController {
         TransactionDetailDTO transaction;
         Account account = accountRepos.findByUsername(username);
         int vehicleId = account.getVehicle().getId();
-        
-        transaction = transactionService.getCapturedTransaction(vehicleId, stationId, true);  
-        
-        
-        if (transaction == null) {
-            System.out.println("Not found captured payment created by camera");
-            return priceService.findPriceByStationIdAndLicensePlate(stationId, account.getVehicle().getLicensePlate());
-        }
+            transaction = transactionService.getCapturedTransactionForMobile(vehicleId, stationId);
 
-        System.out.println("Found captured payment created by camera");
-        return transaction;
+            if (transaction == null) {
+                System.out.println("Not found captured payment created by camera");
+                return priceService.findPriceByStationIdAndLicensePlate(stationId, account.getVehicle().getLicensePlate());
+            }
+            System.out.println("Found captured payment created by camera");
+            return transaction;
     }
 
     /**
@@ -156,9 +176,8 @@ public class BeaconController {
      * trạng
      *
      * @param laneId
-     * @param transactionId
-     * @param idTransaction
-     * @return
+     * @param transactionId Id của giao dich
+     * @return true if FINISH Transaction. If not, it is false
      */
     @RequestMapping(value = "/result/{laneId}/{transactionId}", method = RequestMethod.GET)
     public String triggerBeaconResult(@PathVariable int laneId, @PathVariable String transactionId) {
