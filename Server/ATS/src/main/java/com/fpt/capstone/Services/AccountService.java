@@ -30,11 +30,15 @@ public interface AccountService {
 
 	AccountDTO update(Account account);
 
-        String checkLogin(String username, String password);
+	String checkLogin(String username, String password);
         
-        boolean checkLicensePlate(String username, String licensePlate);
+	boolean checkLicensePlate(String username, String licensePlate);
 
-        boolean updateToken(String username, String token);
+	boolean updateToken(String username, String token);
         
-        boolean topupBalance(String username, double amount);
+	boolean topupBalance(String username, double amount);
+
+	boolean active(Account account);
+
+	boolean deactive(Account account);
 }

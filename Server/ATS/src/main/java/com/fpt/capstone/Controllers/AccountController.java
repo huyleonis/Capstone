@@ -228,4 +228,29 @@ public class AccountController {
         return accountService.checkLoginFromDesktopApp(username, password);
     }
 
+    /**
+     * active tai khoan
+     * @param account
+     * @return
+     */
+    @RequestMapping(value = "/active", method = RequestMethod.POST)
+    public String activeAccount(@RequestBody Account account) {
+
+        boolean isSuccessful = accountService.active(account);
+
+        return (isSuccessful)? "success" : "fail";
+    }
+
+    /**
+     * deactive tai khoan
+     * @param account
+     * @return
+     */
+    @RequestMapping(value = "/deactive", method = RequestMethod.POST)
+    public String deactiveAccount(@RequestBody Account account) {
+
+        boolean isSuccessful = accountService.deactive(account);
+
+        return (isSuccessful)? "success" : "fail";
+    }
 }

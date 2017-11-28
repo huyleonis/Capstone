@@ -13,19 +13,14 @@ import com.fpt.capstone.Entities.Vehicle;
 import com.fpt.capstone.Repositories.AccountRepos;
 import com.fpt.capstone.Repositories.PriceRepos;
 import com.fpt.capstone.Repositories.VehicleRepos;
-
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * @author hp
  */
 @Service
@@ -199,7 +194,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean updateToken(String username, String token) {
         int sqlResult = accountRepos.updateToken(username, token);
-        if (sqlResult > 0){
+        if (sqlResult > 0) {
             return true;
         }
         return false;
@@ -209,15 +204,44 @@ public class AccountServiceImpl implements AccountService {
     public boolean topupBalance(String username, double amount) {
 
         Account account = accountRepos.findByUsername(username);
-        
+
         if (account == null) {
             return false;
         }
-        
+
         double newBalance = account.getBalance() + amount;
         int sqlResult = accountRepos.updateBalance(account.getId(), newBalance);
-        
+
         return sqlResult > 0;
     }
 
+    @Override
+    public boolean active(Account account) {
+
+        Account existingAccount = accountRepos.findOne(account.getId());
+        if (existingAccount != null) {
+            existingAccount.setActive(true);
+            Account processedAccount = accountRepos.save(existingAccount);
+            if (processedAccount != null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean deactive(Account account) {
+
+        Account existingAccount = accountRepos.findOne(account.getId());
+        if (existingAccount != null) {
+            existingAccount.setActive(false);
+            Account processedAccount = accountRepos.save(existingAccount);
+            if (processedAccount != null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
