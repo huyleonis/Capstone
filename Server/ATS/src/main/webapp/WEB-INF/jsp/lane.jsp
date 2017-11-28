@@ -53,8 +53,8 @@
                                             <div class="form-group">
                                                 <label class="control-label">Active:</label>
                                                 <select id="add-form-active" class="form-control">
-                                                	<option value="0">Inactive</option>
-                                                	<option value="1">Active</option>
+                                                	<option value="false">Inactive</option>
+                                                	<option value="true">Active</option>
                                                 </select>  
                                                 <label id="nameError" class="error"></label>
                                             </div>
@@ -103,14 +103,9 @@
                                                 </select>  
                                                 <label id="nameErrorUpdate" class="error"></label>
                                             </div>
-                                            
+
                                             <div class="form-group">
-                                                <label class="control-label">Active:</label>
-                                                <select id="update-form-active" class="form-control">
-                                                	<option value="0">Inactive</option>
-                                                	<option value="1">Active</option>
-                                                </select>  
-                                                <label id="nameErrorUpdate" class="error"></label>
+                                                <input class="form-control hidden" id="update-form-active" readonly />
                                             </div>
 
                                         </div>
@@ -155,6 +150,7 @@
                                style="text-align: center" id="table">
                             <thead>
                                 <tr>
+                                    <th class="text-center">#</th>
                                     <th>id</th>
                                     <th class="text-center">Name</th>
                                     <th class="text-center">Station ID</th>

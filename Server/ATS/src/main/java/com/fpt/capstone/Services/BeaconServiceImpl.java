@@ -77,7 +77,7 @@ public class BeaconServiceImpl implements BeaconService {
 			existingBeacon.setActive(true);
 			Beacon processedBeacon = beaconRepos.save(existingBeacon);
 			if (processedBeacon != null) {
-				System.out.println(processedBeacon.getActive());
+				System.out.println("Active Beacon: " + processedBeacon.getActive());
 				return true;
 			}
 		}
@@ -92,7 +92,7 @@ public class BeaconServiceImpl implements BeaconService {
 			existingBeacon.setActive(false);
 			Beacon processedBeacon = beaconRepos.save(existingBeacon);
 			if (processedBeacon != null) {
-				System.out.println(processedBeacon.getActive());
+				System.out.println("Deactive Beacon: " + processedBeacon.getActive());
 				return true;
 			}
 		}

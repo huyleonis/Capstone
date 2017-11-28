@@ -85,7 +85,7 @@ public class LaneServiceImpl implements LaneService {
 			existingLane.setActive(true);
 			Lane processedLane = laneRepos.save(existingLane);
 			if (processedLane != null) {
-				System.out.println(processedLane.getActive());
+				System.out.println("Active Lane: " + processedLane.getActive());
 				return true;
 			}
 		}
@@ -100,7 +100,7 @@ public class LaneServiceImpl implements LaneService {
 			existingLane.setActive(false);
 			Lane processedLane = laneRepos.save(existingLane);
 			if (processedLane != null) {
-				System.out.println(processedLane.getActive());
+				System.out.println("Deactive Lane: " + processedLane.getActive());
 				return true;
 			}
 		}

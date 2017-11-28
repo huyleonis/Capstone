@@ -4,51 +4,42 @@ var active_to_button = function (data, type, full, meta) {
     } else {
         return "<button class='label label-danger' style='padding: 10px;' onclick = 'changeRole(this)'>Deactive</button>";
     }
-}
+};
+
+var checkData = function (data, type, full, meta) {
+    if (data == null || data == "")
+        return "N/A";
+    else
+        return data;
+
+};
+
 function changeRole(element) {
     var data = $("#table").DataTable().row($(element).parents('tr')).data();
-    var skill = {
-        "skillId": data.skillId
+    var beacon = {
+        "id": data.id
     };
-    if (data.approved) {
+    if (data.active) {
         $.ajax({
             type: "POST",
             contentType: "application/json",
-            url: contextPath + "/skills/deactive-skill",
-            data: JSON.stringify(skill),
-            success: function (result) {
-                if (result == "fail") {
-                    setStatus("This skill does not exist! Please check again!", "#ff0000");
-                } else {
-                    setStatus("Update success!", "#00cc00");
-                }
-            },
-            error: function (result) {
-                setStatus("This skill does not exist! Please check again!", "#ff0000");
-            }
+            url: "/beacon/deactive",
+            data: JSON.stringify(beacon),
+
         });
     } else {
         $.ajax({
             type: "POST",
             contentType: "application/json",
-            url: contextPath + "/skills/active-skill",
-            data: JSON.stringify(skill),
-            success: function (result) {
-                if (result == "fail") {
-                    setStatus("This skill does not exist! Please check again!", "#ff0000");
-                } else {
-                    setStatus("Update success!", "#00cc00");
-                }
-            },
-            error: function (result) {
-                setStatus("This skill does not exist! Please check again!", "#ff0000");
-            }
+            url: "/beacon/active",
+            data: JSON.stringify(beacon),
+
         });
     }
-    $("#alert").show();
-    clearStatus();
+
     reloadTable();
 }
+
 $(document)
         .ready(
                 function ($) {
@@ -95,10 +86,11 @@ $(document)
                                             // data for the cell from the
                                             // returned list
                                             {
+                                                "data": null
+                                            },
+                                            {
                                                 "data": "id",
                                                 "visible": false
-                                                        // hide the column
-														// processID
                                             },
                                             {
                                                 "data": "uuid"
@@ -113,21 +105,36 @@ $(document)
                                                 "data": "type"
                                             },
                                             {
-                                                "data": "laneId"
+                                                "data": "laneId",
+                                                "render": checkData
                                             },
                                             {
-                                                "data": "stationId"
+                                                "data": "stationId",
+                                                "render": checkData
                                             },
                                             {
-                                                "data": "active"
+                                                "data": "active",
+                                                "render": active_to_button
                                             },
                                             {// column for view
                                                 // detail-update-delete
                                                 "data": null,
                                                 "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>"
                                                         + "<button class='btn btn-danger glyphicon glyphicon-trash' onclick='openDeleteModal(this)'></button>",
-                                            }]
+                                            }],
+                                        "columnDefs": [{
+                                            "searchable": false,
+                                            "orderable": false,
+                                            "targets": 0
+                                        }]
                                     });
+                    // generate index column
+                    table.on('order.dt search.dt', function () {
+                        table.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+                            cell.innerHTML = i + 1;
+                        });
+                    }).draw();
+
                     // handle delete form submit
                     $("#delete-form").submit(function (event) {
                         event.preventDefault();
@@ -150,35 +157,25 @@ $(document)
  */
 // perform ajax call to save report
 function submitAddForm() {
-	var beacon;
 	var lane = $("#add-form-laneId").val();
 	if (lane == "0") {
-		beacon = {
-	            "uuid": $("#add-form-uuid").val(),
-	            "major": $("#add-form-major").val(),
-	            "minor": $("#add-form-minor").val(),
-	            "type": $("#add-form-type").val(),
-	            "lane": null,
-	            "station": {
-	            	"id": $("#add-form-stationId").val()
-	            },
-	            "active": $("#add-form-active").val()
-	    };
+		lane = null;
 	} else {
-		beacon = {
-	            "uuid": $("#add-form-uuid").val(),
-	            "major": $("#add-form-major").val(),
-	            "minor": $("#add-form-minor").val(),
-	            "type": $("#add-form-type").val(),
-	            "lane": {
-	            	"id": $("#add-form-laneId").val()
-	            },
-	            "station": {
-	            	"id": $("#add-form-stationId").val()
-	            },
-	            "active": $("#add-form-active").val()
-	    };
+		lane = {
+            "id": $("#add-form-laneId").val()
+        };
 	}
+    var beacon = {
+        "uuid": $("#add-form-uuid").val(),
+        "major": $("#add-form-major").val(),
+        "minor": $("#add-form-minor").val(),
+        "type": $("#add-form-type").val(),
+        "lane": lane,
+        "station": {
+            "id": $("#add-form-stationId").val()
+        },
+        "active": $("#add-form-active").val()
+    };
     $.ajax({
         type: "POST",
         contentType: "application/json",
@@ -203,37 +200,26 @@ function submitAddForm() {
 
 var curr;
 function submitUpdateForm() {
-	var beacon;
 	var lane = $("#update-form-laneId").val();
 	if (lane == "0") {
-		beacon = {
-				"id": $("#update-form-id").val(),
-	            "uuid": $("#update-form-uuid").val(),
-	            "major": $("#update-form-major").val(),
-	            "minor": $("#update-form-minor").val(),
-	            "type": $("#update-form-type").val(),
-	            "lane": null,
-	            "station": {
-	            	"id": $("#update-form-stationId").val()
-	            },
-	            "active": $("#update-form-active").val()
-	    };
+		lane = null;
 	} else {
-		beacon = {
-				"id": $("#update-form-id").val(),
-	            "uuid": $("#update-form-uuid").val(),
-	            "major": $("#update-form-major").val(),
-	            "minor": $("#update-form-minor").val(),
-	            "type": $("#update-form-type").val(),
-	            "lane": {
-	            	"id": $("#update-form-laneId").val()
-	            },
-	            "station": {
-	            	"id": $("#update-form-stationId").val()
-	            },
-	            "active": $("#update-form-active").val()
-	    };
+		lane = {
+            "id": $("#update-form-laneId").val()
+        };
 	}
+	var beacon = {
+        "id": $("#update-form-id").val(),
+        "uuid": $("#update-form-uuid").val(),
+        "major": $("#update-form-major").val(),
+        "minor": $("#update-form-minor").val(),
+        "type": $("#update-form-type").val(),
+        "lane": lane,
+        "station": {
+            "id": $("#update-form-stationId").val()
+        },
+        "active": $("#update-form-active").val()
+    };
     $.ajax({
         type: "POST",
         contentType: "application/json",
@@ -255,49 +241,7 @@ function submitUpdateForm() {
     reloadTable();
     clearStatus();
 }
-// handle delete form submit
-function submitDeleteForm() {
-	var account = {
-			"id": $("#update-form-id").val(),
-	        "username": $("#update-form-username").val(),
-	        "password": $("#update-form-password").val(),
-	        "role": $("#update-form-role").val(),
-	        "fullname": $("#update-form-fullname").val(),
-	        "email": $("#update-form-email").val(),
-	        "phone": $("#update-form-phone").val(),
-	        "numberId": $("#update-form-numberId").val(),
-	        "vehicle": {
-	        		"id": $("#update-form-vehicleId").val(),
-	        		"licensePlate": $("#update-form-licensePlate").val(),
-	        		"vehicletype": {
-	        			"id": $("#update-form-typeId").val()
-	        		}
-	        },
-	        "balance": $("#update-form-balance").val(),
-	        "isActive": $("#update-form-isActive").val(),
-	        "isEnable": $("#update-form-isEnable").val()
-	    };
-    $.ajax({
-        type: "POST",
-        contentType: "application/json",
-        url: "../account/delete",
-        data: JSON.stringify(account),
-        success: function (result) {
-            if (result == "fail") {
-                setStatus("Delete fail!", "#ff0000");
-            } else {
-                setStatus("Delete success!", "#00cc00");
-            }
-        },
-        error: function (result) {
-            setStatus("This account does not exist! Please check again!", "#ff0000");
-        }
-    });
-    $("#delete-modal").modal("hide");
-    $("#alert").show();
-    reloadTable();
-    clearStatus();
-}
+
 // ajax jquery dataTables reload
 function reloadTable() {
     setTimeout(function () {
@@ -306,12 +250,6 @@ function reloadTable() {
         // first page
     }, 200); // reload the table after 0.2s
 }
-
-// report-home.jsp's script
-
-/*
- * Modal process for report-home.jsp
- */
 
 // open updateModal
 function openUpdateModal(element) {

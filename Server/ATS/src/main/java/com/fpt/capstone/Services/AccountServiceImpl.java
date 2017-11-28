@@ -121,6 +121,9 @@ public class AccountServiceImpl implements AccountService {
                 }
             }
 
+            // system will generate password automatically
+//            account.setPassword("123");
+
             Account processedAccount = accountRepos.save(account);
             if (processedAccount != null) {
                 dto = AccountDTO.convertFromEntity(processedAccount);
@@ -223,7 +226,7 @@ public class AccountServiceImpl implements AccountService {
             existingAccount.setActive(true);
             Account processedAccount = accountRepos.save(existingAccount);
             if (processedAccount != null) {
-                System.out.println(processedAccount.getActive());
+                System.out.println("Active Account: " + processedAccount.getActive());
                 return true;
             }
         }
@@ -239,7 +242,7 @@ public class AccountServiceImpl implements AccountService {
             existingAccount.setActive(false);
             Account processedAccount = accountRepos.save(existingAccount);
             if (processedAccount != null) {
-                System.out.println(processedAccount.getActive());
+                System.out.println("Deactive Account: " + processedAccount.getActive());
                 return true;
             }
         }

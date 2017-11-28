@@ -119,12 +119,7 @@
                                             <div class="form-group">
                                                 <input class="form-control hidden" id="update-form-id" readonly />
                                             </div>
-                                            <%-- <div class="form-group">
-                                                <label class="control-label">Username:</label> <input
-                                                    class="form-control" id="update-form-username"
-                                                    onblur="checkValidateNameUpdate()" required /> <label
-                                                    id="nameErrorUpdate" class="error"></label>
-                                            </div> --%>
+
                                             <div class="form-group">
                                                 <label class="control-label">Username:</label> 
                                                 <input type="text" class="form-control" id="update-form-username" required /> 
@@ -175,11 +170,19 @@
                                             </div>
 
                                             <div class="form-group">
+                                                <input class="form-control hidden" id="update-form-licensePlate" readonly />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <input class="form-control hidden" id="update-form-active" readonly />
+                                            </div>
+
+                                            <div class="form-group">
                                                 <label class="control-label">Enable:</label>
                                                 <select id="update-form-enable" class="form-control">
-                                                    <option value="0">Disable</option>
-                                                    <option value="1">Enable</option>
-                                                </select>  
+                                                    <option value="false">Disable</option>
+                                                    <option value="true">Enable</option>
+                                                </select>
                                                 <label id="nameErrorUpdate" class="error"></label>
                                             </div>
 

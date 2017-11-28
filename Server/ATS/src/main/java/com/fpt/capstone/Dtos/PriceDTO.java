@@ -20,13 +20,13 @@ public class PriceDTO {
     private int stationId;
     private String vehicleType;
     private int vehicleTypeId;
-    private String active;
+    private boolean active;
 
     public PriceDTO() {
     }
 
     public PriceDTO(int id, String stationName, String stationLocation, String stationZone, double price,
-                    String fromDate, int stationId, String vehicleType, int vehicleTypeId, String active) {
+                    String fromDate, int stationId, String vehicleType, int vehicleTypeId, boolean active) {
         this.id = id;
         this.stationName = stationName;
         this.stationLocation = stationLocation;
@@ -103,11 +103,11 @@ public class PriceDTO {
         this.vehicleType = vehicleType;
     }
 
-    public String getActive() {
+    public boolean isActive() {
         return active;
     }
 
-    public void setActive(String active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 
@@ -147,7 +147,7 @@ public class PriceDTO {
                 dto.setVehicleType(price.getVehicleType().getName());
             }
 
-            dto.setActive((price.getActive()) ? ACTIVE : INACTIVE);
+            dto.setActive(price.getActive());
         }
         return dto;
     }

@@ -74,7 +74,7 @@ public class StationServiceImpl implements StationService {
 			existingStation.setActive(true);
 			Station processedStation = stationRepos.save(existingStation);
 			if (processedStation != null) {
-				System.out.println(processedStation.getActive());
+				System.out.println("Active Station: " + processedStation.getActive());
 				return true;
 			}
 		}
@@ -89,7 +89,7 @@ public class StationServiceImpl implements StationService {
 			existingStation.setActive(false);
 			Station processedStation = stationRepos.save(existingStation);
 			if (processedStation != null) {
-				System.out.println(processedStation.getActive());
+				System.out.println("Deactive Station: " + processedStation.getActive());
 				return true;
 			}
 		}

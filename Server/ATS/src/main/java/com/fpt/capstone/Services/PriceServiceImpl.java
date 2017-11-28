@@ -92,7 +92,7 @@ public class PriceServiceImpl implements PriceService {
 			existingPrice.setActive(true);
 			Price processedPrice = priceRepos.save(existingPrice);
 			if (processedPrice != null) {
-				System.out.println(processedPrice.getActive());
+				System.out.println("Active Price: " + processedPrice.getActive());
 				return true;
 			}
 		}
@@ -107,7 +107,7 @@ public class PriceServiceImpl implements PriceService {
 			existingPrice.setActive(false);
 			Price processedPrice = priceRepos.save(existingPrice);
 			if (processedPrice != null) {
-				System.out.println(processedPrice.getActive());
+				System.out.println("Deactive Price: " + processedPrice.getActive());
 				return true;
 			}
 		}

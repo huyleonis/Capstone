@@ -4,51 +4,42 @@ var active_to_button = function (data, type, full, meta) {
     } else {
         return "<button class='label label-danger' style='padding: 10px;' onclick = 'changeRole(this)'>Deactive</button>";
     }
-}
+};
+
+var checkData = function (data, type, full, meta) {
+    if (data == null || data == "")
+        return "N/A";
+    else
+        return data;
+
+};
+
 function changeRole(element) {
     var data = $("#table").DataTable().row($(element).parents('tr')).data();
-    var skill = {
-        "skillId": data.skillId
+    var price = {
+        "id": data.id
     };
-    if (data.approved) {
+    if (data.active) {
         $.ajax({
             type: "POST",
             contentType: "application/json",
-            url: contextPath + "/skills/deactive-skill",
-            data: JSON.stringify(skill),
-            success: function (result) {
-                if (result == "fail") {
-                    setStatus("This skill does not exist! Please check again!", "#ff0000");
-                } else {
-                    setStatus("Update success!", "#00cc00");
-                }
-            },
-            error: function (result) {
-                setStatus("This skill does not exist! Please check again!", "#ff0000");
-            }
+            url: "/price/deactive",
+            data: JSON.stringify(price),
+
         });
     } else {
         $.ajax({
             type: "POST",
             contentType: "application/json",
-            url: contextPath + "/skills/active-skill",
-            data: JSON.stringify(skill),
-            success: function (result) {
-                if (result == "fail") {
-                    setStatus("This skill does not exist! Please check again!", "#ff0000");
-                } else {
-                    setStatus("Update success!", "#00cc00");
-                }
-            },
-            error: function (result) {
-                setStatus("This skill does not exist! Please check again!", "#ff0000");
-            }
+            url: "/price/active",
+            data: JSON.stringify(price),
+
         });
     }
-    $("#alert").show();
-    clearStatus();
+
     reloadTable();
 }
+
 $(document)
         .ready(
                 function ($) {
@@ -95,6 +86,9 @@ $(document)
                                             // data for the cell from the
                                             // returned list
                                             {
+                                                "data": null
+                                            },
+                                            {
                                                 "data": "id",
                                                 "visible": false
                                                         // hide the column
@@ -124,7 +118,8 @@ $(document)
                                                 "data": "vehicleType"
                                             },
                                             {
-                                                "data": "active"
+                                                "data": "active",
+                                                "render": active_to_button
                                             },
                                             {// column for view
                                                 // detail-update-delete
@@ -133,6 +128,13 @@ $(document)
                                                         + "<button class='btn btn-danger glyphicon glyphicon-trash' onclick='openDeleteModal(this)'></button>",
                                             }]
                                     });
+                    // generate index column
+                    table.on('order.dt search.dt', function () {
+                        table.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+                            cell.innerHTML = i + 1;
+                        });
+                    }).draw();
+
                     // handle delete form submit
                     $("#delete-form").submit(function (event) {
                         event.preventDefault();
@@ -160,7 +162,7 @@ function submitAddForm() {
 	        "station": {
 	        	"id": $("#add-form-stationId").val()
 	        },
-	        "vehicletype": {
+	        "vehicleType": {
 	        	"id": $("#add-form-vehicletypeId").val()
 	        },
 	        "fromDate": $("#add-form-fromDate").val(),
@@ -196,7 +198,7 @@ function submitUpdateForm() {
 	        "station": {
 	        	"id": $("#update-form-stationId").val()
 	        },
-	        "vehicletype": {
+	        "vehicleType": {
 	        	"id": $("#update-form-vehicletypeId").val()
 	        },
 	        "fromDate": $("#update-form-fromDate").val(),

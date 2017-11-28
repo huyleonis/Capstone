@@ -224,7 +224,7 @@ public class BeaconController {
      * @return
      */
     @RequestMapping(value = "/active", method = RequestMethod.POST)
-    public String activeBeacon(@RequestBody Beacon beacon) {
+    public String active(@RequestBody Beacon beacon) {
 
         boolean isSuccessful = beaconService.active(beacon);
 
@@ -237,7 +237,7 @@ public class BeaconController {
      * @return
      */
     @RequestMapping(value = "/deactive", method = RequestMethod.POST)
-    public String deactiveBeacon(@RequestBody Beacon beacon) {
+    public String deactive(@RequestBody Beacon beacon) {
 
         boolean isSuccessful = beaconService.deactive(beacon);
 

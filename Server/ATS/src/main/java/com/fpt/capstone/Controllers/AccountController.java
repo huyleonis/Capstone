@@ -86,8 +86,6 @@ public class AccountController {
 
         boolean isSuccessful = false;
 
-        // system will generate password automatically
-        //account.setPassword("123");
         AccountDTO dto = accountService.insert(account);
 
         if (dto != null) {
@@ -98,7 +96,6 @@ public class AccountController {
     }
 
     /**
-     * Enable/Disable account
      *
      * @param account Account entity
      * @return kết quả thực hiện
@@ -234,7 +231,7 @@ public class AccountController {
      * @return
      */
     @RequestMapping(value = "/active", method = RequestMethod.POST)
-    public String activeAccount(@RequestBody Account account) {
+    public String active(@RequestBody Account account) {
 
         boolean isSuccessful = accountService.active(account);
 
@@ -247,7 +244,7 @@ public class AccountController {
      * @return
      */
     @RequestMapping(value = "/deactive", method = RequestMethod.POST)
-    public String deactiveAccount(@RequestBody Account account) {
+    public String deactive(@RequestBody Account account) {
 
         boolean isSuccessful = accountService.deactive(account);
 

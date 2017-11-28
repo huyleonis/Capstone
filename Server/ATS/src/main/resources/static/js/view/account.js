@@ -4,7 +4,7 @@ var active_to_button = function (data, type, full, meta) {
     } else {
         return "<button class='label label-danger' style='padding: 10px;' onclick = 'changeRole(this)'>Deactive</button>";
     }
-}
+};
 
 var roleName = function (data, type, full, meta) {
     switch (data) {
@@ -20,7 +20,7 @@ var roleName = function (data, type, full, meta) {
         default:
             break;
     }
-}
+};
 
 var checkData = function (data, type, full, meta) {
     if (data == null || data == "")
@@ -28,7 +28,7 @@ var checkData = function (data, type, full, meta) {
     else
         return data;
 
-}
+};
 
 function changeRole(element) {
     var data = $("#table").DataTable().row($(element).parents('tr')).data();
@@ -162,14 +162,15 @@ $(document)
                                                 "orderable": false,
                                                 "targets": 0
                                             }]
-
-//        "order": [[ 1, 'asc' ]]
+//                                      "order": [[ 1, 'asc' ]]
                                     });
+                    // generate index column
                     table.on('order.dt search.dt', function () {
                         table.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
                             cell.innerHTML = i + 1;
                         });
                     }).draw();
+
                     // handle delete form submit
                     $("#delete-form").submit(function (event) {
                         event.preventDefault();
@@ -192,9 +193,7 @@ $(document)
  */
 // perform ajax call to save report
 function submitAddForm() {
-    var account;
-
-    account = {
+    var account = {
         "username": $("#add-form-username").val(),
         "password": $("#add-form-password").val(),
         "role": $("#add-form-role").val(),
@@ -204,8 +203,8 @@ function submitAddForm() {
         "numberId": $("#add-form-numberId").val(),
         "vehicle": null,
         "balance": "0",
-        "active": $("#add-form-active").val(),
-        "enable": $("#add-form-enable").val()
+        "isActive": $("#add-form-active").val(),
+        "isEnabled": $("#add-form-enable").val()
     };
 
     $.ajax({
@@ -221,45 +220,33 @@ function submitAddForm() {
 
 var curr;
 function submitUpdateForm() {
-    var account;
+    var vehicle;
     var role = $("#update-form-role").val();
     if (role != "3") {
-        account = {
-            "id": $("#update-form-id").val(),
-            "username": $("#update-form-username").val(),
-            "password": $("#update-form-password").val(),
-            "role": $("#update-form-role").val(),
-            "fullname": $("#update-form-fullname").val(),
-            "email": $("#update-form-email").val(),
-            "phone": $("#update-form-phone").val(),
-            "numberId": $("#update-form-numberId").val(),
-            "vehicle": null,
-            "balance": "0",
-            "active": $("#update-form-active").val(),
-            "enable": $("#update-form-enable").val()
-        };
+        vehicle = null;
     } else {
-        account = {
-            "id": $("#update-form-id").val(),
-            "username": $("#update-form-username").val(),
-            "password": $("#update-form-password").val(),
-            "role": $("#update-form-role").val(),
-            "fullname": $("#update-form-fullname").val(),
-            "email": $("#update-form-email").val(),
-            "phone": $("#update-form-phone").val(),
-            "numberId": $("#update-form-numberId").val(),
-            "vehicle": {
-                "id": $("#update-form-vehicleId").val(),
-                "licensePlate": $("#update-form-licensePlate").val(),
-                "vehicletype": {
-                    "id": $("#update-form-typeId").val()
-                }
-            },
-            "balance": $("#update-form-balance").val(),
-            "active": $("#update-form-active").val(),
-            "enable": $("#update-form-enable").val()
-        };
+        vehicle = {
+            "id": $("#update-form-vehicleId").val(),
+            "licensePlate": $("#update-form-licensePlate").val(),
+            "vehicletype": {
+                "id": $("#update-form-typeId").val()
+            }
+        }
     }
+    var account = {
+        "id": $("#update-form-id").val(),
+        "username": $("#update-form-username").val(),
+        "password": $("#update-form-password").val(),
+        "role": $("#update-form-role").val(),
+        "fullname": $("#update-form-fullname").val(),
+        "email": $("#update-form-email").val(),
+        "phone": $("#update-form-phone").val(),
+        "numberId": $("#update-form-numberId").val(),
+        "vehicle": vehicle,
+        "balance": $("#update-form-balance").val(),
+        "active": $("#update-form-active").val(),
+        "enable": $("#update-form-enable").val()
+    };
     $.ajax({
         type: "POST",
         contentType: "application/json",
@@ -306,8 +293,8 @@ function openUpdateModal(element) {
     $("#update-form-vehicleId").val(data.vehicleId);
     $("#update-form-licensePlate").val(data.licensePlate);
     $("#update-form-typeId").val(data.vehicletypeId);
-    $("#update-form-active").val(data.active);
-    $("#update-form-enable").val(data.enable);
+    $("#update-form-active").val(data.isActive);
+    $("#update-form-enable").val(data.isEnable);
     curr = {
         "id": data.id,
         "username": data.username,
@@ -325,8 +312,8 @@ function openUpdateModal(element) {
             }
         },
         "balance": data.balance,
-        "active": data.active,
-        "enable": data.enable
+        "active": data.isActive,
+        "enable": data.isEnable
     };
     clearErrorUpdate();
     $("#update-modal").modal('toggle');

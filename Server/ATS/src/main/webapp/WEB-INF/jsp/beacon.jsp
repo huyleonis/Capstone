@@ -84,8 +84,8 @@
                                            	<div class="form-group">
                                                 <label class="control-label">Active:</label>
                                                 <select id="add-form-active" class="form-control">
-                                                	<option value="0">Inactive</option>
-                                                	<option value="1">Active</option>
+                                                	<option value="false">Inactive</option>
+                                                	<option value="true">Active</option>
                                                 </select>  
                                                 <label id="nameError" class="error"></label>
                                           	</div>
@@ -165,15 +165,10 @@
                                                 </select>  
                                                 <label id="nameErrorUpdate" class="error"></label>
                                          	</div>
-                                                
-                                           	<div class="form-group">
-                                                <label class="control-label">Active:</label>
-                                                <select id="update-form-active" class="form-control">
-                                                	<option value="0">Inactive</option>
-                                                	<option value="1">Active</option>
-                                                </select>  
-                                                <label id="nameErrorUpdate" class="error"></label>
-                                          	</div>
+
+                                            <div class="form-group">
+                                                <input class="form-control hidden" id="update-form-active" readonly />
+                                            </div>
 
                                         </div>
                                         <div class="modal-footer">
@@ -217,6 +212,7 @@
                                style="text-align: center" id="table">
                             <thead>
                                 <tr>
+                                    <th class="text-center">#</th>
                                     <th>id</th>
                                     <th class="text-center">UUID</th>
                                     <th class="text-center">Major</th>
