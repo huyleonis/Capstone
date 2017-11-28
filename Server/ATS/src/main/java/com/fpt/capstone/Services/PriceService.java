@@ -16,4 +16,8 @@ public interface PriceService {
     PriceDTO insert(Price price);
     
     PriceDTO update(Price price);
+
+    boolean active(Price price);
+
+    boolean deactive(Price price);
 }

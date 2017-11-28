@@ -223,6 +223,7 @@ public class AccountServiceImpl implements AccountService {
             existingAccount.setActive(true);
             Account processedAccount = accountRepos.save(existingAccount);
             if (processedAccount != null) {
+                System.out.println(processedAccount.getActive());
                 return true;
             }
         }
@@ -238,6 +239,7 @@ public class AccountServiceImpl implements AccountService {
             existingAccount.setActive(false);
             Account processedAccount = accountRepos.save(existingAccount);
             if (processedAccount != null) {
+                System.out.println(processedAccount.getActive());
                 return true;
             }
         }

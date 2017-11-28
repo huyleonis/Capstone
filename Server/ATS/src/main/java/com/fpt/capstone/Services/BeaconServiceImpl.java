@@ -70,4 +70,33 @@ public class BeaconServiceImpl implements BeaconService {
 		return dto;
 	}
 
+	@Override
+	public boolean active(Beacon beacon) {
+		Beacon existingBeacon = beaconRepos.findOne(beacon.getId());
+		if (existingBeacon != null) {
+			existingBeacon.setActive(true);
+			Beacon processedBeacon = beaconRepos.save(existingBeacon);
+			if (processedBeacon != null) {
+				System.out.println(processedBeacon.getActive());
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deactive(Beacon beacon) {
+		Beacon existingBeacon = beaconRepos.findOne(beacon.getId());
+		if (existingBeacon != null) {
+			existingBeacon.setActive(false);
+			Beacon processedBeacon = beaconRepos.save(existingBeacon);
+			if (processedBeacon != null) {
+				System.out.println(processedBeacon.getActive());
+				return true;
+			}
+		}
+
+		return false;
+	}
 }

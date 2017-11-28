@@ -65,7 +65,6 @@ public class StationController {
     }
 
     /**
-     * Enable/Disable station
      *
      * @param station station entity
      * @return kểt quả thực hiện
@@ -78,5 +77,31 @@ public class StationController {
             isSuccessful = true;
         }
         return (isSuccessful) ? "success" : "fail";
+    }
+
+    /**
+     * active station
+     * @param station
+     * @return
+     */
+    @RequestMapping(value = "/active", method = RequestMethod.POST)
+    public String active(@RequestBody Station station) {
+
+        boolean isSuccessful = stationService.active(station);
+
+        return (isSuccessful)? "success" : "fail";
+    }
+
+    /**
+     * deactive station
+     * @param station
+     * @return
+     */
+    @RequestMapping(value = "/deactive", method = RequestMethod.POST)
+    public String deactive(@RequestBody Station station) {
+
+        boolean isSuccessful = stationService.deactive(station);
+
+        return (isSuccessful)? "success" : "fail";
     }
 }

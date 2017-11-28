@@ -13,4 +13,8 @@ public interface LaneService {
     LaneDTO insert(Lane lane);
     
     LaneDTO update(Lane lane);
+
+    boolean active(Lane lane);
+
+    boolean deactive(Lane lane);
 }

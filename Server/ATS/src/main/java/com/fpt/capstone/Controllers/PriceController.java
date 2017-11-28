@@ -79,7 +79,6 @@ public class PriceController {
     }
 
     /**
-     * Enable/Disable price
      *
      * @param price Price entity
      * @return kểt quả thực hiện
@@ -92,5 +91,31 @@ public class PriceController {
             isSuccessful = true;
         }
         return (isSuccessful) ? "success" : "fail";
+    }
+
+    /**
+     * active price
+     * @param price
+     * @return
+     */
+    @RequestMapping(value = "/active", method = RequestMethod.POST)
+    public String active(@RequestBody Price price) {
+
+        boolean isSuccessful = priceService.active(price);
+
+        return (isSuccessful)? "success" : "fail";
+    }
+
+    /**
+     * deactive price
+     * @param price
+     * @return
+     */
+    @RequestMapping(value = "/deactive", method = RequestMethod.POST)
+    public String deactive(@RequestBody Price price) {
+
+        boolean isSuccessful = priceService.deactive(price);
+
+        return (isSuccessful)? "success" : "fail";
     }
 }

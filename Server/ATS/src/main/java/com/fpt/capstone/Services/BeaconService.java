@@ -12,4 +12,8 @@ public interface BeaconService {
     BeaconDTO insert(Beacon beacon);
 
     BeaconDTO update(Beacon beacon);
+
+    boolean active(Beacon beacon);
+
+    boolean deactive(Beacon beacon);
 }

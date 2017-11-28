@@ -65,7 +65,6 @@ public class LaneController {
     }
 
     /**
-     * Enable/Disable lane
      *
      * @param lane station entity
      * @return kểt quả thực hiện
@@ -78,5 +77,31 @@ public class LaneController {
             isSuccessful = true;
         }
         return (isSuccessful) ? "success" : "fail";
+    }
+
+    /**
+     * active lane
+     * @param lane
+     * @return
+     */
+    @RequestMapping(value = "/active", method = RequestMethod.POST)
+    public String active(@RequestBody Lane lane) {
+
+        boolean isSuccessful = laneService.active(lane);
+
+        return (isSuccessful)? "success" : "fail";
+    }
+
+    /**
+     * deactive lane
+     * @param lane
+     * @return
+     */
+    @RequestMapping(value = "/deactive", method = RequestMethod.POST)
+    public String deactive(@RequestBody Lane lane) {
+
+        boolean isSuccessful = laneService.deactive(lane);
+
+        return (isSuccessful)? "success" : "fail";
     }
 }

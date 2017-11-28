@@ -12,4 +12,8 @@ public interface StationService {
     StationDTO insert(Station station);
     
     StationDTO update(Station station);
+
+    boolean active(Station station);
+
+    boolean deactive(Station station);
 }

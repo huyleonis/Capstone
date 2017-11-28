@@ -67,4 +67,33 @@ public class StationServiceImpl implements StationService {
 		return dto;
 	}
 
+	@Override
+	public boolean active(Station station) {
+		Station existingStation = stationRepos.findOne(station.getId());
+		if (existingStation != null) {
+			existingStation.setActive(true);
+			Station processedStation = stationRepos.save(existingStation);
+			if (processedStation != null) {
+				System.out.println(processedStation.getActive());
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deactive(Station station) {
+		Station existingStation = stationRepos.findOne(station.getId());
+		if (existingStation != null) {
+			existingStation.setActive(false);
+			Station processedStation = stationRepos.save(existingStation);
+			if (processedStation != null) {
+				System.out.println(processedStation.getActive());
+				return true;
+			}
+		}
+
+		return false;
+	}
 }

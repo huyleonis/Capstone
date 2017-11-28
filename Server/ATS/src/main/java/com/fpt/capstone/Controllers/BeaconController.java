@@ -217,4 +217,30 @@ public class BeaconController {
         System.out.println("Transaction is wrong status: " + transDTO.getStatus());
         return "false";
     }
+
+    /**
+     * active beacon
+     * @param beacon
+     * @return
+     */
+    @RequestMapping(value = "/active", method = RequestMethod.POST)
+    public String activeBeacon(@RequestBody Beacon beacon) {
+
+        boolean isSuccessful = beaconService.active(beacon);
+
+        return (isSuccessful)? "success" : "fail";
+    }
+
+    /**
+     * deactive beacon
+     * @param beacon
+     * @return
+     */
+    @RequestMapping(value = "/deactive", method = RequestMethod.POST)
+    public String deactiveBeacon(@RequestBody Beacon beacon) {
+
+        boolean isSuccessful = beaconService.deactive(beacon);
+
+        return (isSuccessful)? "success" : "fail";
+    }
 }

@@ -85,4 +85,33 @@ public class PriceServiceImpl implements PriceService {
 		return dto;
 	}
 
+	@Override
+	public boolean active(Price price) {
+		Price existingPrice = priceRepos.findOne(price.getId());
+		if (existingPrice != null) {
+			existingPrice.setActive(true);
+			Price processedPrice = priceRepos.save(existingPrice);
+			if (processedPrice != null) {
+				System.out.println(processedPrice.getActive());
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deactive(Price price) {
+		Price existingPrice = priceRepos.findOne(price.getId());
+		if (existingPrice != null) {
+			existingPrice.setActive(false);
+			Price processedPrice = priceRepos.save(existingPrice);
+			if (processedPrice != null) {
+				System.out.println(processedPrice.getActive());
+				return true;
+			}
+		}
+
+		return false;
+	}
 }

@@ -78,4 +78,33 @@ public class LaneServiceImpl implements LaneService {
 		return dto;
 	}
 
+	@Override
+	public boolean active(Lane lane) {
+		Lane existingLane = laneRepos.findOne(lane.getId());
+		if (existingLane != null) {
+			existingLane.setActive(true);
+			Lane processedLane = laneRepos.save(existingLane);
+			if (processedLane != null) {
+				System.out.println(processedLane.getActive());
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deactive(Lane lane) {
+		Lane existingLane = laneRepos.findOne(lane.getId());
+		if (existingLane != null) {
+			existingLane.setActive(false);
+			Lane processedLane = laneRepos.save(existingLane);
+			if (processedLane != null) {
+				System.out.println(processedLane.getActive());
+				return true;
+			}
+		}
+
+		return false;
+	}
 }
