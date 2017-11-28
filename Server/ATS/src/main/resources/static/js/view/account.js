@@ -5,51 +5,76 @@ var active_to_button = function (data, type, full, meta) {
         return "<button class='label label-danger' style='padding: 10px;' onclick = 'changeRole(this)'>Deactive</button>";
     }
 }
+
+var roleName = function (data, type, full, meta) {
+    switch (data) {
+        case 1:
+            return "Admin";
+            break;
+        case 2:
+            return "Staff";
+            break;
+        case 3:
+            return "Driver";
+            break;
+        default:
+            break;
+    }
+}
+
+var checkData = function (data, type, full, meta) {
+    if (data == null)
+        return "N/A";
+    else
+        return data;
+
+}
+
 function changeRole(element) {
-	var data = $("#table").DataTable().row($(element).parents('tr')).data();
-	var skill = {
-		"skillId" : data.skillId
-	};
-	if (data.approved) {
-		$.ajax({
-			type : "POST",
-			contentType : "application/json",
-			url : contextPath + "/skills/deactive-skill",
-			data : JSON.stringify(skill),
+    var data = $("#table").DataTable().row($(element).parents('tr')).data();
+    var account = {
+        "id": data.id
+    };
+    if (data.approved) {
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "/account/deactive",
+            data: JSON.stringify(account),
 
-			success : function(result) {
-				if (result == "fail") {
-					setStatus("This skill does not exist! Please check again!", "#ff0000");
-				} else {
-					setStatus("Update success!", "#00cc00");
-				}
-			},
-			error : function(result) {
-				setStatus("This skill does not exist! Please check again!", "#ff0000");
-			}
-		});
-	} else {
-		$.ajax({
-			type : "POST",
-			contentType : "application/json",
-			url : contextPath + "/skills/active-skill",
-			data : JSON.stringify(skill),
+            success: function (result) {
+                if (result == "fail") {
+                    setStatus("This skill does not exist! Please check again!", "#ff0000");
+                } else {
+                    setStatus("Update success!", "#00cc00");
+                }
+            },
+            error: function (result) {
+                setStatus("This skill does not exist! Please check again!", "#ff0000");
+            }
+        });
+    } else {
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: contextPath + "/account/active",
+            data: JSON.stringify(account),
 
-			success : function(result) {
-				if (result == "fail") {
-					setStatus("This skill does not exist! Please check again!", "#ff0000");
-				} else {
-					setStatus("Update success!", "#00cc00");
-				}
-			},
-			error : function(result) {
-				setStatus("This skill does not exist! Please check again!", "#ff0000");
-			}
-		});
-	}
-	$("#alert").show();
-	clearStatus();
-	reloadTable();
+            success: function (result) {
+                if (result == "fail") {
+                    setStatus("This skill does not exist! Please check again!", "#ff0000");
+                } else {
+                    setStatus("Update success!", "#00cc00");
+                }
+            },
+            error: function (result) {
+                setStatus("This skill does not exist! Please check again!", "#ff0000");
+            }
+        });
+    }
+    $("#alert").show();
+    clearStatus();
+    reloadTable();
 }
 
 $(document)
@@ -98,6 +123,9 @@ $(document)
                                             // data for the cell from the
                                             // returned list
                                             {
+                                                "data": null
+                                            },
+                                            {
                                                 "data": "id",
                                                 "visible": false
                                                         // hide the column
@@ -107,54 +135,70 @@ $(document)
                                                 "data": "username"
                                             },
                                             {
-                                                "data": "fullname"
+                                                "data": "fullname",
+                                                "render": checkData
                                             },
                                             {
-                                                "data": "role"
+                                                "data": "role",
+                                                "render": roleName
                                             },
                                             {
                                                 "data": "email",
-//                                                "visible": false
+                                                "render": checkData
                                             },
                                             {
                                                 "data": "phone",
-//                                                "visible": false
+                                                "render": checkData
                                             },
                                             {
                                                 "data": "numberId",
-//                                                "visible": false
+                                                "render": checkData
                                             },
                                             {
                                                 "data": "vehicleId",
-                                                "visible": false
+                                                "visible": false,
+                                                "render": checkData
                                             },
                                             {
                                                 "data": "balance",
-//                                                "visible": false
+                                                "render": checkData
                                             },
                                             {
                                                 "data": "licensePlate",
-//                                                "visible": false
+                                                "render": checkData
                                             },
                                             {
                                                 "data": "vehicletypeId",
-                                                "visible": false
+                                                "visible": false,
+                                                "render": checkData
                                             },
                                             {
-                                                "data": "approved",
+                                                "data": "isActive",
                                                 "render": active_to_button
                                             },
                                             {
                                                 "data": "enable",
+                                                "render": checkData,
                                                 "visible": false
                                             },
                                             {// column for view
                                                 // detail-update-delete
                                                 "data": null,
-                                                "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>"
-                                                        + "<button class='btn btn-danger glyphicon glyphicon-trash' onclick='openDeleteModal(this)'></button>",
+                                                "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>",
+                                            }],
+                                        "columnDefs": [{
+                                                "searchable": false,
+                                                "orderable": false,
+                                                "targets": 0
                                             }]
+
+//        "order": [[ 1, 'asc' ]]
                                     });
+                    table.on('order.dt search.dt', function () {
+                        table.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+                            cell.innerHTML = i + 1;
+                        });
+                    }).draw();
                     // handle delete form submit
                     $("#delete-form").submit(function (event) {
                         event.preventDefault();

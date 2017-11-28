@@ -18,7 +18,7 @@
                     <div class="container-fluid">
 
                         <a href="" data-toggle="modal" data-target="#add-modal"
-                           class="btn btn-primary btn-lg pe-7s-add-user pe-5x pe-va" onclick="clearError()"></a>
+                           class="btn btn-primary glyphicon glyphicon-plus" onclick="clearError()"></a>
 
                         <div id="add-modal" class="modal fade" role="dialog"
                              data-backdrop="false">
@@ -51,7 +51,6 @@
                                                 <select id="add-form-role" class="form-control">
                                                 	<option value="1">Admin</option>
                                                 	<option value="2">Staff</option>
-                                                	<option value="3">Driver</option>
                                                 </select>  
                                                 <label id="nameError" class="error"></label>
                                                 </div>
@@ -79,44 +78,14 @@
                                                 <input type="text" class="form-control" id="add-form-numberId" required /> 
                                                 <label id="nameError" class="error"></label>
                                                 </div>
-                                                
-                                                <div class="form-group">
-                                                <label class="control-label">License Plate:</label> 
-                                                <input type="text" class="form-control" id="add-form-licensePlate" /> 
-                                                <label id="nameError" class="error"></label>
-                                                </div>
-                                                
-                                                <div class="form-group">
-                                                <label class="control-label">Type of Vehicle:</label>
-                                                <select id="add-form-typeId" class="form-control">
-                                                	
-                                                </select>  
-                                                <label id="nameError" class="error"></label>
-                                                </div>
-                                                
-                                                <div class="form-group">
-                                                <label class="control-label">Balance:</label> 
-                                                <input type="text" class="form-control" id="add-form-balance" value="0" required /> 
-                                                <label id="nameError" class="error"></label>
-                                                </div>
-                                                
-                                                <div class="form-group">
-                                                <label class="control-label">Active:</label>
-                                                <select id="add-form-active" class="form-control">
-                                                	<option value="0">Inactive</option>
-                                                	<option value="1">Active</option>
-                                                </select>  
-                                                <label id="nameError" class="error"></label>
-                                                </div>
-                                                
+                                               
                                                 <div class="form-group">
                                                 <label class="control-label">Enable:</label>
                                                 <select id="add-form-enable" class="form-control">
                                                 	<option value="0">Disable</option>
                                                 	<option value="1">Enable</option>
                                                 </select>  
-                                                <label id="nameError" class="error"></label>
-                                                
+                                                <label id="nameError" class="error"></label>                                               
                                             </div>
                                             
                                         </div>
@@ -283,6 +252,7 @@
                                style="text-align: center" id="table">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>id</th>
                                     <th class="text-center">Username</th>
                                     <th class="text-center">Full Name</th>
