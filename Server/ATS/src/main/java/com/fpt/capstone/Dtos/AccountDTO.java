@@ -210,7 +210,9 @@ public class AccountDTO {
         }
         dto.setActive(account.getActive());
         dto.setEnable(account.getEnable());
-        dto.setLoginStatus(account.getLoginStatus());
+        if(account.getLoginStatus() != null){
+            dto.setLoginStatus(account.getLoginStatus());
+        }
         dto.setToken(account.getToken());
         return dto;
     }
