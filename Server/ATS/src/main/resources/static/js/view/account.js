@@ -5,51 +5,55 @@ var active_to_button = function (data, type, full, meta) {
         return "<button class='label label-danger' style='padding: 10px;' onclick = 'changeRole(this)'>Deactive</button>";
     }
 }
+
+var roleName = function (data, type, full, meta) {
+    switch (data) {
+        case 1:
+            return "Admin";
+            break;
+        case 2:
+            return "Staff";
+            break;
+        case 3:
+            return "Driver";
+            break;
+        default:
+            break;
+    }
+}
+
+var checkData = function (data, type, full, meta) {
+    if (data == null || data == "")
+        return "N/A";
+    else
+        return data;
+
+}
+
 function changeRole(element) {
-	var data = $("#table").DataTable().row($(element).parents('tr')).data();
-	var skill = {
-		"skillId" : data.skillId
-	};
-	if (data.approved) {
-		$.ajax({
-			type : "POST",
-			contentType : "application/json",
-			url : contextPath + "/skills/deactive-skill",
-			data : JSON.stringify(skill),
+    var data = $("#table").DataTable().row($(element).parents('tr')).data();
+    var account = {
+        "id": data.id
+    };
+    if (data.isActive) {
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "/account/deactive",
+            data: JSON.stringify(account),
 
-			success : function(result) {
-				if (result == "fail") {
-					setStatus("This skill does not exist! Please check again!", "#ff0000");
-				} else {
-					setStatus("Update success!", "#00cc00");
-				}
-			},
-			error : function(result) {
-				setStatus("This skill does not exist! Please check again!", "#ff0000");
-			}
-		});
-	} else {
-		$.ajax({
-			type : "POST",
-			contentType : "application/json",
-			url : contextPath + "/skills/active-skill",
-			data : JSON.stringify(skill),
+        });
+    } else {
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "/account/active",
+            data: JSON.stringify(account),
 
-			success : function(result) {
-				if (result == "fail") {
-					setStatus("This skill does not exist! Please check again!", "#ff0000");
-				} else {
-					setStatus("Update success!", "#00cc00");
-				}
-			},
-			error : function(result) {
-				setStatus("This skill does not exist! Please check again!", "#ff0000");
-			}
-		});
-	}
-	$("#alert").show();
-	clearStatus();
-	reloadTable();
+        });
+    }
+
+    reloadTable();
 }
 
 $(document)
@@ -98,6 +102,9 @@ $(document)
                                             // data for the cell from the
                                             // returned list
                                             {
+                                                "data": null
+                                            },
+                                            {
                                                 "data": "id",
                                                 "visible": false
                                                         // hide the column
@@ -107,54 +114,62 @@ $(document)
                                                 "data": "username"
                                             },
                                             {
-                                                "data": "fullname"
+                                                "data": "fullname",
+                                                "render": checkData
                                             },
                                             {
-                                                "data": "role"
+                                                "data": "role",
+                                                "render": roleName
                                             },
                                             {
                                                 "data": "email",
-//                                                "visible": false
+                                                "render": checkData
                                             },
                                             {
                                                 "data": "phone",
-//                                                "visible": false
-                                            },
-                                            {
-                                                "data": "numberId",
-//                                                "visible": false
+                                                "render": checkData
                                             },
                                             {
                                                 "data": "vehicleId",
-                                                "visible": false
-                                            },
-                                            {
-                                                "data": "balance",
-//                                                "visible": false
+                                                "visible": false,
+                                                "render": checkData
                                             },
                                             {
                                                 "data": "licensePlate",
-//                                                "visible": false
+                                                "render": checkData
                                             },
                                             {
                                                 "data": "vehicletypeId",
-                                                "visible": false
+                                                "visible": false,
+                                                "render": checkData
                                             },
                                             {
-                                                "data": "approved",
+                                                "data": "isActive",
                                                 "render": active_to_button
                                             },
                                             {
                                                 "data": "enable",
+                                                "render": checkData,
                                                 "visible": false
                                             },
                                             {// column for view
                                                 // detail-update-delete
                                                 "data": null,
-                                                "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>"
-                                                        + "<button class='btn btn-danger glyphicon glyphicon-trash' onclick='openDeleteModal(this)'></button>",
+                                                "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>",
+                                            }],
+                                        "columnDefs": [{
+                                                "searchable": false,
+                                                "orderable": false,
+                                                "targets": 0
                                             }]
+
+//        "order": [[ 1, 'asc' ]]
                                     });
+                    table.on('order.dt search.dt', function () {
+                        table.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+                            cell.innerHTML = i + 1;
+                        });
+                    }).draw();
                     // handle delete form submit
                     $("#delete-form").submit(function (event) {
                         event.preventDefault();
@@ -178,61 +193,30 @@ $(document)
 // perform ajax call to save report
 function submitAddForm() {
     var account;
-    var role = $("#add-form-role").val();
-    if (role != "3") {
-        account = {
-            "username": $("#add-form-username").val(),
-            "password": $("#add-form-password").val(),
-            "role": $("#add-form-role").val(),
-            "fullname": $("#add-form-fullname").val(),
-            "email": $("#add-form-email").val(),
-            "phone": $("#add-form-phone").val(),
-            "numberId": $("#add-form-numberId").val(),
-            "vehicle": null,
-            "balance": "0",
-            "active": $("#add-form-active").val(),
-            "enable": $("#add-form-enable").val()
-        };
-    } else {
-        account = {
-            "username": $("#add-form-username").val(),
-            "password": $("#add-form-password").val(),
-            "role": $("#add-form-role").val(),
-            "fullname": $("#add-form-fullname").val(),
-            "email": $("#add-form-email").val(),
-            "phone": $("#add-form-phone").val(),
-            "numberId": $("#add-form-numberId").val(),
-            "vehicle": {
-                "licensePlate": $("#add-form-licensePlate").val(),
-                "vehicletype": {
-                    "id": $("#add-form-typeId").val()
-                }
-            },
-            "balance": $("#add-form-balance").val(),
-            "active": $("#add-form-active").val(),
-            "enable": $("#add-form-enable").val()
-        };
-    }
+
+    account = {
+        "username": $("#add-form-username").val(),
+        "password": $("#add-form-password").val(),
+        "role": $("#add-form-role").val(),
+        "fullname": $("#add-form-fullname").val(),
+        "email": $("#add-form-email").val(),
+        "phone": $("#add-form-phone").val(),
+        "numberId": $("#add-form-numberId").val(),
+        "vehicle": null,
+        "balance": "0",
+        "active": $("#add-form-active").val(),
+        "enable": $("#add-form-enable").val()
+    };
+
     $.ajax({
         type: "POST",
         contentType: "application/json",
         url: "../account/create",
         data: JSON.stringify(account),
-        success: function (result) {
-            if (result == "fail") {
-                setStatus("Something was wrong! Please check again!", "#ff0000");
-            } else {
-                setStatus("Add success!", "#00cc00");
-            }
-        },
-        error: function (result) {
-            setStatus("Something was wrong! Please check again!", "#ff0000");
-        }
+
     });
     $("#add-modal").modal("hide");
-    $("#alert").show();
     reloadTable();
-    clearStatus();
 }
 
 var curr;
@@ -298,48 +282,7 @@ function submitUpdateForm() {
     clearStatus();
 }
 // handle delete form submit
-function submitDeleteForm() {
-    var account = {
-        "id": $("#update-form-id").val(),
-        "username": $("#update-form-username").val(),
-        "password": $("#update-form-password").val(),
-        "role": $("#update-form-role").val(),
-        "fullname": $("#update-form-fullname").val(),
-        "email": $("#update-form-email").val(),
-        "phone": $("#update-form-phone").val(),
-        "numberId": $("#update-form-numberId").val(),
-        "vehicle": {
-            "id": $("#update-form-vehicleId").val(),
-            "licensePlate": $("#update-form-licensePlate").val(),
-            "vehicletype": {
-                "id": $("#update-form-typeId").val()
-            }
-        },
-        "balance": $("#update-form-balance").val(),
-        "active": $("#update-form-active").val(),
-        "enable": $("#update-form-enable").val()
-    };
-    $.ajax({
-        type: "POST",
-        contentType: "application/json",
-        url: "../account/delete",
-        data: JSON.stringify(account),
-        success: function (result) {
-            if (result == "fail") {
-                setStatus("Delete fail!", "#ff0000");
-            } else {
-                setStatus("Delete success!", "#00cc00");
-            }
-        },
-        error: function (result) {
-            setStatus("This account does not exist! Please check again!", "#ff0000");
-        }
-    });
-    $("#delete-modal").modal("hide");
-    $("#alert").show();
-    reloadTable();
-    clearStatus();
-}
+
 // ajax jquery dataTables reload
 function reloadTable() {
     setTimeout(function () {
@@ -349,11 +292,6 @@ function reloadTable() {
     }, 200); // reload the table after 0.2s
 }
 
-// report-home.jsp's script
-
-/*
- * Modal process for report-home.jsp
- */
 
 // open updateModal
 function openUpdateModal(element) {
@@ -365,11 +303,9 @@ function openUpdateModal(element) {
     $("#update-form-fullname").val(data.fullname);
     $("#update-form-email").val(data.email);
     $("#update-form-phone").val(data.phone);
-    $("#update-form-numberId").val(data.numberId);
     $("#update-form-vehicleId").val(data.vehicleId);
     $("#update-form-licensePlate").val(data.licensePlate);
     $("#update-form-typeId").val(data.vehicletypeId);
-    $("#update-form-balance").val(data.balance);
     $("#update-form-active").val(data.active);
     $("#update-form-enable").val(data.enable);
     curr = {

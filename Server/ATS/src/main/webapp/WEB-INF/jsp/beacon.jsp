@@ -18,7 +18,7 @@
                     <div class="container-fluid">
 
                         <a href="" data-toggle="modal" data-target="#add-modal"
-                           class="btn btn-primary btn-lg pe-7s-add-user pe-5x pe-va" onclick="clearError()"></a>
+                           class="btn btn-primary glyphicon glyphicon-plus"></a>
 
                         <div id="add-modal" class="modal fade" role="dialog"
                              data-backdrop="false">
