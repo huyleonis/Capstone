@@ -2,7 +2,7 @@ var active_to_button = function (data, type, full, meta) {
     if (data == true) {
         return "<button class='label label-success' style='padding: 10px; padding-left: 16px; padding-right: 16px;' onclick = 'changeRole(this)'>Active</button>";
     } else {
-        return "<button class='label label-danger' style='padding: 10px;' onclick = 'changeRole(this)'>Deactive</button>";
+        return "<button class='label label-danger' style='padding: 10px;' onclick = 'changeRole(this)'>Deactivate</button>";
     }
 };
 
@@ -22,6 +22,14 @@ var roleName = function (data, type, full, meta) {
     }
 };
 
+var checkRole = function (data, type, full, meta) {
+    if (data == 3) {
+        return "<button class='btn btn-success glyphicon glyphicon-edit' disabled></button>";
+    } else {
+        return "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>";
+    }
+}
+
 var checkData = function (data, type, full, meta) {
     if (data == null || data == "")
         return "N/A";
@@ -40,7 +48,7 @@ function changeRole(element) {
             type: "POST",
             contentType: "application/json",
             url: "/account/deactive",
-            data: JSON.stringify(account),
+            data: JSON.stringify(account)
 
         });
     } else {
@@ -48,7 +56,7 @@ function changeRole(element) {
             type: "POST",
             contentType: "application/json",
             url: "/account/active",
-            data: JSON.stringify(account),
+            data: JSON.stringify(account)
 
         });
     }
@@ -144,18 +152,24 @@ $(document)
                                                 "render": checkData
                                             },
                                             {
+                                                "data": "numberId",
+                                                "visible": false,
+                                                "render": checkData
+                                            },
+                                            {
                                                 "data": "isActive",
                                                 "render": active_to_button
                                             },
                                             {
-                                                "data": "enable",
+                                                "data": "isEnable",
                                                 "render": checkData,
                                                 "visible": false
                                             },
                                             {// column for view
                                                 // detail-update-delete
-                                                "data": null,
-                                                "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>",
+                                                "data": "role",
+//                                                "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>",
+                                                "render": checkRole
                                             }],
                                         "columnDefs": [{
                                                 "searchable": false,
@@ -171,16 +185,11 @@ $(document)
                         });
                     }).draw();
 
-                    // handle delete form submit
-                    $("#delete-form").submit(function (event) {
-                        event.preventDefault();
-                        submitDeleteForm();
-                    });
                     // handle update form submit
                     $("#update-form").submit(function (event) {
                         event.preventDefault();
                         submitUpdateForm();
-                    })
+                    });
 
                     $("#add-form").submit(function (event) {
                         event.preventDefault();
@@ -203,15 +212,15 @@ function submitAddForm() {
         "numberId": $("#add-form-numberId").val(),
         "vehicle": null,
         "balance": "0",
-        "isActive": $("#add-form-active").val(),
-        "isEnabled": $("#add-form-enable").val()
+        "active": "true",
+        "enable": "true"
     };
 
     $.ajax({
         type: "POST",
         contentType: "application/json",
         url: "../account/create",
-        data: JSON.stringify(account),
+        data: JSON.stringify(account)
 
     });
     $("#add-modal").modal("hide");
@@ -231,7 +240,7 @@ function submitUpdateForm() {
             "vehicletype": {
                 "id": $("#update-form-typeId").val()
             }
-        }
+        };
     }
     var account = {
         "id": $("#update-form-id").val(),
@@ -251,17 +260,7 @@ function submitUpdateForm() {
         type: "POST",
         contentType: "application/json",
         url: "../account/update",
-        data: JSON.stringify(account),
-        success: function (result) {
-            if (result == "fail") {
-                setStatus("Update fail!", "#ff0000");
-            } else {
-                setStatus("Update success!", "#00cc00");
-            }
-        },
-        error: function (result) {
-            setStatus("Something was wrong! Please check again!", "#ff0000");
-        }
+        data: JSON.stringify(account)      
     });
     $("#update-modal").modal("hide");
     $("#alert").show();
@@ -292,6 +291,7 @@ function openUpdateModal(element) {
     $("#update-form-phone").val(data.phone);
     $("#update-form-vehicleId").val(data.vehicleId);
     $("#update-form-licensePlate").val(data.licensePlate);
+    $("#update-form-numberId").val(data.numberId);
     $("#update-form-typeId").val(data.vehicletypeId);
     $("#update-form-active").val(data.isActive);
     $("#update-form-enable").val(data.isEnable);
@@ -315,7 +315,6 @@ function openUpdateModal(element) {
         "active": data.isActive,
         "enable": data.isEnable
     };
-    clearErrorUpdate();
     $("#update-modal").modal('toggle');
 }
 // open delete confirm modal
@@ -345,101 +344,26 @@ function clearErrorUpdate() {
     $("#update").prop('disabled', false);
 }
 
-// clear the div inform save delete status
-function clearStatus() {
-    setTimeout(function () {
-        $("#alert").fadeOut(1000); // slowly faded div status
-        $("#text").html();
-    }, 3000);
-}
-
-// set status of save update form or delete-form
-function setStatus(result, background) {
-    $("#text").html(result);
-    var a = document.getElementById("alert");
-    a.style.backgroundColor = background;
-}
-
-// $("add-form").validate();
-// open report details page
-function checkValidateNameAdd() {
-    var skill = {
-        skillName: $("#add-form-skillName").val()
-    };
-    $.ajax({
-        type: "POST",
-        contentType: "application/JSON",
-        url: contextPath + "/skills/check-duplicate-add-name",
-        data: JSON.stringify(skill),
-        success: function (result) {
-            if (result == "duplicate") {
-                $("#nameError").html("Skill already existed");
-                $("#save").prop('disabled', true);
-            } else if (result == "overLength") {
-                $("#nameError").html("Skill name must consist of at least 1 and maximum 50 characters");
-                $("#save").prop('disabled', true);
-            } else {
-                $("#nameError").html("");
-            }
-        }
-    });
-    $("#save").prop('disabled', false);
-}
-
-function checkValidateNameUpdate() {
-    var skill = {
-        skillName: $("#update-form-skillName").val()
-    };
-    $.ajax({
-        type: "POST",
-        contentType: "application/JSON",
-        url: contextPath + "/skills/check-duplicate-update-name/" + curr.skillName.replace(/[/]/g, '_'),
-        data: JSON.stringify(skill),
-        success: function (result) {
-            if (result == "duplicate") {
-                $("#nameErrorUpdate").html("Skill already existed");
-                $("#update").prop('disabled', true);
-            } else if (result == "overLength") {
-                $("#nameErrorUpdate").html("Skill name must consist of at least 1 and maximum 50 characters");
-                $("#update").prop('disabled', true);
-            } else {
-                $("#nameErrorUpdate").html("");
-            }
-        }
-    });
-    $("#update").prop('disabled', false);
-}
-
-function clearError() {
-    document.getElementById("nameError").innerHTML = "";
-//    document.getElementById("add-form-skillName").value = "";
-    $("#save").prop('disabled', false);
-}
-
-function clearErrorUpdate() {
-    document.getElementById("nameErrorUpdate").innerHTML = "";
-    $("#update").prop('disabled', false);
-}
 
 // set data to select tag type of vehicle from database
-$(document).ready(function () {
-    $.ajax({
-        type: "GET",
-        contentType: "application/json",
-        url: "../vehicletype/get",
-        success: function (result) {
-            $.each(JSON.parse(result), function (i, item) {
-                $('#add-form-typeId').append($('<option>', {
-                    value: item.id,
-                    text: item.name
-                }));
-            });
-            $.each(JSON.parse(result), function (i, item) {
-                $('#update-form-typeId').append($('<option>', {
-                    value: item.id,
-                    text: item.name
-                }));
-            });
-        }
-    });
-});
+//$(document).ready(function () {
+//    $.ajax({
+//        type: "GET",
+//        contentType: "application/json",
+//        url: "../vehicletype/get",
+//        success: function (result) {
+//            $.each(JSON.parse(result), function (i, item) {
+//                $('#add-form-typeId').append($('<option>', {
+//                    value: item.id,
+//                    text: item.name
+//                }));
+//            });
+//            $.each(JSON.parse(result), function (i, item) {
+//                $('#update-form-typeId').append($('<option>', {
+//                    value: item.id,
+//                    text: item.name
+//                }));
+//            });
+//        }
+//    });
+//});

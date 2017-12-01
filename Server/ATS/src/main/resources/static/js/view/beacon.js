@@ -93,7 +93,8 @@ $(document)
                                                 "visible": false
                                             },
                                             {
-                                                "data": "uuid"
+                                                "data": "uuid",
+                                                "visible": false
                                             },
                                             {
                                                 "data": "major"
@@ -119,8 +120,7 @@ $(document)
                                             {// column for view
                                                 // detail-update-delete
                                                 "data": null,
-                                                "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>"
-                                                        + "<button class='btn btn-danger glyphicon glyphicon-trash' onclick='openDeleteModal(this)'></button>",
+                                                "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>"                                                        
                                             }],
                                         "columnDefs": [{
                                             "searchable": false,
@@ -135,16 +135,10 @@ $(document)
                         });
                     }).draw();
 
-                    // handle delete form submit
-                    $("#delete-form").submit(function (event) {
-                        event.preventDefault();
-                        submitDeleteForm();
-                    });
-                    // handle update form submit
                     $("#update-form").submit(function (event) {
                         event.preventDefault();
                         submitUpdateForm();
-                    })
+                    });
 
                     $("#add-form").submit(function (event) {
                         event.preventDefault();
@@ -174,28 +168,17 @@ function submitAddForm() {
         "station": {
             "id": $("#add-form-stationId").val()
         },
-        "active": $("#add-form-active").val()
+        "active": "true"
     };
     $.ajax({
         type: "POST",
         contentType: "application/json",
         url: "../beacon/create",
-        data: JSON.stringify(beacon),
-        success: function (result) {
-            if (result == "fail") {
-                setStatus("Something was wrong! Please check again!", "#ff0000");
-            } else {
-                setStatus("Add success!", "#00cc00");
-            }
-        },
-        error: function (result) {
-            setStatus("Something was wrong! Please check again!", "#ff0000");
-        }
+        data: JSON.stringify(beacon)      
     });
     $("#add-modal").modal("hide");
     $("#alert").show();
     reloadTable();
-    clearStatus();
 }
 
 var curr;
@@ -279,12 +262,6 @@ function openUpdateModal(element) {
     clearErrorUpdate();
     $("#update-modal").modal('toggle');
 }
-// open delete confirm modal
-function openDeleteModal(element) {
-    var data = $("#table").DataTable().row($(element).parents('tr')).data();
-    $("#delete-form-skillId").val(data.skillId);
-    $("#delete-modal").modal('toggle');
-}
 
 // clear input of update modal
 function clearUpdateForm() {
@@ -319,65 +296,4 @@ function setStatus(result, background) {
     $("#text").html(result);
     var a = document.getElementById("alert");
     a.style.backgroundColor = background;
-}
-
-// $("add-form").validate();
-// open report details page
-function checkValidateNameAdd() {
-    var skill = {
-        skillName: $("#add-form-skillName").val()
-    };
-    $.ajax({
-        type: "POST",
-        contentType: "application/JSON",
-        url: contextPath + "/skills/check-duplicate-add-name",
-        data: JSON.stringify(skill),
-        success: function (result) {
-            if (result == "duplicate") {
-                $("#nameError").html("Skill already existed");
-                $("#save").prop('disabled', true);
-            } else if (result == "overLength") {
-                $("#nameError").html("Skill name must consist of at least 1 and maximum 50 characters");
-                $("#save").prop('disabled', true);
-            } else {
-                $("#nameError").html("");
-            }
-        }
-    });
-    $("#save").prop('disabled', false);
-}
-
-function checkValidateNameUpdate() {
-    var skill = {
-        skillName: $("#update-form-skillName").val()
-    };
-    $.ajax({
-        type: "POST",
-        contentType: "application/JSON",
-        url: contextPath + "/skills/check-duplicate-update-name/" + curr.skillName.replace(/[/]/g, '_'),
-        data: JSON.stringify(skill),
-        success: function (result) {
-            if (result == "duplicate") {
-                $("#nameErrorUpdate").html("Skill already existed");
-                $("#update").prop('disabled', true);
-            } else if (result == "overLength") {
-                $("#nameErrorUpdate").html("Skill name must consist of at least 1 and maximum 50 characters");
-                $("#update").prop('disabled', true);
-            } else {
-                $("#nameErrorUpdate").html("");
-            }
-        }
-    });
-    $("#update").prop('disabled', false);
-}
-
-function clearError() {
-    document.getElementById("nameError").innerHTML = "";
-//    document.getElementById("add-form-skillName").value = "";
-    $("#save").prop('disabled', false);
-}
-
-function clearErrorUpdate() {
-    document.getElementById("nameErrorUpdate").innerHTML = "";
-    $("#update").prop('disabled', false);
 }

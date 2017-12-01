@@ -15,12 +15,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import org.springframework.data.annotation.Transient;
 
 @Entity(name = "beacon")
 public class Beacon implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+        @Column(name = "id")
 	private int id;
 
 	@Column(name = "uuid")
@@ -43,6 +45,7 @@ public class Beacon implements Serializable {
 	@Column(name = "type")
 	private int type;
 
+        
 	@Column(name = "isactive")
 	private Boolean isActive;
 

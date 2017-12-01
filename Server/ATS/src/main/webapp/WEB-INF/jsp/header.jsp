@@ -1,6 +1,6 @@
 <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/png" href="img/car.ico">
+    <link rel="icon" type="image/png" href="./img/car.ico">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
     <title>ATS Management</title>
@@ -17,8 +17,6 @@
 
     <!--  Light Bootstrap Table core CSS    -->
     <link href="./css/light-bootstrap-dashboard.css" rel="stylesheet"/>
-
-
 
     <!--     Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">

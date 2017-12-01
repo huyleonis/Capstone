@@ -17,8 +17,14 @@
                     </div>
                     <div class="container-fluid">
 
-                        <a href="" data-toggle="modal" data-target="#add-modal"
-                           class="btn btn-primary glyphicon glyphicon-plus"></a>
+                       <div class="form-inline col-lg-8">
+                            <p class="form-group">Create beacon: </p>
+                            <a href="" data-toggle="modal" data-target="#add-modal"
+                           class="btn btn-primary glyphicon glyphicon-plus form-group"></a>
+                           
+                        </div>
+                        <div class="form-inline col-lg-4">                
+                        </div>
 
                         <div id="add-modal" class="modal fade" role="dialog"
                              data-backdrop="false">
@@ -30,7 +36,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">New Beacon</h4>
+                                            <h4 class="modal-title" style="color: blue; font-weight: bold">New Beacon</h4>
                                         </div>
                                         <div class="modal-body">
                                         
@@ -55,8 +61,8 @@
                                             <div class="form-group">
                                                 <label class="control-label">Type:</label>
                                                 <select id="add-form-type" class="form-control">
-                                                	<option value="0">Type 0</option>
-                                                	<option value="1">Type 1</option>
+                                                	<option value="0">Payment</option>
+                                                	<option value="1">Result</option>
                                                 </select>  
                                                 <label id="nameError" class="error"></label>
                                             </div>
@@ -77,23 +83,16 @@
                                                 	<option value="0"> -- Select an option -- </option>
                                                 	<option value="1">Lane 1</option>
                                                 	<option value="2">Lane 2</option>
+                                                	<option value="3">Lane 3</option>
                                                 </select>  
                                                 <label id="nameError" class="error"></label>
                                          	</div>
-                                                
-                                           	<div class="form-group">
-                                                <label class="control-label">Active:</label>
-                                                <select id="add-form-active" class="form-control">
-                                                	<option value="false">Inactive</option>
-                                                	<option value="true">Active</option>
-                                                </select>  
-                                                <label id="nameError" class="error"></label>
-                                          	</div>
+                                                                                      	
                                                 
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" id="save" class="btn btn-success">Save</button>
-                                            <button type="button" class="btn btn-default"
+                                            <button type="submit" id="save" class="btn btn-primary" style="font-weight: bold">Save</button>
+                                            <button type="button" class="btn btn-warning" style="font-weight: bold"
                                                     data-dismiss="modal">Close</button>
                                         </div>
                                     </div>
@@ -111,7 +110,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">Update Beacon</h4>
+                                            <h4 class="modal-title" style="color: blue; font-weight: bold">Update Beacon</h4>
                                         </div>
                                         <div class="modal-body">
 
@@ -140,8 +139,8 @@
                                             <div class="form-group">
                                                 <label class="control-label">Type:</label>
                                                 <select id="update-form-type" class="form-control">
-                                                	<option value="0">Type 0</option>
-                                                	<option value="1">Type 1</option>
+                                                	<option value="0">Payment</option>
+                                                	<option value="1">Result</option>
                                                 </select>  
                                                 <label id="nameErrorUpdate" class="error"></label>
                                             </div>
@@ -162,6 +161,7 @@
                                                 	<option value="0"> -- Select an option -- </option>
                                                 	<option value="1">Lane 1</option>
                                                 	<option value="2">Lane 2</option>
+                                                	<option value="3">Lane 3</option>
                                                 </select>  
                                                 <label id="nameErrorUpdate" class="error"></label>
                                          	</div>
@@ -172,56 +172,29 @@
 
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" id="update" class="btn btn-success">Save</button>
-                                            <button type="button" class="btn btn-default"
+                                            <button type="submit" id="update" class="btn btn-primary" style="font-weight: bold">Save</button>
+                                            <button type="button" class="btn btn-warning" style="font-weight: bold"
                                                     data-dismiss="modal">Close</button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
-                        </div>
-                        <%-- End div update modal --%>
-
-                        <div id="delete-modal" class="modal fade" role="dialog"
-                             data-backdrop="false">
-                            <div class="modal-dialog">
-                                <%--<!-- AJAX delete form-->--%>
-                                <form id="delete-form" method="POST" class="form-horizontal">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">Delete</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <b>Are you sure to delete this skill</b> <input type="hidden"
-                                                                                            id="delete-form-skillId">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit"  class="btn btn-success">Yes</button>
-                                            <button type="button" class="btn btn-default"
-                                                    data-dismiss="modal">Cancel</button>
-                                        </div>
-                                    </div>
-                                    <%-- End div modal-content --%>
-                                </form>
-                            </div>
-                        </div>
-                        <%-- End div modal delete --%>
+                        </div>                  
 
                         <table class="table cell-border table-responsive hover"
                                style="text-align: center" id="table">
                             <thead>
                                 <tr>
-                                    <th class="text-center">#</th>
+                                    <th class="text-center" style="font-size: 15px; color: blue; font-weight: bold">#</th>
                                     <th>id</th>
-                                    <th class="text-center">UUID</th>
-                                    <th class="text-center">Major</th>
-                                    <th class="text-center">Minor</th>
-                                    <th class="text-center">Type</th>
-                                    <th class="text-center">Lane ID</th>
-                                    <th class="text-center">Station ID</th>
-                                    <th class="text-center">Active</th>
-                                    <th class="text-center">Update/Delete</th>
+                                    <th class="text-center" style="font-size: 15px; color: blue; font-weight: bold">UUID</th>
+                                    <th class="text-center" style="font-size: 15px; color: blue; font-weight: bold">Major</th>
+                                    <th class="text-center" style="font-size: 15px; color: blue; font-weight: bold">Minor</th>
+                                    <th class="text-center" style="font-size: 15px; color: blue; font-weight: bold">Type</th>
+                                    <th class="text-center" style="font-size: 15px; color: blue; font-weight: bold">Lane ID</th>
+                                    <th class="text-center" style="font-size: 15px; color: blue; font-weight: bold">Station ID</th>
+                                    <th class="text-center" style="font-size: 15px; color: blue; font-weight: bold">Active</th>
+                                    <th class="text-center" style="font-size: 15px; color: blue; font-weight: bold">Update</th>
                                         <%--<th class="pull-left">Delete/Update</th>--%>
                                 </tr>
                             </thead>

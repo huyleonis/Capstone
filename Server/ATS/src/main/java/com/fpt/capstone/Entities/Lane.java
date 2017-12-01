@@ -23,6 +23,7 @@ public class Lane implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+        @Column(name = "id")
 	private int id;
 
 	@Column(name = "name")
