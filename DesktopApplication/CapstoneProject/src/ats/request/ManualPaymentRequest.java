@@ -50,7 +50,7 @@ public class ManualPaymentRequest {
             while ((inputLine = in.readLine()) != null) {
                 JSONObject payment = (JSONObject) parser.parse(inputLine);
                 if (payment != null) {
-                    String typeName = (String) payment.get("typeVehicle");
+                    String typeName = (String) payment.get("vehicleType");
                     Double price = (Double) payment.get("price");
                     vehicleDTO = new VehicleDTO(licensePlate, typeName, price);
                 } else {
