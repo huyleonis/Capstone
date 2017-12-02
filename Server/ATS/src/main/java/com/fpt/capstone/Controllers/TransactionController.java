@@ -365,5 +365,18 @@ public class TransactionController {
         int vehicleId = vehicleService.getVehicleId(licensePlate);
         return transactionService.getCapturedTransactionForDesktop(vehicleId, stationId);
     }
+    
+    /**
+     * Lấy transaction chưa thanh toán theo biển số xe
+     *
+     * @param licensePlate
+     * @return transaction
+     * @throws com.fasterxml.jackson.core.JsonProcessingException
+     */
+    @RequestMapping(value = "findTransactionNotPay/{licensePlate}")
+    public String findTransactionNotPay(@PathVariable String licensePlate) throws JsonProcessingException{
+        List<TransactionDTO> dtos = transactionService.findVehicleNotPay(licensePlate);
+        return new Gson().toJson(dtos);
+    }
 
 }

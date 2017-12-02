@@ -6,6 +6,7 @@
 package ats.daos;
 
 import ats.connection.MyConnection;
+import ats.dtos.VehicleDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -51,4 +52,6 @@ public class AccountDAO {
         }
         return idAccount;
     }
+        
+        
 }

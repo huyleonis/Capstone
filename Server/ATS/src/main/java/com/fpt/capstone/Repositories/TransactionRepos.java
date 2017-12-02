@@ -193,4 +193,8 @@ public interface TransactionRepos extends JpaRepository<Transaction, String> {
             + "(createdTime between :createdTime - INTERVAL 30 minute AND :createdTime + INTERVAL 30 minute)", nativeQuery = true)
     List<Transaction> findByVehicleIdAndTime(@Param("vehicleId") int vehicleId,
             @Param("createdTime") String createdTime);
+    
+    @Query(value = "SELECT * FROM transaction WHERE vehicleId = :vehicleId"
+            + " AND status <> 'Finish' AND status <> 'Success'", nativeQuery = true)
+    List<Transaction> findVehicleNotPay(@Param("vehicleId") int vehicleId);
 }

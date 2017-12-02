@@ -53,4 +53,6 @@ public interface TransactionService {
     boolean confirmReport(String transId, String licensePlate);
 
     boolean updatePhoto(String transId, String photo);
+    
+    List<TransactionDTO> findVehicleNotPay(String licensePlate);
 }
