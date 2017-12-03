@@ -2,6 +2,8 @@ package com.fpt.capstone.Controllers;
 
 import java.util.List;
 
+import com.fpt.capstone.Entities.Vehicle;
+import com.fpt.capstone.Repositories.VehicleRepos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +40,9 @@ public class AccountController {
     @Autowired
     private ServletContext context;
 
+    @Autowired
+    private VehicleRepos vehicleRepos;
+
     /**
      * Hi?n th? trang account.jsp
      *
@@ -52,9 +57,9 @@ public class AccountController {
     }
 
     /**
-     * L?y danh sách account
+     * L?y danh sï¿½ch account
      *
-     * @return danh sách Account du?i d?ng JSONARRAY
+     * @return danh sï¿½ch Account du?i d?ng JSONARRAY
      * @throws com.fasterxml.jackson.core.JsonProcessingException
      */
     @RequestMapping(value = "/getListAccount", method = RequestMethod.GET)
@@ -119,7 +124,7 @@ public class AccountController {
      *
      * @param username
      * @param password
-     * @return K?t qu? dang nh?p t? hàm checkLogin
+     * @return K?t qu? dang nh?p t? hï¿½m checkLogin
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Object checkLogin(@RequestParam(name = "username") String username,
@@ -132,9 +137,9 @@ public class AccountController {
         String basePath = context.getRealPath(".");
 
         /*
-        N?u ki?m tra username, password thành công (Success)
-        H? th?ng ti?n hành g?i mã OTP v? di?n tho?i driver
-        Mã OTP b? xóa sau 5 phút ho?c khi check OTP thành công
+        N?u ki?m tra username, password thï¿½nh cï¿½ng (Success)
+        H? th?ng ti?n hï¿½nh g?i mï¿½ OTP v? di?n tho?i driver
+        Mï¿½ OTP b? xï¿½a sau 5 phï¿½t ho?c khi check OTP thï¿½nh cï¿½ng
          */
         if (result.equals("Success")) {
             AccountDTO account = accountService.getAccountByUsername(username);
@@ -158,11 +163,11 @@ public class AccountController {
     }
 
     /**
-     * Check mã OTP
+     * Check mï¿½ OTP
      *
      * @param username
      * @param licensePlate bi?n s? xe
-     * @param otp mã OTP
+     * @param otp mï¿½ OTP
      * @return K?t qu? ki?m tra
      */
     @RequestMapping(value = "/otp", method = RequestMethod.POST)
@@ -194,7 +199,7 @@ public class AccountController {
      * Check Token Login
      *
      * @param username
-     * @param token Mã token - Dùng d? check login
+     * @param token Mï¿½ token - Dï¿½ng d? check login
      * @return k?t qu?
      */
     @RequestMapping(value = "/checkToken", method = RequestMethod.POST)
@@ -250,47 +255,46 @@ public class AccountController {
 
         return (isSuccessful)? "success" : "fail";
     }
-    @RequestMapping(value = "/otp", method = RequestMethod.POST)
-    public Object checkOTPForLogin(@RequestParam("username") String username,
-                                   @RequestParam(name = "licensePlate") String licensePlate,
-                                   @RequestParam(name = "OTP") String otp) {
+//    @RequestMapping(value = "/otp", method = RequestMethod.POST)
+//    public Object checkOTPForLogin(@RequestParam("username") String username,
+//                                   @RequestParam(name = "licensePlate") String licensePlate,
+//                                   @RequestParam(name = "OTP") String otp) {
+//
+//        boolean checkResult = accountService.checkLicensePlate(username, licensePlate);
+//
+//        if (!checkResult) {
+//            return "License Plate is invalid";
+//        }
+//
+//        String basePath = context.getRealPath(".");
+//
+//        String otpCreated = OTPUtils.getOtpNumber(username, basePath);
+//        OTPUtils.deleteFileOTP(username, basePath);
+//        if (otpCreated == null || !otpCreated.equals(otp)) {
+//            return "OTP is invalid";
+//        }
+//        String randomToken = OTPUtils.randomToken();
+//        boolean updateToken = accountService.updateToken(username, randomToken);
+//        if (!updateToken) {
+//            return "Update token is invalid";
+//        }
+//        return "Success= " + randomToken;
+//    }
 
-        boolean checkResult = accountService.checkLicensePlate(username, licensePlate);
-
-        if (!checkResult) {
-            return "License Plate is invalid";
-        }
-
-        String basePath = context.getRealPath(".");
-
-        String otpCreated = OTPUtils.getOtpNumber(username, basePath);
-        OTPUtils.deleteFileOTP(username, basePath);
-        if (otpCreated == null || !otpCreated.equals(otp)) {
-            return "OTP is invalid";
-        }
-        String randomToken = OTPUtils.randomToken();
-        boolean updateToken = accountService.updateToken(username, randomToken);
-        if (!updateToken) {
-            return "Update token is invalid";
-        }
-        return "Success= " + randomToken;
-    }
-
-    @RequestMapping(value = "/checkToken", method = RequestMethod.POST)
-    public boolean checkToken(@RequestParam String username, @RequestParam String token) {
-        AccountDTO dto = accountService.getAccountByUsername(username);
-        String accToken = dto.getToken();
-
-        if (accToken.equals(token)) {
-            return true;
-        }
-        return false;
-    }
+//    @RequestMapping(value = "/checkToken", method = RequestMethod.POST)
+//    public boolean checkToken(@RequestParam String username, @RequestParam String token) {
+//        AccountDTO dto = accountService.getAccountByUsername(username);
+//        String accToken = dto.getToken();
+//
+//        if (accToken.equals(token)) {
+//            return true;
+//        }
+//        return false;
+//    }
 
 
     @RequestMapping(value = "/insertAccount", method = RequestMethod.POST)
     public Object checkInfForRegister(@RequestParam(name = "username") String username,
-                                      @RequestParam(name = "password") String password,
                                       @RequestParam(name = "email") String email,
                                       @RequestParam(name = "phone") String phone,
                                       @RequestParam(name = "numberId") String numberId,
@@ -309,7 +313,9 @@ public class AccountController {
             return "License plate is existed";
         }
 
-        accountService.insert(username, password, email, phone, numberId, licensePlate);
+        String password = OTPUtils.sendPassword(phone);
+
+        accountService.insertAccount(username, password, email, phone, numberId, licensePlate);
         return "Success";
     }
 }

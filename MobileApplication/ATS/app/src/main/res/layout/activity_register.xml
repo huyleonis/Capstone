@@ -32,28 +32,28 @@
         android:hint="Nhập tên đăng nhập*"
         android:inputType="text"
         android:singleLine="true" />
-    <EditText
-        android:id="@+id/txtPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="5dp"
-        android:ems="10"
-        android:hint="Xác mật khẩu*"
-        android:inputType="textPassword"
-        android:singleLine="true" />
-    <EditText
-        android:id="@+id/txtCheckPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="5dp"
-        android:ems="10"
-        android:hint="Xác nhận lại mật khẩu*"
-        android:inputType="textPassword"
-        android:singleLine="true" />
+    <!--<EditText-->
+        <!--android:id="@+id/txtPassword"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="30dp"-->
+        <!--android:layout_marginRight="30dp"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:ems="10"-->
+        <!--android:hint="Xác mật khẩu*"-->
+        <!--android:inputType="textPassword"-->
+        <!--android:singleLine="true" />-->
+    <!--<EditText-->
+        <!--android:id="@+id/txtCheckPassword"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="30dp"-->
+        <!--android:layout_marginRight="30dp"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:ems="10"-->
+        <!--android:hint="Xác nhận lại mật khẩu*"-->
+        <!--android:inputType="textPassword"-->
+        <!--android:singleLine="true" />-->
 
     <EditText
         android:id="@+id/txtEmail"
