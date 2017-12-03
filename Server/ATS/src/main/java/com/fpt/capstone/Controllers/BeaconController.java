@@ -92,15 +92,15 @@ public class BeaconController {
         Beacon beaconEntity = beaconRepos.getBeacon(uuid, iMajor, iMinor);
         if (beaconEntity != null) {
             BeaconDTO dto = BeaconDTO.convertFromEntity(beaconEntity);
-            result.put("type ", dto.getType().getName());
+            result.put("type", dto.getType().getName());
             System.out.println("Get beacon info - type " + dto.getType());
             if (dto.getType() == BeaconType.BEACON_PAYMENT) {
-                result.put("info ", this.triggerBeaconPayment(dto.getStationId(), username));
+                result.put("info", this.triggerBeaconPayment(dto.getStationId(), username));
             } else if (dto.getType() == BeaconType.BEACON_RESULT) {
-                result.put("laneId ", dto.getLaneId());
+                result.put("laneId", dto.getLaneId());
             }
         } else {
-            result.put("type ", BeaconType.BEACON_OTHER.getName());
+            result.put("type", BeaconType.BEACON_OTHER.getName());
             System.out.println("Get beacon info - type OTHER");
         }
         return result;

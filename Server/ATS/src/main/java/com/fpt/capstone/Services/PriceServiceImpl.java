@@ -26,6 +26,7 @@ public class PriceServiceImpl implements PriceService {
 			PriceDTO priceDTO = PriceDTO.convertFromEntity(price);
 			return priceDTO;
 		} else {
+			System.out.println("price is null");
 			return null;
 		}
 	}
