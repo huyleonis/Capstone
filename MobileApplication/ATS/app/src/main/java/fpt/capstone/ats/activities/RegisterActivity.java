@@ -100,5 +100,5 @@ public class RegisterActivity extends AppCompatActivity {
         rs.execute(params, "account", "insertAccount", "POST");
     }
 
-    public void checkValid()
+
 }
