@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.Null;
 
 /**
  * @author hp
@@ -108,31 +109,34 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDTO insert(Account account) {
-
-        AccountDTO dto = null;
-
+    public void insert(String username, String password, String email, String phone, String numberId, String licensePlate) {
         try {
-            // neu user dang ki xe ma xe da co trong he thong
-            if (account.getVehicle() != null) {
-                Vehicle vehicle = vehicleRepos.findByLicensePlate(account.getVehicle().getLicensePlate());
-                if (vehicle != null) {
-                    account.setVehicle(vehicle);
-                }
-            }
+            Account account = new Account();
+            account.setUsername(username);
+            account.setPassword(password);
+            account.setRole(3);
+            account.setFullname(username);
+            account.setEmail(email);
+            account.setPhone(phone);
+            account.setNumberId(numberId);
+            account.seteWallet("0");
+            Vehicle vehicle = vehicleRepos.findByLicensePlate(licensePlate);
+            int vehicleId = vehicle.getId();
+            account.setVehicle(vehicle);
+            System.out.println("vehicle:" + vehicle.getId());
+            account.setBalance(0.0);
+            account.setActive(true);
+            account.setEnable(true);
+            account.setLoginStatus(false);
+            account.setToken("");
 
-            // system will generate password automatically
-//            account.setPassword("123");
+            accountRepos.save(account);
 
-            Account processedAccount = accountRepos.save(account);
-            if (processedAccount != null) {
-                dto = AccountDTO.convertFromEntity(processedAccount);
-            }
+
         } catch (Exception e) {
             log.error(e.getMessage());
         }
 
-        return dto;
     }
 
     @Override
@@ -249,4 +253,15 @@ public class AccountServiceImpl implements AccountService {
 
         return false;
     }
+    @Override
+    public boolean checkUsername(String username) {
+        Account account = accountRepos.findByUsername(username);
+
+        if (account != null) {
+            return true;
+        }
+
+        return false;
+    }
+
 }

@@ -112,54 +112,56 @@ public class BeaconService extends Service {
             int major = bundle.getInt("major");
             int minor = bundle.getInt("minor");
             String identifier = uuid + ";" + major + ";" + minor;
-            processBeacon(uuid, major, minor, identifier);
+            processBeacon(uuid,major,minor,identifier);
+        }
+    };
+
+    private BeaconManager.BeaconMonitoringListener listener = new BeaconManager.BeaconMonitoringListener() {
+        @Override
+        public void onEnteredRegion(BeaconRegion beaconRegion, List<Beacon> beacons) {
+            Log.w(TAG, "Enter Region of " + beacons.size() + " beacon(s)");
+            if (beacons.size() == 0) {
+                currentBeacon = null;
+            }
+
+            // Lấy ra hết những beacon mà detect được
+            for (Beacon beacon: beacons) {
+                String uuid = beacon.getProximityUUID().toString();
+                int major = beacon.getMajor();
+                int minor = beacon.getMinor();
+                String identifier = uuid + ";" + major + ";" + minor;
+
+                processBeacon(uuid, major, minor, identifier);
+            }
+        }
+
+        @Override
+        public void onExitedRegion(BeaconRegion beaconRegion) {
+            Log.w(TAG, "Exit beacon region");
+            if (currentType.equals("BEACON_RESULT")) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(ConstantValues.INSIDE_PARAM, false);
+                bundle.putString(ConstantValues.STATUS_PARAM, "Ra khỏi khu vực trạm thu phí");
+                bundle.putInt(ConstantValues.STAGE_PARAM, 4);
+                bundle.putBoolean(ConstantValues.EXIT_PARAM, true);
+
+                if (isForeground()) { //Nếu ứng dụng đang chạy trên cùng
+                    Intent broadcastIntent = new Intent();
+                    broadcastIntent.setAction(ConstantValues.BEACON_EXIT_ACTION);
+                    broadcastIntent.putExtras(bundle);
+                    sendBroadcast(broadcastIntent);
+
+                } else { // Nếu ứng dụng đang không được mở
+                    Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);
+                    resultIntent.putExtras(bundle);
+                }
+            }
         }
     };
 
 
     private void setUpMonitorBeacon() {
-        bm.setMonitoringListener(new BeaconManager.BeaconMonitoringListener() {
-            @Override
-            public void onEnteredRegion(BeaconRegion beaconRegion, List<Beacon> beacons) {
-                Log.w(TAG, "Enter Region of " + beacons.size() + " beacon(s)");
-                if (beacons.size() == 0) {
-                    currentBeacon = null;
-                }
-
-                // Lấy ra hết những beacon mà detect được
-                for (Beacon beacon: beacons) {
-                    String uuid = beacon.getProximityUUID().toString();
-                    int major = beacon.getMajor();
-                    int minor = beacon.getMinor();
-                    String identifier = uuid + ";" + major + ";" + minor;
-
-                    processBeacon(uuid, major, minor, identifier);
-                }
-            }
-
-            @Override
-            public void onExitedRegion(BeaconRegion beaconRegion) {
-                Log.w(TAG, "Exit beacon region");
-                if (currentType.equals("BEACON_RESULT")) {
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean(ConstantValues.INSIDE_PARAM, false);
-                    bundle.putString(ConstantValues.STATUS_PARAM, "Ra khỏi khu vực trạm thu phí");
-                    bundle.putInt(ConstantValues.STAGE_PARAM, 4);
-                    bundle.putBoolean(ConstantValues.EXIT_PARAM, true);
-
-                    if (isForeground()) { //Nếu ứng dụng đang chạy trên cùng
-                        Intent broadcastIntent = new Intent();
-                        broadcastIntent.setAction(ConstantValues.BEACON_EXIT_ACTION);
-                        broadcastIntent.putExtras(bundle);
-                        sendBroadcast(broadcastIntent);
-
-                    } else { // Nếu ứng dụng đang không được mở
-                        Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);
-                        resultIntent.putExtras(bundle);
-                    }
-                }
-            }
-        });
+        bm.setMonitoringListener(listener);
     }
 
     private void processBeacon(String uuid, int major, int minor, String identifier) {

@@ -39,7 +39,7 @@ public class AccountController {
     private ServletContext context;
 
     /**
-     * Hiển thị trang account.jsp
+     * Hi?n th? trang account.jsp
      *
      * @return beacon view
      */
@@ -52,9 +52,9 @@ public class AccountController {
     }
 
     /**
-     * Lấy danh sách account
+     * L?y danh s�ch account
      *
-     * @return danh sách Account dưới dạng JSONARRAY
+     * @return danh s�ch Account du?i d?ng JSONARRAY
      * @throws com.fasterxml.jackson.core.JsonProcessingException
      */
     @RequestMapping(value = "/getListAccount", method = RequestMethod.GET)
@@ -76,10 +76,10 @@ public class AccountController {
     }
 
     /**
-     * Tạo account mới
+     * T?o account m?i
      *
      * @param account Account entity
-     * @return Kết quả thực hiện
+     * @return K?t qu? th?c hi?n
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(@RequestBody Account account) {
@@ -98,7 +98,7 @@ public class AccountController {
     /**
      *
      * @param account Account entity
-     * @return kết quả thực hiện
+     * @return k?t qu? th?c hi?n
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String update(@RequestBody Account account) {
@@ -115,11 +115,11 @@ public class AccountController {
     }
 
     /**
-     * Check đăng nhập từ Mobile Application
+     * Check dang nh?p t? Mobile Application
      *
      * @param username
      * @param password
-     * @return Kết quả đăng nhập từ hàm checkLogin
+     * @return K?t qu? dang nh?p t? h�m checkLogin
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Object checkLogin(@RequestParam(name = "username") String username,
@@ -132,9 +132,9 @@ public class AccountController {
         String basePath = context.getRealPath(".");
 
         /*
-        Nếu kiểm tra username, password thành công (Success)
-        Hệ thống tiến hành gửi mã OTP về điện thoại driver
-        Mã OTP bị xóa sau 5 phút hoặc khi check OTP thành công
+        N?u ki?m tra username, password th�nh c�ng (Success)
+        H? th?ng ti?n h�nh g?i m� OTP v? di?n tho?i driver
+        M� OTP b? x�a sau 5 ph�t ho?c khi check OTP th�nh c�ng
          */
         if (result.equals("Success")) {
             AccountDTO account = accountService.getAccountByUsername(username);
@@ -158,12 +158,12 @@ public class AccountController {
     }
 
     /**
-     * Check mã OTP
+     * Check m� OTP
      *
      * @param username
-     * @param licensePlate biển số xe
-     * @param otp mã OTP
-     * @return Kết quả kiểm tra
+     * @param licensePlate bi?n s? xe
+     * @param otp m� OTP
+     * @return K?t qu? ki?m tra
      */
     @RequestMapping(value = "/otp", method = RequestMethod.POST)
     public Object checkOTPForLogin(@RequestParam("username") String username,
@@ -194,8 +194,8 @@ public class AccountController {
      * Check Token Login
      *
      * @param username
-     * @param token Mã token - Dùng để check login
-     * @return kết quả
+     * @param token M� token - D�ng d? check login
+     * @return k?t qu?
      */
     @RequestMapping(value = "/checkToken", method = RequestMethod.POST)
     public String checkToken(@RequestParam String username, @RequestParam String token) {
@@ -249,5 +249,67 @@ public class AccountController {
         boolean isSuccessful = accountService.deactive(account);
 
         return (isSuccessful)? "success" : "fail";
+    }
+    @RequestMapping(value = "/otp", method = RequestMethod.POST)
+    public Object checkOTPForLogin(@RequestParam("username") String username,
+                                   @RequestParam(name = "licensePlate") String licensePlate,
+                                   @RequestParam(name = "OTP") String otp) {
+
+        boolean checkResult = accountService.checkLicensePlate(username, licensePlate);
+
+        if (!checkResult) {
+            return "License Plate is invalid";
+        }
+
+        String basePath = context.getRealPath(".");
+
+        String otpCreated = OTPUtils.getOtpNumber(username, basePath);
+        OTPUtils.deleteFileOTP(username, basePath);
+        if (otpCreated == null || !otpCreated.equals(otp)) {
+            return "OTP is invalid";
+        }
+        String randomToken = OTPUtils.randomToken();
+        boolean updateToken = accountService.updateToken(username, randomToken);
+        if (!updateToken) {
+            return "Update token is invalid";
+        }
+        return "Success= " + randomToken;
+    }
+
+    @RequestMapping(value = "/checkToken", method = RequestMethod.POST)
+    public boolean checkToken(@RequestParam String username, @RequestParam String token) {
+        AccountDTO dto = accountService.getAccountByUsername(username);
+        String accToken = dto.getToken();
+
+        if (accToken.equals(token)) {
+            return true;
+        }
+        return false;
+    }
+
+
+    @RequestMapping(value = "/insertAccount", method = RequestMethod.POST)
+    public Object checkInfForRegister(@RequestParam(name = "username") String username,
+                                      @RequestParam(name = "password") String password,
+                                      @RequestParam(name = "email") String email,
+                                      @RequestParam(name = "phone") String phone,
+                                      @RequestParam(name = "numberId") String numberId,
+                                      @RequestParam(name = "licensePlate") String licensePlate) {
+        boolean checkUsername = accountService.checkUsername(username);
+        if (checkUsername) {
+            return "Username is existed";
+        }
+
+        boolean checkLicensePlate = false;
+        Vehicle vehicle = vehicleRepos.findByLicensePlate(licensePlate);
+        if (vehicle != null) {
+            checkLicensePlate = true;
+        }
+        if (!checkLicensePlate) {
+            return "License plate is existed";
+        }
+
+        accountService.insert(username, password, email, phone, numberId, licensePlate);
+        return "Success";
     }
 }
