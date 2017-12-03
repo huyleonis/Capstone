@@ -33,11 +33,11 @@ public class RegisterActivity extends AppCompatActivity {
         EditText edtUsername = (EditText) findViewById(R.id.txtUsername);
         String username = edtUsername.getText().toString();
 
-        EditText edtPassword = (EditText) findViewById(R.id.txtPassword);
-        String password = edtPassword.getText().toString();
-
-        EditText edtCheckPassword = (EditText) findViewById(R.id.txtCheckPassword);
-        String checkPassword = edtCheckPassword.getText().toString();
+//        EditText edtPassword = (EditText) findViewById(R.id.txtPassword);
+//        String password = edtPassword.getText().toString();
+//
+//        EditText edtCheckPassword = (EditText) findViewById(R.id.txtCheckPassword);
+//        String checkPassword = edtCheckPassword.getText().toString();
 
         EditText edtEmail = (EditText) findViewById(R.id.txtEmail);
         String email = edtEmail.getText().toString();
@@ -91,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
         };
         Map<String, String> params = new HashMap<>();
         params.put("username", username);
-        params.put("password", password);
+//        params.put("password", password);
         params.put("email", email);
         params.put("phone", phone);
         params.put("numberId", numberId);
@@ -100,5 +100,7 @@ public class RegisterActivity extends AppCompatActivity {
         rs.execute(params, "account", "insertAccount", "POST");
     }
 
-    public void checkValid()
+    public void checkValid(){
+        
+    }
 }

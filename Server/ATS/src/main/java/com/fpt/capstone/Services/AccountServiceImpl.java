@@ -109,7 +109,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void insert(String username, String password, String email, String phone, String numberId, String licensePlate) {
+    public AccountDTO insert(Account account) {
+        return null;
+    }
+
+    @Override
+    public void insertAccount(String username, String password, String email, String phone, String numberId, String licensePlate) {
         try {
             Account account = new Account();
             account.setUsername(username);

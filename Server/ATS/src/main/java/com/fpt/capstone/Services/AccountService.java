@@ -26,7 +26,9 @@ public interface AccountService {
 
 	List<AccountDTO> getListAccount();
 
-	void insert(String username, String password, String email, String phone, String numberId, String licensePlate);
+	AccountDTO insert(Account account);
+
+	void insertAccount(String username, String password, String email, String phone, String numberId, String licensePlate);
 
 	AccountDTO update(Account account);
 

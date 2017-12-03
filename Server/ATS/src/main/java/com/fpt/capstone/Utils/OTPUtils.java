@@ -48,6 +48,16 @@ public class OTPUtils {
 
     }
 
+    public static String sendPassword(String phone) {
+        String numberOtp = randomToken();
+        String phoneStr = phone.replaceFirst("0", "+84");
+        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+
+        Message message = Message.creator(new PhoneNumber(phoneStr), new PhoneNumber("+18643830360"),
+                "Mật khẩu của bạn là:" + numberOtp).create();
+        return numberOtp;
+    }
+
     /**
      * Tạo file và đọc mã OTP trong file username.txt
      *
