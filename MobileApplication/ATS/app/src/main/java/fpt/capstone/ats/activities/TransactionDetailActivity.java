@@ -10,8 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -39,11 +42,9 @@ public class TransactionDetailActivity extends AppCompatActivity {
     private TextView textType;
     private Button btnPayment;
     private Button btnReport;
+    private ImageView imgTrans;
 
     private String transactionId;
-
-    private DBAdapter database;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +58,11 @@ public class TransactionDetailActivity extends AppCompatActivity {
         textType = (TextView) findViewById(R.id.textType);
         btnPayment = (Button) findViewById(R.id.btnPayLater);
         btnReport = (Button) findViewById(R.id.btnReport);
+        imgTrans = (ImageView) findViewById(R.id.imgTrans);
 
         Bundle bundle = getIntent().getExtras();
         transactionId = bundle.getString(ConstantValues.TRANSACTION_ID_PARAM);
 
-
-        Log.d("GET DETAIL TRANSACTION", "VIEW FROM SERVER");
         getTransactionDetail();
     }
 
@@ -102,8 +102,16 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     double price = infos.getDouble("price");
                     String status = infos.getString("status");
                     String type = infos.getString("type");
-                    String vehicleType = infos.getString("vehicleType");
                     Date datetime = new Date(infos.getLong("dateTime"));
+                    String photo = infos.getString("photo");
+
+                    if (photo != null && !photo.isEmpty()) {
+                        Picasso.with(TransactionDetailActivity.this)
+                                .load(RequestServer.DEFAULT_URL + "imgs/plates/" + photo)
+                                .placeholder(R.drawable.loading_img)
+                                .error(R.drawable.notfound_img)
+                                .into(imgTrans);
+                    }
 
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                     DecimalFormat formatter = new DecimalFormat("###,###,###.##");
@@ -121,15 +129,17 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         btnPayment.setVisibility(View.VISIBLE);
                         btnPayment.setEnabled(true);
 
-                        btnReport.setVisibility(View.VISIBLE);
-                        btnReport.setEnabled(true);
+                        if (photo != null && !photo.isEmpty()) {
+                            btnReport.setVisibility(View.VISIBLE);
+                            btnReport.setEnabled(true);
+                        }
 
                     } else {
                         btnPayment.setVisibility(View.INVISIBLE);
                         btnPayment.setEnabled(false);
 
-                        btnReport.setVisibility(View.VISIBLE);
-                        btnReport.setEnabled(true);
+                        btnReport.setVisibility(View.INVISIBLE);
+                        btnReport.setEnabled(false);
                     }
                 } catch (Exception e) {
                     Log.e("Transaction Detail", e.getMessage());
@@ -219,7 +229,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
         List<String> params = new ArrayList<>();
         params.add(transactionId);
-        rs.execute(params, "transaction", "updateProcessingTransaction", "GET");
+        rs.execute(params, "transaction", "payLater", "GET");
     }
 
     public void viewFromLocal(Cursor resultSet) {
@@ -306,11 +316,8 @@ public class TransactionDetailActivity extends AppCompatActivity {
                 try {
                     pdial.dismiss();
                     Log.w("Receive TransStatus", "Transaction Status Json: " + result);
-                    JSONObject infos = new JSONObject(result);
-                    String newStatus = infos.getString("status");
-                    String updateResult = infos.getString("result");
 
-                    if (updateResult.equalsIgnoreCase("success")) {
+                    if (result.equalsIgnoreCase("success")) {
                         new AlertDialog.Builder(TransactionDetailActivity.this)
                                 .setTitle("Kết quả")
                                 .setMessage("Giao dịch của bạn đã được gửi về xử lý sai xót.\nCám ơn bạn đã hỗ trợ")
@@ -321,7 +328,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                                     }
                                 })
                                 .create().show();
-                    } else if (updateResult.equalsIgnoreCase("fail")) {
+                    } else if (result.equalsIgnoreCase("fail")) {
                         Log.e(TAG, "Report Transaction Fail");
                         Toast.makeText(TransactionDetailActivity.this, "Báo cáo thất bại. Vui lòng thử lại", Toast.LENGTH_LONG).show();
                     }

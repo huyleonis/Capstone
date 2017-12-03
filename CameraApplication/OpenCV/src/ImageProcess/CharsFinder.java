@@ -48,7 +48,7 @@ public class CharsFinder {
     private static final double MAX_ANGLE_BETWEEN_CHARS = 12.0;
 
     // other constants
-    private static final int MIN_NUMBER_OF_MATCHING_CHARS = 3;
+    private static final int MIN_NUMBER_OF_MATCHING_CHARS = 4;
 
     private static final int RESIZED_CHAR_IMAGE_WIDTH = 20;
     private static final int RESIZED_CHAR_IMAGE_HEIGHT = 30;

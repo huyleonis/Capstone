@@ -262,20 +262,17 @@ public class BeaconService extends Service {
         double price;
         boolean isCreated;
 
+        nameStation = infos.getString("stationName");
+        idStation = infos.getString("stationId");
+        zone = infos.getString("zone");
+        price = infos.getDouble("price");
+
 
         if (infos.has("photo")) { //transaction dc tạo bởi camera
-            nameStation = infos.getString("stationName");
-            idStation = infos.getString("stationId");
-            zone = infos.getString("zone");
-            price = infos.getDouble("price");
             photo = infos.getString("photo");
             transactionId = infos.getString("id");
             isCreated = true;
         } else { //chỉ lấy giá bình thường
-            nameStation = infos.getString("nameStation");
-            idStation = infos.getString("stationId");
-            zone = infos.getString("zoneStation");
-            price = infos.getDouble("price");
             isCreated = false;
         }
 
