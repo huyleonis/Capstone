@@ -183,7 +183,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     JSONObject infos = new JSONObject(result);
                     String resultPayment = infos.getString("result");
 
-                    if (result.equals("")) {
+                    if (resultPayment.equals("")) {
                         new AlertDialog.Builder(TransactionDetailActivity.this)
                                 .setTitle("Kết quả")
                                 .setMessage("Giao dịch đã được thực hiện thành công")

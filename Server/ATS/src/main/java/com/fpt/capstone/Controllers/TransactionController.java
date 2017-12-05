@@ -176,6 +176,9 @@ public class TransactionController {
         } else {
             transDTO = transactionService.updateTransactionStatus(transDTO.getId(), TransactionStatus.TRANS_FAILED);
             transDTO.setFailReason(result);
+            
+            transactionService.updateTransactionStatus(transDTO.getId(),
+                    TransactionStatus.TRANS_NOTPAY);
         }
 
         // status:
@@ -215,8 +218,11 @@ public class TransactionController {
                     TransactionStatus.TRANS_SUCCESS);
         } else {
             transResultDTO = transactionService.updateTransactionStatus(transDTO.getId(),
-                    TransactionStatus.TRANS_FAILED);
+                    TransactionStatus.TRANS_FAILED);            
             transResultDTO.setFailReason(result);
+            
+            transactionService.updateTransactionStatus(transDTO.getId(),
+                    TransactionStatus.TRANS_NOTPAY);
         }
 
         // status:
@@ -287,7 +293,7 @@ public class TransactionController {
         // Gọi module paypal
         String result = accountService.makePayment(transDTO.getUsername(), transDTO.getStationId());
         if (result.equals("")) {
-            transactionService.updateTransactionStatus(transDTO.getId(), TransactionStatus.TRANS_SUCCESS);
+            transactionService.updateTransactionStatus(transDTO.getId(), TransactionStatus.TRANS_FINISH);
             status = "Kết Thúc";
         } else {
             transactionService.updateTransactionStatus(transDTO.getId(), TransactionStatus.TRANS_FAILED);
@@ -298,23 +304,22 @@ public class TransactionController {
         System.out.println("   + update transaction success with status: " + status);
 
         map.put("status", status);
-        map.put("reason", result);
+        map.put("result", result);
 
         return map;
     }
 
     /**
-     * Báo cáo Transaction theo id Transaction bị báo cáo sẽ update status thành
+     * Báo cáo Transaction theo id, Transaction bị báo cáo sẽ update status thành
      * ERROR
      *
      * @param transactionId
      * @return Kết quả thực hiện và tên Status được update
      */
     @RequestMapping(value = "/reportTransaction/{transactionId}")
-    public Map<String, String> reportTransaction(@PathVariable String transactionId) {
-        Map<String, String> map = new HashMap<>();
+    public String reportTransaction(@PathVariable String transactionId) {
 
-        String result = "";
+        String result;
         TransactionStatus status = TransactionStatus.TRANS_ERROR;
 
         TransactionDTO dto = transactionService.updateTransactionStatus(transactionId, status);
@@ -326,10 +331,8 @@ public class TransactionController {
 
         System.out.println("Update transaction success with status: " + status);
 
-        map.put("result", result);
-        map.put("status", status.getName());
 
-        return map;
+        return result;
     }
 
     /**

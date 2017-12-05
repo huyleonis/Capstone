@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.estimote.coresdk.cloud.google.ProximityBeaconCloud;
 import com.estimote.coresdk.common.requirements.SystemRequirementsChecker;
+import com.estimote.coresdk.observation.region.RegionUtils;
 import com.estimote.coresdk.observation.region.beacon.BeaconRegion;
 import com.estimote.coresdk.recognition.packets.Beacon;
 import com.estimote.coresdk.service.BeaconManager;
@@ -83,17 +84,16 @@ public class BeaconService extends Service {
 
         bm = new BeaconManager(getApplicationContext());
 
-        bm.setBackgroundScanPeriod(500, 0);
-
-
-        //setUpRangingBeacon();
-        setUpMonitorBeacon();
+        bm.setMonitoringListener(monitorListener);
+        bm.setRangingListener(rangingListener);
 
         bm.connect(new BeaconManager.ServiceReadyCallback() {
             @Override
             public void onServiceReady() {
                 Log.w(TAG, "Start ranging and monitoring beacon");
-                bm.startMonitoring(defaultRegion);
+                //bm.startMonitoring(defaultRegion);
+                bm.startRanging(defaultRegion);
+
             }
         });
 
@@ -116,7 +116,7 @@ public class BeaconService extends Service {
         }
     };
 
-    private BeaconManager.BeaconMonitoringListener listener = new BeaconManager.BeaconMonitoringListener() {
+    private BeaconManager.BeaconMonitoringListener monitorListener = new BeaconManager.BeaconMonitoringListener() {
         @Override
         public void onEnteredRegion(BeaconRegion beaconRegion, List<Beacon> beacons) {
             Log.w(TAG, "Enter Region of " + beacons.size() + " beacon(s)");
@@ -159,10 +159,39 @@ public class BeaconService extends Service {
         }
     };
 
+    private BeaconManager.BeaconRangingListener rangingListener = new BeaconManager.BeaconRangingListener() {
+        @Override
+        public void onBeaconsDiscovered(BeaconRegion beaconRegion, List<Beacon> beacons) {
+            Log.w(TAG, "Detect " + beacons.size() + " beacon(s)");
+            if (beacons.size() == 0) {
+                currentBeacon = null;
+            }
 
-    private void setUpMonitorBeacon() {
-        bm.setMonitoringListener(listener);
-    }
+            double minDistance = 100;
+
+            Beacon selected = null;
+
+            // Lấy ra beacon có khoảng cách gần nhất
+            for (Beacon beacon: beacons) {
+                double distance = RegionUtils.computeAccuracy(beacon);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    selected = beacon;
+                }
+            }
+
+            if (selected != null) {
+                Log.w(TAG, "Nearest beacon is about " + minDistance + "m ");
+                String uuid = selected.getProximityUUID().toString();
+                int major = selected.getMajor();
+                int minor = selected.getMinor();
+                String identifier = uuid + ";" + major + ";" + minor;
+
+                processBeacon(uuid, major, minor, identifier);
+            }
+        }
+    };
+
 
     private void processBeacon(String uuid, int major, int minor, String identifier) {
         // Kiểm tra xem có phải beacon mới hay ko?
@@ -266,7 +295,7 @@ public class BeaconService extends Service {
 
         nameStation = infos.getString("stationName");
         idStation = infos.getString("stationId");
-        zone = infos.getString("zone");
+        zone = infos.getString("stationZone");
         price = infos.getDouble("price");
 
 

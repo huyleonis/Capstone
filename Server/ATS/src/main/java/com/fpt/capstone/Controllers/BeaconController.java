@@ -191,13 +191,13 @@ public class BeaconController {
 
         TransactionStatus status = transDTO.getTransactionStatus();
         if (status == TransactionStatus.TRANS_SUCCESS
-                || status == TransactionStatus.TRANS_FAILED) {
+                || status == TransactionStatus.TRANS_NOTPAY) {
 
             TransactionStatus newStatus;
             if (status == TransactionStatus.TRANS_SUCCESS) {
                 newStatus = TransactionStatus.TRANS_FINISH;
             } else {
-                newStatus = TransactionStatus.TRANS_FAILED_PASSED;
+                newStatus = TransactionStatus.TRANS_NOTPAY;
             }
 
             // Cập nhật làn xe vô
