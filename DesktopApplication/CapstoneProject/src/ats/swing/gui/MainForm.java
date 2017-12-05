@@ -66,22 +66,23 @@ public class MainForm extends javax.swing.JFrame {
 
     class ButtonRenderer extends JButton implements TableCellRenderer {
 
-  public ButtonRenderer() {
-    setOpaque(true);
-  }
+        public ButtonRenderer() {
+            setOpaque(true);
+        }
 
-  public Component getTableCellRendererComponent(JTable table, Object value,
-      boolean isSelected, boolean hasFocus, int row, int column) {
-    if (isSelected) {
-      setForeground(table.getSelectionForeground());
-      setBackground(table.getSelectionBackground());
-    } else {
-      setForeground(table.getForeground());
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            if (isSelected) {
+                setForeground(table.getSelectionForeground());
+                setBackground(table.getSelectionBackground());
+            } else {
+                setForeground(table.getForeground());
+            }
+            setText((value == null) ? "" : value.toString());
+            return this;
+        }
     }
-    setText((value == null) ? "" : value.toString());
-    return this;
-  }
-}
+
     private void clearForm() throws IOException {
         txtLicensePlate.setText("");
         //lbId.setText("");
@@ -236,7 +237,6 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         lbNotification.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbNotification.setForeground(new java.awt.Color(0, 102, 255));
         lbNotification.setText("...");
         lbNotification.setToolTipText("Click để xem chi tiết");
         lbNotification.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -448,9 +448,9 @@ public class MainForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addComponent(TablePane, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
-                .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel100)
-                    .addComponent(lbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel100))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnPayTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(146, 146, 146))
@@ -843,8 +843,8 @@ public class MainForm extends javax.swing.JFrame {
         }
         try {
             List<TransactionDetailDTO> list = mpr.listTransactionNotPay(licensePlate, localhost);
-            if(list.size()>0){
-                lbNotification.setText("Phương tiện " + licensePlate + " còn " +list.size() + " giao dịch chưa thanh toán");
+            if (list.size() > 0) {
+                lbNotification.setText("Phương tiện " + licensePlate + " còn " + list.size() + " giao dịch chưa thanh toán!");
             }
         } catch (Exception ex) {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -863,7 +863,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtLicensePlateCaretUpdate
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
-        
+
 
     }//GEN-LAST:event_txtSearchActionPerformed
 
@@ -893,19 +893,20 @@ public class MainForm extends javax.swing.JFrame {
         List<TransactionDetailDTO> list;
         String col[] = {"#", "Id", "Biển số xe", "Loại xe", "Giá", "Loại giao dịch", "Ngày tháng", "Trạng Thái", "Hình ảnh", "Trả phí"};
         DefaultTableModel tbl = new DefaultTableModel(col, 0);
-
+        double total = 0.0;
         try {
             list = mpr.listTransactionNotPay(licensePlate, localhost);
-            if (list.size() >= 0) {
+            if (list.size() > 0) {
                 for (int i = 0; i < list.size(); i++) {
                     Object ojb[] = {i + 1 + "", list.get(i).getId(), list.get(i).getLicensePlate(), list.get(i).getTypeVehicle(),
                         formatter.format(list.get(i).getPrice()) + " đồng", changeType(list.get(i).getType()), list.get(i).getDateTime(), changeStatus(list.get(i).getStaus()),
-                        list.get(i).getPhoto()};
+                        list.get(i).getPhoto(), null};
+                    total += list.get(i).getPrice();
                     tbl.addRow(ojb);
                 }
             }
             JTable tblHistory = new JTable(tbl);
-            tblHistory.getColumn("Trả phí").setCellRenderer(new ButtonRenderer());
+            //tblHistory.getColumn("Trả phí").setCellRenderer(new ButtonRenderer());
             //tblHistory.setEnabled(false);
             tblHistory.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
             TableColumn index = tblHistory.getColumnModel().getColumn(0);
@@ -932,11 +933,6 @@ public class MainForm extends javax.swing.JFrame {
             TablePane.add(tableContainer, BorderLayout.CENTER);
             repaint();
             revalidate();
-            double total = 0.0;
-            for (int i = 0; i < list.size(); i++) {
-                total += list.get(i).getPrice();
-            }
-
             lbTotal.setText(formatter.format(total) + " đồng");
         } catch (Exception ex) {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -959,7 +955,7 @@ public class MainForm extends javax.swing.JFrame {
                 for (int i = 0; i < list.size(); i++) {
                     mpr.finishManualPayment(list.get(i).getId(), localhost);
                 }
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Không có giao dịch nào để thanh toán!", "Thông báo", JOptionPane.OK_OPTION);
             }
 

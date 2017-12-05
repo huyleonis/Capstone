@@ -222,7 +222,7 @@ public class ManualPaymentRequest {
                         String photo = (String) trans.get("photo");
                         String dateTime = (String) trans.get("dateTime");
                         String type = (String) trans.get("type");
-                        String typeVehicle = (String) trans.get("typeVehicle");
+                        String typeVehicle = (String) trans.get("vehicleType");
                         TransactionDetailDTO dto = new TransactionDetailDTO(licensePlate, id, status, dateTime, type, photo, typeVehicle, price);
                         list.add(dto);
                     }
