@@ -50,15 +50,17 @@
                                                 <br/>
                                                 <label class="control-label">License Plate Recognized: </label>
                                                 <input type="text" class="form-control" id="update-form-licensePlate" readonly/>
+                                                <br/>
                                                 <label id="nameErrorUpdate" class="error"></label>
-                                                <br/>
-                                                <label class="control-label">Correct License Plate: </label>                    
-                                                <input type="text" class="form-control" id="update-form-correct-licensePlate" required />
-                                                <br/>
-                                                <label class="control-label">Date tIme: </label>                    
+                                                <label class="control-label">Date time: </label>                    
                                                 <input type="text" class="form-control" id="update-form-dateTime" readonly/>
                                                 <br/>
-                                                <button onclick="myFunction()" type="submit" class="btn btn-success">View Transaction</button>
+                                                <label class="control-label">Correct License Plate: </label>                    
+                                                <input type="text" class="form-control" id="update-form-correct-licensePlate" />
+                                                
+                                                
+                                                <br/>
+                                                <button onclick="myFunction()" type="submit" class="btn btn-success">Check Transaction</button>
                                                 
                                                 
                                                 <table class="table table-striped" id="table1">
@@ -78,8 +80,9 @@
 
                                         </div>
                                         <div class="modal-footer">
-                                        	<button class='btn btn-primary' type="submit" onclick='submitConfirm()'>Confirm</button>
-                                            <button onclick = "clearUpdateForm()" type="button" class="btn btn-default"
+                                        	<button class='btn btn-primary' style="font-weight: bold" type="submit" onclick='submitConfirm()'>Confirm</button>
+                                                <button class='btn btn-info' style="font-weight: bold" type="submit" onclick='submitDismiss()'>Dismiss</button>
+                                            <button onclick = "clearUpdateForm()" type="button" class="btn btn-warning" style="font-weight: bold"
                                                     data-dismiss="modal">Close</button>
                                         </div>
                                     </div>

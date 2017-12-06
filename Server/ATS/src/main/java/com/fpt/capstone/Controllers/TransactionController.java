@@ -1,6 +1,7 @@
 package com.fpt.capstone.Controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fpt.capstone.Dtos.PhotoDTO;
 import com.fpt.capstone.Dtos.TransactionDTO;
 import com.fpt.capstone.Dtos.TransactionDetailDTO;
 import com.fpt.capstone.Services.AccountService;
@@ -22,10 +23,12 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 @RestController
 @RequestMapping("/transaction")
@@ -350,7 +353,7 @@ public class TransactionController {
         List<TransactionDTO> dtos = transactionService
                 .getTransByLicPlateAndTime(licensePlate, processedDate);
         return new Gson().toJson(dtos);
-    }   
+    }
 
     /**
      * Lấy transaction detail theo id cho desktop Kiểm tra transaction được tạo
@@ -365,7 +368,7 @@ public class TransactionController {
         int vehicleId = vehicleService.getVehicleId(licensePlate);
         return transactionService.getCapturedTransactionForDesktop(vehicleId, stationId);
     }
-    
+
     /**
      * Lấy transaction chưa thanh toán theo biển số xe
      *
@@ -374,9 +377,71 @@ public class TransactionController {
      * @throws com.fasterxml.jackson.core.JsonProcessingException
      */
     @RequestMapping(value = "findTransactionNotPay/{licensePlate}")
-    public String findTransactionNotPay(@PathVariable String licensePlate) throws JsonProcessingException{
+    public String findTransactionNotPay(@PathVariable String licensePlate) throws JsonProcessingException {
         List<TransactionDTO> dtos = transactionService.findVehicleNotPay(licensePlate);
         return new Gson().toJson(dtos);
+    }
+
+    /**
+     * Xác nhận report đúng.
+     *
+     * @param transId
+     * @param licensePlate
+     * @return transaction
+     *
+     */
+    @RequestMapping(value = "/confirmReport")
+    public String confirmReport(@RequestParam(name = "transId") String transId,
+            @RequestParam(name = "licensePlate") String licensePlate) {
+
+        boolean isSuccessful = false;
+
+        isSuccessful = transactionService.confirmReport(transId, licensePlate);
+
+        if (isSuccessful) {
+            return "success";
+        }
+
+        return "fail";
+    }
+
+    @RequestMapping(value = "/dismissReport")
+    public boolean dismissReport(@RequestParam(name = "transId") String transId) {
+        TransactionDTO dto = transactionService.updateTransactionStatus(transId, TransactionStatus.TRANS_NOTPAY);
+        if(dto == null)
+            return false;
+        return true;
+
+    }
+    @RequestMapping(value = "/getDumpToPhoto")
+    @ResponseStatus(HttpStatus.OK)
+    public List<PhotoDTO> getDumpToPhoto() {
+
+        String basePath = context.getRealPath(".");
+        File folder = new File(basePath + "/WEB-INF/images/dumps");
+        File[] listOfFile = folder.listFiles();
+        List<PhotoDTO> listFile = new ArrayList<>();
+        if (folder.isDirectory()) {
+            for (int i = 0; i < listOfFile.length; i++) {
+                if (listOfFile[i].isFile()) {
+
+                    String str = listOfFile[i].getName();
+
+                    StringTokenizer st = new StringTokenizer(str, "_.");
+                    String licensePlate = st.nextToken();
+                    String createdTime = st.nextToken();
+
+                    Date date = new Date(Long.parseLong(createdTime));
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                    PhotoDTO dto = new PhotoDTO(str, licensePlate, df.format(date));
+
+                    listFile.add(dto);
+                }
+            }
+        }
+
+        return listFile;
     }
 
 }

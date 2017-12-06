@@ -1,4 +1,7 @@
-
+var changeData = function (data) {
+    if (data == "TRANS_ERROR")
+        return "Error";
+};
 var table;
 $(document)
     .ready(
@@ -62,7 +65,8 @@ $(document)
                                 "data": "dateTime"
                             },
                             {
-                                "data": "status"
+                                "data": "status",
+                                "render": changeData
                             },
                             {
                                 "data": "username"

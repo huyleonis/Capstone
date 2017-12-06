@@ -1,10 +1,9 @@
 
-var table1;
 function myFunction() {
     var licensePlate = $("#update-form-correct-licensePlate").val();
     var createdTime = $("#update-form-dateTime").val();
     var df = new Date(createdTime);
-    table1 = $('#table1')
+    var table1 = $('#table1')
             .DataTable(
                     {
                         "lengthMenu": [[5, 10, 20, -1],
