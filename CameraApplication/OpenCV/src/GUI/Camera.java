@@ -282,7 +282,7 @@ public class Camera extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-        webSource = new VideoCapture(0);
+        webSource = new VideoCapture(1);
         myThread = new DaemonThread();
         myThread.runnable = true;
         Thread t = new Thread(myThread);

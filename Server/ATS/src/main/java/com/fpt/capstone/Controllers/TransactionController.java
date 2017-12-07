@@ -17,8 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.ServletContext;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
@@ -443,5 +446,50 @@ public class TransactionController {
 
         return listFile;
     }
+    
+    @RequestMapping(value = "/updatePhoto")
+    public String updatePhoto(@RequestParam(name = "transId") String transId,
+            @RequestParam(name = "photo") String photo) {
 
+        boolean isSuccessful = false;
+
+        isSuccessful = transactionService.updatePhoto(transId, photo);
+        if (isSuccessful) {
+            InputStream is = null;
+            OutputStream os = null;
+            String basePath = context.getRealPath(".");
+            File folderSrc = new File(basePath + "/WEB-INF/images/dumps/" + photo + ".jpg");
+            File folderPlate = new File(basePath + "/WEB-INF/images/plates/" + photo + ".jpg");
+            try {
+                is = new FileInputStream(folderSrc);
+                os = new FileOutputStream(folderPlate);
+
+                byte[] buffer = new byte[1024];
+                int length;
+
+                while ((length = is.read(buffer)) > 0) {
+                    os.write(buffer, 0, length);
+                }
+
+                is.close();
+                os.close();
+
+                folderSrc.delete();
+
+                System.out.println("File transfer is successfuly");
+            } catch (IOException e) {
+                
+                System.out.println("Cannot transfer file dump");
+            }
+//
+//            if (!folderSrc.exists()) {
+//                return "success";
+//            }
+
+            return "success";
+        }
+
+        return "fail";
+    }
 }
+

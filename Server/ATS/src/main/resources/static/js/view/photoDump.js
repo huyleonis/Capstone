@@ -5,7 +5,9 @@
 //    var img = document.getElementById(id);
 //    img.style.visibility = (visible ? 'visible' : 'hidden');
 //}
-
+var showImange = function (data) {
+    return "<p><a href='/imgs/dumps/" + data + "' target='bettie'>Xem ảnh</a></p>";
+};
 
 $(document)
         .ready(
@@ -27,6 +29,7 @@ $(document)
                                         "columns": [
                                             {"data": null},
                                             {"data": "photoName",
+                                                "render": showImange
                                             },
                                             {"data": "licensePlate"},
                                             {"data": "createdTime"},
