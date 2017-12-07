@@ -6,28 +6,30 @@
 package ats.swing.gui;
 
 import ats.daos.TransactionDAO;
-import ats.daos.VehicleDAO;
 import ats.dtos.LoginDTO;
-import ats.dtos.TransactionDTO;
+import ats.dtos.TransactionDetailDTO;
 import ats.dtos.VehicleDTO;
 import ats.dtos.VehiclePayment;
-import ats.request.AutoPaymentRequest;
+import ats.request.LoginRequest;
 import ats.request.ManualPaymentRequest;
+import java.awt.BorderLayout;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.net.URI;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -36,44 +38,30 @@ import javax.swing.ImageIcon;
 public class MainForm extends javax.swing.JFrame {
 
     String localhost = "";
-    List<VehiclePayment> listGobal = new ArrayList<VehiclePayment>();
-//    Timer timer = new Timer(5000, new MyTimerActionListener());
+    JTable tblHistory = new JTable();
 
     /**
-     * Creates new form MainForm
+     * Khởi tạo mainform
      */
     public MainForm(LoginDTO loginDTO) {
         initComponents();
         setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
         lbId.setVisible(false);
-        //timer.start();
         txtHello.setText("Xin chào, " + loginDTO.getFullname());
-        Long role = loginDTO.getRole();
-        if (role == 2) {
-            paneTechnical.setVisible(false);
-            panePayment.setVisible(false);
-        }
+        txtLocalhost.setText(loginDTO.getLocalhost());
     }
 
-    public void clearForm() {
+    private void clearForm() throws IOException {
         txtLicensePlate.setText("");
         //lbId.setText("");
         lbPirce.setText("-");
         lbTypeName.setText("-");
-        lbTypeName.setText("-");
-        lbPicture.setIcon(null);
+
+        File f = new File("./src/picture/default_text.png");
+        Image image = ImageIO.read(f);
+        this.lbPicture.setIcon(new ImageIcon(image));
     }
 
-    //AutoPaymentRequest apr = new AutoPaymentRequest();
-    //list = apr.getListVehicleUnpaid(localhost);
-//    class MyTimerActionListener implements ActionListener {
-//
-//        public void actionPerformed(ActionEvent e) {
-//            //int idLane = Integer.parseInt(txtLane.getText().trim());
-////            List<VehiclePayment> list = apr.getListVehicleUnpaid(localhost);
-//            lbId.setText("Có " + 0 + " người Chưa thanh toán");
-//        }
-//    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -83,7 +71,7 @@ public class MainForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        menuTab = new javax.swing.JTabbedPane();
         tabHome = new javax.swing.JPanel();
         InfoPane = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -93,44 +81,37 @@ public class MainForm extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         lbTypeName = new javax.swing.JLabel();
         lbId = new javax.swing.JLabel();
+        btnClear = new javax.swing.JButton();
+        lbNotification = new javax.swing.JLabel();
         panelCamera = new javax.swing.JPanel();
         lbPicture = new javax.swing.JLabel();
         txtHello = new javax.swing.JLabel();
         btnManualPayment = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
         tabHistory = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblHistory = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         btnSearch = new javax.swing.JButton();
-        tabReport = new javax.swing.JPanel();
+        TablePane = new javax.swing.JPanel();
+        jLabel100 = new javax.swing.JLabel();
+        lbTotal = new javax.swing.JLabel();
+        btnPayTotal = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        lbWantPay = new javax.swing.JLabel();
+        btnPaymentWant = new javax.swing.JButton();
         tabSetting = new javax.swing.JPanel();
-        paneTechnical = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        txtLocalhost = new javax.swing.JTextField();
         panePayment = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        txtLane = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        txtStation = new javax.swing.JTextField();
+        txtStation = new javax.swing.JFormattedTextField();
+        txtLane = new javax.swing.JFormattedTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txtStationName = new javax.swing.JTextField();
         paneBasic = new javax.swing.JPanel();
         txtLogOut = new javax.swing.JButton();
-        menuBar = new javax.swing.JMenuBar();
-        fileMenu = new javax.swing.JMenu();
-        openMenuItem = new javax.swing.JMenuItem();
-        saveMenuItem = new javax.swing.JMenuItem();
-        saveAsMenuItem = new javax.swing.JMenuItem();
-        exitMenuItem = new javax.swing.JMenuItem();
-        editMenu = new javax.swing.JMenu();
-        cutMenuItem = new javax.swing.JMenuItem();
-        copyMenuItem = new javax.swing.JMenuItem();
-        pasteMenuItem = new javax.swing.JMenuItem();
-        deleteMenuItem = new javax.swing.JMenuItem();
-        helpMenu = new javax.swing.JMenu();
-        contentsMenuItem = new javax.swing.JMenuItem();
-        aboutMenuItem = new javax.swing.JMenuItem();
+        jLabel3 = new javax.swing.JLabel();
+        txtLocalhost = new javax.swing.JTextField();
+        btnCheckConnection = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(0, 0));
@@ -138,9 +119,9 @@ public class MainForm extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(1280, 720));
         getContentPane().setLayout(new java.awt.CardLayout());
 
-        jTabbedPane1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jTabbedPane1.setMinimumSize(new java.awt.Dimension(1280, 720));
-        jTabbedPane1.setPreferredSize(new java.awt.Dimension(1280, 720));
+        menuTab.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        menuTab.setMinimumSize(new java.awt.Dimension(1280, 720));
+        menuTab.setPreferredSize(new java.awt.Dimension(1280, 720));
 
         tabHome.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         tabHome.setPreferredSize(new java.awt.Dimension(1280, 720));
@@ -177,44 +158,73 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         lbPirce.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        lbPirce.setForeground(new java.awt.Color(255, 0, 51));
+        lbPirce.setForeground(new java.awt.Color(0, 0, 204));
         lbPirce.setText("-");
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel5.setText("Giá tiền:");
 
         lbTypeName.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        lbTypeName.setForeground(new java.awt.Color(255, 0, 51));
+        lbTypeName.setForeground(new java.awt.Color(0, 0, 204));
         lbTypeName.setText("-");
 
         lbId.setText("id");
+
+        btnClear.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnClear.setText("Làm mới (F5)");
+        btnClear.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
+        btnClear.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnClearKeyPressed(evt);
+            }
+        });
+
+        lbNotification.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lbNotification.setForeground(new java.awt.Color(255, 0, 0));
+        lbNotification.setText("...");
+        lbNotification.setToolTipText("Click để xem chi tiết");
+        lbNotification.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lbNotification.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbNotificationMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout InfoPaneLayout = new javax.swing.GroupLayout(InfoPane);
         InfoPane.setLayout(InfoPaneLayout);
         InfoPaneLayout.setHorizontalGroup(
             InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, InfoPaneLayout.createSequentialGroup()
-                .addContainerGap(81, Short.MAX_VALUE)
-                .addComponent(txtLicensePlate, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(80, 80, 80))
             .addGroup(InfoPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(InfoPaneLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(txtLicensePlate, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnClear))
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbId, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbTypeName, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbPirce, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(156, Short.MAX_VALUE))
+                    .addComponent(lbPirce, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbNotification))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         InfoPaneLayout.setVerticalGroup(
             InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(InfoPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addGap(11, 11, 11)
-                .addComponent(txtLicensePlate, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtLicensePlate, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -223,28 +233,34 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lbPirce)
-                .addGap(52, 52, 52)
+                .addGap(27, 27, 27)
+                .addComponent(lbNotification)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lbId)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         panelCamera.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        lbPicture.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbPicture.setToolTipText("Hình ảnh xe");
+        lbPicture.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         javax.swing.GroupLayout panelCameraLayout = new javax.swing.GroupLayout(panelCamera);
         panelCamera.setLayout(panelCameraLayout);
         panelCameraLayout.setHorizontalGroup(
             panelCameraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelCameraLayout.createSequentialGroup()
-                .addGap(102, 102, 102)
-                .addComponent(lbPicture, javax.swing.GroupLayout.PREFERRED_SIZE, 661, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(67, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCameraLayout.createSequentialGroup()
+                .addContainerGap(40, Short.MAX_VALUE)
+                .addComponent(lbPicture, javax.swing.GroupLayout.PREFERRED_SIZE, 719, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36))
         );
         panelCameraLayout.setVerticalGroup(
             panelCameraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelCameraLayout.createSequentialGroup()
-                .addGap(92, 92, 92)
-                .addComponent(lbPicture, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(85, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCameraLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lbPicture, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(64, 64, 64))
         );
 
         txtHello.setFont(new java.awt.Font("Arial", 2, 14)); // NOI18N
@@ -256,6 +272,7 @@ public class MainForm extends javax.swing.JFrame {
         btnManualPayment.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/750765_hand_512x512.png"))); // NOI18N
         btnManualPayment.setText("Đã Thu");
         btnManualPayment.setToolTipText("Ấn để tiến hành thu phí");
+        btnManualPayment.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnManualPayment.setName(""); // NOI18N
         btnManualPayment.setPreferredSize(new java.awt.Dimension(140, 40));
         btnManualPayment.addActionListener(new java.awt.event.ActionListener() {
@@ -269,94 +286,114 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("jButton2");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jLabel10.setText("Hệ thống thu phí ATS - FPT University - 2017");
 
         javax.swing.GroupLayout tabHomeLayout = new javax.swing.GroupLayout(tabHome);
         tabHome.setLayout(tabHomeLayout);
         tabHomeLayout.setHorizontalGroup(
             tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabHomeLayout.createSequentialGroup()
-                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(tabHomeLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(txtHello))
-                    .addGroup(tabHomeLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(InfoPane, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(tabHomeLayout.createSequentialGroup()
-                        .addGap(64, 64, 64)
-                        .addComponent(btnManualPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(panelCamera, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(141, 141, 141)
-                .addComponent(jButton2)
-                .addGap(297, 297, 297))
+                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel10)
+                    .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(tabHomeLayout.createSequentialGroup()
+                            .addGap(20, 20, 20)
+                            .addComponent(txtHello))
+                        .addGroup(tabHomeLayout.createSequentialGroup()
+                            .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(tabHomeLayout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addComponent(InfoPane, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(tabHomeLayout.createSequentialGroup()
+                                    .addGap(50, 50, 50)
+                                    .addComponent(btnManualPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGap(18, 18, 18)
+                            .addComponent(panelCamera, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
         tabHomeLayout.setVerticalGroup(
             tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabHomeLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(txtHello)
+                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tabHomeLayout.createSequentialGroup()
-                        .addComponent(txtHello)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(InfoPane, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnManualPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(panelCamera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addContainerGap(49, Short.MAX_VALUE))
+                        .addComponent(InfoPane, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnManualPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(tabHomeLayout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addComponent(panelCamera, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
+                .addComponent(jLabel10)
+                .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Thu Phí", tabHome);
+        menuTab.addTab("Thu Phí", tabHome);
         tabHome.getAccessibleContext().setAccessibleName("");
 
-        tblHistory.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        tblHistory.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        tblHistory.setSelectionBackground(new java.awt.Color(255, 255, 153));
-        jScrollPane1.setViewportView(tblHistory);
-
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel1.setText("Tìm kiếm theo số xe");
-
-        txtSearch.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        txtSearch.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         txtSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtSearchActionPerformed(evt);
             }
         });
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSearchKeyPressed(evt);
+            }
+        });
 
-        btnSearch.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel1.setText("Biển số xe:");
+
         btnSearch.setText("Tìm kiếm");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        TablePane.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Danh sách giao dịch", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 16), new java.awt.Color(0, 0, 255))); // NOI18N
+        TablePane.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                TablePaneMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                TablePaneMouseReleased(evt);
+            }
+        });
+        TablePane.setLayout(new java.awt.BorderLayout());
+
+        jLabel100.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel100.setText("Tổng số tiền chưa thanh toán: ");
+
+        lbTotal.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        lbTotal.setForeground(new java.awt.Color(255, 0, 51));
+
+        btnPayTotal.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnPayTotal.setText("Chọn tất cả");
+        btnPayTotal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPayTotalActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel9.setText("Số tiền muốn thanh toán: ");
+
+        lbWantPay.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lbWantPay.setForeground(new java.awt.Color(51, 51, 255));
+        lbWantPay.setText("0 đồng");
+
+        btnPaymentWant.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnPaymentWant.setText("Thanh toán");
+        btnPaymentWant.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPaymentWantActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout tabHistoryLayout = new javax.swing.GroupLayout(tabHistory);
         tabHistory.setLayout(tabHistoryLayout);
@@ -365,95 +402,90 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(tabHistoryLayout.createSequentialGroup()
                 .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tabHistoryLayout.createSequentialGroup()
-                        .addGap(224, 224, 224)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnSearch))
+                        .addContainerGap()
+                        .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TablePane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(tabHistoryLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnPayTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(tabHistoryLayout.createSequentialGroup()
-                        .addGap(85, 85, 85)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(90, Short.MAX_VALUE))
+                        .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(tabHistoryLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel100))
+                                .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHistoryLayout.createSequentialGroup()
+                                        .addGap(6, 6, 6)
+                                        .addComponent(lbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(tabHistoryLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lbWantPay, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(tabHistoryLayout.createSequentialGroup()
+                                                .addGap(20, 20, 20)
+                                                .addComponent(btnPaymentWant, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                            .addGroup(tabHistoryLayout.createSequentialGroup()
+                                .addGap(359, 359, 359)
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 492, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         tabHistoryLayout.setVerticalGroup(
             tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHistoryLayout.createSequentialGroup()
-                .addGap(59, 59, 59)
-                .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSearch))
-                .addGap(44, 44, 44)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(116, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Lịch Sử Giao Dịch", tabHistory);
-        tabHistory.getAccessibleContext().setAccessibleName("");
-
-        javax.swing.GroupLayout tabReportLayout = new javax.swing.GroupLayout(tabReport);
-        tabReport.setLayout(tabReportLayout);
-        tabReportLayout.setHorizontalGroup(
-            tabReportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1275, Short.MAX_VALUE)
-        );
-        tabReportLayout.setVerticalGroup(
-            tabReportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 677, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Báo Cáo và Phân Tích", tabReport);
-        tabReport.getAccessibleContext().setAccessibleName("");
-        tabReport.getAccessibleContext().setAccessibleDescription("");
-
-        paneTechnical.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông số kĩ thuật", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 24), new java.awt.Color(0, 51, 255))); // NOI18N
-
-        jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel3.setText("LOCALHOST: ");
-
-        txtLocalhost.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        txtLocalhost.setText("http://localhost:8080");
-        txtLocalhost.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtLocalhostActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout paneTechnicalLayout = new javax.swing.GroupLayout(paneTechnical);
-        paneTechnical.setLayout(paneTechnicalLayout);
-        paneTechnicalLayout.setHorizontalGroup(
-            paneTechnicalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(paneTechnicalLayout.createSequentialGroup()
+                .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(tabHistoryLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnPayTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(tabHistoryLayout.createSequentialGroup()
+                        .addGap(57, 57, 57)
+                        .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                        .addComponent(TablePane, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel100))))
                 .addGap(29, 29, 29)
-                .addComponent(jLabel3)
+                .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(lbWantPay))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtLocalhost, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(141, Short.MAX_VALUE))
+                .addComponent(btnPaymentWant, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(108, 108, 108))
         );
-        paneTechnicalLayout.setVerticalGroup(
-            paneTechnicalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(paneTechnicalLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(paneTechnicalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtLocalhost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(245, Short.MAX_VALUE))
-        );
+
+        menuTab.addTab("Lịch Sử Giao Dịch", tabHistory);
 
         panePayment.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Thông tin thu phí", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 24), new java.awt.Color(0, 51, 255))); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel7.setText("Làn xe");
 
-        txtLane.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        txtLane.setText("1");
-
         jLabel8.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jLabel8.setText("Tên trạm thu");
+        jLabel8.setText("Mã số trạm");
 
-        txtStation.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        txtStation.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat(""))));
         txtStation.setText("1");
+        txtStation.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+
+        txtLane.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat(""))));
+        txtLane.setText("1");
+        txtLane.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel6.setText("Tên trạm");
+
+        txtStationName.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
 
         javax.swing.GroupLayout panePaymentLayout = new javax.swing.GroupLayout(panePayment);
         panePayment.setLayout(panePaymentLayout);
@@ -462,26 +494,32 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(panePaymentLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panePaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel6)
                     .addComponent(jLabel8)
                     .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(panePaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtStation, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtLane, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(269, Short.MAX_VALUE))
+                    .addComponent(txtLane, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtStation, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtStationName, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
         panePaymentLayout.setVerticalGroup(
             panePaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panePaymentLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
+                .addGap(23, 23, 23)
                 .addGroup(panePaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(txtStation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
-                .addGroup(panePaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(23, 23, 23)
+                .addGroup(panePaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtStationName, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(panePaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txtLane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(146, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         paneBasic.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cài đặt cơ bản", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 24), new java.awt.Color(0, 51, 255))); // NOI18N
@@ -499,21 +537,56 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel3.setText("Địa chỉ máy chủ");
+
+        txtLocalhost.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        txtLocalhost.setText("http://localhost:8080");
+        txtLocalhost.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtLocalhostActionPerformed(evt);
+            }
+        });
+
+        btnCheckConnection.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnCheckConnection.setText("Kiểm tra kết nối");
+        btnCheckConnection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCheckConnectionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout paneBasicLayout = new javax.swing.GroupLayout(paneBasic);
         paneBasic.setLayout(paneBasicLayout);
         paneBasicLayout.setHorizontalGroup(
             paneBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, paneBasicLayout.createSequentialGroup()
-                .addContainerGap(295, Short.MAX_VALUE)
-                .addComponent(txtLogOut)
-                .addContainerGap())
+            .addGroup(paneBasicLayout.createSequentialGroup()
+                .addGroup(paneBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, paneBasicLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(paneBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addGroup(paneBasicLayout.createSequentialGroup()
+                                .addComponent(txtLocalhost, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnCheckConnection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(paneBasicLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(txtLogOut)))
+                .addGap(114, 114, 114))
         );
         paneBasicLayout.setVerticalGroup(
             paneBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, paneBasicLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(paneBasicLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(paneBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtLocalhost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCheckConnection, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(txtLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(48, 48, 48))
         );
 
         javax.swing.GroupLayout tabSettingLayout = new javax.swing.GroupLayout(tabSetting);
@@ -521,223 +594,49 @@ public class MainForm extends javax.swing.JFrame {
         tabSettingLayout.setHorizontalGroup(
             tabSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabSettingLayout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addGroup(tabSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(tabSettingLayout.createSequentialGroup()
-                        .addComponent(paneTechnical, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(tabSettingLayout.createSequentialGroup()
-                        .addComponent(paneBasic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-                        .addComponent(panePayment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37))))
+                .addContainerGap(17, Short.MAX_VALUE)
+                .addComponent(paneBasic, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(panePayment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(397, 397, 397))
         );
         tabSettingLayout.setVerticalGroup(
             tabSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabSettingLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(tabSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(panePayment, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(paneBasic, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addComponent(paneTechnical, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                    .addComponent(paneBasic, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panePayment, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(408, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Cài Đặt", tabSetting);
+        menuTab.addTab("Cài Đặt", tabSetting);
 
-        getContentPane().add(jTabbedPane1, "card2");
-        jTabbedPane1.getAccessibleContext().setAccessibleName("JTabbedPane");
-
-        fileMenu.setMnemonic('f');
-        fileMenu.setText("File");
-
-        openMenuItem.setMnemonic('o');
-        openMenuItem.setText("Open");
-        fileMenu.add(openMenuItem);
-
-        saveMenuItem.setMnemonic('s');
-        saveMenuItem.setText("Save");
-        fileMenu.add(saveMenuItem);
-
-        saveAsMenuItem.setMnemonic('a');
-        saveAsMenuItem.setText("Save As ...");
-        saveAsMenuItem.setDisplayedMnemonicIndex(5);
-        fileMenu.add(saveAsMenuItem);
-
-        exitMenuItem.setMnemonic('x');
-        exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exitMenuItemActionPerformed(evt);
-            }
-        });
-        fileMenu.add(exitMenuItem);
-
-        menuBar.add(fileMenu);
-
-        editMenu.setMnemonic('e');
-        editMenu.setText("Edit");
-
-        cutMenuItem.setMnemonic('t');
-        cutMenuItem.setText("Cut");
-        editMenu.add(cutMenuItem);
-
-        copyMenuItem.setMnemonic('y');
-        copyMenuItem.setText("Copy");
-        editMenu.add(copyMenuItem);
-
-        pasteMenuItem.setMnemonic('p');
-        pasteMenuItem.setText("Paste");
-        editMenu.add(pasteMenuItem);
-
-        deleteMenuItem.setMnemonic('d');
-        deleteMenuItem.setText("Delete");
-        editMenu.add(deleteMenuItem);
-
-        menuBar.add(editMenu);
-
-        helpMenu.setMnemonic('h');
-        helpMenu.setText("Help");
-
-        contentsMenuItem.setMnemonic('c');
-        contentsMenuItem.setText("Contents");
-        helpMenu.add(contentsMenuItem);
-
-        aboutMenuItem.setMnemonic('a');
-        aboutMenuItem.setText("About");
-        helpMenu.add(aboutMenuItem);
-
-        menuBar.add(helpMenu);
-
-        setJMenuBar(menuBar);
+        getContentPane().add(menuTab, "card2");
+        menuTab.getAccessibleContext().setAccessibleName("JTabbedPane");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_exitMenuItemActionPerformed
-
-    /**
-     * Event của button "Đã thu" Staff nhập biển số xe và gửi request lên server
-     * yêu cầu thanh toán thủ công
-     *
-     * input licensePlate, idLane
-     *
-     * @return typeVehicle, price
-     */
-    private void btnManualPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManualPaymentActionPerformed
-
-        ManualPaymentRequest rs = new ManualPaymentRequest();
-
-        TransactionDAO dao = new TransactionDAO();
-
-        try {
-            boolean flag = false;
-            String licensePlate = txtLicensePlate.getText().toUpperCase().trim();
-            int idLane = Integer.parseInt(txtLane.getText().trim());
-            AutoPaymentRequest apr = new AutoPaymentRequest();
-            List<VehiclePayment> list = apr.getListVehicleUnpaid(localhost);
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).getLicensePlate().equals(licensePlate)) {
-                    rs.finishManualPayment(list.get(i).getId(), localhost);
-                    list.remove(i);
-                    clearForm();
-                    flag = true;
-                }
-            }
-            if (flag == false) {
-                boolean check = dao.insertTransaction(licensePlate, idLane, null);
-                if (check) {
-                    clearForm();
-                }
-
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+    private void btnCheckConnectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckConnectionActionPerformed
+        String localhost = txtLocalhost.getText().trim();
+        LoginRequest lp = new LoginRequest();
+        boolean check = lp.checkConnection(localhost);
+        if (check) {
+            JOptionPane.showMessageDialog(null, "Kết nối thành công!", "Kiểm tra kết nối", JOptionPane.OK_OPTION);
+        } else {
+            JOptionPane.showMessageDialog(null, "Kết nối thất bại! Xin thử lại", "Kiểm tra kết nối", JOptionPane.OK_OPTION);
         }
-    }//GEN-LAST:event_btnManualPaymentActionPerformed
+    }//GEN-LAST:event_btnCheckConnectionActionPerformed
 
-    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+    private void txtLocalhostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLocalhostActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtSearchActionPerformed
+    }//GEN-LAST:event_txtLocalhostActionPerformed
 
-
-    private void txtLicensePlateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLicensePlateActionPerformed
-
-    }//GEN-LAST:event_txtLicensePlateActionPerformed
-
-    /**
-     * Event lấy dữ liệu xe gồm loại xe, giá xe từ biển số xe do Staff nhập vào
-     *
-     * input licensePlate, idLane
-     *
-     * @return typeVehicle, price
-     */
-    private void txtLicensePlateCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtLicensePlateCaretUpdate
-        localhost = txtLocalhost.getText().trim();
-        String licensePlate = txtLicensePlate.getText();
-        int stationId = Integer.parseInt(txtStation.getText().trim());
-        VehicleDAO dao = new VehicleDAO();
-        ManualPaymentRequest mpr = new ManualPaymentRequest();
-        AutoPaymentRequest apr = new AutoPaymentRequest();
-        try {
-            int vehicleId = dao.findVehicleByLicensePlate(licensePlate);
-
-            VehiclePayment vp = mpr.getCapturedTransaction(vehicleId, stationId, localhost);
-            
-            String photo = vp.getPhoto();
-            
-            
-            if (photo != null) {
-                String path = localhost + "/imgs/plates/" + photo + ".jpg";
-                System.out.println("Get Image from " + path);
-                URL url = new URL(path);
-                Image image = ImageIO.read(url);
-                System.out.println("Load image into frame...");
-                //JLabel label = new JLabel(new ImageIcon(image));
-                this.lbPicture.setIcon(new ImageIcon(image));
-            } else {
-                File defaultImg = new File("./src/picture/default.png");
-                Image image = ImageIO.read(defaultImg);
-                this.lbPicture.setIcon(new ImageIcon(image));
-            }
-
-        } catch (Exception ex) {
-            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        //String path = "http://localhost:8080/imgs/plates/52S3333_1510494372521.jpg";
-
-//          
-        DecimalFormat formatter = new DecimalFormat("###,###,###.##");
-        int idLane = Integer.parseInt(txtLane.getText().trim());
-        try {
-            VehicleDTO dto = mpr.getInfoVehicle(licensePlate, idLane, localhost);
-            if (dto != null) {
-                if (dto.getPrice() != null) {
-                    lbPirce.setText(formatter.format(dto.getPrice()) + " đồng");
-                } else {
-                    lbPirce.setText("-");
-                }
-                if (dto.getTypeVehicle() != null) {
-                    lbTypeName.setText(dto.getTypeVehicle());
-                } else {
-                    lbTypeName.setText("-");
-                }
-
-            } else {
-                lbPirce.setText("-");
-                lbTypeName.setText("-");
-
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(MainForm.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-
-        //dto = null;
-    }//GEN-LAST:event_txtLicensePlateCaretUpdate
+    private void txtLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLogOutActionPerformed
+        this.setVisible(false);
+        GlobalVar.login.setVisible(true);
+    }//GEN-LAST:event_txtLogOutActionPerformed
 
     /**
      * Event ấn nút Enter của button "Đã thu"
@@ -750,105 +649,422 @@ public class MainForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnManualPaymentKeyPressed
 
+    /**
+     * Event của button "Đã thu" Staff nhập biển số xe và gửi request lên server
+     * yêu cầu thanh toán thủ công
+     *
+     * input licensePlate, idLane
+     *
+     * @return typeVehicle, price
+     */
+    private void btnManualPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManualPaymentActionPerformed
+
+        ManualPaymentRequest rs = new ManualPaymentRequest();
+        TransactionDAO dao = new TransactionDAO();
+        String licensePlate = txtLicensePlate.getText().toUpperCase().trim();
+        String id = lbId.getText().trim();
+        localhost = txtLocalhost.getText().trim();
+        int landId = Integer.parseInt(txtLane.getText().trim());
+        try {
+            if ("".equals(id)) {
+                VehiclePayment vp = rs.insertManualPayment(licensePlate, landId, localhost);
+                if ("".equals(vp.getId())) {
+                    boolean check = dao.insertTransaction(licensePlate, landId, null);
+                    if (check) {
+                        clearForm();
+                    }
+                } else {
+                    //rs.insertManualPayment(licensePlate, landId, localhost);
+                    rs.finishManualPayment(vp.getId(), localhost);
+                    clearForm();
+                }
+            } else {
+                rs.finishManualPayment(id, localhost);
+                clearForm();
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnManualPaymentActionPerformed
+
+    private void btnClearKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnClearKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_F5) {
+            btnClear.doClick();
+        }
+    }//GEN-LAST:event_btnClearKeyPressed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        try {
+            clearForm();
+        } catch (IOException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnClearActionPerformed
+
     private void txtLicensePlateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLicensePlateKeyPressed
+
+        // Sự kiện Ấn nút F5
+        if (evt.getKeyCode() == KeyEvent.VK_F5) {
+            btnClear.doClick();
+        }
+//        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+//            
+//        }
 
     }//GEN-LAST:event_txtLicensePlateKeyPressed
 
+    private void txtLicensePlateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLicensePlateActionPerformed
+        localhost = txtLocalhost.getText().trim();
+        String licensePlate = txtLicensePlate.getText().toUpperCase().trim();
+        int stationId = Integer.parseInt(txtStation.getText().trim());
+        DecimalFormat formatter = new DecimalFormat("###,###,###.##");
+        //VehicleDAO dao = new VehicleDAO();
+        ManualPaymentRequest mpr = new ManualPaymentRequest();
+        if (licensePlate.matches("^\\d{2}[A-Z]\\d{4,5}$")) {
+            try {
+                /*Bắt đầu lấy dữ liệu của xe để show lên màn hình*/
+                VehicleDTO vehicleDTO = mpr.getInfoVehicle(licensePlate, stationId, localhost);
+                if (vehicleDTO != null) {
+                    if (vehicleDTO.getPrice() != null) {
+                        lbPirce.setText(formatter.format(vehicleDTO.getPrice()) + " đồng");
+                    } else {
+                        lbPirce.setText("-");
+                    }
+                    if (vehicleDTO.getTypeVehicle() != null) {
+                        lbTypeName.setText(vehicleDTO.getTypeVehicle());
+                    } else {
+                        lbTypeName.setText("-");
+                    }
 
-    private void txtLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLogOutActionPerformed
-        this.setVisible(false);
-        GlobalVar.login.setVisible(true);
-    }//GEN-LAST:event_txtLogOutActionPerformed
+                } else {
+                    lbPirce.setText("-");
+                    lbTypeName.setText("-");
+                }
 
-    private void txtLocalhostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLocalhostActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtLocalhostActionPerformed
+                /*Kiểm tra giao dịch đã tồn tại trên hệ thống chưa*/
+                //int vehicleId = dao.findVehicleByLicensePlate(licensePlate);
+                VehiclePayment vp = mpr.getCapturedTransaction(licensePlate, stationId, localhost);
+                String photo = vp.getPhoto();
+                String transactionId = vp.getId();
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-//        webSource = new VideoCapture(0);
-//        myThread = new DaemonThread();
-//        Thread t = new Thread(myThread);
-//        t.setDaemon(true);
-//        myThread.runnable = true;
-//        t.start();
-//        jButton1.setEnabled(false);  //start button
-//        jButton2.setEnabled(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+                if (transactionId != null) {
+                    lbId.setText(transactionId);
+                } else {
+                    lbId.setText("");
+                }
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-//        myThread.runnable = false;
-//        jButton2.setEnabled(false);
-//        jButton1.setEnabled(true);
-//
-//        webSource.release();
-    }//GEN-LAST:event_jButton2ActionPerformed
+                if (photo != null) {
+                    //                    //loading gif
+                    //                    File defaultImg = new File("./src/picture/giphy.gif");
+                    //                    Image imageLoading = ImageIO.read(defaultImg);
+                    //                    this.lbPicture.setIcon(new ImageIcon(imageLoading));
+                    //
+                    //                    Thread.sleep(1000);
+                    String path = localhost + "/imgs/plates/" + photo;
+                    System.out.println("Get Image from " + path);
+
+                    //Download image
+                    URL url = new URL(path);
+                    Image image = ImageIO.read(url);
+                    System.out.println("Load image into frame...");
+                    //JLabel label = new JLabel(new ImageIcon(image));
+                    this.lbPicture.setIcon(new ImageIcon(image));
+                } else {
+                    File defaultImg = new File("./src/picture/default_text.png");
+                    Image image = ImageIO.read(defaultImg);
+                    this.lbPicture.setIcon(new ImageIcon(image));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(MainForm.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        try {
+            List<TransactionDetailDTO> list = mpr.listTransactionNotPay(licensePlate, localhost);
+            if (list.size() > 0) {
+                lbNotification.setText("Phương tiện " + licensePlate + " còn " + list.size() + " giao dịch chưa thanh toán!");
+            } else {
+                lbNotification.setText("...");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_txtLicensePlateActionPerformed
+
+    /**
+     * Event lấy dữ liệu xe gồm loại xe, giá xe từ biển số xe do Staff nhập vào
+     *
+     * input licensePlate, idLane
+     *
+     * @return typeVehicle, price
+     */
+    private void txtLicensePlateCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtLicensePlateCaretUpdate
+
+    }//GEN-LAST:event_txtLicensePlateCaretUpdate
+
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+
+
+    }//GEN-LAST:event_txtSearchActionPerformed
+
+    private String changeStatus(String status) {
+        switch (status) {
+            case "TRANS_ERROR":
+                return "Thanh toán lỗi";
+            case "TRANS_FAILED":
+                return "Thanh toán thất bại";
+            default:
+                return "Chưa thanh toán";
+        }
+    }
+
+    private String changeType(String type) {
+        switch (type) {
+            case "MANUAL":
+                return "Thanh toán thủ công";
+            case "AUTOMATION":
+                return "Thanh toán tự động";
+            default:
+                return "Chưa xác định";
+        }
+    }
+
+    private String changePrice(String price) {
+        String priceValue = "";
+        String priceValue2 = "";
+        if (price.length() == 11) {
+            priceValue = price.substring(0, 6);
+            priceValue2 = priceValue.replace(",", "");
+        } else if (price.length() == 12) {
+            priceValue = price.substring(0, 7);
+            priceValue2 = priceValue.replace(",", "");
+        } else if (price.length() == 10) {
+            priceValue = price.substring(0, 5);
+            priceValue2 = priceValue.replace(",", "");
+        }
+
+        return priceValue2;
+    }
+
+    private void getTable(String licensePlate, String localhost) {
+        //JCheckBox checkbox = new JCheckBox();
+        DecimalFormat formatter = new DecimalFormat("###,###,###.##");
+        ManualPaymentRequest mpr = new ManualPaymentRequest();
+        List<TransactionDetailDTO> list;
+        String col[] = {"#", "Id", "Biển số xe", "Loại xe", "Giá", "Loại giao dịch", "Ngày tháng", "Trạng Thái", "Hình ảnh", "Trả phí"};
+        DefaultTableModel tbl = new DefaultTableModel() {
+            @Override
+            public Class<?> getColumnClass(int column) {
+                switch (column) {
+                    case 0:
+                        return Integer.class;
+                    case 1:
+                        return String.class;
+                    case 2:
+                        return String.class;
+                    case 3:
+                        return String.class;
+                    case 4:
+                        return String.class;
+                    case 5:
+                        return String.class;
+                    case 6:
+                        return String.class;
+                    case 7:
+                        return String.class;
+                    case 8:
+                        return String.class;
+                    case 9:
+                        return Boolean.class;
+                    default:
+                        return String.class;
+                }
+            }
+        };
+        double total = 0.0;
+
+        tblHistory.setModel(tbl);
+        tbl.setColumnIdentifiers(col);
+        try {
+            list = mpr.listTransactionNotPay(licensePlate, localhost);
+            if (list.size() > 0) {
+                for (int i = 0; i < list.size(); i++) {
+                    Object ojb[] = {i + 1 + "", list.get(i).getId(), list.get(i).getLicensePlate(), list.get(i).getTypeVehicle(),
+                        formatter.format(list.get(i).getPrice()) + " đồng", changeType(list.get(i).getType()), list.get(i).getDateTime(), changeStatus(list.get(i).getStaus()),
+                        list.get(i).getPhoto(), false};
+                    total += list.get(i).getPrice();
+                    tbl.addRow(ojb);
+                }
+            }
+
+            tblHistory.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+            TableColumn index = tblHistory.getColumnModel().getColumn(0);
+            index.setPreferredWidth(40);
+            TableColumn id = tblHistory.getColumnModel().getColumn(1);
+            id.setPreferredWidth(120);
+            TableColumn plate = tblHistory.getColumnModel().getColumn(2);
+            plate.setPreferredWidth(100);
+            TableColumn typeVehicle = tblHistory.getColumnModel().getColumn(3);
+            typeVehicle.setPreferredWidth(150);
+            TableColumn price = tblHistory.getColumnModel().getColumn(4);
+            price.setPreferredWidth(130);
+            TableColumn type = tblHistory.getColumnModel().getColumn(5);
+            type.setPreferredWidth(135);
+            TableColumn date = tblHistory.getColumnModel().getColumn(6);
+            date.setPreferredWidth(200);
+            TableColumn status = tblHistory.getColumnModel().getColumn(7);
+            status.setPreferredWidth(200);
+            TableColumn photo = tblHistory.getColumnModel().getColumn(8);
+            photo.setPreferredWidth(100);
+            TableColumn button = tblHistory.getColumnModel().getColumn(9);
+            button.setPreferredWidth(150);
+            JScrollPane tableContainer = new JScrollPane(tblHistory);
+            TablePane.add(tableContainer, BorderLayout.CENTER);
+            repaint();
+            revalidate();
+            lbTotal.setText(formatter.format(total) + " đồng");
+        } catch (Exception ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+
+        String search = txtSearch.getText().trim();
+        String localhost = txtLocalhost.getText().trim();
+        getTable(search, localhost);
+    }//GEN-LAST:event_btnSearchActionPerformed
+    boolean checkAll = false;
+    private void btnPayTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPayTotalActionPerformed
+        DecimalFormat formatter = new DecimalFormat("###,###,###.##");
+        double money = 0.0;
+        if (checkAll) {
+            btnPayTotal.setText("Bỏ tất cả");
+            for (int i = 0; i < tblHistory.getRowCount(); i++) {
+                tblHistory.setValueAt(true, i, 9);
+                String price = tblHistory.getValueAt(i, 4).toString();
+                money += Double.parseDouble(changePrice(price));
+            }
+            lbWantPay.setText(formatter.format(money) + " đồng");
+            checkAll = false;
+        } else {
+            btnPayTotal.setText("Chọn tất cả");
+            for (int i = 0; i < tblHistory.getRowCount(); i++) {
+                tblHistory.setValueAt(false, i, 9);
+            }
+            checkAll = true;
+            lbWantPay.setText(formatter.format(0) + " đồng");
+        }
+    }//GEN-LAST:event_btnPayTotalActionPerformed
+
+    private void txtSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            btnSearch.doClick();
+        }
+    }//GEN-LAST:event_txtSearchKeyPressed
+
+    private void lbNotificationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbNotificationMouseClicked
+        menuTab.setSelectedIndex(1);
+        txtSearch.setText(txtLicensePlate.getText().trim());
+        btnSearch.doClick();
+    }//GEN-LAST:event_lbNotificationMouseClicked
+
+    private void btnPaymentWantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaymentWantActionPerformed
+        ManualPaymentRequest mpr = new ManualPaymentRequest();
+        String localhost = txtLocalhost.getText().trim();
+        for (int i = 0; i < tblHistory.getRowCount(); i++) {
+            Boolean checked = Boolean.valueOf(tblHistory.getValueAt(i, 9).toString());
+            String id = tblHistory.getValueAt(i, 1).toString();
+            if (checked) {
+                try {
+                    mpr.finishManualPayment(id, localhost);
+                } catch (Exception ex) {
+                    Logger.getLogger(MainForm.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        lbWantPay.setText("0 đồng");
+        btnSearch.doClick();
+    }//GEN-LAST:event_btnPaymentWantActionPerformed
+
+    private void TablePaneMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablePaneMousePressed
+
+    }//GEN-LAST:event_TablePaneMousePressed
+
+    private void TablePaneMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablePaneMouseReleased
+        double money = 0.0;
+        DecimalFormat formatter = new DecimalFormat("###,###,###.##");
+        for (int i = 0; i < tblHistory.getRowCount(); i++) {
+            Boolean checked = Boolean.valueOf(tblHistory.getValueAt(i, 9).toString());
+            String price = tblHistory.getValueAt(i, 4).toString();
+            //money += Double.parseDouble(changePrice(price));
+            if (checked) {
+               money += Double.parseDouble(changePrice(price));
+            }
+            lbWantPay.setText(formatter.format(money) + " đồng");
+        }
+    }//GEN-LAST:event_TablePaneMouseReleased
 
     /**
      * @param args the command line arguments
      */
-//    public static void main(String args[]) {
-//        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//
-//            public void run() {
-//                LoginDTO dto = new LoginDTO("hieu", 1L, "Chi Hieu");
-//                new MainForm(dto).setVisible(true);
-//
-//            }
-//        });
-//
-//    }
+    //    public static void main(String args[]) {
+    //        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    //        /* Create and display the form */
+    //        java.awt.EventQueue.invokeLater(new Runnable() {
+    //
+    //            public void run() {
+    //                LoginDTO dto = new LoginDTO("hieu", 1L, "Chi Hieu");
+    //                new MainForm(dto).setVisible(true);
+    //
+    //            }
+    //        });
+    //
+    //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel InfoPane;
-    private javax.swing.JMenuItem aboutMenuItem;
+    private javax.swing.JPanel TablePane;
+    private javax.swing.JButton btnCheckConnection;
+    private javax.swing.JButton btnClear;
     private javax.swing.JButton btnManualPayment;
+    private javax.swing.JButton btnPayTotal;
+    private javax.swing.JButton btnPaymentWant;
     private javax.swing.JButton btnSearch;
-    private javax.swing.JMenuItem contentsMenuItem;
-    private javax.swing.JMenuItem copyMenuItem;
-    private javax.swing.JMenuItem cutMenuItem;
-    private javax.swing.JMenuItem deleteMenuItem;
-    private javax.swing.JMenu editMenu;
-    private javax.swing.JMenuItem exitMenuItem;
-    private javax.swing.JMenu fileMenu;
-    private javax.swing.JMenu helpMenu;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel100;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel lbId;
+    private javax.swing.JLabel lbNotification;
     private javax.swing.JLabel lbPicture;
     private javax.swing.JLabel lbPirce;
+    private javax.swing.JLabel lbTotal;
     private javax.swing.JLabel lbTypeName;
-    private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenuItem openMenuItem;
+    private javax.swing.JLabel lbWantPay;
+    private javax.swing.JTabbedPane menuTab;
     private javax.swing.JPanel paneBasic;
     private javax.swing.JPanel panePayment;
-    private javax.swing.JPanel paneTechnical;
     private javax.swing.JPanel panelCamera;
-    private javax.swing.JMenuItem pasteMenuItem;
-    private javax.swing.JMenuItem saveAsMenuItem;
-    private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JPanel tabHistory;
     private javax.swing.JPanel tabHome;
-    private javax.swing.JPanel tabReport;
     private javax.swing.JPanel tabSetting;
-    private javax.swing.JTable tblHistory;
     private javax.swing.JLabel txtHello;
-    private javax.swing.JTextField txtLane;
+    private javax.swing.JFormattedTextField txtLane;
     private javax.swing.JTextField txtLicensePlate;
     private javax.swing.JTextField txtLocalhost;
     private javax.swing.JButton txtLogOut;
     private javax.swing.JTextField txtSearch;
-    private javax.swing.JTextField txtStation;
+    private javax.swing.JFormattedTextField txtStation;
+    private javax.swing.JTextField txtStationName;
     // End of variables declaration//GEN-END:variables
 
 }

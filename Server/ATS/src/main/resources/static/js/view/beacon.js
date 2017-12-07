@@ -120,7 +120,7 @@ $(document)
                                             {// column for view
                                                 // detail-update-delete
                                                 "data": null,
-                                                "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>"                                                        
+                                                "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>"
                                             }],
                                         "columnDefs": [{
                                             "searchable": false,
@@ -244,7 +244,7 @@ function openUpdateModal(element) {
     $("#update-form-type").val(data.type);
     $("#update-form-laneId").val(data.laneId);
     $("#update-form-stationId").val(data.stationId);
-    $("#update-form-active").val(data.active);
+
     curr = {
     	"id": data.id,
     	"uuid": data.uuid,
@@ -257,9 +257,8 @@ function openUpdateModal(element) {
         "station": {
             "id": data.stationId
         },
-        "active": data.active
+        "active": 'true'
     };
-    clearErrorUpdate();
     $("#update-modal").modal('toggle');
 }
 
@@ -269,19 +268,6 @@ function clearUpdateForm() {
     $("#delete-modal").modal("hide");
 }
 
-function clearError() {
-    document.getElementById("nameError").innerHTML = "";
-    document.getElementById("codeError").innerHTML = "";
-    document.getElementById("code").value = "";
-    document.getElementById("name").value = "";
-    $("#save").prop('disabled', false);
-}
-
-function clearErrorUpdate() {
-    document.getElementById("nameErrorUpdate").innerHTML = "";
-    document.getElementById("codeErrorUpdate").innerHTML = "";
-    $("#update").prop('disabled', false);
-}
 
 // clear the div inform save delete status
 function clearStatus() {

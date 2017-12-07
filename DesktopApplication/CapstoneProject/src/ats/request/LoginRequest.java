@@ -28,10 +28,12 @@ public class LoginRequest {
      *
      * @param username Tên tài khoản
      * @param password Mật khẩu đăng nhập
+     * @param localhost
      * @return LoginDTO(username, role, fullname)
+     * @throws java.lang.Exception
      */
     public LoginDTO checkLogin(String username, String password, String localhost) throws Exception {
-        String urlName = localhost + "/login/checkLogin/" + username + "/" + password;
+        String urlName = localhost + "/account/checkLogin/" + username + "/" + password;
         JSONParser parser = new JSONParser();
         LoginDTO loginDTO = new LoginDTO();
         try {
@@ -56,5 +58,23 @@ public class LoginRequest {
         } catch (IOException e) {
         }
         return loginDTO;
+    }
+    
+    public boolean checkConnection(String localhost){
+        boolean check = false;
+        String urlName = localhost + "/ats/checkConnection";
+        try {
+            URL oracle = new URL(urlName); // URL to Parse
+            URLConnection yc = oracle.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+            if((in.readLine()) != null) {
+              check = true;  
+            }
+            in.close();
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        }
+        
+        return check;
     }
 }

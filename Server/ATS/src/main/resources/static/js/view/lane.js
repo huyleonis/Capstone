@@ -108,7 +108,6 @@ $(document)
                                                 // detail-update-delete
                                                 "data": null,
                                                 "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>"
-                                                        + "<button class='btn btn-danger glyphicon glyphicon-trash' onclick='openDeleteModal(this)'></button>",
                                             }],
                                         "columnDefs": [{
                                             "searchable": false,
@@ -150,7 +149,7 @@ function submitAddForm() {
 	        "station": {
 	        	"id": $("#add-form-stationId").val()
 	        },
-	        "active": $("#add-form-active").val()
+	        "active": "true"
 	};
     $.ajax({
         type: "POST",
@@ -158,20 +157,11 @@ function submitAddForm() {
         url: "../lane/create",
         data: JSON.stringify(lane),
         success: function (result) {
-            if (result == "fail") {
-                setStatus("Something was wrong! Please check again!", "#ff0000");
-            } else {
-                setStatus("Add success!", "#00cc00");
-            }
         },
-        error: function (result) {
-            setStatus("Something was wrong! Please check again!", "#ff0000");
-        }
     });
     $("#add-modal").modal("hide");
     $("#alert").show();
     reloadTable();
-    clearStatus();
 }
 
 var curr;
@@ -189,65 +179,12 @@ function submitUpdateForm() {
         contentType: "application/json",
         url: "../lane/update",
         data: JSON.stringify(lane),
-        success: function (result) {
-            if (result == "fail") {
-                setStatus("Update fail!", "#ff0000");
-            } else {
-                setStatus("Update success!", "#00cc00");
-            }
-        },
-        error: function (result) {
-            setStatus("Something was wrong! Please check again!", "#ff0000");
-        }
     });
     $("#update-modal").modal("hide");
     $("#alert").show();
     reloadTable();
-    clearStatus();
 }
-// handle delete form submit
-function submitDeleteForm() {
-	var account = {
-			"id": $("#update-form-id").val(),
-	        "username": $("#update-form-username").val(),
-	        "password": $("#update-form-password").val(),
-	        "role": $("#update-form-role").val(),
-	        "fullname": $("#update-form-fullname").val(),
-	        "email": $("#update-form-email").val(),
-	        "phone": $("#update-form-phone").val(),
-	        "numberId": $("#update-form-numberId").val(),
-	        "vehicle": {
-	        		"id": $("#update-form-vehicleId").val(),
-	        		"licensePlate": $("#update-form-licensePlate").val(),
-	        		"vehicletype": {
-	        			"id": $("#update-form-typeId").val()
-	        		}
-	        },
-	        "balance": $("#update-form-balance").val(),
-	        "isActive": $("#update-form-isActive").val(),
-	        "isEnable": $("#update-form-isEnable").val()
-	    };
-    $.ajax({
-        type: "POST",
-        contentType: "application/json",
-        url: "../account/delete",
-        data: JSON.stringify(account),
-        success: function (result) {
-            if (result == "fail") {
-                setStatus("Delete fail!", "#ff0000");
-            } else {
-                setStatus("Delete success!", "#00cc00");
-            }
-        },
-        error: function (result) {
-            setStatus("This account does not exist! Please check again!", "#ff0000");
-        }
-    });
-    $("#delete-modal").modal("hide");
-    $("#alert").show();
-    reloadTable();
-    clearStatus();
-}
+
 // ajax jquery dataTables reload
 function reloadTable() {
     setTimeout(function () {
@@ -256,13 +193,6 @@ function reloadTable() {
         // first page
     }, 200); // reload the table after 0.2s
 }
-
-// report-home.jsp's script
-
-/*
- * Modal process for report-home.jsp
- */
-
 // open updateModal
 function openUpdateModal(element) {
     var data = $("#table").DataTable().row($(element).parents('tr')).data();

@@ -1,17 +1,22 @@
-var active_to_button = function (data, type, full, meta) {
+var active_to_button = function (data) {
     if (data == true) {
         return "<button class='label label-success' style='padding: 10px; padding-left: 16px; padding-right: 16px;' onclick = 'changeRole(this)'>Active</button>";
     } else {
-        return "<button class='label label-danger' style='padding: 10px;' onclick = 'changeRole(this)'>Deactive</button>";
+        return "<button class='label label-danger' style='padding: 10px;' onclick = 'changeRole(this)'>Deactivate</button>";
     }
 };
 
-var checkData = function (data, type, full, meta) {
+
+var checkData = function (data) {
     if (data == null || data == "")
         return "N/A";
     else
         return data;
 
+};
+
+var formatPrice = function(data){
+return data = data.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
 };
 
 function changeRole(element) {
@@ -25,7 +30,6 @@ function changeRole(element) {
             contentType: "application/json",
             url: "/price/deactive",
             data: JSON.stringify(price),
-
         });
     } else {
         $.ajax({
@@ -33,7 +37,6 @@ function changeRole(element) {
             contentType: "application/json",
             url: "/price/active",
             data: JSON.stringify(price),
-
         });
     }
 
@@ -44,8 +47,8 @@ $(document)
         .ready(
                 function ($) {
                     /*
-					 * define dataTables
-					 */
+                     * define dataTables
+                     */
                     var index = 1;
                     var table = $('#table')
                             .DataTable(
@@ -92,7 +95,7 @@ $(document)
                                                 "data": "id",
                                                 "visible": false
                                                         // hide the column
-														// processID
+                                                        // processID
                                             },
                                             {
                                                 "data": "stationName"
@@ -101,7 +104,8 @@ $(document)
                                                 "data": "stationZone"
                                             },
                                             {
-                                                "data": "price"
+                                                "data": "price",
+                                                "render":  formatPrice
                                             },
                                             {
                                                 "data": "fromDate"
@@ -125,7 +129,6 @@ $(document)
                                                 // detail-update-delete
                                                 "data": null,
                                                 "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openUpdateModal(this)'></button>"
-                                                        + "<button class='btn btn-danger glyphicon glyphicon-trash' onclick='openDeleteModal(this)'></button>",
                                             }]
                                     });
                     // generate index column
@@ -135,16 +138,11 @@ $(document)
                         });
                     }).draw();
 
-                    // handle delete form submit
-                    $("#delete-form").submit(function (event) {
-                        event.preventDefault();
-                        submitDeleteForm();
-                    });
                     // handle update form submit
                     $("#update-form").submit(function (event) {
                         event.preventDefault();
                         submitUpdateForm();
-                    })
+                    });
 
                     $("#add-form").submit(function (event) {
                         event.preventDefault();
@@ -157,118 +155,51 @@ $(document)
  */
 // perform ajax call to save report
 function submitAddForm() {
-	var price = {
-	        "price": $("#add-form-price").val(),
-	        "station": {
-	        	"id": $("#add-form-stationId").val()
-	        },
-	        "vehicleType": {
-	        	"id": $("#add-form-vehicletypeId").val()
-	        },
-	        "fromDate": $("#add-form-fromDate").val(),
-	        "active": $("#add-form-active").val()
-	};
+    var price = {
+        "price": $("#add-form-price").val(),
+        "station": {
+            "id": $("#add-form-stationId").val()
+        },
+        "vehicleType": {
+            "id": $("#add-form-vehicletypeId").val()
+        },
+        "fromDate": $("#add-form-fromDate").val(),
+        "active": $("#add-form-active").val()
+    };
     $.ajax({
         type: "POST",
         contentType: "application/json",
         url: "../price/create",
-        data: JSON.stringify(price),
-        success: function (result) {
-            if (result == "fail") {
-                setStatus("Something was wrong! Please check again!", "#ff0000");
-            } else {
-                setStatus("Add success!", "#00cc00");
-            }
-        },
-        error: function (result) {
-            setStatus("Something was wrong! Please check again!", "#ff0000");
-        }
+        data: JSON.stringify(price)
     });
     $("#add-modal").modal("hide");
-    $("#alert").show();
     reloadTable();
-    clearStatus();
 }
 
 var curr;
 function submitUpdateForm() {
-	var price = {
-			"id": $("#update-form-id").val(),
-	        "price": $("#update-form-price").val(),
-	        "station": {
-	        	"id": $("#update-form-stationId").val()
-	        },
-	        "vehicleType": {
-	        	"id": $("#update-form-vehicletypeId").val()
-	        },
-	        "fromDate": $("#update-form-fromDate").val(),
-	        "active": $("#update-form-active").val()
-	};
+    var price = {
+        "id": $("#update-form-id").val(),
+        "price": $("#update-form-price").val(),
+        "station": {
+            "id": $("#update-form-stationId").val()
+        },
+        "vehicleType": {
+            "id": $("#update-form-vehicletypeId").val()
+        },
+        "fromDate": $("#update-form-fromDate").val(),
+        "active": "true"
+    };
     $.ajax({
         type: "POST",
         contentType: "application/json",
         url: "../price/update",
-        data: JSON.stringify(price),
-        success: function (result) {
-            if (result == "fail") {
-                setStatus("Update fail!", "#ff0000");
-            } else {
-                setStatus("Update success!", "#00cc00");
-            }
-        },
-        error: function (result) {
-            setStatus("Something was wrong! Please check again!", "#ff0000");
-        }
+        data: JSON.stringify(price)      
     });
     $("#update-modal").modal("hide");
-    $("#alert").show();
     reloadTable();
-    clearStatus();
 }
 // handle delete form submit
-function submitDeleteForm() {
-	var account = {
-			"id": $("#update-form-id").val(),
-	        "username": $("#update-form-username").val(),
-	        "password": $("#update-form-password").val(),
-	        "role": $("#update-form-role").val(),
-	        "fullname": $("#update-form-fullname").val(),
-	        "email": $("#update-form-email").val(),
-	        "phone": $("#update-form-phone").val(),
-	        "numberId": $("#update-form-numberId").val(),
-	        "vehicle": {
-	        		"id": $("#update-form-vehicleId").val(),
-	        		"licensePlate": $("#update-form-licensePlate").val(),
-	        		"vehicletype": {
-	        			"id": $("#update-form-typeId").val()
-	        		}
-	        },
-	        "balance": $("#update-form-balance").val(),
-	        "isActive": $("#update-form-isActive").val(),
-	        "isEnable": $("#update-form-isEnable").val()
-	    };
-    $.ajax({
-        type: "POST",
-        contentType: "application/json",
-        url: "../account/delete",
-        data: JSON.stringify(account),
-        success: function (result) {
-            if (result == "fail") {
-                setStatus("Delete fail!", "#ff0000");
-            } else {
-                setStatus("Delete success!", "#00cc00");
-            }
-        },
-        error: function (result) {
-            setStatus("This account does not exist! Please check again!", "#ff0000");
-        }
-    });
-    $("#delete-modal").modal("hide");
-    $("#alert").show();
-    reloadTable();
-    clearStatus();
-}
-// ajax jquery dataTables reload
 function reloadTable() {
     setTimeout(function () {
         $('#table').DataTable().ajax.reload(null, false); // reload without
@@ -276,12 +207,6 @@ function reloadTable() {
         // first page
     }, 200); // reload the table after 0.2s
 }
-
-// report-home.jsp's script
-
-/*
- * Modal process for report-home.jsp
- */
 
 // open updateModal
 function openUpdateModal(element) {
@@ -291,121 +216,23 @@ function openUpdateModal(element) {
     $("#update-form-stationId").val(data.stationId);
     $("#update-form-vehicletypeId").val(data.vehicleTypeId);
     $("#update-form-fromDate").val(data.fromDate);
-    $("#update-form-active").val(data.active);
     curr = {
         "id": data.id,
         "price": data.price,
         "station": {
-        	"id": data.stationId
+            "id": data.stationId
         },
         "vehicletype": {
-        	"id": data.vehicleTypeId
+            "id": data.vehicleTypeId
         },
         "fromDate": data.fromDate,
-        "active": data.active
+        "active": "true"
     };
-    clearErrorUpdate();
     $("#update-modal").modal('toggle');
-}
-// open delete confirm modal
-function openDeleteModal(element) {
-    var data = $("#table").DataTable().row($(element).parents('tr')).data();
-    $("#delete-form-skillId").val(data.skillId);
-    $("#delete-modal").modal('toggle');
 }
 
 // clear input of update modal
 function clearUpdateForm() {
     $("#update-form-skillName").val("");
     $("#delete-modal").modal("hide");
-}
-
-function clearError() {
-    document.getElementById("nameError").innerHTML = "";
-    document.getElementById("codeError").innerHTML = "";
-    document.getElementById("code").value = "";
-    document.getElementById("name").value = "";
-    $("#save").prop('disabled', false);
-}
-
-function clearErrorUpdate() {
-    document.getElementById("nameErrorUpdate").innerHTML = "";
-    document.getElementById("codeErrorUpdate").innerHTML = "";
-    $("#update").prop('disabled', false);
-}
-
-// clear the div inform save delete status
-function clearStatus() {
-    setTimeout(function () {
-        $("#alert").fadeOut(1000); // slowly faded div status
-        $("#text").html();
-    }, 3000);
-}
-
-// set status of save update form or delete-form
-function setStatus(result, background) {
-    $("#text").html(result);
-    var a = document.getElementById("alert");
-    a.style.backgroundColor = background;
-}
-
-// $("add-form").validate();
-// open report details page
-function checkValidateNameAdd() {
-    var skill = {
-        skillName: $("#add-form-skillName").val()
-    };
-    $.ajax({
-        type: "POST",
-        contentType: "application/JSON",
-        url: contextPath + "/skills/check-duplicate-add-name",
-        data: JSON.stringify(skill),
-        success: function (result) {
-            if (result == "duplicate") {
-                $("#nameError").html("Skill already existed");
-                $("#save").prop('disabled', true);
-            } else if (result == "overLength") {
-                $("#nameError").html("Skill name must consist of at least 1 and maximum 50 characters");
-                $("#save").prop('disabled', true);
-            } else {
-                $("#nameError").html("");
-            }
-        }
-    });
-    $("#save").prop('disabled', false);
-}
-
-function checkValidateNameUpdate() {
-    var skill = {
-        skillName: $("#update-form-skillName").val()
-    };
-    $.ajax({
-        type: "POST",
-        contentType: "application/JSON",
-        url: contextPath + "/skills/check-duplicate-update-name/" + curr.skillName.replace(/[/]/g, '_'),
-        data: JSON.stringify(skill),
-        success: function (result) {
-            if (result == "duplicate") {
-                $("#nameErrorUpdate").html("Skill already existed");
-                $("#update").prop('disabled', true);
-            } else if (result == "overLength") {
-                $("#nameErrorUpdate").html("Skill name must consist of at least 1 and maximum 50 characters");
-                $("#update").prop('disabled', true);
-            } else {
-                $("#nameErrorUpdate").html("");
-            }
-        }
-    });
-    $("#update").prop('disabled', false);
-}
-
-function clearError() {
-    document.getElementById("nameError").innerHTML = "";
-//    document.getElementById("add-form-skillName").value = "";
-    $("#save").prop('disabled', false);
-}
-
-function clearErrorUpdate() {
-    document.getElementById("nameErrorUpdate").innerHTML = "";
-    $("#update").prop('disabled', false);
 }

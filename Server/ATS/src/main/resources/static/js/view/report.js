@@ -1,4 +1,7 @@
-
+var changeData = function (data) {
+    if (data == "TRANS_ERROR")
+        return "Error";
+};
 var table;
 $(document)
     .ready(
@@ -62,7 +65,8 @@ $(document)
                                 "data": "dateTime"
                             },
                             {
-                                "data": "status"
+                                "data": "status",
+                                "render": changeData
                             },
                             {
                                 "data": "username"
@@ -82,8 +86,7 @@ $(document)
                             {// column for view
                                 // detail-update-delete
                                 "data": null,
-                                "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openResolveModal(this)'></button>"
-                                + "<button class='btn btn-danger glyphicon glyphicon-trash' onclick='openDeleteModal(this)'></button>"
+                                "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openResolveModal(this)'></button>"                            
                             }],
                         "columnDefs": [ {
                             "searchable": false,

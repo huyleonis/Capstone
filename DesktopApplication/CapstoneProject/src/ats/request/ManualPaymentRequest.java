@@ -5,6 +5,7 @@
  */
 package ats.request;
 
+import ats.dtos.TransactionDetailDTO;
 import ats.dtos.VehicleDTO;
 import ats.dtos.VehiclePayment;
 import java.io.BufferedReader;
@@ -13,9 +14,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import java.util.TimerTask;
 
 /**
  *
@@ -46,7 +50,7 @@ public class ManualPaymentRequest {
             while ((inputLine = in.readLine()) != null) {
                 JSONObject payment = (JSONObject) parser.parse(inputLine);
                 if (payment != null) {
-                    String typeName = (String) payment.get("typeVehicle");
+                    String typeName = (String) payment.get("vehicleType");
                     Double price = (Double) payment.get("price");
                     vehicleDTO = new VehicleDTO(licensePlate, typeName, price);
                 } else {
@@ -79,7 +83,7 @@ public class ManualPaymentRequest {
             while ((inputLine = in.readLine()) != null) {
                 JSONObject payment = (JSONObject) parser.parse(inputLine);
                 // Get id of transaction
-                String id = (String) payment.get("vehicleId");
+                String id = (String) payment.get("id");
                 String typeName = (String) payment.get("typeVehicle");
                 Double price = (Double) payment.get("price");
                 String status = (String) payment.get("status");
@@ -93,8 +97,8 @@ public class ManualPaymentRequest {
         return vehiclePayment;
     }
 
-    public VehiclePayment getCapturedTransaction(int vehicleId, int stationId, String localhost) throws Exception {
-        String urlName = localhost + "/transaction/getCapturedTransaction/" + vehicleId + "/" + stationId;
+    public VehiclePayment getCapturedTransaction(String licensePlate, int stationId, String localhost) throws Exception {
+        String urlName = localhost + "/transaction/getCapturedTransaction/" + licensePlate + "/" + stationId;
         JSONParser parser = new JSONParser();
         VehiclePayment vehiclePayment = new VehiclePayment();
         try {
@@ -106,7 +110,7 @@ public class ManualPaymentRequest {
                 JSONObject payment = (JSONObject) parser.parse(inputLine);
                 // Get id of transaction
                 String id = (String) payment.get("id");
-                String licensePlate = (String) payment.get("licensePlate");
+                //String licensePlate = (String) payment.get("licensePlate");
                 String typeName = (String) payment.get("typeVehicle");
                 Double price = (Double) payment.get("price");
                 String status = (String) payment.get("status");
@@ -187,5 +191,48 @@ public class ManualPaymentRequest {
         }
         return vehiclePayment;
     }
+/**
+     * Danh sách các transaction chưa thanh toán theo biển số xe
+     *
+     * @param licensePlate
+     * @param localhost
 
+     * @return trả về Object có chứa thông tin transaction với status là "Kết
+     * thúc"
+     * @throws java.lang.Exception
+     */
+    public List<TransactionDetailDTO> listTransactionNotPay(String licensePlate, String localhost) throws Exception {
+        String urlName = localhost + "/transaction/findTransactionNotPay/" + licensePlate;
+        JSONParser parser = new JSONParser();
+        List<TransactionDetailDTO> list = new ArrayList<>();
+        try {
+            URL oracle = new URL(urlName); // URL to Parse
+            URLConnection yc = oracle.openConnection();  // Open Connection
+            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                JSONArray array = (JSONArray) parser.parse(inputLine);
+                // Loop through each item
+                for (Object transaction : array) {
+                    JSONObject trans = (JSONObject) transaction;
+                    if (!trans.isEmpty()) {
+                        String id = (String) trans.get("id");
+                        Double price = (Double) trans.get("price");
+                        String status = (String) trans.get("status");
+                        String photo = (String) trans.get("photo");
+                        String dateTime = (String) trans.get("dateTime");
+                        String type = (String) trans.get("type");
+                        String typeVehicle = (String) trans.get("typeVehicle");
+                        TransactionDetailDTO dto = new TransactionDetailDTO(licensePlate, id, status, dateTime, type, photo, typeVehicle, price);
+                        list.add(dto);
+                    }
+                }
+            }
+            in.close();
+        } catch (FileNotFoundException e) {
+        } catch (IOException | org.json.simple.parser.ParseException e) {
+        }
+        return list;
+    }
+    
 }

@@ -1,9 +1,20 @@
+//function showImage() {
+//     return "<a href="javascript:showImage()">show image</a>";
+//}
+//function setImageVisible(id, visible) {
+//    var img = document.getElementById(id);
+//    img.style.visibility = (visible ? 'visible' : 'hidden');
+//}
+var showImange = function (data) {
+    return "<p><a href='/imgs/dumps/" + data + "' target='bettie'>Xem ảnh</a></p>";
+};
+
 $(document)
         .ready(
                 function ($) {
                     /*
-					 * define dataTables
-					 */
+                     * define dataTables
+                     */
                     var index = 1;
                     var table = $('#table')
                             .DataTable(
@@ -12,21 +23,33 @@ $(document)
                                             [5, 10, 20, "All"]], // change
 
                                         "ajax": {
-                                        	"url" : "../transaction/getDumpToPhoto",
-                                        	"dataSrc": ""
+                                            "url": "../transaction/getDumpToPhoto",
+                                            "dataSrc": ""
                                         },
                                         "columns": [
-
-                                            { "data": "photoName" },
-                                            { "data": "licensePlate" },
-                                            { "data": "createdTime" },
+                                            {"data": null},
+                                            {"data": "photoName",
+                                                "render": showImange
+                                            },
+                                            {"data": "licensePlate"},
+                                            {"data": "createdTime"},
                                             {// column for view
                                                 // detail-update-delete
                                                 "data": null,
                                                 "defaultContent": "<button class='btn btn-success glyphicon glyphicon-edit' onclick='openResolveModal(this)'></button>"
                                             }
-                                        ]
+                                        ],
+                                        "columnDefs": [{
+                                                "searchable": false,
+                                                "orderable": false,
+                                                "targets": 0
+                                            }]
                                     });
+                    table.on('order.dt search.dt', function () {
+                        table.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+                            cell.innerHTML = i + 1;
+                        });
+                    }).draw();
 //                    // handle delete form submit
 //                    $("#delete-form").submit(function (event) {
 //                        event.preventDefault();
@@ -174,7 +197,7 @@ function reloadTable() {
 
 
 function openResolveModal(element) {
-	var data = $("#table").DataTable().row($(element).parents('tr')).data();
+    var data = $("#table").DataTable().row($(element).parents('tr')).data();
     var img = document.getElementById("update-form-photo");
 
     $("#update-form-licensePlate").val(data.licensePlate);
@@ -183,11 +206,11 @@ function openResolveModal(element) {
     curr = {
         //"photo": "./imgs/dumps/"+ data.photo,
         "photo": img.src = "/imgs/dumps/" + data.photoName,
-        
-        "vehicle": {           
+
+        "vehicle": {
             "licensePlate": data.licensePlate
         }
-        
+
     };
     $("#resolve-modal").modal('toggle');
 }

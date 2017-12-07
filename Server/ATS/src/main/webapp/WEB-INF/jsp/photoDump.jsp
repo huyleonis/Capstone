@@ -27,40 +27,11 @@
                             </script>
                         </c:if>
 
-                        <div id="add-modal" class="modal fade" role="dialog"
-                             data-backdrop="false">
-                            <div class="modal-dialog">
-
-                                <%--<!-- Modal content-->--%>
-                                <%--<!-- add Form using ajax !-->--%>
-                                <form id="add-form">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">New Transaction</h4>
-                                        </div>
-                                        <div class="modal-body">
-
-                                            <div class="form-group">
-                                                <label class="control-label">Username:</label>
-                                                <input type="text" class="form-control" id="add-form-username" required />
-                                                <label id="nameError" class="error"></label>
-                                            </div>
-
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" id="save" class="btn btn-success">Save</button>
-                                            <button type="button" class="btn btn-default"
-                                                    data-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                        
                         <%-- End div add modal --%>
                         <div id="resolve-modal" class="modal fade" role="dialog"
                              data-backdrop="false">
-                            <div class="modal-dialog modal-lg">
+                            <div class="modal-dialog">
 
                                 <%--<!-- Modal content-->--%>
                                 <%--<!-- Update Form using ajax !-->--%>
@@ -81,13 +52,14 @@
                                                 <input type="text" class="form-control" id="update-form-licensePlate" readonly/>
                                                 <label id="nameErrorUpdate" class="error"></label>
                                                 <br/>
+                                                <label class="control-label">Date time: </label>                    
+                                                <input type="text" class="form-control" id="update-form-dateTime" readonly/>
+                                                <br/>
                                                 <label class="control-label">Correct License Plate: </label>                    
                                                 <input type="text" class="form-control" id="update-form-correct-licensePlate" required />
                                                 <br/>
-                                                <label class="control-label">Date tIme: </label>                    
-                                                <input type="text" class="form-control" id="update-form-dateTime" readonly/>
-                                                <br/>
-                                                <button onclick="myFunction()" type="button" class="btn btn-success">View Transaction</button>
+                                                
+                                                <button onclick="myFunction()" type="button" class="btn btn-success">Check Transaction</button>
                                                 
                                                 
                                                 <table class="table table-striped" id="table1">
@@ -117,39 +89,14 @@
                         </div>
                         <%-- End div update modal --%>
 
-                        <div id="delete-modal" class="modal fade" role="dialog"
-                             data-backdrop="false">
-                            <div class="modal-dialog">
-                                <%--<!-- AJAX delete form-->--%>
-                                <form id="delete-form" method="POST" class="form-horizontal">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">Delete</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <b>Are you sure to delete this report</b> <input type="hidden"
-                                                                                             id="delete-form-id">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit"  class="btn btn-success">Yes</button>
-                                            <button type="button" class="btn btn-default"
-                                                    data-dismiss="modal">Cancel</button>
-                                        </div>
-                                    </div>
-                                    <%-- End div modal-content --%>
-                                </form>
-                            </div>
-                        </div>
-                        <%-- End div modal delete --%>
-
                         <table class="table cell-border table-responsive hover"
                                style="text-align: center" id="table">
                             <thead>
                                 <tr>
-                                    <th class="text-center">Photo Name</th>
-                                    <th class="text-center">License Plate</th>
-                                    <th class="text-center">Created Time</th>
+                                    <th class="text-center" style="font-size: 15px; color: blue; font-weight: bold">#</th>
+                                    <th class="text-center" style="font-size: 15px; color: blue; font-weight: bold">Photo</th>
+                                    <th class="text-center" style="font-size: 15px; color: blue; font-weight: bold">License Plate</th>
+                                    <th class="text-center" style="font-size: 15px; color: blue; font-weight: bold">Created Time</th>
                                     <th class="text-center"></th>
                                 </tr>
                             </thead>
