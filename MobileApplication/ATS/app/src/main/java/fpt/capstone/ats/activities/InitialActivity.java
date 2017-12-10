@@ -1,8 +1,11 @@
 package fpt.capstone.ats.activities;
 
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,6 +18,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.estimote.coresdk.common.requirements.SystemRequirementsChecker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -94,10 +99,8 @@ public class InitialActivity extends AppCompatActivity {
             public void processFinish(String result){
                 Log.w("INITIAL_ACTIVITY", "check token result = " + result );
                 if(result.equals("true")){
-                    //Go directly to main activity.
-                    Intent intent = new Intent(InitialActivity.this, MainActivity.class);
-                    startActivity(intent);
 
+                    //Start the service to monitor the Beacon
                     Intent serviceIntent = new Intent(InitialActivity.this, BeaconService.class);
 
                     Bundle bundle = new Bundle();
@@ -105,6 +108,13 @@ public class InitialActivity extends AppCompatActivity {
                     serviceIntent.putExtras(bundle);
 
                     startService(serviceIntent);
+
+
+                    //Here is the code for going to Main Activity
+                    Intent intent = new Intent(InitialActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+
                 } else{
                     //Go to Login activity.
                     Intent intent = new Intent(InitialActivity.this, LoginActivity.class);
@@ -134,12 +144,32 @@ public class InitialActivity extends AppCompatActivity {
 
 
     public void clickToContinue(View view) {
-        checkLogin();
+        //Check bluetooth
+        if (!SystemRequirementsChecker.checkWithDefaultDialogs(this)) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Lỗi bluetooth")
+                    .setMessage("Thiết bị chưa bật bluetooth. Vui lòng bật bluetooth để sử dụng ứng dụng thu phí tự động ATS.")
+                    .setPositiveButton("Bật bluetooth", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                            bluetoothAdapter.enable();
+                        }
+                    })
+                    .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .create().show();
+            return;
+        } else {
+            //check login
+            checkLogin();
+        }
 
-        //Go directly to main activity.
-//        Intent intent = new Intent(this, LoginActivity.class);
-//        startActivity(intent);
-//        InitialActivity.this.finish();
+
+
     }
 
     public void clickToCheckConnection(View view) {
@@ -172,4 +202,8 @@ public class InitialActivity extends AppCompatActivity {
         rs.execute(new ArrayList<String>(), "ats", "checkConnection", "GET");
     }
 
+    private void startServiceAndMainActivity(String username, String randomToken) {
+
+
+    }
 }

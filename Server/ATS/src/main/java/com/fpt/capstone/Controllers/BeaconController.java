@@ -2,6 +2,7 @@ package com.fpt.capstone.Controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fpt.capstone.Dtos.BeaconDTO;
+import com.fpt.capstone.Dtos.StationDTO;
 import com.fpt.capstone.Dtos.TransactionDTO;
 import com.fpt.capstone.Dtos.TransactionDetailDTO;
 import com.fpt.capstone.Entities.Account;
@@ -10,6 +11,7 @@ import com.fpt.capstone.Repositories.AccountRepos;
 import com.fpt.capstone.Repositories.BeaconRepos;
 import com.fpt.capstone.Services.BeaconService;
 import com.fpt.capstone.Services.PriceService;
+import com.fpt.capstone.Services.StationService;
 import com.fpt.capstone.Services.TransactionService;
 import com.fpt.capstone.Utils.BeaconType;
 import com.fpt.capstone.Utils.TransactionStatus;
@@ -41,6 +43,9 @@ public class BeaconController {
 
     @Autowired
     private AccountRepos accountRepos;
+    
+    @Autowired
+    private StationService stationService;
 
     static final int ACTIVE = 3;
 
@@ -177,16 +182,29 @@ public class BeaconController {
      *
      * @param laneId
      * @param transactionId Id của giao dich
+     * @param username username trong trường hợp ko có trnasation id
      * @return true if FINISH Transaction. If not, it is false
      */
-    @RequestMapping(value = "/result/{laneId}/{transactionId}", method = RequestMethod.GET)
-    public String triggerBeaconResult(@PathVariable int laneId, @PathVariable String transactionId) {
+    @RequestMapping(value = "/result/{laneId}/{transactionId}/{username}", method = RequestMethod.GET)
+    public Object triggerBeaconResult(@PathVariable int laneId, @PathVariable String transactionId,
+            @PathVariable String username) {
+        
         System.out.println("Request Check result from Driver in lane with ID " + laneId);
 
+        boolean exist = true;
+        if (transactionId == null || transactionId.isEmpty()) {
+            exist = false;
+        }
+        
         TransactionDTO transDTO = transactionService.getById(transactionId);
 
         if (transDTO == null) {
-            return "false";
+            exist = false;
+        }
+        
+        if (!exist) {         
+            StationDTO stationDTO = stationService.getByLane(laneId);
+            return triggerBeaconPayment(stationDTO.getId(), transactionId);
         }
 
         TransactionStatus status = transDTO.getTransactionStatus();

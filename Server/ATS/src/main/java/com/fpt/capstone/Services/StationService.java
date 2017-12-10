@@ -16,4 +16,6 @@ public interface StationService {
     boolean active(Station station);
 
     boolean deactive(Station station);
+    
+    StationDTO getByLane(int laneId);
 }

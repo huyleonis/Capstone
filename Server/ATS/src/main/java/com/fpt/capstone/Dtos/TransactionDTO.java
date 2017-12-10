@@ -100,8 +100,8 @@ public class TransactionDTO {
         this.laneId = laneId;
     }
 
-    public TransactionType getType() {
-        return type;
+    public String getType() {
+        return type.display();
     }
 
     public void setType(TransactionType type) {
@@ -159,11 +159,21 @@ public class TransactionDTO {
         if (transaction.getLane() != null) {
             dto.setLaneId(transaction.getLane().getId());
         }
-        if (transaction.getType() == 1) {
-            dto.setType(TransactionType.AUTOMATION);
-        } else {
-            dto.setType(TransactionType.MANUAL);
+        switch (transaction.getType()) {
+            case 1:
+                dto.setType(TransactionType.AUTOMATION);
+                break;
+            case 2:
+                dto.setType(TransactionType.MANUAL);
+                break;
+            case 3:
+                dto.setType(TransactionType.PAY_LATER);
+                break;
+            default:
+                dto.setType(TransactionType.UNKNOWN);
+                break;
         }
+        
         if (transaction.getPhoto() != null) {
             dto.setPhoto(transaction.getPhoto());
         }

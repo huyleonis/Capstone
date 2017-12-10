@@ -10,9 +10,10 @@ package com.fpt.capstone.Utils;
  * @author hp
  */
 public enum TransactionType {
-    UNKNOWN(0, "Chưa biết"),
+    UNKNOWN(0, "Chưa xác định"),
     AUTOMATION(1, "Tự động"),
-    MANUAL(2, "Thủ công");
+    MANUAL(2, "Thủ công"),
+    PAY_LATER(3, "Trả sau");
     
     private int type;
     private String display;

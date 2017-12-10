@@ -8,6 +8,7 @@ import com.fpt.capstone.Services.AccountService;
 import com.fpt.capstone.Services.TransactionService;
 import com.fpt.capstone.Services.VehicleService;
 import com.fpt.capstone.Utils.TransactionStatus;
+import com.fpt.capstone.Utils.TransactionType;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -209,6 +210,10 @@ public class TransactionController {
         TransactionDetailDTO detailDTO = transactionService.getDetailById(transactionId);
         String username = detailDTO.getUsername();
 
+        // update type của transaction
+        transactionService.updateTransactionType(transactionId,
+                TransactionType.AUTOMATION.getType());
+        
         // update sang trạng thái pending, chờ xử lý giao dịch
         TransactionDTO transDTO = transactionService.updateTransactionStatus(transactionId,
                 TransactionStatus.TRANS_PENDING);
@@ -296,6 +301,10 @@ public class TransactionController {
         System.out.println(
                 "   + get transaction [" + transDTO.getId() + "] success with status [" + transDTO.getStatus() + "]");
 
+        // update type của transaction
+        transactionService.updateTransactionType(transactionId,
+                TransactionType.PAY_LATER.getType());
+        
         // Gọi module paypal
         String result = accountService.makePayment(transDTO.getUsername(), transDTO.getStationId());
         if (result.equals("")) {
@@ -372,7 +381,8 @@ public class TransactionController {
     @RequestMapping(value = "getCapturedTransaction/{licensePlate}/{stationId}")
     public TransactionDetailDTO getCapturedTransactionForDesktop(@PathVariable String licensePlate, @PathVariable int stationId) {
         int vehicleId = vehicleService.getVehicleId(licensePlate);
-        return transactionService.getCapturedTransactionForDesktop(vehicleId, stationId);
+        TransactionDetailDTO dto = transactionService.getCapturedTransactionForDesktop(vehicleId, stationId);
+        return dto;
     }
 
     /**

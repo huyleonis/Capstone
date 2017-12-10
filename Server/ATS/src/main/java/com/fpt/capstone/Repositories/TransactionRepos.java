@@ -53,7 +53,6 @@ public interface TransactionRepos extends JpaRepository<Transaction, String> {
      *
      * @param id
      * @param stationId
-     * @param idTransaction
      * @param now
      * @param status
      * @param price
@@ -156,6 +155,7 @@ public interface TransactionRepos extends JpaRepository<Transaction, String> {
      * @return
      */
     @Query(value = "select * from transaction where vehicleId = :vehicleId "
+            + "AND status <> 'Error' "
             + "and createdTime > :fromDate and createdTime < :toDate", nativeQuery = true)
     List<Transaction> getHistoryTransaction(@Param("vehicleId") int vehicleId,
             @Param("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date fromDate,
@@ -176,14 +176,18 @@ public interface TransactionRepos extends JpaRepository<Transaction, String> {
             + "WHERE vehicleId = :vehicleId "
             + "AND stationId = :stationId "
             + "AND status = 'Initial' "
-            + "AND createdTime > NOW() - INTERVAL 30 MINUTE", nativeQuery = true)
+            + "AND createdTime > NOW() - INTERVAL 30 MINUTE "
+            + "ORDER BY createdTime DESC "
+            + "LIMIT 1", nativeQuery = true)
     Transaction getCapturedTransactionForMobile(@Param("vehicleId") Integer vehicleId, @Param("stationId") Integer stationId);
-    
+
     @Query(value = "SELECT * FROM transaction "
             + "WHERE vehicleId = :vehicleId "
             + "AND stationId = :stationId "
-            + "AND status = 'Initial' AND status = 'Not pay' "
-            + "AND createdTime > NOW() - INTERVAL 30 MINUTE", nativeQuery = true)
+            + "AND (status = 'Initial' OR status = 'Not pay') "
+            + "AND createdTime > NOW() - INTERVAL 30 MINUTE "
+            + "ORDER BY createdTime DESC "
+            + "LIMIT 1", nativeQuery = true)
     Transaction getCapturedTransactionForDesktop(@Param("vehicleId") Integer vehicleId, @Param("stationId") Integer stationId);
 
     @Query(value = "SELECT * FROM transaction WHERE status = :status", nativeQuery = true)
@@ -193,7 +197,7 @@ public interface TransactionRepos extends JpaRepository<Transaction, String> {
             + "(createdTime between :createdTime - INTERVAL 30 minute AND :createdTime + INTERVAL 30 minute)", nativeQuery = true)
     List<Transaction> findByVehicleIdAndTime(@Param("vehicleId") int vehicleId,
             @Param("createdTime") String createdTime);
-    
+
     @Query(value = "SELECT * FROM transaction WHERE vehicleId = :vehicleId"
             + " AND status <> 'Finish' AND status <> 'Success'", nativeQuery = true)
     List<Transaction> findVehicleNotPay(@Param("vehicleId") int vehicleId);

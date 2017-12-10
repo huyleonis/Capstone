@@ -8,92 +8,110 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fpt.capstone.Dtos.StationDTO;
+import com.fpt.capstone.Entities.Lane;
 import com.fpt.capstone.Entities.Station;
+import com.fpt.capstone.Repositories.LaneRepos;
 import com.fpt.capstone.Repositories.StationRepos;
 
 @Service
 public class StationServiceImpl implements StationService {
 
-	private final Logger log = Logger.getLogger(this.getClass());
+    private final Logger log = Logger.getLogger(this.getClass());
 
-	@Autowired
-	private StationRepos stationRepos;
+    @Autowired
+    private StationRepos stationRepos;
+    
+    @Autowired
+    private LaneRepos laneRepos;
 
-	@Override
-	public List<StationDTO> getAllStation() {
+    @Override
+    public List<StationDTO> getAllStation() {
 
-		List<Station> stations = stationRepos.findAll();
-		List<StationDTO> dtos = new ArrayList<>();
+        List<Station> stations = stationRepos.findAll();
+        List<StationDTO> dtos = new ArrayList<>();
 
-		for (Station station : stations) {
-			StationDTO dto = StationDTO.convertFromEntity(station);
-			dtos.add(dto);
-		}
+        for (Station station : stations) {
+            StationDTO dto = StationDTO.convertFromEntity(station);
+            dtos.add(dto);
+        }
 
-		return dtos;
-	}
+        return dtos;
+    }
 
-	@Override
-	public StationDTO insert(Station station) {
-		StationDTO dto = null;
+    @Override
+    public StationDTO insert(Station station) {
+        StationDTO dto = null;
 
-		try {
-			Station processedStation = stationRepos.save(station);
-			if (processedStation != null) {
-				dto = StationDTO.convertFromEntity(processedStation);
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
+        try {
+            Station processedStation = stationRepos.save(station);
+            if (processedStation != null) {
+                dto = StationDTO.convertFromEntity(processedStation);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
 
-		return dto;
-	}
+        return dto;
+    }
 
-	@Override
-	public StationDTO update(Station station) {
-		StationDTO dto = null;
+    @Override
+    public StationDTO update(Station station) {
+        StationDTO dto = null;
 
-		try {
-			Station existingStation = stationRepos.findOne(station.getId());
+        try {
+            Station existingStation = stationRepos.findOne(station.getId());
 
-			if (existingStation != null) {
-				Station processedStation = stationRepos.save(station);
-				dto = StationDTO.convertFromEntity(processedStation);
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
+            if (existingStation != null) {
+                Station processedStation = stationRepos.save(station);
+                dto = StationDTO.convertFromEntity(processedStation);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
 
-		return dto;
-	}
+        return dto;
+    }
 
-	@Override
-	public boolean active(Station station) {
-		Station existingStation = stationRepos.findOne(station.getId());
-		if (existingStation != null) {
-			existingStation.setActive(true);
-			Station processedStation = stationRepos.save(existingStation);
-			if (processedStation != null) {
-				System.out.println("Active Station: " + processedStation.getActive());
-				return true;
-			}
-		}
+    @Override
+    public boolean active(Station station) {
+        Station existingStation = stationRepos.findOne(station.getId());
+        if (existingStation != null) {
+            existingStation.setActive(true);
+            Station processedStation = stationRepos.save(existingStation);
+            if (processedStation != null) {
+                System.out.println("Active Station: " + processedStation.getActive());
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public boolean deactive(Station station) {
-		Station existingStation = stationRepos.findOne(station.getId());
-		if (existingStation != null) {
-			existingStation.setActive(false);
-			Station processedStation = stationRepos.save(existingStation);
-			if (processedStation != null) {
-				System.out.println("Deactive Station: " + processedStation.getActive());
-				return true;
-			}
-		}
+    @Override
+    public boolean deactive(Station station) {
+        Station existingStation = stationRepos.findOne(station.getId());
+        if (existingStation != null) {
+            existingStation.setActive(false);
+            Station processedStation = stationRepos.save(existingStation);
+            if (processedStation != null) {
+                System.out.println("Deactive Station: " + processedStation.getActive());
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
+
+    @Override
+    public StationDTO getByLane(int laneId) {
+        Lane lane = laneRepos.findOne(laneId);
+        
+        if (lane != null) {
+            Station station = lane.getStation();
+            if (station != null) {
+                return StationDTO.convertFromEntity(station);
+            }
+        }
+        return null;
+    }
 }

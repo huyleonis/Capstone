@@ -24,6 +24,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -95,7 +96,8 @@ public class Camera extends javax.swing.JFrame {
         btnStop.setEnabled(false);
         recognition = new Recognition();
 
-        scrollPanel.setLayout(new GridLayout(0, 1));     
+        scrollPanel.setLayout(new GridLayout(0, 1)); 
+        JScrollPane scrollPane = new JScrollPane(scrollPanel);
     }
 
     private void showImage(Mat img, JPanel panel) throws IOException {

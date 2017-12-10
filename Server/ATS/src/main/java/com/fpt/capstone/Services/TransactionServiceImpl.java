@@ -207,7 +207,7 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionDetailDTO getCapturedTransactionForDesktop(int vehicleId, int stationId) {
         TransactionDetailDTO result = null;
         
-        Transaction tran = transactionRepos.getCapturedTransactionForMobile(vehicleId, stationId);
+        Transaction tran = transactionRepos.getCapturedTransactionForDesktop(vehicleId, stationId);
         
         if (tran != null) {
             

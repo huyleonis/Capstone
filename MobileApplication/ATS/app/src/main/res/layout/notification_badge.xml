@@ -17,6 +17,6 @@
         android:gravity="center"
         android:padding="3dp"
         android:textColor="#fff"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textStyle="bold" />
 </FrameLayout>

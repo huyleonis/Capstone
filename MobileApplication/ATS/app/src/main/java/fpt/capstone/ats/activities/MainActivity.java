@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 homeFragment.resolveBundle(bundle);
             } else {
                 Log.w(TAG, "Home Fragment is not displayed when receive broadcasr");
-                setBadgeNoti(0);
+                //setBadgeNoti(0);
             }
 
         }
@@ -192,7 +192,8 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationItemView item  = (BottomNavigationItemView) menuView.getChildAt(pos);
 
         View badge = LayoutInflater.from(this)
-                .inflate(R.layout.notification_badge, navigation, false);
+                .inflate(R.layout.notification_badge, menuView, false);
+
 
         item.addView(badge);
     }

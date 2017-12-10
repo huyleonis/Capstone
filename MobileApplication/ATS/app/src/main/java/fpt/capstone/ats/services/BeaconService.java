@@ -180,7 +180,7 @@ public class BeaconService extends Service {
                 }
             }
 
-            if (selected != null) {
+            if (selected != null && minDistance < 0.25) {
                 Log.w(TAG, "Nearest beacon is about " + minDistance + "m ");
                 String uuid = selected.getProximityUUID().toString();
                 int major = selected.getMajor();
@@ -295,15 +295,17 @@ public class BeaconService extends Service {
 
         nameStation = infos.getString("stationName");
         idStation = infos.getString("stationId");
-        zone = infos.getString("stationZone");
+
         price = infos.getDouble("price");
 
 
         if (infos.has("photo")) { //transaction dc tạo bởi camera
             photo = infos.getString("photo");
             transactionId = infos.getString("id");
+            zone = infos.getString("zone");
             isCreated = true;
         } else { //chỉ lấy giá bình thường
+            zone = infos.getString("stationZone");
             isCreated = false;
         }
 
@@ -362,25 +364,36 @@ public class BeaconService extends Service {
 
         final SharedPreferences setting = getSharedPreferences(ConstantValues.PREF_NAME, MODE_PRIVATE);
 
-        String transId = setting.getString(ConstantValues.TRANSACTION_ID_PARAM, "");
+        final String transId = setting.getString(ConstantValues.TRANSACTION_ID_PARAM, "");
 
         Log.w(TAG, "Get Result beacon, check transaction id = <"+transId+">");
-        if (transId.isEmpty()) {
-            Log.w(TAG, "Get Result Beacon not trigger because there is no transaction id");
-            return;
-        }
+//        if (transId.isEmpty()) {
+//            Log.w(TAG, "Get Result Beacon not trigger because there is no transaction id");
+//            return;
+//        }
 
         List<String> params = new ArrayList<>();
         params.add(laneId + "");
         params.add(transId);
+        params.add(username);
 
         RequestServer rs = new RequestServer();
         rs.delegate = new RequestServer.RequestResult() {
             @Override
             public void processFinish(String result) {
-                Log.w(TAG, "Request for check result success");
-                processResultBeacon();
-                setting.edit().remove(ConstantValues.TRANSACTION_ID_PARAM).commit();
+                if (result.equals("true") || result.equals("false")) {
+                    Log.w(TAG, "Request for check result success");
+                    processResultBeacon();
+                    setting.edit().remove(ConstantValues.TRANSACTION_ID_PARAM).commit();
+                } else {
+                    try {
+                        processPaymentBeaconInfo(new JSONObject(result));
+                    } catch (JSONException e) {
+                        Log.e(TAG, "JSON Exception: " + e.getMessage() + " - result: " + result);
+                    }
+
+                }
+
             }
         };
 
