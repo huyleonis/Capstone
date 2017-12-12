@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -60,6 +61,7 @@ public class MainForm extends javax.swing.JFrame {
         File f = new File("./src/picture/default_text.png");
         Image image = ImageIO.read(f);
         this.lbPicture.setIcon(new ImageIcon(image));
+        lbNotification.setText("...");
     }
 
     /**
@@ -203,7 +205,7 @@ public class MainForm extends javax.swing.JFrame {
             InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(InfoPaneLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(InfoPaneLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(txtLicensePlate, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -215,7 +217,7 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(lbTypeName, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbPirce, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbNotification))
+                    .addComponent(lbNotification, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
         InfoPaneLayout.setVerticalGroup(
@@ -400,6 +402,9 @@ public class MainForm extends javax.swing.JFrame {
         lbChanged.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 lbChangedMouseEntered(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lbChangedMousePressed(evt);
             }
         });
 
@@ -723,6 +728,29 @@ public class MainForm extends javax.swing.JFrame {
 
     }//GEN-LAST:event_txtLicensePlateKeyPressed
 
+    public void checkTransaction() {
+        localhost = txtLocalhost.getText().trim();
+        ManualPaymentRequest mpr = new ManualPaymentRequest();
+        String licensePlate = txtLicensePlate.getText().toUpperCase().trim();
+        String id = lbId.getText().trim();
+        int count = 0;
+        try {
+            List<TransactionDetailDTO> list = mpr.listTransactionNotPay(licensePlate, localhost);
+            if (list.size() > 0) {
+                for (int i = 0; i < list.size(); i++) {
+                    if (!list.get(i).equals(id)) {
+                        count++;
+                    }
+                }
+                lbNotification.setText("Phương tiện " + licensePlate + " còn " + count + " giao dịch chưa thanh toán!");
+            } else {
+                lbNotification.setText("...");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     private void txtLicensePlateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLicensePlateActionPerformed
         localhost = txtLocalhost.getText().trim();
         String licensePlate = txtLicensePlate.getText().toUpperCase().trim();
@@ -791,6 +819,7 @@ public class MainForm extends javax.swing.JFrame {
                     Logger.getLogger(MainForm.class
                             .getName()).log(Level.SEVERE, null, ex);
                 }
+                checkTransaction();
             } else {
 
                 try {
@@ -814,20 +843,12 @@ public class MainForm extends javax.swing.JFrame {
                 } catch (Exception ex) {
                     Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
+                lbNotification.setText("Không có kết nối mạng! Chuyến sang thanh toán cục bộ!");
             }
+
         }
 
-        try {
-            List<TransactionDetailDTO> list = mpr.listTransactionNotPay(licensePlate, localhost);
-            if (list.size() > 0) {
-                lbNotification.setText("Phương tiện " + licensePlate + " còn " + (list.size() - 1) + " giao dịch chưa thanh toán!");
-            } else {
-                lbNotification.setText("...");
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
     }//GEN-LAST:event_txtLicensePlateActionPerformed
 
     /**
@@ -893,6 +914,8 @@ public class MainForm extends javax.swing.JFrame {
 
     private void getTable(String licensePlate, String localhost) {
         //JCheckBox checkbox = new JCheckBox();
+        String transactionId = lbId.getText().trim();
+        tblHistory = new JTable();
         DecimalFormat formatter = new DecimalFormat("###,###,###.##");
         ManualPaymentRequest mpr = new ManualPaymentRequest();
         List<TransactionDetailDTO> list;
@@ -931,17 +954,20 @@ public class MainForm extends javax.swing.JFrame {
         try {
             list = mpr.listTransactionNotPay(licensePlate, localhost);
             if (list.size() > 0) {
-                for (int i = 0; i < list.size() - 1; i++) {
-                    Object ojb[] = {i + 1 + "", list.get(i).getId(), list.get(i).getLicensePlate(), list.get(i).getTypeVehicle(),
-                        formatter.format(list.get(i).getPrice()) + " đồng",
-                        changeType(list.get(i).getType()), list.get(i).getDateTime(),
-                        changeStatus(list.get(i).getStaus()), false};
-                    total += list.get(i).getPrice();
-                    tbl.addRow(ojb);
+                for (int i = 0; i < list.size(); i++) {
+                    if (!list.get(i).getId().equals(transactionId)) {
+                        Object ojb[] = {i + 1 + "", list.get(i).getId(), list.get(i).getLicensePlate(), list.get(i).getTypeVehicle(),
+                            formatter.format(list.get(i).getPrice()) + " đồng",
+                            changeType(list.get(i).getType()), list.get(i).getDateTime(),
+                            changeStatus(list.get(i).getStaus()), false};
+                        total += list.get(i).getPrice();
+                        tbl.addRow(ojb);
+                    }
+
                 }
             }
 
-            tblHistory.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+            //tblHistory.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
             TableColumn index = tblHistory.getColumnModel().getColumn(0);
             index.setPreferredWidth(40);
             TableColumn id = tblHistory.getColumnModel().getColumn(1);
@@ -959,11 +985,11 @@ public class MainForm extends javax.swing.JFrame {
             TableColumn status = tblHistory.getColumnModel().getColumn(7);
             status.setPreferredWidth(180);
             TableColumn checkBox = tblHistory.getColumnModel().getColumn(8);
-            checkBox.setPreferredWidth(122);
+            checkBox.setPreferredWidth(125);
             JScrollPane tableContainer = new JScrollPane(tblHistory);
+            //TablePane = new JPanel();
             TablePane.add(tableContainer, BorderLayout.CENTER);
-            repaint();
-            revalidate();
+
             lbTotal.setText(formatter.format(total) + " đồng");
         } catch (Exception ex) {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -972,7 +998,7 @@ public class MainForm extends javax.swing.JFrame {
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
 
         String search = txtSearch.getText().trim();
-        String localhost = txtLocalhost.getText().trim();
+        localhost = txtLocalhost.getText().trim();
         getTable(search, localhost);
     }//GEN-LAST:event_btnSearchActionPerformed
     boolean checkAll = false;
@@ -1029,6 +1055,7 @@ public class MainForm extends javax.swing.JFrame {
         }
         lbWantPay.setText("0 đồng");
         btnSearch.doClick();
+        checkTransaction();
     }//GEN-LAST:event_btnPaymentWantActionPerformed
 
     private void TablePaneMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablePaneMousePressed
@@ -1052,6 +1079,20 @@ public class MainForm extends javax.swing.JFrame {
             lbWantPay.setText(formatter.format(money) + " đồng");
         }
     }//GEN-LAST:event_lbChangedMouseEntered
+
+    private void lbChangedMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbChangedMousePressed
+        double money = 0.0;
+        DecimalFormat formatter = new DecimalFormat("###,###,###.##");
+        for (int i = 0; i < tblHistory.getRowCount(); i++) {
+            Boolean checked = Boolean.valueOf(tblHistory.getValueAt(i, 8).toString());
+            String price = tblHistory.getValueAt(i, 4).toString();
+            //money += Double.parseDouble(changePrice(price));
+            if (checked) {
+                money += Double.parseDouble(changePrice(price));
+            }
+            lbWantPay.setText(formatter.format(money) + " đồng");
+        }
+    }//GEN-LAST:event_lbChangedMousePressed
 
     /**
      * @param args the command line arguments

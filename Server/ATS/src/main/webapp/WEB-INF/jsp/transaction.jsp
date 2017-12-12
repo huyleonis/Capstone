@@ -12,8 +12,6 @@
             <div class="main-panel">
                 <c:import url="navbar.jsp"/>   
                 <div class="content">
-                    <div class="alert alert-success" id="alert" style="display: none">
-                        <p id="text"></p>
                     </div>
                     <div class="container-fluid">
 

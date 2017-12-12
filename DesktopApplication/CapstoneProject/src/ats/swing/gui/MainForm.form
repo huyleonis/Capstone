@@ -157,7 +157,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Group type="102" attributes="0">
                                   <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                                   <Component id="txtLicensePlate" min="-2" pref="232" max="-2" attributes="0"/>
@@ -170,7 +170,7 @@
                               <Component id="lbTypeName" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
                               <Component id="jLabel5" alignment="0" min="-2" pref="176" max="-2" attributes="0"/>
                               <Component id="lbPirce" alignment="0" min="-2" pref="227" max="-2" attributes="0"/>
-                              <Component id="lbNotification" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="lbNotification" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace pref="18" max="32767" attributes="0"/>
                       </Group>
@@ -603,6 +603,7 @@
             <Component class="javax.swing.JLabel" name="lbChanged">
               <Events>
                 <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lbChangedMouseEntered"/>
+                <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lbChangedMousePressed"/>
               </Events>
             </Component>
           </SubComponents>

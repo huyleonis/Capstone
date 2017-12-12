@@ -12,9 +12,6 @@
             <div class="main-panel">
                 <c:import url="navbar.jsp"/>   
                 <div class="content">
-                    <div class="alert alert-success" id="alert" style="display: none">
-                        <p id="text"></p>
-                    </div>
                     <div class="container-fluid">
 
                         <a href="" data-toggle="modal" data-target="#add-modal"
@@ -118,8 +115,8 @@
                             <thead>
                                 <tr>
                                     <th>id</th>
-                                    <th class="text-center">Name</th>
-                                    <th class="text-center">Update/Delete</th>
+                                    <th class="text-center" style="font-size: 15px; color: blue; font-weight: bold">Name</th>
+                                    <th class="text-center" style="font-size: 15px; color: blue; font-weight: bold">Update/Delete</th>
                                         <%--<th class="pull-left">Delete/Update</th>--%>
                                 </tr>
                             </thead>
