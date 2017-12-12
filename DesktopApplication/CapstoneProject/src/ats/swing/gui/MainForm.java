@@ -6,6 +6,7 @@
 package ats.swing.gui;
 
 import ats.daos.TransactionDAO;
+import ats.daos.VehicleDAO;
 import ats.dtos.LoginDTO;
 import ats.dtos.TransactionDetailDTO;
 import ats.dtos.VehicleDTO;
@@ -17,7 +18,6 @@ import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -99,6 +99,8 @@ public class MainForm extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         lbWantPay = new javax.swing.JLabel();
         btnPaymentWant = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        lbChanged = new javax.swing.JLabel();
         tabSetting = new javax.swing.JPanel();
         panePayment = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
@@ -395,6 +397,12 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        lbChanged.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lbChangedMouseEntered(evt);
+            }
+        });
+
         javax.swing.GroupLayout tabHistoryLayout = new javax.swing.GroupLayout(tabHistory);
         tabHistory.setLayout(tabHistoryLayout);
         tabHistoryLayout.setHorizontalGroup(
@@ -402,16 +410,16 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(tabHistoryLayout.createSequentialGroup()
                 .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tabHistoryLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(TablePane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(tabHistoryLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnPayTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(359, 359, 359)
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(tabHistoryLayout.createSequentialGroup()
-                        .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addContainerGap()
+                        .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(tabHistoryLayout.createSequentialGroup()
-                                .addContainerGap()
                                 .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel9)
                                     .addComponent(jLabel100))
@@ -425,43 +433,44 @@ public class MainForm extends javax.swing.JFrame {
                                             .addComponent(lbWantPay, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addGroup(tabHistoryLayout.createSequentialGroup()
                                                 .addGap(20, 20, 20)
-                                                .addComponent(btnPaymentWant, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                            .addGroup(tabHistoryLayout.createSequentialGroup()
-                                .addGap(359, 359, 359)
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 492, Short.MAX_VALUE)))
-                .addContainerGap())
+                                                .addComponent(btnPaymentWant, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGap(663, 663, 663)
+                                .addComponent(btnPayTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(TablePane, javax.swing.GroupLayout.DEFAULT_SIZE, 1232, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbChanged, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel11)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         tabHistoryLayout.setVerticalGroup(
             tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHistoryLayout.createSequentialGroup()
-                .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(57, 57, 57)
+                .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tabHistoryLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnPayTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(tabHistoryLayout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)
-                            .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                        .addComponent(TablePane, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(TablePane, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbChanged, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(30, 30, 30)
                         .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel100))))
-                .addGap(29, 29, 29)
-                .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(lbWantPay))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnPaymentWant, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(108, 108, 108))
+                            .addComponent(jLabel100)
+                            .addComponent(btnPayTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12)
+                        .addGroup(tabHistoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(lbWantPay))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnPaymentWant, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 97, Short.MAX_VALUE))
+                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         menuTab.addTab("Lịch Sử Giao Dịch", tabHistory);
@@ -519,7 +528,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(panePaymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txtLane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
 
         paneBasic.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cài đặt cơ bản", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 24), new java.awt.Color(0, 51, 255))); // NOI18N
@@ -561,19 +570,19 @@ public class MainForm extends javax.swing.JFrame {
         paneBasicLayout.setHorizontalGroup(
             paneBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(paneBasicLayout.createSequentialGroup()
-                .addGroup(paneBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, paneBasicLayout.createSequentialGroup()
-                        .addContainerGap()
+                .addContainerGap()
+                .addGroup(paneBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(paneBasicLayout.createSequentialGroup()
                         .addGroup(paneBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addGroup(paneBasicLayout.createSequentialGroup()
                                 .addComponent(txtLocalhost, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCheckConnection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(btnCheckConnection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(114, 114, 114))
                     .addGroup(paneBasicLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(txtLogOut)))
-                .addGap(114, 114, 114))
+                        .addComponent(txtLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         paneBasicLayout.setVerticalGroup(
             paneBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -584,9 +593,9 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(paneBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtLocalhost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCheckConnection, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
                 .addComponent(txtLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48))
+                .addGap(18, 18, 18))
         );
 
         javax.swing.GroupLayout tabSettingLayout = new javax.swing.GroupLayout(tabSetting);
@@ -604,10 +613,10 @@ public class MainForm extends javax.swing.JFrame {
             tabSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabSettingLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(tabSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(paneBasic, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(panePayment, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(408, Short.MAX_VALUE))
+                .addGroup(tabSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panePayment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(paneBasic, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(368, Short.MAX_VALUE))
         );
 
         menuTab.addTab("Cài Đặt", tabSetting);
@@ -719,71 +728,100 @@ public class MainForm extends javax.swing.JFrame {
         String licensePlate = txtLicensePlate.getText().toUpperCase().trim();
         int stationId = Integer.parseInt(txtStation.getText().trim());
         DecimalFormat formatter = new DecimalFormat("###,###,###.##");
-        //VehicleDAO dao = new VehicleDAO();
+        VehicleDAO dao = new VehicleDAO();
         ManualPaymentRequest mpr = new ManualPaymentRequest();
+        LoginRequest lp = new LoginRequest();
+
         if (licensePlate.matches("^\\d{2}[A-Z]\\d{4,5}$")) {
-            try {
-                /*Bắt đầu lấy dữ liệu của xe để show lên màn hình*/
-                VehicleDTO vehicleDTO = mpr.getInfoVehicle(licensePlate, stationId, localhost);
-                if (vehicleDTO != null) {
-                    if (vehicleDTO.getPrice() != null) {
-                        lbPirce.setText(formatter.format(vehicleDTO.getPrice()) + " đồng");
+            if (lp.checkConnection(localhost)) {
+                try {
+                    /*Bắt đầu lấy dữ liệu của xe để show lên màn hình*/
+                    VehicleDTO vehicleDTO = mpr.getInfoVehicle(licensePlate, stationId, localhost);
+                    if (vehicleDTO != null) {
+                        if (vehicleDTO.getPrice() != null) {
+                            lbPirce.setText(formatter.format(vehicleDTO.getPrice()) + " đồng");
+                        } else {
+                            lbPirce.setText("-");
+                        }
+                        if (vehicleDTO.getTypeVehicle() != null) {
+                            lbTypeName.setText(vehicleDTO.getTypeVehicle());
+                        } else {
+                            lbTypeName.setText("-");
+                        }
+
                     } else {
                         lbPirce.setText("-");
-                    }
-                    if (vehicleDTO.getTypeVehicle() != null) {
-                        lbTypeName.setText(vehicleDTO.getTypeVehicle());
-                    } else {
                         lbTypeName.setText("-");
                     }
 
-                } else {
-                    lbPirce.setText("-");
-                    lbTypeName.setText("-");
+                    /*Kiểm tra giao dịch đã tồn tại trên hệ thống chưa*/
+                    //int vehicleId = dao.findVehicleByLicensePlate(licensePlate);
+                    VehiclePayment vp = mpr.getCapturedTransaction(licensePlate, stationId, localhost);
+                    String photo = vp.getPhoto();
+                    String transactionId = vp.getId();
+
+                    if (transactionId != null) {
+                        lbId.setText(transactionId);
+                    } else {
+                        lbId.setText("");
+                    }
+
+                    if (photo != null) {
+                        //                    //loading gif
+                        //                    File defaultImg = new File("./src/picture/giphy.gif");
+                        //                    Image imageLoading = ImageIO.read(defaultImg);
+                        //                    this.lbPicture.setIcon(new ImageIcon(imageLoading));
+                        //
+                        //                    Thread.sleep(1000);
+                        String path = localhost + "/imgs/plates/" + photo;
+                        System.out.println("Get Image from " + path);
+
+                        //Download image
+                        URL url = new URL(path);
+                        Image image = ImageIO.read(url);
+                        System.out.println("Load image into frame...");
+                        //JLabel label = new JLabel(new ImageIcon(image));
+                        this.lbPicture.setIcon(new ImageIcon(image));
+                    } else {
+                        File defaultImg = new File("./src/picture/default_text.png");
+                        Image image = ImageIO.read(defaultImg);
+                        this.lbPicture.setIcon(new ImageIcon(image));
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(MainForm.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+
+                try {
+                    VehicleDTO veDto = dao.findPriceByLicensePlate(licensePlate, stationId);
+                    if (veDto != null) {
+                        if (veDto.getPrice() != null) {
+                            lbPirce.setText(formatter.format(veDto.getPrice()) + " đồng");
+                        } else {
+                            lbPirce.setText("-");
+                        }
+                        if (veDto.getTypeVehicle() != null) {
+                            lbTypeName.setText(veDto.getTypeVehicle());
+                        } else {
+                            lbTypeName.setText("-");
+                        }
+
+                    } else {
+                        lbPirce.setText("-");
+                        lbTypeName.setText("-");
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-                /*Kiểm tra giao dịch đã tồn tại trên hệ thống chưa*/
-                //int vehicleId = dao.findVehicleByLicensePlate(licensePlate);
-                VehiclePayment vp = mpr.getCapturedTransaction(licensePlate, stationId, localhost);
-                String photo = vp.getPhoto();
-                String transactionId = vp.getId();
-
-                if (transactionId != null) {
-                    lbId.setText(transactionId);
-                } else {
-                    lbId.setText("");
-                }
-
-                if (photo != null) {
-                    //                    //loading gif
-                    //                    File defaultImg = new File("./src/picture/giphy.gif");
-                    //                    Image imageLoading = ImageIO.read(defaultImg);
-                    //                    this.lbPicture.setIcon(new ImageIcon(imageLoading));
-                    //
-                    //                    Thread.sleep(1000);
-                    String path = localhost + "/imgs/plates/" + photo;
-                    System.out.println("Get Image from " + path);
-
-                    //Download image
-                    URL url = new URL(path);
-                    Image image = ImageIO.read(url);
-                    System.out.println("Load image into frame...");
-                    //JLabel label = new JLabel(new ImageIcon(image));
-                    this.lbPicture.setIcon(new ImageIcon(image));
-                } else {
-                    File defaultImg = new File("./src/picture/default_text.png");
-                    Image image = ImageIO.read(defaultImg);
-                    this.lbPicture.setIcon(new ImageIcon(image));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(MainForm.class
-                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
+
         try {
             List<TransactionDetailDTO> list = mpr.listTransactionNotPay(licensePlate, localhost);
             if (list.size() > 0) {
-                lbNotification.setText("Phương tiện " + licensePlate + " còn " + list.size() + " giao dịch chưa thanh toán!");
+                lbNotification.setText("Phương tiện " + licensePlate + " còn " + (list.size() - 1) + " giao dịch chưa thanh toán!");
             } else {
                 lbNotification.setText("...");
             }
@@ -833,15 +871,21 @@ public class MainForm extends javax.swing.JFrame {
     private String changePrice(String price) {
         String priceValue = "";
         String priceValue2 = "";
-        if (price.length() == 11) {
-            priceValue = price.substring(0, 6);
-            priceValue2 = priceValue.replace(",", "");
-        } else if (price.length() == 12) {
-            priceValue = price.substring(0, 7);
-            priceValue2 = priceValue.replace(",", "");
-        } else if (price.length() == 10) {
-            priceValue = price.substring(0, 5);
-            priceValue2 = priceValue.replace(",", "");
+        switch (price.length()) {
+            case 11:
+                priceValue = price.substring(0, 6);
+                priceValue2 = priceValue.replace(",", "");
+                break;
+            case 12:
+                priceValue = price.substring(0, 7);
+                priceValue2 = priceValue.replace(",", "");
+                break;
+            case 10:
+                priceValue = price.substring(0, 5);
+                priceValue2 = priceValue.replace(",", "");
+                break;
+            default:
+                break;
         }
 
         return priceValue2;
@@ -852,7 +896,7 @@ public class MainForm extends javax.swing.JFrame {
         DecimalFormat formatter = new DecimalFormat("###,###,###.##");
         ManualPaymentRequest mpr = new ManualPaymentRequest();
         List<TransactionDetailDTO> list;
-        String col[] = {"#", "Id", "Biển số xe", "Loại xe", "Giá", "Loại giao dịch", "Ngày tháng", "Trạng Thái", "Hình ảnh", "Trả phí"};
+        String col[] = {"#", "Id", "Biển số xe", "Loại xe", "Giá", "Loại giao dịch", "Ngày tháng", "Trạng Thái", "Trả phí"};
         DefaultTableModel tbl = new DefaultTableModel() {
             @Override
             public Class<?> getColumnClass(int column) {
@@ -874,8 +918,6 @@ public class MainForm extends javax.swing.JFrame {
                     case 7:
                         return String.class;
                     case 8:
-                        return String.class;
-                    case 9:
                         return Boolean.class;
                     default:
                         return String.class;
@@ -889,10 +931,11 @@ public class MainForm extends javax.swing.JFrame {
         try {
             list = mpr.listTransactionNotPay(licensePlate, localhost);
             if (list.size() > 0) {
-                for (int i = 0; i < list.size(); i++) {
+                for (int i = 0; i < list.size() - 1; i++) {
                     Object ojb[] = {i + 1 + "", list.get(i).getId(), list.get(i).getLicensePlate(), list.get(i).getTypeVehicle(),
-                        formatter.format(list.get(i).getPrice()) + " đồng", changeType(list.get(i).getType()), list.get(i).getDateTime(), changeStatus(list.get(i).getStaus()),
-                        list.get(i).getPhoto(), false};
+                        formatter.format(list.get(i).getPrice()) + " đồng",
+                        changeType(list.get(i).getType()), list.get(i).getDateTime(),
+                        changeStatus(list.get(i).getStaus()), false};
                     total += list.get(i).getPrice();
                     tbl.addRow(ojb);
                 }
@@ -906,19 +949,17 @@ public class MainForm extends javax.swing.JFrame {
             TableColumn plate = tblHistory.getColumnModel().getColumn(2);
             plate.setPreferredWidth(100);
             TableColumn typeVehicle = tblHistory.getColumnModel().getColumn(3);
-            typeVehicle.setPreferredWidth(150);
+            typeVehicle.setPreferredWidth(170);
             TableColumn price = tblHistory.getColumnModel().getColumn(4);
-            price.setPreferredWidth(130);
+            price.setPreferredWidth(140);
             TableColumn type = tblHistory.getColumnModel().getColumn(5);
-            type.setPreferredWidth(135);
+            type.setPreferredWidth(140);
             TableColumn date = tblHistory.getColumnModel().getColumn(6);
             date.setPreferredWidth(200);
             TableColumn status = tblHistory.getColumnModel().getColumn(7);
-            status.setPreferredWidth(200);
-            TableColumn photo = tblHistory.getColumnModel().getColumn(8);
-            photo.setPreferredWidth(100);
-            TableColumn button = tblHistory.getColumnModel().getColumn(9);
-            button.setPreferredWidth(150);
+            status.setPreferredWidth(180);
+            TableColumn checkBox = tblHistory.getColumnModel().getColumn(8);
+            checkBox.setPreferredWidth(122);
             JScrollPane tableContainer = new JScrollPane(tblHistory);
             TablePane.add(tableContainer, BorderLayout.CENTER);
             repaint();
@@ -939,21 +980,23 @@ public class MainForm extends javax.swing.JFrame {
         DecimalFormat formatter = new DecimalFormat("###,###,###.##");
         double money = 0.0;
         if (checkAll) {
+            btnPayTotal.setText("Chọn tất cả");
+            for (int i = 0; i < tblHistory.getRowCount(); i++) {
+                tblHistory.setValueAt(false, i, 8);
+
+            }
+            lbWantPay.setText(formatter.format(0) + " đồng");
+            checkAll = false;
+        } else {
             btnPayTotal.setText("Bỏ tất cả");
             for (int i = 0; i < tblHistory.getRowCount(); i++) {
-                tblHistory.setValueAt(true, i, 9);
+                tblHistory.setValueAt(true, i, 8);
                 String price = tblHistory.getValueAt(i, 4).toString();
                 money += Double.parseDouble(changePrice(price));
             }
-            lbWantPay.setText(formatter.format(money) + " đồng");
-            checkAll = false;
-        } else {
-            btnPayTotal.setText("Chọn tất cả");
-            for (int i = 0; i < tblHistory.getRowCount(); i++) {
-                tblHistory.setValueAt(false, i, 9);
-            }
             checkAll = true;
-            lbWantPay.setText(formatter.format(0) + " đồng");
+            lbWantPay.setText(formatter.format(money) + " đồng");
+
         }
     }//GEN-LAST:event_btnPayTotalActionPerformed
 
@@ -971,9 +1014,9 @@ public class MainForm extends javax.swing.JFrame {
 
     private void btnPaymentWantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaymentWantActionPerformed
         ManualPaymentRequest mpr = new ManualPaymentRequest();
-        String localhost = txtLocalhost.getText().trim();
+        localhost = txtLocalhost.getText().trim();
         for (int i = 0; i < tblHistory.getRowCount(); i++) {
-            Boolean checked = Boolean.valueOf(tblHistory.getValueAt(i, 9).toString());
+            Boolean checked = Boolean.valueOf(tblHistory.getValueAt(i, 8).toString());
             String id = tblHistory.getValueAt(i, 1).toString();
             if (checked) {
                 try {
@@ -993,18 +1036,22 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_TablePaneMousePressed
 
     private void TablePaneMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablePaneMouseReleased
+
+    }//GEN-LAST:event_TablePaneMouseReleased
+
+    private void lbChangedMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbChangedMouseEntered
         double money = 0.0;
         DecimalFormat formatter = new DecimalFormat("###,###,###.##");
         for (int i = 0; i < tblHistory.getRowCount(); i++) {
-            Boolean checked = Boolean.valueOf(tblHistory.getValueAt(i, 9).toString());
+            Boolean checked = Boolean.valueOf(tblHistory.getValueAt(i, 8).toString());
             String price = tblHistory.getValueAt(i, 4).toString();
             //money += Double.parseDouble(changePrice(price));
             if (checked) {
-               money += Double.parseDouble(changePrice(price));
+                money += Double.parseDouble(changePrice(price));
             }
             lbWantPay.setText(formatter.format(money) + " đồng");
         }
-    }//GEN-LAST:event_TablePaneMouseReleased
+    }//GEN-LAST:event_lbChangedMouseEntered
 
     /**
      * @param args the command line arguments
@@ -1035,6 +1082,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel100;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1043,6 +1091,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel lbChanged;
     private javax.swing.JLabel lbId;
     private javax.swing.JLabel lbNotification;
     private javax.swing.JLabel lbPicture;

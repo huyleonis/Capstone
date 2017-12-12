@@ -7,7 +7,6 @@ package ats.daos;
 
 import ats.connection.MyConnection;
 import ats.dtos.TransactionDTO;
-import ats.dtos.VehicleDTO;
 import ats.utils.TransactionStatus;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,7 +38,7 @@ public class TransactionDAO {
             conn.close();
         }
     }
-
+    
     public boolean insertTransaction(String licensePlate, int idLane, String photo) throws Exception {
         boolean check = false;
         PriceDAO priceDAO = new PriceDAO();

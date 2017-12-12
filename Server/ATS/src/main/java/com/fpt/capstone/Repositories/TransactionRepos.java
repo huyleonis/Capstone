@@ -199,6 +199,6 @@ public interface TransactionRepos extends JpaRepository<Transaction, String> {
             @Param("createdTime") String createdTime);
 
     @Query(value = "SELECT * FROM transaction WHERE vehicleId = :vehicleId"
-            + " AND status <> 'Finish' AND status <> 'Success'", nativeQuery = true)
+            + " AND status <> 'Finish' AND status <> 'Success' ORDER BY createdTime ASC", nativeQuery = true)
     List<Transaction> findVehicleNotPay(@Param("vehicleId") int vehicleId);
 }
